@@ -1,5 +1,5 @@
 <?php
-require dirname(dirname(__FILE__)) . '/lib/GD/Tab/Guitar/GD_Tab_Guitar.php';
+require dirname(dirname(__FILE__)) . '/GD/Tab/Guitar.php';
 
 $gtr = new GD_Tab_Guitar();
 
