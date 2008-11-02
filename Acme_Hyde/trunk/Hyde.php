@@ -4,6 +4,7 @@
  *
  * @author  riaf <riafweb@gmail.com>
  * @see     http://search.cpan.org/~nozzzzz/Acme-Hyde-0.04/
+ * @todo    接頭辞＋単位とかの対応したい
  * @version $Id$
  */
 
