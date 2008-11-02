@@ -1,5 +1,4 @@
 <?php
-require_once dirname(dirname(__FILE__)) . '/Net/TokyoTyrant.php';
 require_once 'Benchmark/Timer.php';
 $timer = new Benchmark_Timer();
 $timer->start();
