@@ -10,6 +10,7 @@
 class Acme_Hyde
 {
     const size = 156;
+    const unit = 'hyde';
 
     /**
      * cm を hyde に変換
