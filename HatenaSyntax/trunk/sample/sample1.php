@@ -3,29 +3,29 @@ set_include_path(dirname(__FILE__) . '/../code' . PATH_SEPARATOR . get_include_p
 include_once 'HatenaSyntax.php';
 
 $p = new HatenaSyntax_Parser;
-$result = $p->parse('*Œ©o‚µ
+$result = $p->parse('*è¦‹å‡ºã—
 
-**¬Œ©o‚µ
+**å°è¦‹å‡ºã—
 
-:’è‹`:à–¾
-::à–¾2
+:å®šç¾©:èª¬æ˜Ž
+::èª¬æ˜Ž2
 
--ƒŠƒXƒg
--+‡˜•t‚«ƒŠƒXƒg
--+‡˜•t‚«ƒŠƒXƒg
--+-ƒŠƒXƒg
--+-ƒŠƒXƒg
--ƒŠƒXƒg
+-ãƒªã‚¹ãƒˆ
+-+é †åºä»˜ããƒªã‚¹ãƒˆ
+-+é †åºä»˜ããƒªã‚¹ãƒˆ
+-+-ãƒªã‚¹ãƒˆ
+-+-ãƒªã‚¹ãƒˆ
+-ãƒªã‚¹ãƒˆ
 
-–{•¶‚Å‚·((‹r’‚Ì“à—e))
+æœ¬æ–‡ã§ã™((è„šæ³¨ã®å†…å®¹))
 
-|*Ží—Þ |*”  |
-|‚è‚ñ‚²|1    |
-|‚Ý‚©‚ñ|2    |
+|*ç¨®é¡ž |*æ•°  |
+|ã‚Šã‚“ã”|1    |
+|ã¿ã‹ã‚“|2    |
 
 >>
-***ˆø—p
-‚Å‚·‚æ[
+***å¼•ç”¨
+ã§ã™ã‚ˆãƒ¼
 <<
 
 >|php|
