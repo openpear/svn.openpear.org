@@ -4,7 +4,7 @@
  *
  * @author  yohei.kawano@gmail.com
  * @package openpear
- * @version $Id
+ * @version $Id$
  */
 require_once 'Acme/IdolMaster/Member/Base.php';
 

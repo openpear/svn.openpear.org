@@ -4,7 +4,7 @@
  *
  * @author  yohei.kawano@gmail.com
  * @package openpear
- * @version $Id
+ * @version $Id$
  */
 
 class Acme_IdolMaster_Member_Base
