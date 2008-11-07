@@ -51,7 +51,7 @@ class String_Formatter_Core{
   protected $config;
 
   protected function createStatement($stmt,$config){
-    return StringStatement::Initialize($this->statement,$config);
+    return String_Statement::Initialize($this->statement,$config);
   }
   
   protected function InitializeConfig(){
@@ -76,7 +76,7 @@ class String_Formatter_Core{
 
 
 /**
- * StringStatement
+ * String_Statement
  * String Formatter Statement Class
  *
  * @version: 0.1.0 <2008/10/26 16:49>
@@ -84,7 +84,7 @@ class String_Formatter_Core{
  * @author: Shuhei Tanuma <shuhei.tanuma@gmail.com>
  *
 **/
-final class StringStatement extends String_Formatter_Core implements ArrayAccess{
+final class String_Statement extends String_Formatter_Core implements ArrayAccess{
   private $statement;
   private $placeHolder;
   private $joint;
@@ -104,7 +104,7 @@ final class StringStatement extends String_Formatter_Core implements ArrayAccess
 
   
   protected static function Initialize($statement,$config){
-    $stmt = new StringStatement($statement,$config);
+    $stmt = new String_Statement($statement,$config);
 
     return $stmt;
   }
