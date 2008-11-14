@@ -171,7 +171,7 @@ class HTML_DomParser{
         $this->root = new HTML_DomParser_Node($this);
         $this->root->tag = 'root';
         $this->root->_[HTML_DomParser_Const::INFO_BEGIN] = -1;
-        $this->root->nodetype = HDOM_TYPE_ROOT;
+        $this->root->nodetype = HTML_DomParser_Const::TYPE_ROOT;
         $this->parent = $this->root;
         // set the length of content
         $this->size = strlen($str);
