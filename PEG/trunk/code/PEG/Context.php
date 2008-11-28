@@ -11,16 +11,13 @@ class PEG_Context implements PEG_IContext
     
     function read($i = 1)
     {
-        assert(is_uint($i));
-        
         $this->i += $i;
+        if ($this->eos() && $i > 0) throw new PEG_Failure();
         return substr($this->s, $this->i - $i, $i);
     }
     
     function lookahead($i = 1)
     {
-        assert(is_uint($i));
-        
         return substr($this->s, $this->i, $i);
     }
     
@@ -30,8 +27,6 @@ class PEG_Context implements PEG_IContext
      */
     function seek($i)
     {
-        assert(is_uint($i));
-        
         if ($this->len < $i) return false;
         $this->i = $i;
         return true;
