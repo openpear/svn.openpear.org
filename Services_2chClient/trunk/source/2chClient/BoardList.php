@@ -3,7 +3,7 @@
 class Services_2chClient_BoardList extends Services_2chClient_Common
 {
     /**
-     * 板一覧のUR
+     * 板一覧のURL
      */
     private $_url = 'http://menu.2ch.net/bbsmenu.html';
 
@@ -11,12 +11,11 @@ class Services_2chClient_BoardList extends Services_2chClient_Common
 
     function load(){
         $httpObject =& new HTTP_Request($this->url);
-        $httpObject->addHeader('User-Agent', $this->userAgent);
+        $httpObject->addHeader('User-Agent', $this->_userAgent);
+        $httpObject->addHeader('Accept-Encoding', 'gzip');
 
-        if($this->lastModified){
-            $httpObject->addHeader('If-Modified-Since', $this->lastModified);
-        }else{
-            $httpObject->addHeader('Accept-Encoding', 'gzip');
+        if($this->_lastModified){
+            $httpObject->addHeader('If-Modified-Since', $this->_lastModified);
         }
 
         $response = $httpObject->sendRequest();
@@ -29,7 +28,7 @@ class Services_2chClient_BoardList extends Services_2chClient_Common
             //200(取得成功)の場合は処理続行
             $this->importFromHtml('bbsmenu', $request->getResponseBody());
             //最終更新時刻を変更
-            $this->lastModified($httpObject->getResponseHeader('Last-Modified'));
+            $this->_lastModified($httpObject->getResponseHeader('Last-Modified'));
         }
         //レスポンスコードを返す。
         return $responseCode;
@@ -38,8 +37,8 @@ class Services_2chClient_BoardList extends Services_2chClient_Common
     /**
      * 板リスト読み込み
      *
-     * @var $boardlistText  string  板リスト
-     * @var $type           string  板リストタイプ
+     * @param   string  $boardlistText  板リスト
+     * @param   string  $type           板リストタイプ
      */
     function import($boardlistText, $type = 'bbsmenu'){
         if(empty($boardlistText)){
