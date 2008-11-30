@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * どのような文字列にでもヒットするパーサ
+ *
+ */
 class PEG_Anything implements PEG_IParser
 {
     protected function __construct() { }

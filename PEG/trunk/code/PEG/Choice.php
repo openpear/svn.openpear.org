@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 選択。正規表現でいう"|"。
+ *
+ */
 class PEG_Choice implements PEG_IParser
 {
     protected $parsers = array();
