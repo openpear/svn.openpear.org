@@ -13,5 +13,6 @@ try {
     $token->parse($context);
     $t->fail();
 } catch (PEG_Failure $e) {
+    $t->pass();
 }
 
