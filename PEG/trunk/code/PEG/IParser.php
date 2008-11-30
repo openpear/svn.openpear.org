@@ -2,6 +2,11 @@
 
 interface PEG_IParser
 {
-    // ¸”s‚µ‚½‚çPEG_Failure‚ğ“Š‚°‚é
+    /**
+     * 
+     * ãƒ‘ãƒ¼ã‚¹ã«å¤±æ•—ã—ãŸå ´åˆã¯PEG_Failureã‚’æŠ•ã’ã‚‹
+     *
+     * @param PEG_IContext $c
+     */
     function parse(PEG_IContext $c);
 }

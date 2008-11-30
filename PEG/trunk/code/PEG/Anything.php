@@ -6,7 +6,7 @@ class PEG_Anything implements PEG_IParser
     function parse(PEG_IContext $context)
     {
         if ($context->eos()) throw new PEG_Failure;
-        return $context->read();
+        return $context->read(1);
     }
     static function getInstance()
     {

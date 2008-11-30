@@ -8,16 +8,25 @@ class PEG_Context implements PEG_IContext
         $this->s = $s; 
         $this->len = strlen($s);
     }
-    
-    function read($i = 1)
+
+    /**
+     * @param int $i
+     * @return string
+     */
+    function read($i)
     {
         if ($this->eos() && $i > 0) throw new PEG_Failure();
         $this->i += $i;
         return substr($this->s, $this->i - $i, $i);
     }
     
-    function lookahead($i = 1)
+    /**
+     * @param int $i
+     * @return string
+     */
+    function lookahead($i)
     {
+        if ($this->eos() && $i > 0) throw new PEG_Failure();
         return substr($this->s, $this->i, $i);
     }
     
