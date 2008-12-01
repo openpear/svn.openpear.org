@@ -3,7 +3,7 @@ include_once dirname(__FILE__) . '/t/t.php';
 
 $t = new lime_test;
 
-$context = new PEG_Context('hogehoge');
+$context = PEG::context('hogehoge');
 $t->is($context->read(4), 'hoge');
 $t->is($context->tell(), 4);
 $context->seek(0);

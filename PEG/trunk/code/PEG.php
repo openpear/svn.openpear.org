@@ -16,7 +16,9 @@ include_once dirname(__FILE__) . '/PEG/Not.php';
 include_once dirname(__FILE__) . '/PEG/Optional.php';
 include_once dirname(__FILE__) . '/PEG/Sequence.php';
 include_once dirname(__FILE__) . '/PEG/Token.php';
-
+include_once dirname(__FILE__) . '/PEG/And.php';
+include_once dirname(__FILE__) . '/PEG/LineEnd.php';
+                               
 /**
  * PEG以下のクラスを生成するFactoryクラス
  *
@@ -135,5 +137,21 @@ class PEG
     static function lookaheadNot(PEG_IParser $p)
     {
         return new PEG_LookaheadNot($p);
+    }
+
+    /**
+     * @return PEG_And
+     */
+    static function andalso()
+    {
+        return new PEG_And(func_get_args());
+    }
+
+    /**
+     * @return PEG_LineEnd
+     */
+    static function lineEnd()
+    {
+        return PEG_LineEnd::getInstance();
     }
 }
