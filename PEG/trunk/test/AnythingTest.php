@@ -5,4 +5,4 @@ $lime = new lime_test;
 
 $anything = PEG_Anything::getInstance();
 
-$lime->is('a', $anything->parse(context('a')));
+$lime->is('a', $anything->parse(PEG::context('a')));

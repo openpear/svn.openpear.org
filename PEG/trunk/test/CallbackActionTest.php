@@ -7,5 +7,5 @@ function hoge($v) {
     return $v . $v;
 }
 
-$p = new PEG_CallbackAction('hoge', token('hoge'));
-$lime->is('hogehoge', $p->parse(context('hoge')));
+$p = new PEG_CallbackAction('hoge', PEG::token('hoge'));
+$lime->is('hogehoge', $p->parse(PEG::context('hoge')));

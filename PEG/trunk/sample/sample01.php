@@ -12,28 +12,27 @@ include_once dirname(__FILE__) . '/../code/PEG.php';
  * parser := item*
  */
 
-$p = new PEG; // ファクトリークラス
 
-$item = $p->choice();
-$paren = $p->sequence();
+$item = PEG::choice();
+$paren = PEG::sequence();
 $proc = create_function('$v', 'return $v[1];');
 
 $item->with($paren)
-     ->with($p->anything());
+     ->with(PEG::anything());
 
-$paren_item_mat = $p->sequence();
-$paren_item_mat->with($p->lookaheadNot($p->token(')')))
+$paren_item_mat = PEG::sequence();
+$paren_item_mat->with(PEG::lookaheadNot(PEG::token(')')))
                ->with($item);
-$paren_item = $p->callbackAction($proc, $paren_item_mat);
+$paren_item = PEG::callbackAction($proc, $paren_item_mat);
      
-$paren->with($p->token('('))
-      ->with($p->many($paren_item))
-      ->with($p->token(')'));
+$paren->with(PEG::token('('))
+      ->with(PEG::many($paren_item))
+      ->with(PEG::token(')'));
 
-$parser = $p->many($item);
+$parser = PEG::many($item);
 
 $str = 'abc(def(ghi)(jkl(mno)))';
-var_dump($parser->parse($p->context($str)));
+var_dump($parser->parse(PEG::context($str)));
 /* 結果
 array(4) {
   [0]=>
