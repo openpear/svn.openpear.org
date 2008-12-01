@@ -18,6 +18,8 @@ include_once dirname(__FILE__) . '/PEG/Sequence.php';
 include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/And.php';
 include_once dirname(__FILE__) . '/PEG/LineEnd.php';
+include_once dirname(__FILE__) . '/PEG/Ref.php';
+include_once dirname(__FILE__) . '/PEG/Char.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス
@@ -153,5 +155,22 @@ class PEG
     static function lineEnd()
     {
         return PEG_LineEnd::getInstance();
+    }
+
+    /**
+     * @return PEG_Ref
+     */
+    static function ref()
+    {
+        return new PEG_Ref;
+    }
+
+    /**
+     * @param string $str
+     * @return PEG_Char
+     */
+    static function char($str)
+    {
+        return new PEG_Char($str);
     }
 }
