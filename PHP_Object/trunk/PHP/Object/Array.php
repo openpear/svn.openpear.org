@@ -49,8 +49,9 @@ class PHP_Object_Array extends PHP_Object implements Iterator, ArrayAccess
         $offset = $this->revert($offset);
         if (is_null($offset)) {
             $this->data[] = $value;
+        } else {
+            $this->data[$offset] = $value;
         }
-        $this->data[$offset] = $value;
     }
 
     public function offsetUnset($offset)
