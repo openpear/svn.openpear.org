@@ -14,8 +14,7 @@ include_once dirname(__FILE__) . '/../code/PEG.php';
 
 
 $item = PEG::choice();
-$paren = PEG::sequence();
-$proc = create_function('$v', 'return $v[1];');
+$paren = PEG::ref();
 
 $item->with($paren)
      ->with(PEG::anything());
@@ -23,11 +22,9 @@ $item->with($paren)
 $paren_item_mat = PEG::sequence();
 $paren_item_mat->with(PEG::lookaheadNot(PEG::token(')')))
                ->with($item);
-$paren_item = PEG::callbackAction($proc, $paren_item_mat);
+$paren_item = PEG::second($paren_item_mat);
      
-$paren->with(PEG::token('('))
-      ->with(PEG::many($paren_item))
-      ->with(PEG::token(')'));
+$paren->set(PEG::pack(PEG::token('('), PEG::many($paren_item), PEG::token(')')));
 
 $parser = PEG::many($item);
 
@@ -42,68 +39,41 @@ array(4) {
   [2]=>
   string(1) "c"
   [3]=>
-  array(3) {
+  array(5) {
     [0]=>
-    string(1) "("
+    string(1) "d"
     [1]=>
-    array(5) {
+    string(1) "e"
+    [2]=>
+    string(1) "f"
+    [3]=>
+    array(3) {
       [0]=>
-      string(1) "d"
+      string(1) "g"
       [1]=>
-      string(1) "e"
+      string(1) "h"
       [2]=>
-      string(1) "f"
+      string(1) "i"
+    }
+    [4]=>
+    array(4) {
+      [0]=>
+      string(1) "j"
+      [1]=>
+      string(1) "k"
+      [2]=>
+      string(1) "l"
       [3]=>
       array(3) {
         [0]=>
-        string(1) "("
+        string(1) "m"
         [1]=>
-        array(3) {
-          [0]=>
-          string(1) "g"
-          [1]=>
-          string(1) "h"
-          [2]=>
-          string(1) "i"
-        }
+        string(1) "n"
         [2]=>
-        string(1) ")"
-      }
-      [4]=>
-      array(3) {
-        [0]=>
-        string(1) "("
-        [1]=>
-        array(4) {
-          [0]=>
-          string(1) "j"
-          [1]=>
-          string(1) "k"
-          [2]=>
-          string(1) "l"
-          [3]=>
-          array(3) {
-            [0]=>
-            string(1) "("
-            [1]=>
-            array(3) {
-              [0]=>
-              string(1) "m"
-              [1]=>
-              string(1) "n"
-              [2]=>
-              string(1) "o"
-            }
-            [2]=>
-            string(1) ")"
-          }
-        }
-        [2]=>
-        string(1) ")"
+        string(1) "o"
       }
     }
-    [2]=>
-    string(1) ")"
   }
 }
+
  */
