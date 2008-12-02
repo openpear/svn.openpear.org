@@ -20,6 +20,8 @@ include_once dirname(__FILE__) . '/PEG/And.php';
 include_once dirname(__FILE__) . '/PEG/LineEnd.php';
 include_once dirname(__FILE__) . '/PEG/Ref.php';
 include_once dirname(__FILE__) . '/PEG/Char.php';
+include_once dirname(__FILE__) . '/PEG/Nth.php';
+include_once dirname(__FILE__) . '/PEG/Flatten.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス
@@ -150,12 +152,9 @@ class PEG
     }
 
     /**
-     * @return PEG_LineEnd
+
      */
-    static function lineEnd()
-    {
-        return PEG_LineEnd::getInstance();
-    }
+
 
     /**
      * @return PEG_Ref
@@ -172,5 +171,134 @@ class PEG
     static function char($str)
     {
         return new PEG_Char($str);
+    }
+
+    /**
+     * @return PEG_Char
+     */
+    static function digit()
+    {
+        static $obj = null;
+        return $obj ? $obj : $obj = self::char('0123456789');
+    }
+    
+    /**
+     * @return PEG_Choice
+     */
+    static function newLine()
+    {
+        static $obj = null;
+        return $obj ? $obj : $obj = self::choice(self::char("\r\n"), self::token("\r\n"));
+    }
+    
+    /**
+     * @return PEG_Choice
+     */
+    static function lineEnd()
+    {
+        static $obj = null;
+        return $obj ? $obj : $obj = self::choice(self::newLine(), self::eos());
+    }
+    
+    /**
+     * @return PEG_Char
+     */
+    static function upper()
+    {
+        static $obj = null;
+        return $obj ? $obj : $obj = self::char('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+    }
+    
+    /**
+     * @return PEG_Char
+     */
+    static function lower()
+    {
+        static $obj = null;
+        return $obj ? $obj : $obj = self::char('abcdefghijklmnopqrstuvwxyz');
+    }
+    
+    /**
+     * @return PEG_Choice
+     */
+    static function alphabet()
+    {
+        static $obj = null;
+        return $obj ? $obj : $obj = self::choice(self::lower(), self::upper());
+    }
+
+    /**
+     * @param int $i
+     * @param PEG_IParser $p
+     * @return PEG_Nth
+     */
+    static function nth($i, PEG_IParser $p)
+    {
+        return new PEG_Nth($i, $p);
+    }
+
+    /**
+     * @param PEG_IParser $p
+     * @return PEG_Nth
+     */
+    static function first(PEG_IParser $p)
+    {
+        return self::nth(0, $p);
+    }
+
+    /**
+     * @param PEG_IParser $p
+     * @return PEG_Nth
+     */
+    static function second(PEG_IParser $p)
+    {
+        return self::nth(1, $p);
+    }
+
+    /**
+     * @param PEG_IParser $p
+     * @return PEG_Nth
+     */
+    static function third(PEG_IParser $p)
+    {
+        return self::nth(2, $p);
+    }
+
+    /**
+     * @param PEG_IParser $start
+     * @param PEG_IParser $body
+     * @param PEG_IParser $end
+     * @return PEG_Nth
+     */
+    static function pack(PEG_IParser $start, PEG_IParser $body, PEG_IParser $end)
+    {
+        return self::second(self::sequence($start, $body, $end));
+    }
+
+    /**
+     * @param PEG_IParser $p
+     * @return PEG_Flatten
+     */
+    static function flatten(PEG_IParser $p)
+    {
+        return new PEG_Flatten($p);
+    }
+
+    /**
+     * @param PEG_IParser $p
+     * @return PEG_Sequence
+     */
+    static function bi(PEG_IParser $p)
+    {
+        return self::sequence($p, $p);
+    }
+    
+    /**
+     * @param PEG_IParser $p
+     * @return PEG_Sequence
+     */
+    static function tri(PEG_IParser $p)
+    {
+        return self::sequence($p, $p, $p);
     }
 }

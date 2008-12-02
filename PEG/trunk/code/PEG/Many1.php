@@ -9,12 +9,15 @@ class PEG_Many1 implements PEG_IParser
     }
     function parse(PEG_IContext $context)
     {
-        $ret = array($this->parser->parse($context));
+        $result = $this->parser->parse($context);
+        $ret = array();
+        if ($result !== null) $ret[] = $result;
         
         for (;;) {
             try {
                 $offset = $context->tell();
-                $ret[] = $this->parser->parse($context);
+                $result = $this->parser->parse($context);
+                if ($result !== null) $ret[] = $result;
             } catch (PEG_Failure $e) {
                 $context->seek($offset);
                 break;

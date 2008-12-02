@@ -13,7 +13,8 @@ class PEG_Many implements PEG_IParser
         for(;;) {
             $offset = $context->tell();
             try {
-                $ret[] = $this->parser->parse($context);
+                $result = $this->parser->parse($context);
+                if ($result !== null) $ret[] = $result;
             } catch (PEG_Failure $e) {
                 $context->seek($offset);
                 return $ret;

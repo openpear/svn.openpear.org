@@ -17,7 +17,8 @@ class PEG_Sequence implements PEG_IParser
         $ret = array();
         foreach ($this->parsers as $parser) {
             $offset = $context->tell();
-            $ret[] = $parser->parse($context);
+            $result = $parser->parse($context);
+            if ($result !== null) $ret[] = $result;
         }
         return $ret;
     }
