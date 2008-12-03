@@ -23,6 +23,7 @@ include_once dirname(__FILE__) . '/PEG/Char.php';
 include_once dirname(__FILE__) . '/PEG/Nth.php';
 include_once dirname(__FILE__) . '/PEG/Flatten.php';
 include_once dirname(__FILE__) . '/PEG/Drop.php';
+include_once dirname(__FILE__) . '/PEG/Create.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス。
@@ -186,10 +187,6 @@ class PEG
         return new PEG_And(func_get_args());
     }
 
-    /**
-
-     */
-
 
     /**
      * @return PEG_Ref
@@ -344,5 +341,23 @@ class PEG
     static function drop(PEG_IParser $p)
     {
         return new PEG_Drop($p);
+    }
+    
+    /**
+     * 
+     */
+    static function parse(PEG_IParser $p, $str)
+    {
+        return $p->parse(PEG::context($str));
+    }
+
+    /**
+     * @param string $klass
+     * @param PEG_IParser $p
+     * @return PEG_Create
+     */
+    static function create($klass, PEG_IParser $p)
+    {
+        return new PEG_Create($klass, $p);
     }
 }
