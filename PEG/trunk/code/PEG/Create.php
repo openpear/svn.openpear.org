@@ -4,7 +4,7 @@
  * パーサの結果を与えられたクラスのコンストラクタに渡してそれを返すパーサ
  *
  */
-class PEG_Create extends Action
+class PEG_Create extends PEG_Action
 {
     protected $klass;
 
