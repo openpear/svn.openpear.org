@@ -5,7 +5,6 @@ class PHP_Object_Array extends PHP_Object implements Iterator, ArrayAccess
 {
     protected $aliasMethods = array(
         'array_*',
-        '*_array',
     );
 
     public $argOffsets = array(
