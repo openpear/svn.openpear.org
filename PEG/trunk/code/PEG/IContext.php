@@ -34,4 +34,10 @@ interface PEG_IContext
      * @return bool
      */
     function eos();
+    
+    /**
+     * 文字コードを返す
+     * @return str
+     */
+    function encoding();
 }

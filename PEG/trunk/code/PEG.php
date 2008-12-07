@@ -26,18 +26,14 @@ include_once dirname(__FILE__) . '/PEG/Drop.php';
 include_once dirname(__FILE__) . '/PEG/Create.php';
                                
 /**
- * PEG以下のクラスを生成するFactoryクラス。
+ * PEG以下のクラスを生成するFactoryクラス。<br/>
  * このクラスのファクトリーメソッドを通じて様々なパーサを生成することができる。
- *
- * 言葉の定義
  * 
- * パーサ : ここではPEG_IParserインターフェイスの実装クラスを指す
- * 
- * コンテキスト : PEG_IContextインターフェイスの実装クラスを指す
- * 
- * (パーサが)成功する : parseメソッド実行時にPEG_Failure例外が投げれずに済み、parseメソッドがが何らかの値を返す事を指す
- * 
- * (パーサが)失敗する : parseメソッド実行時にPEG_Failureが投げられること
+ * 言葉の定義:<br/>
+ * パーサ : ここではPEG_IParserインターフェイスの実装クラスを指す  <br/>
+ * コンテキスト : PEG_IContextインターフェイスの実装クラスを指す  <br />
+ * (パーサが)成功する : parseメソッド実行時にPEG_Failure例外が投げれずに済み、parseメソッドがが何らかの値を返す事を指す  <br/>
+ * (パーサが)失敗する : parseメソッド実行時にPEG_Failureが投げられること  <br/>
  */
 class PEG
 {
@@ -48,9 +44,9 @@ class PEG
      * @return PEG_Context
      * @see PEG_Context
      */
-    static function context($str)
+    static function context($str, $enc = null)
     {
-        return new PEG_Context($str);
+        return new PEG_Context($str, $enc);
     }
     
     /**
