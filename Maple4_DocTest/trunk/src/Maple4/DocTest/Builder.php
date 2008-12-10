@@ -253,7 +253,7 @@ class Maple4_DocTest_Builder
      */
     private function getMethodTemplate()
     {
-        $filename = dirname(__FILE__) . '/Builder/method.tpl';
+        $filename = dirname(__FILE__) . '/Builder/method.php';
         return $this->fileUtils->read($filename);
     }
 
@@ -265,7 +265,7 @@ class Maple4_DocTest_Builder
      */
     private function getSpecialMethodTemplate()
     {
-        $filename = dirname(__FILE__) . '/Builder/specialMethod.tpl';
+        $filename = dirname(__FILE__) . '/Builder/specialMethod.php';
         return $this->fileUtils->read($filename);
     }
 
@@ -277,7 +277,7 @@ class Maple4_DocTest_Builder
      */
     public function getClassTemplate()
     {
-        $filename = dirname(__FILE__) . '/Builder/class.tpl';
+        $filename = dirname(__FILE__) . '/Builder/class.php';
         return $this->fileUtils->read($filename);
     }
 
@@ -289,7 +289,7 @@ class Maple4_DocTest_Builder
      */
     public function getFileTemplate()
     {
-        $filename = dirname(__FILE__) . '/Builder/file.tpl';
+        $filename = dirname(__FILE__) . '/Builder/file.php';
         return $this->fileUtils->read($filename);
     }
 
