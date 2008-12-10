@@ -1,0 +1,4 @@
+    public function %s()
+    {
+%s
+    }
