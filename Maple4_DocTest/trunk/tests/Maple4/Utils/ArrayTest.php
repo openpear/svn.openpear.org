@@ -76,6 +76,10 @@ class Maple4_Utils_ArrayTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $instance->bar);
         $this->assertEquals(null, $instance->baz);
 
+        $this->assertEquals(1, $instance['foo']);
+        $this->assertEquals(2, $instance['bar']);
+        $this->assertEquals(null, $instance['baz']);
+
         $this->assertEquals(1, Maple4_Utils_Array::create($test)->foo);
         $this->assertEquals(2, Maple4_Utils_Array::create($test)->bar);
         $this->assertEquals(null, Maple4_Utils_Array::create($test)->baz);
@@ -94,11 +98,7 @@ class Maple4_Utils_ArrayTest extends PHPUnit_Framework_TestCase
         $instance = new Maple4_Utils_Array($test);
 
         $this->assertEquals(3, $instance->get('baz', 3));
-        $this->assertEquals(3, $instance->setDefault('baz', 3)->baz);
-        $this->assertEquals(3, Maple4_Utils_Array::create($test)->setDefault('baz', 3)->baz);
-
-        $this->assertEquals(3, Maple4_Utils_Array::create()->setDefault('baz', 3)->get('baz'));
-        $this->assertEquals(3, Maple4_Utils_Array::create()->setDefault('baz', 3)->baz);
+        $this->assertEquals(4, Maple4_Utils_Array::create($test)->get('baz', 4));
     }
 
     /**
@@ -125,5 +125,24 @@ class Maple4_Utils_ArrayTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(3, Maple4_Utils_Array::create()->set('bar', 3)->get('bar'));
         $this->assertEquals(3, Maple4_Utils_Array::create()->set('bar', 3)->bar);
+        
+        // 配列をセット
+        $add = array(
+            'foo' => 10,
+            'baz' => 20,
+            'nokey',
+        );
+        $instance = new Maple4_Utils_Array($test);
+        $this->assertEquals(1, $instance->get('foo'));
+        $this->assertEquals(2, $instance->get('bar'));
+        $this->assertEquals(null, $instance->get('baz'));
+        $this->assertEquals(null, $instance->get(0));
+        
+        $instance->set($add);
+        $this->assertEquals(10, $instance->get('foo'));
+        $this->assertEquals(2, $instance->get('bar'));
+        $this->assertEquals(20, $instance->get('baz'));
+        $this->assertEquals('nokey', $instance->get(0));
     }
+
 }
