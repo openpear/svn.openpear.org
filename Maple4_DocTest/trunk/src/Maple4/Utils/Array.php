@@ -52,18 +52,8 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.2.0
  */
-class Maple4_Utils_Array
+class Maple4_Utils_Array extends ArrayObject
 {
-    /**
-     * @var array 各要素のデフォルト値
-     */
-    private $defaults = array();
-
-    /**
-     * @var array 処理する配列
-     */
-    private $array = array();
-
     /**
      * コンストラクタ
      *
@@ -71,7 +61,7 @@ class Maple4_Utils_Array
      */
     public function __construct($array = array())
     {
-        $this->array = $array;
+        parent::__construct($array, ArrayObject::ARRAY_AS_PROPS);
     }
 
     /**
@@ -96,13 +86,7 @@ class Maple4_Utils_Array
      */
     public function get($key, $default = null)
     {
-        if (is_array($this->array) && isset($this->array[$key])) {
-            $result = $this->array[$key];
-        } else {
-            $result = $default;
-        }
-
-        return $result;
+        return isset($this[$key])? $this[$key]: $default;
     }
 
     /**
@@ -115,48 +99,14 @@ class Maple4_Utils_Array
      */
     public function set($key, $value = null)
     {
-        $this->array[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * 配列ということを隠蔽したアクセス
-     *
-     * @param mixed $key 配列要素
-     * @return mixed 要素に対する値
-     */
-    public function __get($key)
-    {
-        $default = null;
-        if (isset($this->default[$key])) {
-            $default = $this->default[$key];
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
+                $this->set($k, $v);
+            }
+        } else {
+            $this[$key] = $value;
         }
-
-        return $this->get($key, $default);
-    }
-
-    /**
-     * 配列ということを隠蔽したアクセス
-     *
-     * @param mixed $key 配列要素
-     * @param mixed $value 要素に対する値
-     */
-    public function __set($key, $value)
-    {
-        $this->set($key, $value);
-    }
-
-    /**
-     * 要素に対してデフォルト値をセット
-     *
-     * @param mixed $key 配列要素
-     * @param mixed $default 要素に対するデフォルト値
-     * @return object このオブジェクト自身
-     */
-    public function setDefault($key, $default = null)
-    {
-        $this->array[$key] = $default;
-
         return $this;
     }
+
 }
