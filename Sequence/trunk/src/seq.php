@@ -228,7 +228,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * リストの長さを切り詰める。
-     * $iがリストの長さよりも長い場合、nullが挿入される。
+     * $iがリストの長さよりも長い場合、nullが挿入される
      *
      * @param int $i
      * @return Sequence
@@ -341,7 +341,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストを二つに分割したSequenceを返す
+     * リストを二つに分割したSequenceを生成する
      *
      * @return Sequence
      */
@@ -354,7 +354,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの最初と残りの要素とに分割したSequenceを返す
+     * リストの最初と残りの要素とに分割したSequenceを生成する
      *
      * @return Sequenceを返す
      */
@@ -364,7 +364,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストの一部の要素を返す
+     * リストの一部の要素を格納したSequenceを生成する
      *
      * @param int $offset
      * @paramm int $limit
@@ -385,7 +385,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストの最初の要素以外を返す
+     * リストの最初の要素以外のSequenceを生成する
      *
      * @return Sequence
      */
@@ -395,7 +395,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストを半分に分割する。
+     * リストを半分に分割したSequenceを生成する。
      * リストの長さが奇数だった場合、最初の半分のリストの数のほうが小さくなる。
      *
      * @return Sequence
@@ -442,7 +442,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * リストの要素をひとつずつ与えられた関数に適用し、
-     * その結果を新たなSequenceに格納して返す
+     * その結果を格納したSequenceを生成する
      *
      * @param callback $func
      * @param unknown_type ... 
@@ -463,7 +463,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     
     /**
      * リストの要素をひとつずつ与えられた関数に適用し、
-     * その結果がtrueである要素を格納した新たなSequenceを返す
+     * その結果がtrueである要素を格納した新たなSequenceを生成する
      *
      * @param callback $func
      * @param unknown_type ... 
@@ -535,7 +535,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストの要素を与えられたコールバックに一つ一つ渡していく。
+     * リストの要素を与えられたコールバックに一つ一つ渡していく
      *
      * @param callback $func
      * @return Sequence
@@ -603,7 +603,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストのインデックスのリストを返す
+     * 自身のインデックスのSequenceを生成する
      *
      * @return Sequence
      */
@@ -613,7 +613,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの要素を繰り返したSequenceを生成し返す
+     * リストの要素を繰り返したSequenceを生成する
      * 
      * @param int $i 
      * @return Sequence
@@ -642,7 +642,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * false以外の要素を持つSequenceを生成して返す
+     * false以外の要素を持つSequenceを生成する
      *
      * @return Sequence
      */
@@ -655,4 +655,20 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         return toseq($arr);
     }
     
+    /**
+     * リストをグループ化したリストを生成する
+     *
+     * @param int $i
+     * @return Sequence
+     */
+    function group($i)
+    {
+        if (!is_int($i) || $i < 1) throw new InvalidArgumentException();
+        
+        $ret = seq();
+        foreach (array_chunk($this->arr, $i) as $elt) {
+            $ret[] = toseq($elt);
+        }
+        return $ret;
+    }
 }
