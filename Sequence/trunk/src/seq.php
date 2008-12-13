@@ -10,7 +10,7 @@
 
 /**
  * Sequenceインスタンスを生成する
- * @param mixed ... リストの要素
+ * @param unknown_type ... リストの要素
  * @return Sequence
  */
 function seq()
@@ -243,6 +243,18 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         }
         $this->size = $i;
         return $this;
+    }
+    
+    /**
+     * リストの長さを切り詰める。
+     * $this->setLength()へのエイリアス
+     *
+     * @param int $i
+     * @return Sequence
+     */
+    function lengthen($i)
+    {
+        return $this->setLength($i);
     }
 
     /**
