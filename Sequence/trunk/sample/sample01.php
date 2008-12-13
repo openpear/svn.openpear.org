@@ -26,6 +26,9 @@ foreach ($seq as $elt) echo $elt . PHP_EOL;
 // 配列に変換
 seq(1, 2, 3)->toArray();
 
+// 配列をSequenceに変換
+toseq(array(1, 2, 3));
+
 // リストの大きさを得る
 count($seq);
 $seq->count();
