@@ -676,6 +676,348 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         return $ret;
     }
 
+    /**
+     * リストの末尾にリストを追加し、自身を返す
+     *
+     * @param Sequence $seq
+     * @return Sequence
+     */
+    function append(Sequence $seq)
+    {
+        foreach ($seq as $elt) $this->push($seq);
+        
+        return $this;
+    }
 
+    /**
+     * リストの要素をすべて繋げたリストを生成する。
+     * 要素がSequenceではない場合RuntimeExceptionが投げられる。
+     *
+     */
+    function concat()
+    {
+        $ret = seq();
+        foreach ($this as $elt) if ($elt instanceof self) {
+            $ret->append($elt);
+        }
+        else {
+            throw new RuntimeException;
+        }
+        return $ret;
+    }
+    
+    /**
+     * リストの最初のいくつかの要素を格納したSequenceを生成する
+     *
+     * @param int $i
+     * @return Sequence
+     */
+    function head($i)
+    {
+        if (!is_int($i) || $i < 0) throw new InvalidArgumentException();
+        
+        return $this->slice(0, $i);
+    }
+    
+    /**
+     * リストの末尾を含む要素を格納したSequenceを生成する。
+     * 
+     * 例：
+     * <code>
+     * seq(1, 2, 3, 4, 5)->tail(2); // => seq(4, 5)
+     * </code>
+     * 
+     * @param int $i
+     * @return Sequence
+     */
+    function tail($i)
+    {
+        if (!is_int($i) || $i < 0)throw new InvalidArgumentException();
+        
+        return $this->slice(-$i, $i);
+    }
 
+    /**
+     * 自身のリストと引数で与えられたSequenceの要素を一つ一つ交互に格納したSequenceを生成する。
+     * 
+     * 例:
+     * <code>
+     * seq(1, 2, 3)->zip(seq("a", "b")); // => seq(1, "a", 2, "b", 3);
+     * </code>
+     *
+     * @param Sequence $seq
+     * @return unknown
+     */
+    function zip(Sequence $seq)
+    {
+        $ret = seq();
+        $len = max(array(count($this), count($seq)));
+        for ($i = 0; $i < $len; $i++) {
+            if (isset($this[$i])) {
+                $ret->push($this[$i]);
+            }
+            if (isset($seq[$i])) {
+                $ret->push($sub[$i]);
+            }
+        }
+        return $ret;
+    }
+    
+    /**
+     * リストの中から最も大きな数を返す
+     *
+     * @return int|float
+     */
+    function max()
+    {
+        return max($this->toArray());
+    }
+    
+    /**
+     * リストの中から最も小さな数を返す
+     *
+     * @return int|float
+     */
+    function min()
+    {
+        return min($this->toArray());
+    }
+    
+    /**
+     * リストの中から最も大きな数と小さな数を要素として持つSequenceを生成する
+     *
+     * @return Sequence
+     */
+    function maxmin()
+    {
+        return seq($this->max(), $this->min());
+    }
+    
+    /**
+     * リストの要素の積を返す
+     *
+     * @return int|float
+     */
+    function product()
+    {
+        return array_product($this->toArray());
+    }
+    
+    /**
+     * リストの要素の合計値を返す
+     * 
+     * @return int|float
+     */
+    function sum()
+    {
+        return array_sum($this->toArray());
+    }
+    
+    /**
+     * リストの末尾に与えられた要素を持つSequenceを生成する。
+     * 
+     * 例:
+     * <code>
+     * seq(1, 2, 3)->suffix(4); // => seq(1, 2, 3, 4);
+     * </code>
+     *
+     * @param unknown_type $elt
+     * @return unknown
+     */
+    function suffix($elt)
+    {
+        $arr = $this->toArray();
+        array_push($arr, $elt);
+        return toseq($arr);
+    }
+    
+    /**
+     * リストの最初に与えられた要素を持つSequenceを生成する。
+     * 
+     * 例:
+     * <code>
+     * seq(1, 2, 3)->prefix(0); // => seq(0, 1, 2, 3);
+     * </code>
+     *
+     * @param unknown_type $elt
+     * @return Sequence
+     */
+    function prefix($elt)
+    {
+        $arr = $this->toArray();
+        array_unshift($arr, $elt);
+        return toseq($arr);
+    }
+    
+    /**
+     * 与えられた要素をリストの最初や末尾から取り除いたSequenceを生成する。
+     *
+     * @return Sequence
+     */
+    function trim()
+    {
+        $args = func_get_args();
+        $ret = clone $this;
+        while($ret->count() > 0) if (in_array($ret->first, $args, true)) {
+            $ret->shift();
+        }
+        else {
+            break;
+        }
+    
+        while($ret->count() > 0) if (in_array($ret->last, $args, true)) {
+            $ret->pop();
+        }
+        else {
+            break;
+        }
+        
+        return $ret;
+    }
+    
+    /**
+     * リストの全てを与えられた要素で埋めて自身を返す
+     *
+     * @param unknown_type $elt
+     * @return Sequence
+     */
+    function fill($elt)
+    {
+        foreach ($this as $i => $v) {
+            $this[$i] = $elt;
+        }
+        return $this;
+    }
+    
+    /**
+     * リストから与えられた要素を取り除いたSequenceを生成する
+     *
+     * @return Sequence
+     */
+    function remove()
+    {
+        $args = func_get_args();
+        $ret = seq();
+        foreach ($this as $elt) if (array_in($elt, $args, true)) {
+            $ret->push($elt);
+        }
+        return $ret;
+    }
+    
+    /**
+     * リストのある要素を他の部分にコピーして、自身を返す。
+     * 
+     * 例:
+     * <code>
+     * seq(1, 2, 3)->move(0, 2); // => seq(1, 2, 1);
+     * </code>
+     *
+     * @param int $i
+     * @param int $j
+     * @return unknown
+     */
+    function move($i, $j)
+    {
+        $i = $this->normalizeOffset($i);
+        $j = $this->normalizeOffset($i);
+        $this->assertOffset($i);
+        $this->assertOffset($i);
+        
+        $this[$j] = $this[$i];
+        return $this;
+    }
+    
+    /**
+     * リストの添え字で指定した要素どうしを交換し、自身を返す
+     *
+     * @param int $i
+     * @param int $j
+     * @return Sequence
+     */
+    function swap($i, $j)
+    {
+        $i = $this->normalizeOffset($i);
+        $j = $this->normalizeOffset($i);
+        $this->assertOffset($i);
+        $this->assertOffset($i);
+        
+        $buf = $this[$i];
+        $this[$i] = $this[$j];
+        $this[$j] = $buf;
+        return $this;
+    }
+
+    /**
+     * リストの最初の要素を抜き出して末尾に挿入し、自身を返す
+     *
+     * @return Sequence
+     */
+    function roll()
+    {
+        return $this->push($this->shift());
+    }
+    
+    /**
+     * リストの最後の要素を抜き出して最初に挿入し、自身を返す
+     *
+     * @return Sequence
+     */
+    function rollback()
+    {
+        return $this->unshift($this->pop());
+    }
+    
+    /**
+     * 与えられた要素の添え字を格納したSequenceを生成する。
+     *
+     * @return Sequence
+     */
+    function indices()
+    {
+        $args = func_get_args();
+        $ret = seq();
+        foreach ($this as $i => $elt) if (in_array($elt, $args, true)) {
+            $ret->push($i);
+        }
+        return $ret;
+    }
+    
+    /**
+     * 与えられた要素をリストの全ての要素の間に挟み込んだSequenceを生成する。
+     * 
+     * 例:
+     * <code>
+     * seq(1, 2, 3)->interleave(0); // => seq(1, 0, 2, 0, 3);
+     * </code>
+     *
+     * @param unknown_type $elt
+     * @return Sequence
+     */
+    function interleave($elt)
+    {
+        if ($this->count() <= 1) return seq();
+        $ret = clone $this;
+        return $ret->zip(seq()->lengthen($this->count() - 1)->fill($elt));
+    }
+    
+    /**
+     * リストを平らにしたSequenceを生成する
+     *
+     * @return Sequence
+     */
+    function flatten()    
+    {
+        return toseq($this->flattenInternally($this));
+    }
+
+    protected function flattenInternally(Sequence $seq, Array $buf = array())
+    {
+        foreach ($seq as $elt) if ($elt instanceof self){
+           $buf = $this->flattenWithArray($elt, $buf);
+        }
+        else {
+            $buf[] = $elt;
+        }
+        return $buf;
+    }
 }
