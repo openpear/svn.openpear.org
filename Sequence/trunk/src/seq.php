@@ -9,8 +9,9 @@
  */
 
 /**
- * Sequenceインスタンスを生成する
- * @param unknown_type ... リストの要素
+ * Sequenceインスタンスを生成する。
+ * 引数にはリストの要素を渡す。
+ * 
  * @return Sequence
  */
 function seq()
@@ -19,7 +20,10 @@ function seq()
 }
 
 /**
- * 配列やイテレータからSequenceインスタンスを生成する
+ * 配列やイテレータからSequenceを生成する。
+ * 引数にはSequenceを生成する元となるものをわたす。
+ * この関数は渡された全ての引数を要素として持つSequenceを生成する。
+ * 
  * @return Sequence
  */
 function toseq()
@@ -306,7 +310,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      *
      * @return unknown_type
      */
-    function getTail()
+    function getLast()
     {
         return $this->nth(-1);
     }
@@ -356,7 +360,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     /**
      * リストの最初と残りの要素とに分割したSequenceを生成する
      *
-     * @return Sequenceを返す
+     * @return Sequence
      */
     function unclip()
     {
@@ -671,4 +675,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         }
         return $ret;
     }
+
+
+
 }
