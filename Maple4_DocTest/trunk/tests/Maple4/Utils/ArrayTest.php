@@ -146,3 +146,14 @@ class Maple4_Utils_ArrayTest extends PHPUnit_Framework_TestCase
     }
 
 }
+
+
+if(0 < count(debug_backtrace())) {
+    return;
+}
+
+require_once('PHPUnit/Framework.php');
+require_once('PHPUnit/TextUI/TestRunner.php');
+$suite = new PHPUnit_Framework_TestSuite();
+$suite->addTestSuite('Maple4_Utils_ArrayTest');
+PHPUnit_TextUI_TestRunner::run($suite);
