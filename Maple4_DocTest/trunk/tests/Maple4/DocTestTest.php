@@ -83,10 +83,10 @@ class Maple4_DocTestTest extends PHPUnit_Framework_TestCase
 
         $options = array(
             'compileDir' => $this->baseDir . '/tmp/tests_c',
-            'color' => false,
+            'color' => true,
             'ignore' => array('\.svn'),
             'report' => null,
-            'forceCompile' => true,
+            'forceRun' => true,
         );
 
         ob_start();
@@ -130,7 +130,7 @@ class Maple4_DocTestTest extends PHPUnit_Framework_TestCase
             'color' => false,
             'ignore' => array('\.svn'),
             'report' => null,
-            'forceCompile' => true,
+            'forceRun' => true,
         );
 
         ob_start();
@@ -154,7 +154,7 @@ class Maple4_DocTestTest extends PHPUnit_Framework_TestCase
             'color' => true,
             'ignore' => array('\.svn'),
             'report' => null,
-            'forceCompile' => true,
+            'forceRun' => true,
         );
 
         ob_start();
@@ -184,7 +184,7 @@ class Maple4_DocTestTest extends PHPUnit_Framework_TestCase
             'color' => true,
             'ignore' => array('\.svn'),
             'report' => null,
-            'forceCompile' => true,
+            'forceRun' => true,
         );
 
         ob_start();
@@ -216,7 +216,7 @@ class Maple4_DocTestTest extends PHPUnit_Framework_TestCase
             'color' => true,
             'ignore' => array('\.svn'),
             'report' => null,
-            'forceCompile' => false,
+            'forceRun' => false,
             'forceRun' => false,
         );
 
