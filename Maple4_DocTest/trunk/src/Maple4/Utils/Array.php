@@ -108,5 +108,13 @@ class Maple4_Utils_Array extends ArrayObject
         }
         return $this;
     }
-
+    
+    public function offsetGet($index)
+    {
+        if ($this->offsetExists($index)) {
+            return parent::offsetGet($index);
+        } else {
+            return null;
+        }
+    }
 }
