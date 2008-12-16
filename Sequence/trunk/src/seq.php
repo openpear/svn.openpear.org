@@ -3,34 +3,34 @@
  * 汎用的なリストライブラリ。
  * このライブラリは、オブジェクト指向であること、扱いやすい事、パワフルであることを目指す。
  * 
- * @package Sequence
+ * @package seq
  * @author anatoo <study.anatoo@gmail.com>
  * @version 0.0.1
  */
 
 /**
- * Sequenceインスタンスを生成する。
+ * seqインスタンスを生成する。
  * 引数にはリストの要素を渡す。
  * 
- * @return Sequence
+ * @return seq
  */
 function seq()
 {
-    return new Sequence(func_get_args());
+    return new seq(func_get_args());
 }
 
 /**
- * 配列やイテレータからSequenceを生成する。
- * 引数にはSequenceを生成する元となるものをわたす。
- * この関数は渡された全ての引数を要素として持つSequenceを生成する。
+ * 配列やイテレータからリストを生成する。
+ * 引数にはリストを生成する元となるものをわたす。
+ * この関数は渡された全ての引数を要素として持つリストを生成する。
  * 
- * @return Sequence
+ * @return seq
  */
 function toseq()
 {
     $arr = array();
     foreach (func_get_args() as $arg) foreach ($arg as $elt) $arr[] = $elt;
-    return new Sequence($arr);
+    return new seq($arr);
 }
 
 
@@ -38,7 +38,7 @@ function toseq()
  * 汎用リストクラス
  * 
  */
-class Sequence implements ArrayAccess, Countable, IteratorAggregate 
+class seq implements ArrayAccess, Countable, IteratorAggregate 
 {
     /**
      * リストの要素を持つ配列
@@ -161,7 +161,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * 末尾に要素を挿入する
      *
      * @param unknown_type $v
-     * @return Sequence
+     * @return seq
      */
     function push($v)
     {
@@ -185,9 +185,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * 並びを逆にしたSequenceを生成する
+     * 並びを逆にしたリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function reverse()
     {
@@ -235,7 +235,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * $iがリストの長さよりも長い場合、nullが挿入される
      *
      * @param int $i
-     * @return Sequence
+     * @return seq
      */
     function setLength($i)
     {
@@ -254,7 +254,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * $this->setLength()へのエイリアス
      *
      * @param int $i
-     * @return Sequence
+     * @return seq
      */
     function lengthen($i)
     {
@@ -318,7 +318,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     /**
      * 渡された変数にリストの要素を順に代入する
      *
-     * @return Sequence
+     * @return seq
      */
     function tovar(&$_0, &$_1 = null, &$_2 = null, &$_3 = null, &$_4 = null,
                    &$_5 = null, &$_6 = null, &$_7 = null, &$_8 = null, &$_9 = null)
@@ -345,9 +345,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストを二つに分割したSequenceを生成する
+     * リストを二つに分割したリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function cut($i)
     {
@@ -358,9 +358,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの最初と残りの要素とに分割したSequenceを生成する
+     * リストの最初と残りの要素とに分割したリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function unclip()
     {
@@ -368,11 +368,11 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストの一部の要素を格納したSequenceを生成する
+     * リストの一部の要素を格納したリストを生成する
      *
      * @param int $offset
-     * @paramm int $limit
-     * @return Sequence
+     * @param int $limit
+     * @return seq
      */
     function slice($offset, $limit = null)
     {
@@ -389,9 +389,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストの最初の要素以外のSequenceを生成する
+     * リストの最初の要素以外のリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function rest()
     {
@@ -399,10 +399,10 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * リストを半分に分割したSequenceを生成する。
+     * リストを半分に分割したリストを生成する。
      * リストの長さが奇数だった場合、最初の半分のリストの数のほうが小さくなる。
      *
-     * @return Sequence
+     * @return seq
      */
     function halves()
     {
@@ -414,10 +414,10 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * 添え字で指定した要素で構成されるSequenceを生成する
+     * 添え字で指定した要素で構成されるリストを生成する
      *
      * @param int ...
-     * @return Sequence
+     * @return seq
      */
     function pick()
     {
@@ -431,7 +431,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     /**
      * リストの要素をすべてvar_dumpする
      *
-     * @return Sequence
+     * @return seq
      */
     function dump()
     {
@@ -446,11 +446,11 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * リストの要素をひとつずつ与えられた関数に適用し、
-     * その結果を格納したSequenceを生成する
+     * その結果を格納したリストを生成する
      *
      * @param callback $func
      * @param unknown_type ... 
-     * @return Sequence
+     * @return seq
      */
     function map($func)
     {
@@ -467,11 +467,11 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     
     /**
      * リストの要素をひとつずつ与えられた関数に適用し、
-     * その結果がtrueである要素を格納した新たなSequenceを生成する
+     * その結果がtrueである要素を格納した新たなリストを生成する
      *
      * @param callback $func
      * @param unknown_type ... 
-     * @return Sequence
+     * @return seq
      */
     function filter($func)
     {
@@ -542,7 +542,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * リストの要素を与えられたコールバックに一つ一つ渡していく
      *
      * @param callback $func
-     * @return Sequence
+     * @return seq
      */
     function each($func)
     {
@@ -597,7 +597,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * リストの最初に要素を挿入する
      *
      * @param unknown_type $v
-     * @return Sequence
+     * @return seq
      */
     function unshift($v)
     {
@@ -607,9 +607,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * 自身のインデックスのSequenceを生成する
+     * 自身のインデックスのリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function indexes()
     {
@@ -617,10 +617,10 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの要素を繰り返したSequenceを生成する
+     * リストの要素を繰り返したリストを生成する
      * 
      * @param int $i 
-     * @return Sequence
+     * @return seq
      */
     function repeat($i)
     {
@@ -646,9 +646,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * false以外の要素を持つSequenceを生成する
+     * false以外の要素を持つリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function harvest()
     {
@@ -663,7 +663,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * リストをグループ化したリストを生成する
      *
      * @param int $i
-     * @return Sequence
+     * @return seq
      */
     function group($i)
     {
@@ -679,10 +679,10 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     /**
      * リストの末尾にリストを追加し、自身を返す
      *
-     * @param Sequence $seq
-     * @return Sequence
+     * @param seq $seq
+     * @return seq
      */
-    function append(Sequence $seq)
+    function append(seq $seq)
     {
         foreach ($seq as $elt) $this->push($seq);
         
@@ -691,7 +691,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * リストの要素をすべて繋げたリストを生成する。
-     * 要素がSequenceではない場合RuntimeExceptionが投げられる。
+     * 要素がseqではない場合RuntimeExceptionが投げられる。
      *
      */
     function concat()
@@ -707,10 +707,10 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの最初のいくつかの要素を格納したSequenceを生成する
+     * リストの最初のいくつかの要素を格納したリストを生成する
      *
      * @param int $i
-     * @return Sequence
+     * @return seq
      */
     function head($i)
     {
@@ -720,7 +720,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの末尾を含む要素を格納したSequenceを生成する。
+     * リストの末尾を含む要素を格納したリストを生成する。
      * 
      * 例：
      * <code>
@@ -728,7 +728,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * </code>
      * 
      * @param int $i
-     * @return Sequence
+     * @return seq
      */
     function tail($i)
     {
@@ -738,27 +738,22 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * 自身のリストと引数で与えられたSequenceの要素を一つ一つ交互に格納したSequenceを生成する。
+     * 自身のリストと引数で与えられたseqの要素を持つリストを要素として持つリストを生成する。
      * 
      * 例:
      * <code>
-     * seq(1, 2, 3)->zip(seq("a", "b")); // => seq(1, "a", 2, "b", 3);
+     * seq(1, 2, 3)->zip(seq("a", "b")); // => seq(seq(1, "a"), seq(2, "b"));
      * </code>
      *
-     * @param Sequence $seq
-     * @return unknown
+     * @param seq $seq
+     * @return seq
      */
-    function zip(Sequence $seq)
+    function zip(seq $seq)
     {
         $ret = seq();
-        $len = max(array(count($this), count($seq)));
+        $len = min(array(count($this), count($seq)));
         for ($i = 0; $i < $len; $i++) {
-            if (isset($this[$i])) {
-                $ret->push($this[$i]);
-            }
-            if (isset($seq[$i])) {
-                $ret->push($sub[$i]);
-            }
+            $ret->push(seq($this->nth($i), $seq->nth($i)));
         }
         return $ret;
     }
@@ -784,9 +779,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの中から最も大きな数と小さな数を要素として持つSequenceを生成する
+     * リストの中から最も大きな数と小さな数を要素として持つリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function maxmin()
     {
@@ -814,7 +809,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの末尾に与えられた要素を持つSequenceを生成する。
+     * リストの末尾に与えられた要素を持つリストを生成する。
      * 
      * 例:
      * <code>
@@ -832,7 +827,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストの最初に与えられた要素を持つSequenceを生成する。
+     * リストの最初に与えられた要素を持つリストを生成する。
      * 
      * 例:
      * <code>
@@ -840,7 +835,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * </code>
      *
      * @param unknown_type $elt
-     * @return Sequence
+     * @return seq
      */
     function prefix($elt)
     {
@@ -850,9 +845,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * 与えられた要素をリストの最初や末尾から取り除いたSequenceを生成する。
+     * 与えられた要素をリストの最初や末尾から取り除いたリストを生成する。
      *
-     * @return Sequence
+     * @return seq
      */
     function trim()
     {
@@ -879,7 +874,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * リストの全てを与えられた要素で埋めて自身を返す
      *
      * @param unknown_type $elt
-     * @return Sequence
+     * @return seq
      */
     function fill($elt)
     {
@@ -890,9 +885,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストから与えられた要素を取り除いたSequenceを生成する
+     * リストから与えられた要素を取り除いたリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function remove()
     {
@@ -932,7 +927,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      *
      * @param int $i
      * @param int $j
-     * @return Sequence
+     * @return seq
      */
     function swap($i, $j)
     {
@@ -950,7 +945,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     /**
      * リストの最初の要素を抜き出して末尾に挿入し、自身を返す
      *
-     * @return Sequence
+     * @return seq
      */
     function roll()
     {
@@ -960,7 +955,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     /**
      * リストの最後の要素を抜き出して最初に挿入し、自身を返す
      *
-     * @return Sequence
+     * @return seq
      */
     function rollback()
     {
@@ -968,9 +963,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * 与えられた要素の添え字を格納したSequenceを生成する。
+     * 与えられた要素の添え字を格納したリストを生成する。
      *
-     * @return Sequence
+     * @return seq
      */
     function indices()
     {
@@ -983,7 +978,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * 与えられた要素をリストの全ての要素の間に挟み込んだSequenceを生成する。
+     * 与えられた要素をリストの全ての要素の間に挟み込んだリストを生成する。
      * 
      * 例:
      * <code>
@@ -991,7 +986,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * </code>
      *
      * @param unknown_type $elt
-     * @return Sequence
+     * @return seq
      */
     function interleave($elt)
     {
@@ -1001,16 +996,16 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストを平らにしたSequenceを生成する
+     * 平らにしたリストを生成する
      *
-     * @return Sequence
+     * @return seq
      */
     function flatten()    
     {
         return toseq($this->flattenInternally($this));
     }
 
-    protected function flattenInternally(Sequence $seq, Array $buf = array())
+    protected function flattenInternally(seq $seq, Array $buf = array())
     {
         foreach ($seq as $elt) if ($elt instanceof self){
            $buf = $this->flattenWithArray($elt, $buf);
