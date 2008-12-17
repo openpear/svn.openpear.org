@@ -52,3 +52,5 @@ seq(1, 2, 3)->reduce(create_function('$a, $b', 'return $a + $b;')); // => 6
 seq("a", "b", "c")->all('is_string'); // => true
 seq("a", 1, "b", "c")->any('is_int'); // => true
 seq(1, 2, 3)->each('var_dump'); 
+
+seq(1,2,3)->zip(seq(4,5,6)); // => seq(seq(1, 4), seq(2, 5), seq(3,6))
