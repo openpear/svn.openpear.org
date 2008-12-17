@@ -114,6 +114,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     function offsetSet($i, $val)
     {
+        // $seq[] = $val;の場合
         if (is_null($i)) {
             return $this->push($val);
         }
@@ -121,7 +122,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         $i = $this->normalizeOffset($i);
         $this->assertOffset($i);
         
-        $arr[$i] = $val;
+        $this->arr[$i] = $val;
     }
     
     /**
