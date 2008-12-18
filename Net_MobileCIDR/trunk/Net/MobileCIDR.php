@@ -1,4 +1,13 @@
 <?php
+/**
+* Net_MobileCIDR
+* Scraping Gateway
+*
+* @version: 0.1.1 <2008/12/19 7:29>
+* @package: Net_MobileCIDR
+* @author: Shuhei Tanuma <shuhei.tanuma at gmail.com>
+**/
+
 require dirname(__FILE__) . "/MobileCIDR/Interface.php";
 require dirname(__FILE__) . "/MobileCIDR/Carrier.php";
 require dirname(__FILE__) . "/MobileCIDR/DoCoMo.php";
@@ -8,27 +17,28 @@ require dirname(__FILE__) . "/MobileCIDR/Willcom.php";
 require dirname(__FILE__) . "/MobileCIDR/Emobile.php";
 
 class Net_MobileCIDR{
-  const DoCoMo = 1;
-  const SoftBank = 2;
-  const EZweb = 3;
-  const Willcom = 4;
-  const EMobile = 5;
+  const Version = "0.1.1";
+  const DOCOMO = 1;
+  const SOFTBANK = 2;
+  const EZWEB = 3;
+  const WILLCOM = 4;
+  const EMOBILE = 5;
 
   public static function Factory($carrier){
     switch($carrier){
-      case Net_MobileCIDR::DoCoMo:
+      case Net_MobileCIDR::DOCOMO:
         return new Net_MobileCIDR_DoCoMo();
         break;
-      case Net_MobileCIDR::SoftBank:
+      case Net_MobileCIDR::SOFTBANK:
         return new Net_MobileCIDR_SoftBank();
         break;
-      case Net_MobileCIDR::EZweb:
+      case Net_MobileCIDR::EZWEB:
         return new Net_MobileCIDR_EZweb();
         break;
-      case Net_MobileCIDR::Willcom:
+      case Net_MobileCIDR::WILLCOM:
         return new Net_MobileCIDR_Willcom();
         break;
-      case Net_MobileCIDR::EMobile:
+      case Net_MobileCIDR::EMOBILE:
         return new Net_MobileCIDR_Emobile();
         break;
     }
