@@ -15,6 +15,17 @@ class File_HyperEstraier_Draft {
 	private $hiddens = array();
 	
 	/**
+	 * constructor
+	 *
+	 * @param string $string Document draft string.
+	 */
+	function __construct($string=''){
+		if($string){
+			$this->load($string);
+		}
+	}
+	
+	/**
 	 * Load draft data.
 	 * @param string $string Document draft string.
 	 * @return boolean True on success.
@@ -93,7 +104,41 @@ class File_HyperEstraier_Draft {
 	 * @return string Document draft
 	 */
 	function dump(){
-		trigger_error("Not implemented yet.", E_USER_ERROR);
+		$lines=array();
+		
+		if($this->attrs){
+			foreach($this->attrs as $k=>$v){
+				$lines[]=$k.'='.$v;
+			}
+		}
+		if($this->kwords){
+			$kw=array("%VECTOR");
+			foreach($this->kwords as $k=>$v){
+				$kw[]=$k;
+				$kw[]=$v;
+			}
+			$lines[]=join("\t",$kw);
+		}
+		if($this->score){
+			$lines[]="%SCORE\t".$this->score;
+		}
+		if($this->shadow){
+			$sd=array("%SHADOW");
+			foreach($this->shadow as $k=>$v){
+				$sd[]=$k;
+				$sd[]=$v;
+			}
+			$lines[]=join("\t",$sd);
+		}
+		
+		foreach($this->texts as $t){
+			$lines[]=$t;
+		}
+		foreach($this->hiddens as $t){
+			$lines[]="\t".$t;
+		}
+		
+		return join("\n", $lines);
 	}
 	
 	/**

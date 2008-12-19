@@ -14,6 +14,17 @@ class File_HyperEstraier_SearchResult implements SeekableIterator {
 	private $pos = 0;
 	
 	/**
+	 * constructor
+	 *
+	 * @param string $string Document draft string.
+	 */
+	function __construct($string=''){
+		if($string){
+			$this->load($string);
+		}
+	}
+	
+	/**
 	 * Load draft data.
 	 * @param string $string Search result string.
 	 * @return boolean True on success.
