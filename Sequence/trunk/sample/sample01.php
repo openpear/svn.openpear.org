@@ -1,12 +1,13 @@
 <?php
 include_once dirname(__FILE__) . '/../src/seq.php';
 
-list($a, $b) = seq(1, 2, 3, 4)->map('min', 2)->pick(0, 3);
+list($a, $b) = seq(1, 2, 3, 4)->map('max', 2)->pick(0, 3);
 // $a => 2
 // $b => 4
 
 // これは上の例とおなじ
-seq(1, 2, 3, 4)->map('min', 2)->pick(0, -1)->tovar($a, $b);
+seq(1, 2, 3, 4)->map('max', 2)->pick(0, -1)->tovar($a, $b);
+
 
 // メソッドによる要素へのアクセス
 seq(4, 5, 6)->nth(0); // => 4
