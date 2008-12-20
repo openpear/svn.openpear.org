@@ -7,6 +7,7 @@ class PEG_Flatten extends PEG_Action
         $ret = array();
         foreach ($v as $elt) {
             if (is_array($elt)) $ret = array_merge($ret, $this->process($elt));
+            else $ret[] = $elt;
         }
         return $ret;
     }
