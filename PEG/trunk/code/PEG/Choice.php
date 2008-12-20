@@ -23,11 +23,12 @@ class PEG_Choice implements PEG_IParser
             try {
                 $result = $p->parse($c);
             } catch (PEG_Failure $e) {
+                $last_exception = $e;
                 $c->seek($offset);
                 continue;
             }
             return $result;
         }
-        throw new PEG_Failure;
+        throw isset($last_exception) ? $last_exception : new PEG_Failure;
     }
 }

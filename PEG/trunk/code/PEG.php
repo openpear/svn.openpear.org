@@ -24,6 +24,7 @@ include_once dirname(__FILE__) . '/PEG/Nth.php';
 include_once dirname(__FILE__) . '/PEG/Flatten.php';
 include_once dirname(__FILE__) . '/PEG/Drop.php';
 include_once dirname(__FILE__) . '/PEG/Create.php';
+include_once dirname(__FILE__) . '/PEG/Join.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス。<br/>
@@ -126,6 +127,14 @@ class PEG
      * @return PEG_Sequence
      */
     static function sequence()
+    {
+        return new PEG_Sequence(func_get_args());
+    }
+    
+    /**
+     * @return PEG_Sequence
+     */
+    static function seq()
     {
         return new PEG_Sequence(func_get_args());
     }
@@ -355,5 +364,16 @@ class PEG
     static function create($klass, PEG_IParser $p)
     {
         return new PEG_Create($klass, $p);
+    }
+    
+    /**
+     * 
+     *
+     * @param PEG_IParser $p
+     * @param string $glue
+     */
+    static function join(PEG_IParser $p, $glue = '')
+    {
+        return new PEG_Join($p, $glue);
     }
 }
