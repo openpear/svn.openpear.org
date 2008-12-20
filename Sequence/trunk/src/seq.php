@@ -243,7 +243,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         if (!is_int($i) || $i < 0) throw new InvalidArgumentException;
         
         $this->arr = array_slice($this->arr, 0, $i);
-        for ($i = 0, $m = $i - count($this->arr); $i < $m ; $i++) {
+        for ($j = 0, $m = $j - count($this->arr); $j < $m ; $j++) {
             $this->arr[] = null;
         }
         $this->size = $i;
