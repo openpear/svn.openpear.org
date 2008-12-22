@@ -2,6 +2,7 @@
 /**
  * BoardList.php
  *
+ * @package Services_2chClient
  */
 
 require_once dirname(__FILE__) . '/Common.php';
