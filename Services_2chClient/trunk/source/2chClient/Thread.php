@@ -1,13 +1,16 @@
 <?php
 /**
+ * Thread.php
  *
- *
+ * @package Services_2chClient
  */
 
 require_once dirname(__FILE__) . '/Common.php';
 
 /**
+ * Services_2chClient_Thread
  *
+ * @see http://age.s22.xrea.com/talk2ch/ 
  *
  */
 class Services_2chClient_Thread extends Services_2chClient_Common
@@ -29,6 +32,7 @@ class Services_2chClient_Thread extends Services_2chClient_Common
     /**
      * parse
      *
+     * とってきて配列で返す
      */
     public function parse($url = '')
     {
@@ -38,7 +42,17 @@ class Services_2chClient_Thread extends Services_2chClient_Common
 
         $body = $this->fetch($url);
 
-        return $body;
+        // @todo 任意に変えれるように
+        $body = mb_convert_encoding($body, 'UTF-8', 'Shift-JIS');
+
+        $lines = explode("\n", $body);
+
+        $rows = array();
+        foreach ($lines as $line) {
+            $rows[] = explode('<>', $line);
+        }
+
+        return $rows;
     }
 
 }
