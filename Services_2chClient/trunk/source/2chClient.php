@@ -42,7 +42,6 @@ class Services_2chClient
         return $instance;
     }
 }
-
 /*
 $host = 'gimpo.2ch.net';
 $board_key = 'namazuplus';
@@ -55,6 +54,6 @@ $two_ch = new Services_2chClient();
 //var_dump($result);
 
 $thread = $two_ch->factory('Thread', $host, $board_key, $thread_key);
-//$data = $thread->fetch();
-//var_dump($data);
+$data = $thread->parse();
+var_dump($data);
  */
