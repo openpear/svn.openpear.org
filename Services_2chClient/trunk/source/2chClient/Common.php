@@ -36,6 +36,32 @@ class Services_2chClient_Common
     }
 
     /**
+     * fetch
+     *
+     */
+    public function fetch($url)
+    {
+        $this->http_req->setURL($url);
+
+        if ($this->_lastModified) {
+            $httpObject->addHeader('If-Modified-Since', $this->_lastModified);
+        }
+
+        $response = $this->http_req->sendRequest();
+
+        if (PEAR::isError($response)) {
+            throw new Exception($response->getMessage());
+        }
+
+        $responseCode = $this->http_req->getResponseCode();
+        if ($responseCode != "200") {
+            throw new Exception("Invalid response code:{$responseCode}, url:{$url}");
+        }
+
+        return $this->http_req->getResponseBody();
+    }
+
+    /**
      * setProperty
      *
      */
