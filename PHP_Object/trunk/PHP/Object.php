@@ -75,6 +75,7 @@ class PHP_Object
         'error_get_last' => NULL,
         'error_reporting' => NULL,
         'explode' => 1,
+        'file_put_contents' => 1,
         'flush' => NULL,
         'fprintf' => 2,
         'func_get_args' => NULL,
@@ -192,6 +193,7 @@ class PHP_Object
         'pi' => NULL,
         'preg_grep' => 1,
         'preg_last_error' => NULL,
+        'preg_match' => 1,
         'preg_match_all' => 1,
         'preg_replace_callback' => 2,
         'preg_replace' => 2,
@@ -382,7 +384,7 @@ class PHP_Object
         }
     }
 
-    protected function revert($data) 
+    protected function &revert($data) 
     {
         if ($data instanceof self) {
             $data = $data->val();
