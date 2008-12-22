@@ -2,6 +2,9 @@
 /**
  * 2chClient.php
  *
+ * API経由でデータをとるものはServices．
+ * これはスクレイピングしてるからScraping_2chClientの方がいい気もするけど
+ * SubjectやDATがAPIという考えもできるのなんとも
  */
 
 require_once 'HTTP/Request.php';
@@ -42,6 +45,7 @@ class Services_2chClient
         return $instance;
     }
 }
+
 /*
 $host = 'gimpo.2ch.net';
 $board_key = 'namazuplus';
