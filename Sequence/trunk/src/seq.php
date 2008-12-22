@@ -92,7 +92,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     protected function assertOffset($i)
     {
-        if ($i >= $this->getLength()) throw new DomainException();
+        if ($i < 0 || $i >= $this->getLength()) throw new DomainException();
     }
     
     /**
@@ -243,7 +243,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         if (!is_int($i) || $i < 0) throw new InvalidArgumentException;
         
         $this->arr = array_slice($this->arr, 0, $i);
-        for ($j = 0, $m = $j - count($this->arr); $j < $m ; $j++) {
+        for ($j = 0, $m = $i - count($this->arr); $j < $m ; $j++) {
             $this->arr[] = null;
         }
         $this->size = $i;
@@ -342,7 +342,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function in($i)
     {
         $i = $this->normalizeOffset($i);
-        return $i < $this->getLength();
+        return $i >= 0 && $i < $this->getLength();
     }
 
     /**
@@ -353,7 +353,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function cut($i)
     {
         $i = $this->normalizeOffset($i);
-        $this->assertOffset($i);
+        $this->assertOffset($i > 0 ? $i - 1 : $i);
         return seq(toseq(array_slice($this->arr, 0, $i)),
                    toseq(array_slice($this->arr, $i)));
     }
@@ -365,7 +365,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     function unclip()
     {
-        return $this->cut(1);
+        return seq($this[0], $this->rest());
     }
 
     /**
@@ -378,7 +378,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function slice($offset, $limit = null)
     {
         $offset = $this->normalizeOffset($offset);
-        $this->assertOffset($offset);
+        $this->assertOffset($offset > 0 ? $offset - 1 : $offset);
         
         if (is_null($limit)) {
             return toseq(array_slice($this->arr, $offset));
