@@ -9,6 +9,7 @@ require_once dirname(__FILE__) . '/Common.php';
 /**
  * Services_2chClient_Board
  *
+ * @see http://info.2ch.net/wiki/index.php?subject.txt%A4%CE%BB%C5%CD%CD
  */
 class Services_2chClient_Board extends Services_2chClient_Common
 {
@@ -16,6 +17,7 @@ class Services_2chClient_Board extends Services_2chClient_Common
      * ホスト名・パス
      */
     private $_path;
+
     /**
      * ディレクトリ名
      */
@@ -24,8 +26,35 @@ class Services_2chClient_Board extends Services_2chClient_Common
 
     private $subject;
 
-    function load(){
-        $httpObject =& new HTTP_Request('http://'.$this->_path.'/'.$this->_directory.'/subject.txt');
+    /**
+     * fetchThreadList
+     *
+     * subjectとres数の配列を返す
+     *
+     * @todo 全体的にnaosu
+     *
+     */
+    public function fetchThreadList()
+    {
+        $this->_path = 'gimpo.2ch.net';
+        $this->_directory = 'namazuplus';
+
+        $this->load();
+
+        //$result = $this->export();
+
+        return $this->subject;
+    }
+
+    /**
+     * load
+     *
+     */
+    public function load()
+    {
+        $url = 'http://'.$this->_path.'/'.$this->_directory.'/subject.txt';
+
+        $httpObject =& new HTTP_Request($url);
         $httpObject->addHeader('User-Agent', $this->_userAgent);
         $httpObject->addHeader('Accept-Encoding', 'gzip');
 
@@ -35,30 +64,42 @@ class Services_2chClient_Board extends Services_2chClient_Common
 
         $response = $httpObject->sendRequest();
 
-        if (!PEAR::isError($response)) {
+        if (PEAR::isError($response)) {
             return false;
         }
-        $responseCode = $httpObject->getResponseCode();
-        if ($responseCode == "200") {
-            $this->subject = array();
-            $subjectText = preg_split("/\n/", $request->getResponseBody());
 
-            foreach ($subjectText as $line) {
-                $result = preg_match('/^([\d]+)\.dat\<\>(.*) \(([\d]+)\)$/', $line, $match);
-                if (!$result) {
-                    continue;
-                }
-                $this->subject[$match[1]] = array( 'subject' => $match[2],
-                                                  'res' => $match[3],);
-            }
-            //最終更新時刻を変更
-            $this->_lastModified($httpObject->getResponseHeader('Last-Modified'));
+        $responseCode = $httpObject->getResponseCode();
+        if ($responseCode != "200") {
+            throw new Exception("Invalid response code:{$responseCode}");
         }
+
+        $body = $httpObject->getResponseBody();
+        $subjectText = preg_split("/\n/", $body);
+
+        $this->subject = array();
+        foreach ($subjectText as $line) {
+            $result = preg_match('/^([\d]+)\.dat\<\>(.*) \(([\d]+)\)$/', $line, $match);
+            if (!$result) {
+                continue;
+            }
+            $this->subject[$match[1]] = array( 'subject' => $match[2],
+                'res' => $match[3],);
+        }
+
+        //最終更新時刻を変更
+        $this->_lastModified = $httpObject->getResponseHeader('Last-Modified');
+
         //レスポンスコードを返す。
         return $responseCode;
     }
 
-    function export(){
+    /**
+     * export
+     *
+     * loadしたものを元に戻して返す？
+     */
+    public function export()
+    {
         if (!$this->subject) {
             return false;
         }
@@ -71,7 +112,11 @@ class Services_2chClient_Board extends Services_2chClient_Common
         return $subjectText;
     }
 
-    function loadSetting(){
+    /**
+     * loadSetting
+     *
+     */
+    public function loadSetting(){
         $httpObject =& new HTTP_Request('http://'.$this->_path.'/'.$this->_directory.'/SETTING.TXT');
         $httpObject->addHeader('User-Agent', $this->_userAgent);
         $httpObject->addHeader('Accept-Encoding', 'gzip');
@@ -107,7 +152,7 @@ class Services_2chClient_Board extends Services_2chClient_Common
         return true;
     }
 
-    function exportSetting(){
+    public function exportSetting(){
             if (!$this->subject) {
             return false;
         }
