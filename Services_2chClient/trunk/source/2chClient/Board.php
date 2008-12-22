@@ -28,6 +28,15 @@ class Services_2chClient_Board extends Services_2chClient_Common
 
     private $subject;
 
+    public function __construct($url, $board_key)
+    {
+        //$this->_path = 'gimpo.2ch.net';
+        //$this->_directory = 'namazuplus';
+        
+        $this->_path = $url;
+        $this->_directory = $board_key;
+    }
+
     /**
      * fetchThreadList
      *
@@ -38,9 +47,6 @@ class Services_2chClient_Board extends Services_2chClient_Common
      */
     public function fetchThreadList()
     {
-        $this->_path = 'gimpo.2ch.net';
-        $this->_directory = 'namazuplus';
-
         $this->load();
 
         //$result = $this->export();
