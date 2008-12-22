@@ -9,6 +9,7 @@ require_once dirname(__FILE__) . '/Common.php';
 /**
  * Services_2chClient_Board
  *
+ * @see http://age.s22.xrea.com/talk2ch/ 
  * @see http://info.2ch.net/wiki/index.php?subject.txt%A4%CE%BB%C5%CD%CD
  */
 class Services_2chClient_Board extends Services_2chClient_Common
@@ -19,9 +20,10 @@ class Services_2chClient_Board extends Services_2chClient_Common
     private $_path;
 
     /**
-     * ディレクトリ名
+     * 板キー
      */
     private $_directory;
+
     private $setting = array();
 
     private $subject;
@@ -170,7 +172,8 @@ class Services_2chClient_Board extends Services_2chClient_Common
      *
      * @param int   $redirectMax    最大追尾回数
      */
-    function trackServer($redirectMax = 10){
+    public function trackServer($redirectMax = 10)
+    {
         if ($redirectMax <= 1) {
             $redirectMax = 1;
         } elseif ($redirectMax >= 100) {
