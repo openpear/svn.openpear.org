@@ -1,5 +1,15 @@
 <?php
+/**
+ * BoardList.php
+ *
+ */
 
+require_once dirname(__FILE__) . '/Common.php';
+
+/**
+ * Services_2chClient_BoardList
+ *
+ */
 class Services_2chClient_BoardList extends Services_2chClient_Common
 {
     /**

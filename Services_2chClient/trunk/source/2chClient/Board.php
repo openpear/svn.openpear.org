@@ -1,5 +1,12 @@
 <?php
 /**
+ * Board.php
+ *
+ */
+
+require_once dirname(__FILE__) . '/Common.php';
+
+/**
  * Services_2chClient_Board
  *
  */
