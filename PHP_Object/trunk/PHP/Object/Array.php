@@ -74,6 +74,7 @@ class PHP_Object_Array extends PHP_Object implements Iterator, ArrayAccess
         'pg_copy_from' => 2,
         'pos' => 0,
         'prev' => 0,
+        'preg_match' => 2,
         'preg_match_all' => 2,
         'reset' => 0,
         'rsort' => 0,
