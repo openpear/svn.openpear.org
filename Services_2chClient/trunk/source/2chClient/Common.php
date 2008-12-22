@@ -2,6 +2,7 @@
 /**
  * Common.php
  *
+ * @package Services_2chClient
  */
 
 /**

@@ -2,6 +2,7 @@
 /**
  * Board.php
  *
+ * @package Services_2chClient
  */
 
 require_once dirname(__FILE__) . '/Common.php';
@@ -30,9 +31,6 @@ class Services_2chClient_Board extends Services_2chClient_Common
 
     public function __construct($url, $board_key)
     {
-        //$this->_path = 'gimpo.2ch.net';
-        //$this->_directory = 'namazuplus';
-        
         $this->_path = $url;
         $this->_directory = $board_key;
     }
@@ -48,9 +46,7 @@ class Services_2chClient_Board extends Services_2chClient_Common
     public function fetchThreadList()
     {
         $this->load();
-
         //$result = $this->export();
-
         return $this->subject;
     }
 
@@ -124,7 +120,9 @@ class Services_2chClient_Board extends Services_2chClient_Common
      * loadSetting
      *
      */
-    public function loadSetting(){
+    public function loadSetting()
+    {
+
         $httpObject =& new HTTP_Request('http://'.$this->_path.'/'.$this->_directory.'/SETTING.TXT');
         $httpObject->addHeader('User-Agent', $this->_userAgent);
         $httpObject->addHeader('Accept-Encoding', 'gzip');
@@ -134,11 +132,13 @@ class Services_2chClient_Board extends Services_2chClient_Common
         if (!PEAR::isError($response)) {
             return false;
         }
+
         $responseCode = $httpObject->getResponseCode();
         if ($responseCode == "200") {
             $this->subject = array();
             $this->parseSetting($request->getResponseBody());
         }
+
         //レスポンスコードを返す。
         return $responseCode;
     }
