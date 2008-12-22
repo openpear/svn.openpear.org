@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Services_2chClient_Board
+ *
+ */
 class Services_2chClient_Board extends Services_2chClient_Common
 {
     /**
