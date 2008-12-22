@@ -40,7 +40,9 @@ class Services_2chClient
     }
 }
 
-
-//$two_ch = new Services_2chClient();
-//$board = $two_ch->factory('Board');
-//$board->unntarakanntara();
+/*
+$two_ch = new Services_2chClient();
+$board = $two_ch->factory('Board');
+$result = $board->fetchThreadList();
+var_dump($result);
+ */
