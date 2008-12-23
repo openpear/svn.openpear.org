@@ -685,7 +685,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     function append(Sequence $seq)
     {
-        foreach ($seq as $elt) $this->push($seq);
+        foreach ($seq as $elt) $this->push($elt);
         
         return $this;
     }
