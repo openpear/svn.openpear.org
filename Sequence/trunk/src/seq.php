@@ -735,6 +735,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     {
         if (!is_int($i) || $i < 0)throw new InvalidArgumentException();
         
+        if ($i > $this->getLength()) return $this->slice(0, $i);
         return $this->slice(-$i, $i);
     }
 
@@ -751,8 +752,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     function zip(Sequence $seq)
     {
+        if (count($this) !== count($seq)) throw new RuntimeException();
         $ret = seq();
-        $len = min(array(count($this), count($seq)));
+        $len = count($this);
         for ($i = 0; $i < $len; $i++) {
             $ret->push(seq($this->nth($i), $seq->nth($i)));
         }
