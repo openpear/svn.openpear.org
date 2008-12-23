@@ -140,6 +140,7 @@ catch (Exception $e) {
 $lime->comment('rest');
 $seq = seq(1);
 $lime->is($seq->rest()->toArray(), array());
+$lime->is(seq(1, 2, 3)->rest()->toArray(), array(2, 3));
 try {
     seq()->rest();
     $lime->fail();
@@ -147,3 +148,157 @@ try {
 catch (Exception $e) {
     $lime->pass();
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('halves');
+$seq = seq(1, 2, 3);
+list($left, $right) = $seq->halves();
+$lime->is($left->toArray(), array(1));
+$lime->is($right->toArray(), array(2, 3));
+
+list($left, $right) = seq(1)->halves();
+$lime->is($left->toArray(), array());
+$lime->is($right->toArray(), array(1));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('pick');
+$seq = seq(1, 2, 3);
+$lime->is($seq->pick(0)->nth(0), 1);
+$lime->is($seq->pick(-1)->nth(0), 3);
+try {
+    $seq->pick(3);
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
+try {
+    $seq->pick(-4);
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('map');
+$result = seq(1, 2, 3)->map(create_function('$v', 'return $v * 2;'))->toArray();
+$lime->is($result, array(2, 4, 6));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('filter');
+$result = seq('h', '', 'fuga')->filter('strlen')->toArray();
+$lime->is($result, array('h', 'fuga'));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('reduce');
+$result = seq(1, 2, 3, 4, 5)->reduce(create_function('$a, $b', 'return $a + $b;'));
+$lime->is($result, 15);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('all');
+$result = seq(1, 2, 3, 4)->all('is_int');
+$lime->ok($result);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('any');
+$result = seq(1, 2, 3, 4, '')->any('is_string');
+$lime->ok($result);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('each');
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('shift');
+$seq = seq(1, 2, 3);
+$lime->is($seq->shift(), 1);
+$lime->is(count($seq), 2);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('unshift');
+$seq = seq(1, 2, 3);
+$seq->unshift(0);
+$lime->is($seq[0], 0);
+$lime->is(count($seq), 4);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('indexes');
+$seq = seq(1, 2, 3);
+$lime->ok(count($seq) === count($seq->indexes()));
+$lime->is($seq->indexes()->toArray(), array(0, 1, 2));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('repeat');
+$seq = seq(1, 2, 3);
+$lime->is($seq->repeat(1)->toArray(), array(1, 2, 3));
+$lime->is($seq->repeat(2)->toArray(), array(1, 2, 3, 1, 2, 3));
+try {
+    $seq->repeat(0);
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
+try {
+    $seq->repeat(-2);
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('has');
+$seq = seq(1, 2, 3);
+$lime->ok($seq->has(1));
+$lime->ok(!$seq->has(0));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('harvest');
+$seq = seq(1, 2, 3, false);
+$lime->is($seq->harvest()->toArray(), array(1, 2, 3));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('group');
+$seq = seq(1, 2, 3, 4)->group(2);
+$lime->is($seq[0]->toArray(), array(1, 2));
+$lime->is($seq[1]->toArray(), array(3, 4));
+try {
+    seq(1, 2, 3, 4)->group(0);
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('append');
+$seq = seq(1, 2)->append(seq(3, 4));
+$lime->is($seq->toArray(), array(1, 2, 3, 4));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('concat');
+$seq = seq(seq(1), seq(2, 3));
+$lime->is($seq->concat()->toArray(), array(1, 2, 3));
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
