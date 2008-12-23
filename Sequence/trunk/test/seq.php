@@ -300,5 +300,96 @@ $lime->is($seq->concat()->toArray(), array(1, 2, 3));
 
 ////////////////////////////////////////////////////////////////////////////////
 
+$lime->comment('head');
+$seq = seq(1, 2, 3);
+$lime->is($seq->head(1)->toArray(), array(1));
+$lime->is($seq->head(3)->toArray(), array(1, 2, 3));
+$lime->is($seq->head(4)->toArray(), array(1, 2, 3));
+$lime->is($seq->head(0)->toArray(), array());
+try {
+    $seq->head(-1);
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
 
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('tail');
+$seq = seq(1, 2, 3);
+$lime->is($seq->tail(1)->toArray(), array(3));
+$lime->is($seq->tail(3)->toArray(), array(1, 2, 3));
+$lime->is($seq->tail(4)->toArray(), array(1, 2, 3));
+$lime->is($seq->tail(0)->toArray(), array());
+try {
+    $seq->tail(-1);
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('zip');
+$seq = seq(1, 2, 3);
+$lime->is($seq->zip($seq)->nth(0)->toArray(), array(1, 1));
+try {
+    $seq->zip(seq(1));
+    $lime->fail();
+}
+catch (Exception $e) {
+    $lime->pass();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('max');
+$seq = seq(1, 2, 3);
+$lime->is($seq->max(), 3);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('min');
+$seq = seq(1, 2, 3);
+$lime->is($seq->min(), 1);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('maxmin');
+$seq = seq(1, 2, 3);
+$lime->is($seq->maxmin()->toArray(), array(3, 1));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('product');
+$seq = seq(1, 2, 3);
+$lime->is($seq->product(), 6);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('sum');
+$seq = seq(1, 2, 3, 4, 5);
+$lime->is($seq->sum(), 15);
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('suffix');
+$seq = seq(1, 2, 3);
+$lime->is($seq->suffix(4)->toArray(), array(1, 2, 3, 4));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('prefix');
+$seq = seq(1, 2, 3);
+$lime->is($seq->prefix(0)->toArray(), array(0, 1, 2, 3));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('trim');
+$seq = seq(1, 1, 1, 2, 2, 3);
+$lime->is($seq->trim(1, 3)->toArray(), array(2, 2));
+
+////////////////////////////////////////////////////////////////////////////////
 
