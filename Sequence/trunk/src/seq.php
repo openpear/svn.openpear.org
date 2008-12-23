@@ -896,7 +896,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     {
         $args = func_get_args();
         $ret = seq();
-        foreach ($this as $elt) if (array_in($elt, $args, true)) {
+        foreach ($this as $elt) if (!in_array($elt, $args, true)) {
             $ret->push($elt);
         }
         return $ret;
