@@ -437,3 +437,16 @@ $lime->is($seq->toArray(), array(3, 1, 2));
 $lime->comment('indices');
 $seq = seq(1, 2, 1, 1, 2);
 $lime->is($seq->indices(2)->toArray(), array(1, 4));
+$lime->is($seq->indices(1)->toArray(), array(0, 2, 3));
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('interleave');
+$seq = seq(1, 2, 3);
+$lime->is($seq->interleave(0)->toArray(), array(1, 0, 2, 0, 3));
+$lime->is(seq()->interleave(0)->toArray(), array());
+
+////////////////////////////////////////////////////////////////////////////////
+
+$lime->comment('flatten');
+$lime->is(seq(1, 2, 3)->flatten()->toArray(), array(1, 2, 3));
