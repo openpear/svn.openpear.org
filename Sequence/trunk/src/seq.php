@@ -994,8 +994,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function interleave($elt)
     {
         if ($this->count() <= 1) return seq();
-        $ret = clone $this;
-        return $ret->zip(seq()->lengthen($this->count() - 1)->fill($elt));
+        $ret = $this->zip(seq()->lengthen(count($this))->fill($elt))->flatten();
+        $ret->pop();
+        return $ret;
     }
     
     /**
@@ -1003,7 +1004,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      *
      * @return Sequence
      */
-    function flatten()    
+    function flatten()
     {
         return toseq($this->flattenInternally($this));
     }
@@ -1011,7 +1012,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     protected function flattenInternally(Sequence $seq, Array $buf = array())
     {
         foreach ($seq as $elt) if ($elt instanceof self){
-           $buf = $this->flattenWithArray($elt, $buf);
+           $buf = $this->flattenInternally($elt, $buf);
         }
         else {
             $buf[] = $elt;
