@@ -1006,17 +1006,13 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     function flatten()
     {
-        return toseq($this->flattenInternally($this));
-    }
-
-    protected function flattenInternally(Sequence $seq, Array $buf = array())
-    {
-        foreach ($seq as $elt) if ($elt instanceof self){
-           $buf = $this->flattenInternally($elt, $buf);
+        $ret = seq();
+        foreach ($this as $elt) if ($elt instanceof self) {
+            $ret->append($elt->flatten());
         }
         else {
-            $buf[] = $elt;
+            $ret->push($elt);
         }
-        return $buf;
+        return $ret;
     }
 }
