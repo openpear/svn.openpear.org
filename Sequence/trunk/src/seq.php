@@ -92,7 +92,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     protected function assertOffset($i)
     {
-        if ($i < 0 || $i >= $this->getLength()) throw new DomainException();
+        if (!array_key_exists($i, $this->arr)) throw new DomainException();
     }
     
     /**
@@ -917,7 +917,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function move($i, $j)
     {
         $i = $this->normalizeOffset($i);
-        $j = $this->normalizeOffset($i);
+        $j = $this->normalizeOffset($j);
         $this->assertOffset($i);
         $this->assertOffset($i);
         
@@ -935,7 +935,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function swap($i, $j)
     {
         $i = $this->normalizeOffset($i);
-        $j = $this->normalizeOffset($i);
+        $j = $this->normalizeOffset($j);
         $this->assertOffset($i);
         $this->assertOffset($i);
         
