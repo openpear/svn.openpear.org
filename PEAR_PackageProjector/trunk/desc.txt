@@ -1,0 +1,7 @@
+Creates PEAR Package in the way like the Command "make".
+ex)
+cd <workspace>
+pearproj --create -p TestSample
+pearproj -c --configure TestSample/build.conf -p TestSample
+pearproj --make -p TestSample 
+ls TestSample/release
