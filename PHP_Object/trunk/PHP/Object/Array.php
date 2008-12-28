@@ -59,6 +59,7 @@ class PHP_Object_Array extends PHP_Object implements Iterator, ArrayAccess
         'implode' => 1,
         'in_array' => 1,
         'join' => 1,
+        'key_exists' => 1,
         'key' => 0,
         'krsort' => 0,
         'ksort' => 0,
@@ -102,12 +103,13 @@ class PHP_Object_Array extends PHP_Object implements Iterator, ArrayAccess
 
     public function offsetGet($offset)
     {
-        return self::factory($this->data[$this->revert($offset)]);        
+        return self::factory(&$this->data[$this->revert($offset)]);        
     }
 
     public function offsetSet($offset, $value)
     {
         $offset = $this->revert($offset);
+        $value  = $this->revert($value);
         if (is_null($offset)) {
             $this->data[] = $value;
         } else {

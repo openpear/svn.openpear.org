@@ -16,24 +16,61 @@ class PHP_Object
     protected $aliasMethods = array();
 
     protected $methodsReturningSelf = array(
-        'debug_print_backtrace',
-        'flush',
-        'ini_restore',
-        'ob_clean',
-        'ob_flush',
-        'ob_implicit_flush',
-        'date_add',
+        'clearstatcache',
+        'closedir',
         'date_date_set',
         'date_isodate_set',
         'date_modify',
+        'date_time_set',
+        'date_timezone_set',
+        'dba_close',
+        'debug_print_backtrace',
+        'debug_zval_dump',
+        'define_syslog_variables',
+        'flush',
+        'header',
+        'ini_restore',
+        'libxml_clear_errors',
+        'libxml_set_streams_context',
+        'mt_srand',
+        'ncurses_bkgdset',
+        'ncurses_filter',
+        'ncurses_getmaxyx',
+        'ncurses_getyx',
+        'ncurses_init',
+        'ncurses_noqiflush',
+        'ncurses_qiflush',
+        'ncurses_timeout',
+        'ncurses_update_panels',
+        'ncurses_use_env',
+        'ob_clean',
+        'ob_flush',
+        'ob_implicit_flush',
+        'openssl_free_key',
+        'openssl_pkey_free',
+        'openssl_x509_free',
+        'parse_str',
+        'passthru',
+        'pcntl_exec',
         'register_shutdown_function',
         'restore_include_path',
+        'rewinddir',
         'session_set_cookie_params',
         'session_unset',
         'session_write_close',
         'set_time_limit',
+        'shmop_close',
+        'socket_clear_error',
+        'socket_close',
+        'spl_autoload',
+        'spl_autoload_call',
+        'srand',
+        'stream_bucket_append',
+        'stream_bucket_prepend',
+        'unregister_tick_function',
         'usleep',
         'var_dump',
+        'zip_close',
     );
 
     public $argOffsets = array(
@@ -113,6 +150,7 @@ class PHP_Object
         'ini_alter' => 1,
         'ini_get_all' => NULL,
         'ini_set' => 1,
+        'key_exists' => 0,
         'lcg_value' => NULL,
         'localeconv' => NULL,
         'localtime' => NULL,
@@ -244,7 +282,7 @@ class PHP_Object
 
     public function __construct($data = NULL)
     {
-        $this->data = $data;
+        $this->data = &$data;
 
         $parent = get_parent_class($this);
         while ($parent !== false) {
@@ -298,29 +336,27 @@ class PHP_Object
     public static function factory($data = NULL)
     {
         if (is_string($data)) {
-            return new PHP_Object_String($data);
+            return new PHP_Object_String(&$data);
         } else if (is_numeric($data)) {
             if (is_int($data)) {
-                return new PHP_Object_Numeric_Integer($data);
+                return new PHP_Object_Numeric_Integer(&$data);
             } else {
-                return new PHP_Object_Numeric($data);
+                return new PHP_Object_Numeric(&$data);
             }
         } else if (is_array($data)) {
-            return new PHP_Object_Array($data);
+            return new PHP_Object_Array(&$data);
         } else if (is_bool($data)) {
-            return new PHP_Object_Boolean($data);
+            return new PHP_Object_Boolean(&$data);
         } else if (is_null($data)) {
-            return new PHP_Object_Null($data);
+            return new PHP_Object_Null(&$data);
         } else if (is_object($data)) {
             if ($data instanceof self) {
                 return $data;
             } else {
-                return new PHP_Object_Object($data);
+                return new PHP_Object_Object(&$data);
             }
         } else if (is_resource($data)) {
-            return new PHP_Object_Resource($data);
-        } else {
-            return new PHP_Object($data);
+            return new PHP_Object_Resource(&$data);
         }
     }
 
