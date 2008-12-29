@@ -79,9 +79,9 @@ class PHP_Object
 
     protected $argOffsets = array();
 
-    protected function __construct($data)
+    protected function __construct(&$data)
     {
-        $this->data = &$data;
+        $this->data =& $data;
     }
 
     protected function __toString() 
@@ -128,27 +128,27 @@ class PHP_Object
     public static function factory($data = null)
     {
         if (is_string($data)) {
-            return new PHP_Object_String(&$data);
+            return new PHP_Object_String($data);
         } else if (is_numeric($data)) {
             if (is_int($data)) {
-                return new PHP_Object_Numeric_Integer(&$data);
+                return new PHP_Object_Numeric_Integer($data);
             } else if (is_float($data)) {
-                return new PHP_Object_Numeric_Float(&$data);
+                return new PHP_Object_Numeric_Float($data);
             }
         } else if (is_array($data)) {
-            return new PHP_Object_Array(&$data);
+            return new PHP_Object_Array($data);
         } else if (is_bool($data)) {
-            return new PHP_Object_Boolean(&$data);
+            return new PHP_Object_Boolean($data);
         } else if (is_null($data)) {
             return PHP_Object_Null::getInstance();
         } else if (is_object($data)) {
             if ($data instanceof self) {
                 return $data;
             } else {
-                return new PHP_Object_Object(&$data);
+                return new PHP_Object_Object($data);
             }
         } else if (is_resource($data)) {
-            return new PHP_Object_Resource(&$data);
+            return new PHP_Object_Resource($data);
         }
     }
 
