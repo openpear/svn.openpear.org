@@ -140,7 +140,7 @@ class PHP_Object
         } else if (is_bool($data)) {
             return new PHP_Object_Boolean(&$data);
         } else if (is_null($data)) {
-            return new PHP_Object_Null(&$data);
+            return PHP_Object_Null::getInstance();
         } else if (is_object($data)) {
             if ($data instanceof self) {
                 return $data;
