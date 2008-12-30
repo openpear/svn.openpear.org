@@ -149,4 +149,13 @@ class PHP_Object_Boolean extends PHP_Object
         'XMLWRITER_START_DTD_ENTITY' => 2,
     );
 
+    protected static function getInstance($data)
+    {
+        static $instances = array();
+        $key = ($data === true) ? 'true' : 'false';
+        if (!array_key_exists($key, $instances)) {
+            $instances[$key] = new self($data);
+        }
+        return $instances[$key];
+    }
 }
