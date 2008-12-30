@@ -51,11 +51,11 @@ class PHP_Object_Null extends PHP_Object
 
     protected function __construct() {}
 
-    public static function getInstance()
+    protected static function getInstance()
     {
         static $instance = null;
         if (is_null($instance)) {
-            $instance = new PHP_Object_Null();
+            $instance = new self;
         } 
         return $instance;
     }

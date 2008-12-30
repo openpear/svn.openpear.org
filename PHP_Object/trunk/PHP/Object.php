@@ -138,7 +138,7 @@ class PHP_Object
         } else if (is_array($data)) {
             return new PHP_Object_Array($data);
         } else if (is_bool($data)) {
-            return new PHP_Object_Boolean($data);
+            return PHP_Object_Boolean::getInstance($data);
         } else if (is_null($data)) {
             return PHP_Object_Null::getInstance();
         } else if (is_object($data)) {
