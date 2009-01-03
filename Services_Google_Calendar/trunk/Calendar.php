@@ -13,8 +13,8 @@
  * @package   Services_Google_Calendar
  * @author    Keigo AOKI <hoyo1111 at gmail dot com>
  * @copyright 2006-2009 Keigo AOKI
- * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version   Release: 0.1.0
+ * @license   http://www.debian.org/misc/bsd.license  New BSD License
+ * @version   Release: 0.1.1
  * @link      http://openpear.org/package/Services_Google_Calendar
  */
 
@@ -93,8 +93,8 @@ define('SERVICES_GOOGLE_CALENDAR_SOURCE', 'openpear/Services_Google_Calendar');
  * @package   Services_Google_Calendar
  * @author    Keigo AOKI <hoyo1111 at gmail dot com>
  * @copyright 2006-2009 Keigo AOKI
- * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version   Release: 0.1.0
+ * @license   http://www.debian.org/misc/bsd.license  New BSD License
+ * @version   Release: 0.1.1
  * @link      http://openpear.org/package/Services_Google_Calendar
  */
 class Services_Google_Calendar
