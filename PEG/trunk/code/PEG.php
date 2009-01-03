@@ -25,6 +25,7 @@ include_once dirname(__FILE__) . '/PEG/Flatten.php';
 include_once dirname(__FILE__) . '/PEG/Drop.php';
 include_once dirname(__FILE__) . '/PEG/Create.php';
 include_once dirname(__FILE__) . '/PEG/Join.php';
+include_once dirname(__FILE__) . '/PEG/Count.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス。<br/>
@@ -375,5 +376,10 @@ class PEG
     static function join(PEG_IParser $p, $glue = '')
     {
         return new PEG_Join($p, $glue);
+    }
+
+    static function count(PEG_IParser $p)
+    {
+        return new PEG_Count($p);
     }
 }
