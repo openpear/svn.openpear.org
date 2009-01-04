@@ -1,10 +1,11 @@
 ﻿<?php
 
-mb_internal_encoding('UTF-8');
+//内部処理用のエンコードは保留
+//mb_internal_encoding('UTF-8');
 
 /*
  * Panasocli Mailer v 2.0.0
- * 2008/12/24
+ * 2009/01/04
  */
 
 class Mailer
@@ -96,26 +97,45 @@ class Mailer
 			$str=substr($str[0],1,strlen($str[0])-2); 
 			$from = $str; 
 		} 
-		$headers = $structure->headers['from'];
+		$headers = $structure->headers;
+		$subject = $headers['subject'];
+		//件名だけヘッダーから取り除く 件名は既に変数subjectに入っているので
+		unset($headers['subject']);
+		
+		//fromは加工した奴で上書きする
 		$headers['from'] = $from;
 		
-
-		// 件名を取得 
-		$subject = mb_convert_encoding($structure->headers['subject'], $this->target_encode, $this->source_encode);
-
-		switch(strtolower($structure->ctype_primary)){ 
+		switch(strtolower($structure->ctype_primary)){
 			case "text": // シングルパート(テキストのみ)  
 			//文字コードを変換する
+			//charsetから文字コードの検出を試みる
+			if(preg_match('/text\/plain/', $headers['content-type'])){
+				preg_match_all('/charset="(.+?)"/', $headers['content-type'], $reg);
+				$this->source_encode = $reg[1][0] ? $reg[1][0] : 'auto' ;
+			}else{
+				$this->source_encode = 'auto';
+			}
 			$body = $this->body ? $this->body : $structure->body ;
 			$body = mb_convert_encoding($body, $this->target_encode, $this->source_encode);
+			$subject = mb_convert_encoding($subject, $this->target_encode, $this->source_encode);
 			break; 
-			case "multipart":  // マルチパート(画像付き) 
+			case "multipart":  // マルチパート 
 			foreach($structure->parts as $part){ 
 				switch(strtolower($part->ctype_primary)){ 
-			  		case "text": // テキスト 
+			  		case "text": // テキスト / HTMLメール
 					//内部文字コードに変換する
+					//仮にHTMLメールだったらcharsetを確かめる
+					if(preg_match('/multipart\/alternative/', $headers['content-type'])){
+						$html = explode('<BODY>', $part->body);
+						preg_match_all('/charset=(.+?)"/', $html[0], $reg);
+						//charsetの値を検出出来なかったらautoにする
+						$this->source_encode = $reg[1][0] ? $reg[1][0] : 'auto' ;
+					}else{
+						$this->source_encode = 'auto';
+					}
 					$body = mb_convert_encoding($part->body, $this->target_encode, $this->source_encode);
-				 	break; 
+					$subject = mb_convert_encoding($subject, $this->target_encode, $this->source_encode);
+				 	break;
 					default:  
 					$filename[] = $part->ctype_parameters['name'];
 					$file[] = base64_encode($part->body);
@@ -141,7 +161,7 @@ class Mailer
 	 * @access public
 	 * @return array
 	 */
-	public function getMail(&$config){
+	public function getMail($config){
 		if($config->get('encode')){
 			$this->target_encode = $config->get('encode'); 
 		}
@@ -166,14 +186,21 @@ class Mailer
 		
 		if(!$config->get('port')) return false;
 		
-		$pop3 =& new Net_POP3();
-		$pop3 =& $this->connectMail($pop3, $config);
+		$pop3 =new Net_POP3();
+		$pop3 =$this->connectMail($pop3, $config);
 		if(PEAR::isError($pop3)){
 			return $pop3->getMessage();
 		}
 		$n_msg = $pop3->numMsg(); 
 		for($i = 0 ; $i < $n_msg ; $i++){
-			list($mail[$i]['from'], $mail[$i]['subject'], $mail[$i]['body'], $mail[$i]['filename'], $mail[$i]['file']) = $this->mailParser($pop3->getMsg($i + 1));
+			list($mail[$i]['headers'], $mail[$i]['subject'], $mail[$i]['body'], $mail[$i]['filename'], $mail[$i]['file']) = $this->mailParser($pop3->getMsg($i + 1));
+			//ファイルが添付されていない場合は不要なので配列を消す
+			if(empty($mail[$i]['filename'])){
+				unset($mail[$i]['filename']);
+			}
+			if(empty($mail[$i]['file'])){
+				unset($mail[$i]['file']);
+			}
 			if($config->get('search') && !preg_match($config->get('search'), $mail[$i]['subject'])){
 				unset($mail[$i]);
 			}
@@ -220,16 +247,11 @@ class Mailer
 	/**
 	 *メールを送信する
 	 * 
-	 * @param $mailto string 送信先アドレス
-	 * @param $subject string 件名
-	 * @param $body array or string 本文
-	 * @param $from string 差出人(返信先)
-	 * @param $attach array 添付ファイル
-	 * @param $smtp array 接続先SMTPサーバ ローカルを使う場合は空にする
+	 * @param $config object 設定オブジェクト
 	 * @access public
 	 * @return array
 	 */
-	public function send(&$config, $smtp=null){
+	public function send($config, $smtp=null){
 		if($this->is_file_ex('Mail.php')){
 			require_once("Mail.php");
 		}else{
@@ -371,7 +393,7 @@ class Mailer
 	 * return Object
 	 */
 	public function getMailerConfig(){
-		$config = & new MailerConfig;
+		$config = new MailerConfig;
 		$config->set('delete', false);
 		return $config;
 	}
