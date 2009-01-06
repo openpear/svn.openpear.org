@@ -48,7 +48,7 @@ class Mailer
 	 * @access public
 	 * @return object
 	 */	
-	private function connectMail(&$pop3, &$config){
+	private function connectMail($pop3, $config){
 		if(!$config->get('login')){
 			$config->set('login', 'USER');
 		}
@@ -178,13 +178,24 @@ class Mailer
 			return false;
 		}
 		
-		if(!$config->get('user')) return false;
+		if(!$config->get('user')) {
+			echo 'ユーザ名が設定されていません';
+			return false;
+		}
 
-		if(!$config->get('password')) return false;
+		if(!$config->get('password')) {
+			echo 'パスワードが設定されていません';
+			return false;
+		}
 		
-		if(!$config->get('host')) return false;
+		if(!$config->get('host')) {
+			echo 'メールサーバが設定されていません';
+			return false;
+		}
 		
-		if(!$config->get('port')) return false;
+		if(!$config->get('port')) {
+			$config->set('port', 110);
+		}
 		
 		$pop3 =new Net_POP3();
 		$pop3 =$this->connectMail($pop3, $config);
