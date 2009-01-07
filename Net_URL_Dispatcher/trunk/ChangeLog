@@ -1,0 +1,6 @@
+2009-01-07  Heavens hell <heavenshell.jp@gmail.com>
+
+	* Add __call method in Net_URL_Dispatcher class.
+	* Add __call specs in DispatcherSpec.php.
+	* Fixed typo arraty to array in Net_URL_Dispatcher _match method's comment.
+	* Fixed Missing return value in Net_URL_Dispatcher dispatchAction method.
