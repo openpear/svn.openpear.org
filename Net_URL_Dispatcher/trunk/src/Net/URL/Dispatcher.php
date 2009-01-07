@@ -63,7 +63,7 @@ class Net_URL_Dispatcher
     /**
      * Net_URL_Dispatcher VERSION
      */
-    const VERSION = '0.1.0';
+    const VERSION = '0.1.1';
 
     /**
      * Router
@@ -117,6 +117,27 @@ class Net_URL_Dispatcher
         $this->_mapperId = $id;
         $this->_setRouter();
         $this->setErrorReporting();
+    }
+
+    /**
+     * Call Net_URL_Mapper's method
+     *
+     * @param  mixed $method Net_URL_Mapper's method name
+     * @param  mixed $args arguments
+     * @access public
+     * @return mixed Net_URL_Dispatcher Fluent interface or result of method
+     */
+    public function __call($method, $args = null)
+    {
+        $ret = null;
+        if (method_exists($this->_router, $method)) {
+            $ret = call_user_func_array(array($this->_router, $method), $args);
+            if (!is_null($ret)) {
+                return $ret;
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -485,6 +506,8 @@ class Net_URL_Dispatcher
                 $this->dispatchAction($stackAction, $params, $directory);
             }
         }
+
+        return $instance;
     }
 
     /**

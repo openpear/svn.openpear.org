@@ -70,7 +70,7 @@ class DescribeDispatcher extends SpecCommon
 
     public function itShouldGetVersion()
     {
-        $this->spec(Net_URL_Dispatcher::VERSION)->should->be('0.1.0');
+        $this->spec(Net_URL_Dispatcher::VERSION)->should->be('0.1.1');
     }
 
     public function itShouldCreateInstance()
@@ -129,5 +129,24 @@ class DescribeDispatcher extends SpecCommon
         ob_end_clean();
 
         $this->spec($buffer)->should->be('fuga_bar');
+    }
+
+    public function itShouldCallNet_url_mapperClassMethodWhichHasRetrurnValue()
+    {
+        $path       = dirname(__FILE__) . '/apps/sample/';
+        $dispatcher = new Net_URL_Dispatcher(__METHOD__);
+        $buffer     = $dispatcher->getId();
+
+        $this->spec($buffer)->should->be(__METHOD__);
+    }
+
+    public function itShouldCallNet_url_mapperClassMethodWhichHasNoReturnValue()
+    {
+        $path       = dirname(__FILE__) . '/apps/sample/';
+        $dispatcher = new Net_URL_Dispatcher(__METHOD__);
+        $buffer     = $dispatcher->setScriptname('index.php');
+
+        $this->spec($buffer)->should->beAnInstanceOf('Net_URL_Dispatcher');
+
     }
 }
