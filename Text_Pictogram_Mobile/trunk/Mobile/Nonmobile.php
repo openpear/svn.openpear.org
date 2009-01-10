@@ -1,4 +1,7 @@
 <?php
+
+require_once 'Text/Pictogram/Mobile/Common.php';
+
 class Text_Pictogram_Mobile_Nonmobile extends Text_Pictogram_Mobile_Common
 {
 
