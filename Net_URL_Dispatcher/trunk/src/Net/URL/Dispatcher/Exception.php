@@ -49,7 +49,7 @@
  * @package   Net
  * @category  Net_URL_Dispatcher
  * @version   $id$
- * @copyright 2009 Heavens Hell
+ * @copyright 2009 Heavens hell
  * @author    Heavens hell <heavenshell.jp@gmail.com>
  * @license   New BSD License
  */
