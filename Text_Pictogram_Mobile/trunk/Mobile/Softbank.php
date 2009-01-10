@@ -1,4 +1,7 @@
 <?php
+
+require_once 'Text/Pictogram/Mobile/Common.php';
+
 class Text_Pictgram_Mobile_Softbank extends Text_Pictgram_Mobile_Common
 {
 	public function __construct($type = 'sjis')
