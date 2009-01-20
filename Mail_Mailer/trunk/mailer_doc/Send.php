@@ -1,4 +1,9 @@
 <?php
+//Mailerオブジェクトの生成
+$mail = & new Mail_Mailer();
+
+//Mailer用設定オブジェクトの生成
+$config = & $mail->getMailerConfig();
 //SMTPを指定する場合
 /*
 $smtp = array(
