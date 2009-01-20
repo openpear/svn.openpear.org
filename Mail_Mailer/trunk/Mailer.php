@@ -8,7 +8,7 @@
  * 2009/01/04
  */
 
-class Mailer
+class Mail_Mailer
 {
 	
 	//本文が空の場合にはエラーを返す

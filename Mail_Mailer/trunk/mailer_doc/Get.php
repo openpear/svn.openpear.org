@@ -3,7 +3,7 @@ require_once('Mailer.php');
 //mb_internal_encoding('UTF-8');
 
 //Mailerオブジェクトの生成
-$mail = & new Mailer();
+$mail = & new Mail_Mailer();
 
 //Mailer用設定オブジェクトの生成
 $config = & $mail->getMailerConfig();
@@ -17,6 +17,6 @@ $config->set('encode', 'UTF-8');
 $config->set('delete', false); //受信後にメールを削除するか デフォではfalseに trueで削除
 
 //受信
-$mails = $mail->getMail($config);
-print_r($mails);
+//$mails = $mail->getMail($config);
+//print_r($mails);
 ?>
