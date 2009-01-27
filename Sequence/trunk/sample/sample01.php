@@ -1,5 +1,5 @@
 <?php
-include_once dirname(__FILE__) . '/../src/seq.php';
+include_once dirname(__FILE__) . '/../src/Sequence.php';
 
 list($a, $b) = seq(1, 2, 3, 4)->map('max', 2)->pick(0, 3);
 // $a => 2
