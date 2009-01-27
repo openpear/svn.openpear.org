@@ -791,15 +791,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         return seq($this->max(), $this->min());
     }
     
-    /**
-     * リストの要素の積を返す
-     *
-     * @return int|float
-     */
-    function product()
-    {
-        return array_product($this->toArray());
-    }
+
     
     /**
      * リストの要素の合計値を返す
