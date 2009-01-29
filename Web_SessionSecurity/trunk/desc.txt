@@ -1,0 +1,4 @@
+Block Session Adoption and Session Hijack.
+To block Session Adoption, the values of session is initialized once. 
+When It detect Session Hijack, it is possible to know by Web_SessionSecurity:;getAlert(). 
+The processing after it knows is transferred to Web application. 
