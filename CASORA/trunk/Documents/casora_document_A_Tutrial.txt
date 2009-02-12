@@ -1,0 +1,167 @@
+    付録 A チュートリアル
+
+    とりあえず動かしてみたいという方は、ここを読むといいでしょう。
+
+■A.1. ディレクトリ構成
+
+    まずはディレクトリ構成を決めましょう。 
+
+        casora/
+        ├─config.inc.php
+        ├─conf/
+        │  └─log.inc.php
+        ├─sample/（アプリケーション名）
+        │  ├─config.inc.php
+        │  ├─logs/（Webアプリケーションが書き込める権限にする）
+        │  ├─models/
+        │  │  └─Top.class.php
+        │  └─views/
+        │      └─top.html
+        ├─html/
+        ｜  ├─sample
+        │  └─.htaccess
+        └─lib/
+            ├─FW/
+            │  ├─Controller.class.php
+            │  └─Logger.class.php
+            ├─Log/
+            └─Log.php
+
+    ※アプリケーション名を「sample」、ページ名を「top」とした場合
+    ※アプリケーションのドキュメントルートを１つにまとめる場合。
+
+■A.2. ドキュメントルートの設定
+
+    ウェブサーバのドキュメントルートを、casora/html ディレクトリに設定します。
+
+■A.3. 入り口ファイルの作成
+
+    このファイルを通して、すべてのクラスやViewを表示することになります。
+    設定ファイルを読み込み、コントローラーを実行します。
+
+        casora/html/sample 
+
+            define( 'APPLICATION_NAME', 'sample' );
+            require_once( realpath('../').'/'.basename($_SERVER['SCRIPT_FILENAME']).'/config.inc.php');
+            Controller::execute();
+
+■A.4. rewrite ルールの作成
+
+    casora/html/.htaccess ファイルを、次のように編集します。 
+
+        <Files sample>
+             ForceType application/x-httpd-php
+        </Files>
+
+    ※注意 rewrire ルールは Apache 用のものです。 
+
+■A.5. 設定ファイル（プロジェクト全体用）の作成
+
+    casora/config.class.php で「casora」を動かすために必要な定数を定義します。
+
+        <?php
+        /* フレームワーク必須設定 -------------------------------------------------- */
+        define('BASE_DIR',      '/path/to/casora' );
+        define('APP_DIR',       BASE_DIR.'/apps/'.APPLICATION_NAME );
+        define('LIB_DIR',       BASE_DIR.'/lib' );
+        define('ROOT_DIR',      BASE_DIR.'/html' );
+        define('CONF_ROOT_DIR', BASE_DIR.'/conf' );
+        define('LOG_DIR',       APP_DIR.'/logs' );
+        define('MODELS_DIR',    APP_DIR.'/models' );
+        define('VIEWS_DIR',     APP_DIR.'/views' );
+        define('CONF_APPS_DIR', APP_DIR.'/conf' );
+
+        /* 文字コード --------------- */
+        define('TEMPLATE_CHARSET', 'UTF-8' );
+        define('DATABASE_CHARSET', 'UTF-8' );
+        define('PROGRAM_CHARSET',  'UTF-8' );
+
+        ini_set( 'include_path', ini_get('include_path').':'.LIB_DIR);
+        require_once(APP_DIR.'/config.inc.php');
+
+        /* ルーター ----------------- */
+        define('ROUTER_TYPE', 'default' );
+        require_once('FW/Router.class.php');
+
+        /* テンプレートエンジン ----- */
+        define('VIEWER_TYPE', 'default' );
+        require_once('FW/Viewer.class.php');
+
+        /* コントローラー ----- */
+        require_once('FW/Controller.class.php');
+
+
+    定数の役割や内容については第2章「2.1. 動作に必要な定数」を参照してください。
+
+
+■A.6. 設定ファイル（ログ用）の作成
+
+    casora/config/log.inc.php でロギングするための定数を定義します。
+
+        <?php
+        define( 'LOG_HANDLER',  'file' );
+        define( 'LOG_FILENAME', LOG_DIR.'/php_script.log' );
+        define( 'LOG_LEVEL',    PEAR_LOG_DEBUG );
+
+        ※ 上記は casora/sample/logs/php_script.log にカソラのデバッグレベルの実行ログを
+        吐くようにするための設定です。
+
+■A.7. 設定ファイル（各アプリケーション用）の作成
+
+    casora/sample/config.class.php で各アプリケーションごとにを使用する定数の定義や、
+    初期設定をします。
+
+        <?php
+        define('SITE_NAME_JP', 'カソラ' );
+
+        require_once('FW/Logger.class.php');
+        require_once(CONF_DIR.'/log.inc.php');
+        Logger::setParamater( array( 'Handler'  => LOG_HANDLER,
+                                     'Filename' => LOG_FILENAME,
+                                     'Level'    => LOG_LEVEL ) );
+
+■A.8. アクションクラスの作成
+
+    casora/sample/models/top.class.php に、動作内容を記述したクラスを定義します。
+
+        <?php
+        class sampleTop
+        {
+            public function action( $requests ){
+
+                $this->message = 'Bonjour '. SITE_NAME_JP;
+
+                return 'top';
+            }
+        }
+
+        ビューでmessageという変数を使えるように、メンバ変数に定義します。
+        
+        ※詳しい使い方は「第5章 アクションクラス」を参照してください。
+
+■A.9. ビューテンプレートの作成
+
+    casora/sample/views/top.html に、モデルで定義したmessageを表示するように記述します。
+
+        <html>
+        <head>
+        <title>top</title>
+        </head>
+        <body>
+        <?php echo $message; ?>
+        </body>
+        </html>
+
+■A.10. 実行
+
+    以上で構築は完了です。
+
+    ブラウザからアクセスしてみましょう。
+
+    http://[ご使用のホスト]/sample/top/
+
+    「Bonjour カソラ」と表示されれば、「こんにちわ」と挨拶してください。
+    
+    もし表示されない場合は、casora/sample/logs/php_script.log を見てみるか、
+    Apacheのログ等を参照して原因を探してください。
+

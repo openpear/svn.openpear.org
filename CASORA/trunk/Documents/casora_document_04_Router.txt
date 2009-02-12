@@ -1,0 +1,42 @@
+    第4章 Router
+
+■4.1. 概要
+
+    Router（ルーター）は、URI (ベース URL から取得した URI の一部) を展開し、
+    どのアプリケーションの、どのアクションが リクエストを処理するのかを決める処理をします。 
+    ルーティングが行われるのは一度だけ、すなわちリクエストを最初に受け取ってから
+    最初のコントローラに処理が渡される際だけです。
+
+■4.2. Routerの使用法方
+
+    Routerは ROUTER_TYPE 定数を定義していればコントローラが勝手に実行します。
+
+    ※ROUTER_TYPE 定数が定義されていない場合、Routerが例外を吐きます。
+
+■4.3. デフォルトのRouter
+
+    デフォルトのRouterとして、Router_defaultというクラスが組み込まれいます。
+
+    展開されるURIのフォーマットは、
+    http://ホスト/アプリケーション/パス/アクション/var1=value1&var2=value2 
+    となっています。
+
+    以下に、URIのマッチ処理についての例を示します。
+
+        ・リクエストされたURI
+        http://cassisorange.com/sample/drink/tea/order=tea&salesman=2
+
+        ・配送されるアクションクラス
+        casora/sample/models/drink/Tea.class.php
+
+        ・読み込まれるView（アクションクラスが'tea'というViewを返した場合）
+        casora/sample/views/drink/tea.html
+
+	※アプリケーションディレクトリの models・views ディレクトリが基点となる。
+
+■4.4. オリジナルRouterの作成
+
+    Routerはそれぞれのシステムに合ったRouterを作成することができます。
+
+    今回は省略します。
+

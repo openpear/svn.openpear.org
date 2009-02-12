@@ -1,0 +1,137 @@
+    第7章 Logger
+
+■7.1. 概要
+
+    Logger は、ログ出力用の汎用クラスです。
+    複数のバックエンドに対応しており、ログに出力するメッセージをフォーマットしたり
+    記録するメッセージをフィルタリングしたりすることができます。
+
+    実は PEAR の Logパッケージをラップしただけです。
+
+■7.2. エラーレベルメソッド
+
+    実装されているエラーレベルのメソッドは以下の通りです。
+    PEARのLogパッケージで定義されているメソッドに依存します。
+
+        function emerg($message)
+        function alert($message)
+        function crit($message)
+        function err($message)
+        function warning($message)
+        function notice($message)
+        function info($message)
+        function debug($message)
+
+■7.3. 設定可能なパラメータ
+
+    Logger の設定用のメンバ変数はstaticなので、最初にパラメータを設定すれば、
+    どのスコープでも、同じ設定でのインスタンスを取得することができます。
+
+    setParamater() メソッドを使用し連想配列で引数を指定します。
+
+    設定変更のできる項目は以下の通りです。
+
+        [Handler]
+            出力先ハンドル
+
+            ファイルや、標準出力、Syslogなどへの出力先の指定
+
+
+            【対応している出力】
+                composite
+                console
+                daemon
+                display
+                error_log
+                file
+                firebug
+                mail
+                mcal
+                mdb2
+                null
+                observer
+                sqlite
+                sql
+                syslog
+                win
+
+            【デフォルト】
+                file
+
+        [Filename]
+            ログファイル名
+
+            「出力先ハンドル」を「file」に設定した場合のファイルの作成パス。
+
+            【デフォルト】
+                /var/log/php_script.log
+
+        [Ident]
+            ログに出力されるID
+
+            【デフォルト】
+                実行しているプログラムのプロセスID
+
+        [Conf]
+            ログフォーマット
+
+            ログレコード全体のフォーマットと、時刻の部分のフォーマットがあります。
+            指定は連想配列で指定します。
+
+                array(
+                    'timeFormat' => '%Y-%m-%d %H:%M:%S', // 時刻
+                    'lineFormat' => '[%1$s] %2$s [%3$s] %5$s:%6$s:%7$s() %4$s' // レコード全体
+                );
+
+            【デフォルト】
+                時刻            YYYY-MM-DD HH:mm:ss
+                レコード全体    [時刻] ID [エラーレベル] メッセージ
+
+        [Level]
+            ログ出力レベル
+
+            エラー出力する優先度。
+
+            PEARのLogパッケージで定義されている定数に依存します。
+            優先度の数値が小さいほど優先度が高くなります。
+            EMERG (0) が最重要な優先度で、DEBUG (7) は 組み込みの優先度の中ではもっとも優先度が低いものです。
+
+            PEAR_LOG_WARNINGが設定された場合、ログとして出力されるのは、
+            PEAR_LOG_EMERG・PEAR_LOG_ALERT・PEAR_LOG_CRIT・PEAR_LOG_ERR・PEAR_LOG_WARNING
+            となります。
+
+            【設定可能な値（定数）】
+
+                PEAR_LOG_EMERG   = 0 // 緊急事態 (Emergency): システムが使用不可能です
+                PEAR_LOG_ALERT   = 1 // 警報 (Alert): 至急対応が必要です
+                PEAR_LOG_CRIT    = 2 // 危機 (Critical): 危機的な状況です
+                PEAR_LOG_ERR     = 3 // エラー (Error): エラーが発生しました
+                PEAR_LOG_WARNING = 4 // 警告 (Warning): 警告が発生しました
+                PEAR_LOG_NOTICE  = 5 // 注意 (Notice): 通常動作ですが、注意すべき状況です
+                PEAR_LOG_INFO    = 6 // 情報 (Informational): 情報メッセージ
+                PEAR_LOG_DEBUG   = 7 // デバッグ (Debug): デバッグメッセージ
+
+            【デフォルト】
+                Warning（PEAR_LOG_WARNING）
+
+■7.4. ログの作成
+
+    ログの記録を開始するには、setParamater() メソッドでログ設定を行い、to()メソッドで出力します。 
+    ※デフォルトの設定で出力する場合は、setParamater() を使用する必要はありません。
+
+    以下プログラムのサンプルを示します。
+
+        <?php
+        require_once('FW/Logger.class.php');
+
+        Logger::setParamater( array( 'Handler'  => 'display',
+                                     'Filename' => '/home/casora/logs/log.txt',
+                                     'Level'    => PEAR_LOG_ERR ) );
+
+        Logger::to()->debug('DEBUG');
+        Logger::to()->warning('WARNING');
+        Logger::to()->err('ERROR');
+
+    ログは /home/casora/logs/log.txt に作成され、出力結果は以下のようになります。
+
+        [2008-07-15 18:11:18] 21572 [error] ERROR
