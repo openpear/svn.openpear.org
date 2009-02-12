@@ -1,0 +1,153 @@
+    第8章 DB
+
+■8.1. 概要
+
+    DB とその関連クラス群は、「casora」 において SQL データベースとのインターフェイスを担当します。
+    DBクラス は、PHP アプリケーションから RDBMS に接続する際に使用する
+    PHP Data Objects（PDO）をラップしたクラスです。
+
+    DBを使用するためには、PHPコンパイル時に、それぞれ使用するRDBMSの拡張モジュールを指定しておく必要があります。
+
+        * IBM DB2 および Informix Dynamic Server (IDS) (pdo_ibm PHP 拡張モジュールを使用)
+        * MySQL (pdo_mysql PHP 拡張モジュールを使用)
+        * Microsoft SQL Server (pdo_mssql PHP 拡張モジュールを使用)
+        * Oracle (pdo_oci PHP 拡張モジュールを使用)
+        * PostgreSQL (pdo_pgsql PHP 拡張モジュールを使用)
+        * SQLite (pdo_sqlite PHP 拡張モジュールを使用)
+
+■8.2. 機能
+
+    ・簡単なO/Rマッパーが実装されています。（8.4. で解説）
+
+    ・複数のホストを指定することで、ランダムに接続し、負荷分散する機能を備えています。
+
+    ・DB はマスタースレーブのレプリケーション構成を対象として作成されています。
+
+    ・DB はLoggerクラスに依存しています。
+
+    ・DB はスレーブサーバへの接続として取得したインスタンスで、
+    更新クエリを実行した場合に例外（DBException）を発生させます。
+
+    ・インスタンスの生成（getInstance() メソッド）はシングルトンパターンで実装されています。
+
+
+■8.3. 設定可能なパラメータ
+
+    DB はstaticなクラスなので、最初にパラメータを設定すれば、
+    それ以後は毎回設定せずに、最初の設定内容でインスタンスを取得することができます。
+
+    setParamater() メソッドを使用し連想配列で引数を指定します。
+
+    設定変更のできる項目は以下の通りです。
+
+
+        [Master]
+            マスターとなるサーバのIPまたはホスト名
+
+            以下のいずれかの文字で区切ることにより複数記述することができます。
+                半角スペース、ハイフン（-）、シャープ（#）、カンマ（,）、スラッシュ（/）
+
+        [Slave]
+            スレーブとなるサーバのIPまたはホスト名
+
+            以下のいずれかの文字で区切ることにより複数記述することができます。
+                半角スペース、ハイフン（-）、シャープ（#）、カンマ（,）、スラッシュ（/）
+
+        [Type]
+            RDBMSのタイプ
+
+            【対応している出力】
+
+                ドライバ名      サポートされるデータベース
+                PDO_DBLIB       FreeTDS / Microsoft SQL Server / Sybase
+                PDO_FIREBIRD    Firebird/Interbase 6
+                PDO_IBM         IBM DB2
+                PDO_INFORMIX    IBM Informix Dynamic Server
+                PDO_MYSQL       MySQL 3.x/4.x/5.x
+                PDO_OCI         Oracle Call Interface
+                PDO_ODBC        ODBC v3 (IBM DB2、unixODBC そして win32 ODBC)
+                PDO_PGSQL       PostgreSQL
+                PDO_SQLITE      SQLite 3 と SQLite 2
+
+        [Name]
+            RDBMSのデータベース名
+
+        [User]
+            RDBMSに接続するユーザ名
+
+        [Pass]
+            RDBMSに接続するユーザ名のパスワード
+
+        [Option]
+            ドライバ固有の接続オプション
+            
+            連想配列で指定する
+
+            【デフォルト】
+                array(PDO::ATTR_ORACLE_NULLS => PDO::NULL_EMPTY_STRING,
+                      PDO::ATTR_AUTOCOMMIT   => TRUE,
+                      PDO::ATTR_CASE         => PDO::CASE_NATURAL,
+                      PDO::ATTR_ERRMODE      => PDO::ERRMODE_EXCEPTION);
+
+            ※詳細はPHPのドキュメントを参照してください。
+
+        [_fromEncoding]
+            エンコード元の文字コード
+
+            RDBMSに登録されているデータの文字コードに当たります。
+
+        [_toEncoding]
+            エンコード後の文字コード
+
+            ソースコードの文字コードに当たります。
+
+        [Debug]
+            デバッグフラグ
+
+            DBクラス内での挙動をログに出力します。
+
+■8.4. RDBMSへの接続とデータの取得
+
+    まずは setParamater() メソッドで接続の設定を行います。
+
+        require_once('FW/DB.class.php');
+
+        DB::setParamater( array( 'Master' => '192.168.0.2',
+                                 'Slave'  => '192.168.0.3',
+                                 'Type'   => 'mysql',
+                                 'Name'   => 'test',
+                                 'User'   => 'cassis',
+                                 'Pass'   => 'orange',
+                                 '_fromEncoding' => 'EUC-JP',
+                                 '_toEncoding'   => 'UTF-8',
+                                 'Debug'  => DB::DEBUG_ON ) );
+
+    次に接続とクエリの実行例を条件別で示します。
+
+    例1 スレーブに接続し、query()メソッドを使用します。
+
+        $DB = DB::getInstance( DB::SLAVE );
+        $data = $DB->query('SELECT * FROM test')->fetchAll(PDO::FETCH_OBJ);
+
+
+    例2 スレーブに接続し、プリペアードステートメントを使用します。
+
+        $DB = DB::getInstance( DB::SLAVE );
+        $DB->prepare('SELECT * FROM test WHERE id = :id');
+        $DB->bindParam( ':id', $id );
+        $DB->execute();
+        $item = $DB->fetchObject();
+
+        ※prepareのインスタンスは、DBクラスのメンバ変数で保持しています。
+
+
+    例3 マスターに接続し、easy_mapper() メソッドを使用します。
+
+        $DB = DB::getInstance( DB::MASTER );
+        $data = $DB->easy_mapper('update', 'test', array('delete_flag' => 1), array('guest_id' => 1) );
+
+        ※easy_mapper()（拡張メソッド）はprepare() メソッドをラップした簡易マッパーです。
+        詳しくはソースコードを参照してください。
+
+
+    その他、PDOの使用方法については、PHPのドキュメントを参照してください。
