@@ -123,4 +123,11 @@ class Service_Ustream_Stream extends Service_Ustream_Abstract
             return $this->getResult()->results;
         }
     }
+
+    public function search()
+    {
+        $search = $this->_getSearchInstance('stream');
+        
+        return $search;
+    }
 }

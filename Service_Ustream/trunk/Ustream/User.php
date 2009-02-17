@@ -110,16 +110,12 @@ class Service_Ustream_User extends Service_Ustream_Abstract
         return $this->getResult()->results;
     }
 
-    public function search($command)
+    /**
+     *
+     * @return Service_Ustream_Search
+     */
+    public function search()
     {
-        $url = sprintf("%s/%s/user/recent/search/%s?key=%s",
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $command,
-                    $this->getApiKey()
-                );
-        $this->_send($url);
-        return $this->getResult()->results;
-
+        return $this->_getSearchInstance('user');
     }
 }

@@ -40,3 +40,165 @@
  * @version $Id$
  */
 
+require_once 'Service/Ustream/Abstract.php';
+
+class Service_Ustream_Search extends Service_Ustream_Abstract
+{
+    protected $_command;
+    protected $_scopeAndSorting;
+    protected $_params = array();
+    protected $_allowedCommands = array('user', 'channel', 'stream', 'video');
+
+    public function command($command)
+    {
+        if (!in_array($command, $this->_allowedCommands)) {
+            throw new Service_Ustream_Exception('Invalid command.');
+        } else {
+            $this->_command = $command;
+        }
+
+        return $this;
+    }
+
+    public function scope($scope)
+    {
+        $this->_scopeAndSorting = $scope;
+    }
+    
+    public function uid($uid)
+    {
+        $this->_scopeAndSorting = $uid;
+    }
+
+    /**
+     * @param bool $flag
+     * @return Service_Ustream_Search
+     */
+    public function newest($flag = true)
+    {
+        $this->_scopeAndSorting =
+            ($flag) ? 'newest' : '!newest';
+        return $this;
+    }
+
+    /**
+     * @param bool $flag
+     * @return Service_Ustream_Search
+     */
+    public function recent($flag = true)
+    {
+        $this->_scopeAndSorting =
+            ($flag) ? 'recent' : '!recent';
+        return $this;
+    }
+
+    /**
+     * @return Service_Ustream_Search
+     */
+    public function all()
+    {
+        $this->_scopeAndSorting = 'all';
+        return $this;
+    }
+
+    /**
+     * @return Service_Ustream_Search
+     */
+    public function popular()
+    {
+        $this->_scopeAndSorting = 'popular';
+        return $this;
+    }
+
+    /**
+     * @return Service_Ustream_Search
+     */
+    public function live()
+    {
+        $this->_scopeAndSorting = 'live';
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $name
+     * @return Service_Ustream_Search
+     */
+    public function where($name)
+    {
+        $this->_params[0] = $name;
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $value
+     * @return Service_Ustream_Search
+     */
+    public function like($value)
+    {
+        $this->_params[1] = 'like';
+        $this->_params[2] = $value;
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $value
+     * @return Service_Ustream_Search
+     */
+    public function eq($value)
+    {
+        $this->_params[1] = 'eq';
+        $this->_params[2] = $value;
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $value
+     * @return Service_Ustream_Search
+     */
+    public function lt($value)
+    {
+        $this->_params[1] = 'lt';
+        $this->_params[2] = $value;
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $value
+     * @return Service_Ustream_Search
+     */
+    public function gt($value)
+    {
+        $this->_params[1] = 'gt';
+        $this->_params[2] = $value;
+        return $this;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function query()
+    {
+        $url = sprintf('%s/%s/%s/%s/search/%s?key=%s',
+                self::API_URI,
+                $this->getResponseType(),
+                $this->_command,
+                $this->_scopeAndSorting,
+                implode(':', $this->_params),
+                $this->getApiKey());
+        $this->_send($url);
+
+        if ($this->getResponseType() == 'xml') {
+            $results = $this->getResult()->results;
+            return $results['array'];
+        } else {
+            return $this->getResult()->results;
+        }
+    }
+
+}

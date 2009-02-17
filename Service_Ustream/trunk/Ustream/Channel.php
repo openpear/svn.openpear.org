@@ -165,4 +165,13 @@ class Service_Ustream_Channel extends Service_Ustream_Abstract
             return $this->getResult()->results;
         }
     }
+
+    /**
+     *
+     * @return Service_Ustream_Search
+     */
+    public function search()
+    {
+        return $this->_getSearchInstance('channel');
+    }
 }
