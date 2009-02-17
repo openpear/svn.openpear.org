@@ -141,4 +141,9 @@ class Service_Ustream_Video extends Service_Ustream_Abstract
             return $this->getResult()->results;
         }
     }
+
+    public function search()
+    {
+        return $this->_getSearchInstance('video');
+    }
 }
