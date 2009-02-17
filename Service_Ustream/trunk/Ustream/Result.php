@@ -40,7 +40,7 @@
  * @version $Id$
  */
 
-class Service_Ustream_Result
+class Services_Ustream_Result
 {
     protected $_response;
     protected $_responseType;
@@ -73,8 +73,8 @@ class Service_Ustream_Result
                 $this->_results['results'] = $results;
                 break;
             default:
-                require_once 'Service/Ustream/ResultException.php';
-                throw new Service_Ustream_ResultException('Invalid response type.');
+                require_once 'Services/Ustream/ResultException.php';
+                throw new Services_Ustream_ResultException('Invalid response type.');
         }
     }
 
@@ -85,8 +85,8 @@ class Service_Ustream_Result
         $xml->unserialize($this->_response->getBody());
         $results = $xml->getUnserializedData();
         if ($results['error']) {
-            require_once 'Service/Ustream/ResultException.php';
-            throw new Service_Ustream_ResultException($results['msg']);
+            require_once 'Services/Ustream/ResultException.php';
+            throw new Services_Ustream_ResultException($results['msg']);
         }
         $this->_results = $results;
     }
@@ -95,8 +95,8 @@ class Service_Ustream_Result
     {
         $results = unserialize($this->_response->getBody());
         if ($results['error']) {
-            require_once 'Service/Ustream/ResultException.php';
-            throw new Service_Ustream_ResultException($results['msg']);
+            require_once 'Services/Ustream/ResultException.php';
+            throw new Services_Ustream_ResultException($results['msg']);
         }
         $this->_results = $results;
     }

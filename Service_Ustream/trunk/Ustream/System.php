@@ -40,11 +40,11 @@
  * @version $Id$
  */
 
-require_once 'Service/Ustream/Abstract.php';
+require_once 'Services/Ustream/Abstract.php';
 
-class Service_Ustream_System extends Service_Ustream_Abstract
+class Services_Ustream_System extends Services_Ustream_Abstract
 {
-	public function heartBeat()
+    public function heartBeat()
     {
         $url = sprintf('%s/%s/system/status/heartBeat?key=%s',
                     self::API_URI,

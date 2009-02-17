@@ -40,15 +40,15 @@
  * @version $Id$
  */
 
-require_once 'Service/Ustream/Abstract.php';
+require_once 'Services/Ustream/Abstract.php';
 
-class Service_Ustream_Stream extends Service_Ustream_Abstract
+class Services_Ustream_Stream extends Services_Ustream_Abstract
 {
     /**
      * 
      * @return array
      */
-	public function getRecent()
+    public function getRecent()
     {
         $url = sprintf('%s/%s/stream/all/getRecent?key=%s',
                     self::API_URI,

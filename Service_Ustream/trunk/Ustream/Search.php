@@ -40,9 +40,9 @@
  * @version $Id$
  */
 
-require_once 'Service/Ustream/Abstract.php';
+require_once 'Services/Ustream/Abstract.php';
 
-class Service_Ustream_Search extends Service_Ustream_Abstract
+class Services_Ustream_Search extends Services_Ustream_Abstract
 {
     protected $_command;
     protected $_scopeAndSorting;
@@ -52,7 +52,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     public function command($command)
     {
         if (!in_array($command, $this->_allowedCommands)) {
-            throw new Service_Ustream_Exception('Invalid command.');
+            throw new Services_Ustream_Exception('Invalid command.');
         } else {
             $this->_command = $command;
         }
@@ -72,7 +72,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
 
     /**
      * @param bool $flag
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function newest($flag = true)
     {
@@ -83,7 +83,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
 
     /**
      * @param bool $flag
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function recent($flag = true)
     {
@@ -93,7 +93,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     }
 
     /**
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function all()
     {
@@ -102,7 +102,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     }
 
     /**
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function popular()
     {
@@ -111,7 +111,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     }
 
     /**
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function live()
     {
@@ -122,7 +122,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     /**
      *
      * @param string $name
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function where($name)
     {
@@ -133,7 +133,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     /**
      *
      * @param string $value
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function like($value)
     {
@@ -145,7 +145,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     /**
      *
      * @param string $value
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function eq($value)
     {
@@ -157,7 +157,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     /**
      *
      * @param string $value
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function lt($value)
     {
@@ -169,7 +169,7 @@ class Service_Ustream_Search extends Service_Ustream_Abstract
     /**
      *
      * @param string $value
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function gt($value)
     {

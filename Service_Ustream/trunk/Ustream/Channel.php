@@ -40,11 +40,11 @@
  * @version $Id$
  */
 
-require_once 'Service/Ustream/Abstract.php';
+require_once 'Services/Ustream/Abstract.php';
 
-class Service_Ustream_Channel extends Service_Ustream_Abstract
+class Services_Ustream_Channel extends Services_Ustream_Abstract
 {
-	public function getInfo($uid)
+    public function getInfo($uid)
     {
         $url = sprintf('%s/%s/channel/%s/getInfo?key=%s',
                     self::API_URI,
@@ -78,7 +78,7 @@ class Service_Ustream_Channel extends Service_Ustream_Abstract
                     $channel,
                     $this->getApiKey());
         $this->_send($url);echo $url;
-        $this->_result = new Service_Ustream_Result_Channel($this->_response, $this->getResponseType());
+        $this->_result = new Services_Ustream_Result_Channel($this->_response, $this->getResponseType());
         return $this->_result->getId();
          */
     }
@@ -148,8 +148,8 @@ class Service_Ustream_Channel extends Service_Ustream_Abstract
 
     public function getTags($uid)
     {
-        require_once 'Service/Ustream/Exception.php';
-        throw new Service_Ustream_Exception('******');
+        require_once 'Services/Ustream/Exception.php';
+        throw new Services_Ustream_Exception('******');
         return;
         $url = sprintf('%s/%s/channel/%s/getTags?key=%s',
                     self::API_URI,
@@ -168,7 +168,7 @@ class Service_Ustream_Channel extends Service_Ustream_Abstract
 
     /**
      *
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function search()
     {

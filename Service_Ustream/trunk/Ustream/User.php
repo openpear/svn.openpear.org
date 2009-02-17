@@ -40,9 +40,9 @@
  * @version $Id$
  */
 
-require_once 'Service/Ustream/Abstract.php';
+require_once 'Services/Ustream/Abstract.php';
 
-class Service_Ustream_User extends Service_Ustream_Abstract
+class Services_Ustream_User extends Services_Ustream_Abstract
 {
     public function getInfo($user)
     {
@@ -57,7 +57,7 @@ class Service_Ustream_User extends Service_Ustream_Abstract
         return $this->getResult()->results;
         
     }
-	public function getId($user)
+    public function getId($user)
     {
         $url = sprintf("%s/%s/user/%s/getId?key=%s",
                     self::API_URI,
@@ -93,7 +93,7 @@ class Service_Ustream_User extends Service_Ustream_Abstract
         );
 
         $this->_send($url);
-        $this->_result = new Service_Ustream_Result_User($this->_response, $this->getResponseType());
+        $this->_result = new Services_Ustream_Result_User($this->_response, $this->getResponseType());
         return $this->getResult()->results;
     }
 
@@ -112,7 +112,7 @@ class Service_Ustream_User extends Service_Ustream_Abstract
 
     /**
      *
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     public function search()
     {
