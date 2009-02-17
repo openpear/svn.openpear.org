@@ -40,9 +40,9 @@
  * @version $Id$
  */
 
-require_once 'Service/Ustream/Result.php';
+require_once 'Services/Ustream/Result.php';
 
-abstract class Service_Ustream_Abstract
+abstract class Services_Ustream_Abstract
 {
     const API_URI = 'http://api.ustream.tv';
     protected $_responseTypes = array('xml', 'json', 'php', 'html');
@@ -68,7 +68,7 @@ abstract class Service_Ustream_Abstract
         $this->setResponseType($responseType);
         $rest = new HTTP_Request2(self::API_URI);
         $rest->setAdapter('HTTP_Request2_Adapter_Curl')
-             ->setHeader('User-Agent', 'Service_Ustream/' . Service_Ustream::VERSION);
+             ->setHeader('User-Agent', 'Services_Ustream/' . Services_Ustream::VERSION);
         $this->_rest = $rest;
     }
 
@@ -76,7 +76,7 @@ abstract class Service_Ustream_Abstract
      * Set API Key.
      *
      * @param string $apiKey
-     * @return Service_Ustream_Abstract
+     * @return Services_Ustream_Abstract
      */
     public function setApiKey($apiKey)
     {
@@ -98,14 +98,14 @@ abstract class Service_Ustream_Abstract
      * Set response type.
      * 
      * @param string $responseType
-     * @throws Service_Ustream_Exception
-     * @return Service_Ustream_Abstract
+     * @throws Services_Ustream_Exception
+     * @return Services_Ustream_Abstract
      */
     public function setResponseType($responseType = 'php')
     {
         if (!in_array($responseType, $this->_responseTypes, TRUE)) {
-            require_once 'Service/Ustream/Exception.php';
-            throw new Service_Ustream_Exception('Invalid Response Type.');
+            require_once 'Services/Ustream/Exception.php';
+            throw new Services_Ustream_Exception('Invalid Response Type.');
         }
         $this->_respnseType = $responseType;
         return $this;
@@ -125,7 +125,7 @@ abstract class Service_Ustream_Abstract
      *  Set REST Config.
      * 
      * @param array $restConfig
-     * @return Service_Ustream_Abstract
+     * @return Services_Ustream_Abstract
      */
     public function setRestConfig(Array $restConfig = array())
     {
@@ -136,7 +136,7 @@ abstract class Service_Ustream_Abstract
     /**
      *  Set page num.
      * @param integer $page
-     * @return Service_Ustream_Abstract
+     * @return Services_Ustream_Abstract
      */
     public function setPage($page)
     {
@@ -147,7 +147,7 @@ abstract class Service_Ustream_Abstract
     /**
      * Set limit.
      * @param integer $limit
-     * @return Service_Ustream_Abstract
+     * @return Services_Ustream_Abstract
      */
     public function setLimit($limit)
     {
@@ -171,7 +171,7 @@ abstract class Service_Ustream_Abstract
         $this->_rest->setUrl($url);
         $response = $this->_rest->send();
         $this->_response = $response;
-        $this->_result = new Service_Ustream_Result($response, $this->getResponseType());
+        $this->_result = new Services_Ustream_Result($response, $this->getResponseType());
     }
 
     public function getResult()
@@ -182,11 +182,11 @@ abstract class Service_Ustream_Abstract
     /**
      *
      * @param string $command
-     * @return Service_Ustream_Search
+     * @return Services_Ustream_Search
      */
     protected function _getSearchInstance($command)
     {
-        $search = Service_Ustream::factory('search');
+        $search = Services_Ustream::factory('search');
         $search->setApiKey($this->getApiKey())
                ->setResponseType($this->getResponseType())
                ->command($command);

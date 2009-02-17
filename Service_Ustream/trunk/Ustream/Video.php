@@ -40,11 +40,11 @@
  * @version $Id$
  */
 
-require_once 'Service/Ustream/Abstract.php';
+require_once 'Services/Ustream/Abstract.php';
 
-class Service_Ustream_Video extends Service_Ustream_Abstract
+class Services_Ustream_Video extends Services_Ustream_Abstract
 {
-	public function getInfo($uid)
+    public function getInfo($uid)
     {
         $url = sprintf('%s/%s/video/%s/getInfo?key=%s',
                     self::API_URI,
@@ -124,8 +124,8 @@ class Service_Ustream_Video extends Service_Ustream_Abstract
 
     public function getTags($uid)
     {
-        require_once 'Service/Ustream/Exception.php';
-        throw new Service_Ustream_Exception('******');
+        require_once 'Services/Ustream/Exception.php';
+        throw new Services_Ustream_Exception('******');
         return;
         $url = sprintf('%s/%s/video/%s/getTags?key=%s',
                     self::API_URI,

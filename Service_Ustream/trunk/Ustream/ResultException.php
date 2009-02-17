@@ -40,5 +40,5 @@
  * @version $Id$
  */
 
-class Service_Ustream_ResultException extends Exception
+class Services_Ustream_ResultException extends Exception
 {}
