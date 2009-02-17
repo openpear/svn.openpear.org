@@ -44,9 +44,9 @@ require_once 'Service/Ustream/Result.php';
 
 abstract class Service_Ustream_Abstract
 {
-	const API_URI = 'http://api.ustream.tv';
+    const API_URI = 'http://api.ustream.tv';
     protected $_responseTypes = array('xml', 'json', 'php', 'html');
-	protected $_apiKey;
+    protected $_apiKey;
     protected $_respnseType;
 
     protected $_rest;
@@ -58,17 +58,17 @@ abstract class Service_Ustream_Abstract
      *
      * @param string $apiKey
      */
-	public function __construct($apiKey = null, $responseType = 'php')
-	{
-		if (!is_null($apiKey)) {
-			$this->setApiKey($apiKey);
-		}
+    public function __construct($apiKey = null, $responseType = 'php')
+    {
+        if (!is_null($apiKey)) {
+            $this->setApiKey($apiKey);
+        }
         $this->setResponseType($responseType);
         $rest = new HTTP_Request2(self::API_URI);
         $rest->setAdapter('HTTP_Request2_Adapter_Curl')
              ->setHeader('User-Agent', 'Service_Ustream/' . Service_Ustream::VERSION);
         $this->_rest = $rest;
-	}
+    }
 
     /**
      * Set API Key.
@@ -76,11 +76,11 @@ abstract class Service_Ustream_Abstract
      * @param string $apiKey
      * @return Service_Ustream_Abstract
      */
-	public function setApiKey($apiKey)
-	{
-		$this->_apiKey = $apiKey;
+    public function setApiKey($apiKey)
+    {
+        $this->_apiKey = $apiKey;
         return $this;
-	}
+    }
 
     /**
      * Get API Key.
@@ -136,7 +136,7 @@ abstract class Service_Ustream_Abstract
      */
     protected function _send($url)
     {
-        unset($this->_respnse);
+        unset($this->_response);
         $this->_rest->setUrl($url);
         $response = $this->_rest->send();
         $this->_response = $response;
