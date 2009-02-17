@@ -48,7 +48,9 @@ abstract class Service_Ustream_Abstract
     protected $_responseTypes = array('xml', 'json', 'php', 'html');
     protected $_apiKey;
     protected $_respnseType;
-
+    protected $_page;
+    protected $_limit;
+    
     protected $_rest;
     protected $_response;
     protected $_result;
@@ -102,6 +104,7 @@ abstract class Service_Ustream_Abstract
     public function setResponseType($responseType = 'php')
     {
         if (!in_array($responseType, $this->_responseTypes, TRUE)) {
+            require_once 'Service/Ustream/Exception.php';
             throw new Service_Ustream_Exception('Invalid Response Type.');
         }
         $this->_respnseType = $responseType;
@@ -131,12 +134,40 @@ abstract class Service_Ustream_Abstract
     }
 
     /**
+     *  Set page num.
+     * @param integer $page
+     * @return Service_Ustream_Abstract
+     */
+    public function setPage($page)
+    {
+        $this->_page = (int) $page;
+        return $this;
+    }
+
+    /**
+     * Set limit.
+     * @param integer $limit
+     * @return Service_Ustream_Abstract
+     */
+    public function setLimit($limit)
+    {
+        $this->_limit = (int) $limit;
+        return $this;
+    }
+
+    /**
      *
      * @param string $url
      */
     protected function _send($url)
     {
         unset($this->_response);
+        if ($this->_page) {
+            $url .= '&page=' . $this->_page;
+        }
+        if ($this->_limit) {
+            $url .= '&limit=' . $this->_limit;
+        }
         $this->_rest->setUrl($url);
         $response = $this->_rest->send();
         $this->_response = $response;
@@ -147,4 +178,19 @@ abstract class Service_Ustream_Abstract
     {
         return $this->_result;
     }
+
+    /**
+     *
+     * @param string $command
+     * @return Service_Ustream_Search
+     */
+    protected function _getSearchInstance($command)
+    {
+        $search = Service_Ustream::factory('search');
+        $search->setApiKey($this->getApiKey())
+               ->setResponseType($this->getResponseType())
+               ->command($command);
+        return $search;
+    }
+
 }
