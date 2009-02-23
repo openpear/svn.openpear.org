@@ -14,7 +14,7 @@
   *
   * @category   XML
   * @package    Keires_Feed
-  * @author     KOYAMA Tetsuji <koyama@hoge.hoge.org>
+  * @author     KOYAMA Tetsuji <koyama@hoge.org>
   * @copyright  2008-2009 KOYAMA Tetsuji
   * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
   * @version    svn: $Id$
