@@ -22,9 +22,12 @@
   * @since      File available since Release 0.1
   */
 
-require_once 'Keires/FeedParser.php';
-require_once 'Keires/ExceptionWrapper.php';
 require_once 'HTTP/Request.php';  // PEAR::HTTP_Request
+require_once 'Keires/FeedParser.php';
+require_once 'Openpear/Util.php';
+
+Openpear_Util::import('array_val');
+Openpear_Util::import('ExceptionWrapper');
 
 /*
  * Error codes
@@ -35,18 +38,6 @@ define('KEIRES_ERROR_EMPTY_CONTENTS',  3);
 define('KEIRES_ERROR_UNPARSED',        4);
 define('KEIRES_ERROR_INVALID_XML',     5);
 define('KEIRES_ERROR_DOM_LOADING',     6);
-
-/*
- * Utility function
- */
-if (!function_exists('array_val')) {
-    function array_val(&$data, $key, $default = null) {
-        if (!is_array($data)) {
-            return $default;
-        }
-        return isset($data[$key])? $data[$key]: $default;
-    }
-}
 
 /*
  * Excepiton
@@ -81,7 +72,7 @@ class Keires_Feed {
         }
         $result = $req->sendRequest();
         if (PEAR::isError($result)) {
-            Keires_ExceptionWrapper::handleError($result);
+            ExceptionWrapper::handleError($result);
         }
 
         $code = $req->getResponseCode();
