@@ -33,7 +33,7 @@ include_once dirname(__FILE__) . '/PEG/Count.php';
  * 
  * 言葉の定義:<br/>
  * パーサ : ここではPEG_IParserインターフェイスの実装クラスを指す  <br/>
- * コンテキスト : PEG_IContextインターフェイスの実装クラスを指す  <br />
+ * コンテキスト : PEG_IContextインターフェイスの実装クラスを指す  <br/>
  * (パーサが)成功する : parseメソッド実行時にPEG_Failure例外が投げれずに済み、parseメソッドがが何らかの値を返す事を指す  <br/>
  * (パーサが)失敗する : parseメソッド実行時にPEG_Failureが投げられること  <br/>
  */
@@ -351,6 +351,8 @@ class PEG
     
     /**
      * 
+     * @param PEG_IParser $p
+     * @param String $str
      */
     static function parse(PEG_IParser $p, $str)
     {
