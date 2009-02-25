@@ -39,10 +39,10 @@ include_once dirname(__FILE__) . '/PEG/Count.php';
  */
 class PEG
 {
-    const VER = 0.14;
+    const VER = 0.15;
     
     /**
-     * PEG_Contextンスタンスを生成する。
+     * PEG_Contextインスタンスを生成する。
      * 
      * @param string $str
      * @return PEG_Context
@@ -194,7 +194,6 @@ class PEG
     {
         return new PEG_And(func_get_args());
     }
-
 
     /**
      * @return PEG_Ref
