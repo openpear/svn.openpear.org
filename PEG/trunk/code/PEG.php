@@ -39,6 +39,8 @@ include_once dirname(__FILE__) . '/PEG/Count.php';
  */
 class PEG
 {
+    const VER = 0.14;
+    
     /**
      * PEG_Contextンスタンスを生成する。
      * 
