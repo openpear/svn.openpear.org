@@ -45,7 +45,7 @@ require_once 'HTTP/Request2.php';
 
 class Services_Ustream
 {
-    const VERSION = '0.1.0';
+    const VERSION = '0.1.1';
     private static $_commands = array('Channel', 'User', 'Search', 'Stream', 'System', 'Video');
 
     public static function factory($command, $apiKey = null, $responseType = 'php')
