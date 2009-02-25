@@ -46,67 +46,57 @@ class Services_Ustream_User extends Services_Ustream_Abstract
 {
     public function getInfo($user)
     {
-        $url = sprintf("%s/%s/user/%s/getInfo?key=%s",
+        $url = sprintf('%s/%s/user/%s/getInfo',
                     self::API_URI,
                     $this->getResponseType(),
-                    $user,
-                    $this->getApiKey()
-        );
+                    $user);
 
-        $this->_send($url);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
         
     }
     public function getId($user)
     {
-        $url = sprintf("%s/%s/user/%s/getId?key=%s",
+        $url = sprintf('%s/%s/user/%s/getId',
                     self::API_URI,
                     $this->getResponseType(),
-                    $user,
-                    $this->getApiKey()
-        );
+                    $user);
 
-        $this->_send($url);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
     public function getValueOf($user, $key)
     {
-        $url = sprintf("%s/%s/user/%s/getValueOf/%s?key=%s",
+        $url = sprintf('%s/%s/user/%s/getValueOf/%s',
                     self::API_URI,
                     $this->getResponseType(),
                     $user,
-                    $key,
-                    $this->getApiKey()
-        );
+                    $key);
 
-        $this->_send($url);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function listAllChannels($user)
     {
-        $url = sprintf("%s/%s/user/%s/listAllChannels?key=%s",
+        $url = sprintf('%s/%s/user/%s/listAllChannels',
                     self::API_URI,
                     $this->getResponseType(),
-                    $user,
-                    $this->getApiKey()
-        );
+                    $user);
 
-        $this->_send($url);
+        $this->_send($url, array('key' => $this->getApiKey()));
         $this->_result = new Services_Ustream_Result_User($this->_response, $this->getResponseType());
         return $this->getResult()->results;
     }
 
     public function listAllVideos($user)
     {
-        $url = sprintf("%s/%s/user/%s/listAllVideos?key=%s",
+        $url = sprintf('%s/%s/user/%s/listAllVideos',
                     self::API_URI,
                     $this->getResponseType(),
-                    $user,
-                    $this->getApiKey()
-        );
+                    $user);
 
-        $this->_send($url);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 

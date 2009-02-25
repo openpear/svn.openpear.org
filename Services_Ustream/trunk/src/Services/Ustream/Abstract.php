@@ -159,15 +159,21 @@ abstract class Services_Ustream_Abstract
      *
      * @param string $url
      */
-    protected function _send($url)
+    protected function _send($url, $params)
     {
-        unset($this->_response);
+        if ($this->_response) {
+            unset($this->_response);
+        }
+        if ($this->_result) {
+            unset($this->_result);
+        }
         if ($this->_page) {
-            $url .= '&page=' . $this->_page;
+            $params['page'] = $this->_page;
         }
-        if ($this->_limit) {
-            $url .= '&limit=' . $this->_limit;
+        if ($this->_limit && $this->_limit <= 20) {
+            $params['limit'] = $this->_limit;
         }
+        $url = $url . '?' . http_build_query($params);
         $this->_rest->setUrl($url);
         $response = $this->_rest->send();
         $this->_response = $response;

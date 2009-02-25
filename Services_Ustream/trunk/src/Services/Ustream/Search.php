@@ -186,14 +186,14 @@ class Services_Ustream_Search extends Services_Ustream_Abstract
      */
     public function query()
     {
-        $url = sprintf('%s/%s/%s/%s/search/%s?key=%s',
+        $url = sprintf('%s/%s/%s/%s/search/%s',
                 self::API_URI,
                 $this->getResponseType(),
                 $this->_command,
                 $this->_scopeAndSorting,
-                implode(':', $this->_params),
-                $this->getApiKey());
-        $this->_send($url);
+                implode(':', $this->_params));
+        
+        $this->_send($url, array('key' => $this->getApiKey()));
 
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;

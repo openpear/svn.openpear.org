@@ -46,57 +46,52 @@ class Services_Ustream_Video extends Services_Ustream_Abstract
 {
     public function getInfo($uid)
     {
-        $url = sprintf('%s/%s/video/%s/getInfo?key=%s',
+        $url = sprintf('%s/%s/video/%s/getInfo',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function getValueOf($uid, $key)
     {
-        $url = sprintf('%s/%s/video/%s/getValueOf/%s?key=%s',
+        $url = sprintf('%s/%s/video/%s/getValueOf/%s',
                     self::API_URI,
                     $this->getResponseType(),
                     $uid,
-                    $key,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $key);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function getId($videoUrl)
     {
-        $url = sprintf('%s/%s/video/%s/getId?key=%s',
+        $url = sprintf('%s/%s/video/%s/getId',
                     self::API_URI,
                     $this->getResponseType(),
-                    $videoUrl,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $videoUrl);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function getEmbedTag($uid)
     {
-        $url = sprintf('%s/%s/video/%s/getEmbedTag?key=%s',
+        $url = sprintf('%s/%s/video/%s/getEmbedTag',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function listAllVideos($uid)
     {
-        $url = sprintf('%s/%s/video/%s/listAllVideos?key=%s',
+        $url = sprintf('%s/%s/video/%s/listAllVideos',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
@@ -108,12 +103,11 @@ class Services_Ustream_Video extends Services_Ustream_Abstract
 
     public function getComments($uid)
     {
-        $url = sprintf('%s/%s/video/%s/getComments?key=%s',
+        $url = sprintf('%s/%s/video/%s/getComments',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
@@ -127,13 +121,11 @@ class Services_Ustream_Video extends Services_Ustream_Abstract
         require_once 'Services/Ustream/Exception.php';
         throw new Services_Ustream_Exception('******');
         return;
-        $url = sprintf('%s/%s/video/%s/getTags?key=%s',
+        $url = sprintf('%s/%s/video/%s/getTags',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
-        echo $url;
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
