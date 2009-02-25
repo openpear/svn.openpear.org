@@ -386,4 +386,10 @@ class PEG
     {
         return new PEG_Count($p);
     }
+
+    static function blank()
+    {
+        static $obj = null;
+        return $obj ? $obj : $obj = PEG::char(" \t");
+    }
 }
