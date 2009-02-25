@@ -46,51 +46,38 @@ class Services_Ustream_Channel extends Services_Ustream_Abstract
 {
     public function getInfo($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/getInfo?key=%s',
+        $url = sprintf('%s/%s/channel/%s/getInfo',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function getValueOf($uid, $key)
     {
-        $url = sprintf('%s/%s/channel/%s/getValueOf/%s?key=%s',
+        $url = sprintf('%s/%s/channel/%s/getValueOf/%s',
                     self::API_URI,
                     $this->getResponseType(),
                     $uid,
-                    $key,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $key);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function getId($channel)
     {
         return $this->getValueOf($channel, 'id');
-        /*
-         * Invild COMMAND getId 2009.02.16
-        $url = sprintf('%s/%s/channel/%s/getId?key=%s',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $channel,
-                    $this->getApiKey());
-        $this->_send($url);echo $url;
-        $this->_result = new Services_Ustream_Result_Channel($this->_response, $this->getResponseType());
-        return $this->_result->getId();
-         */
+        
     }
 
     public function getEmbedTag($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/getEmbedTag?key=%s',
+        $url = sprintf('%s/%s/channel/%s/getEmbedTag',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
@@ -103,25 +90,24 @@ class Services_Ustream_Channel extends Services_Ustream_Abstract
      */
     public function getCustomEmbedTag($uid, $params = array())
     {
-        $url = sprintf('%s/%s/channel/%s/getCustomEmbedTag?key=%s%s',
+        $url = sprintf('%s/%s/channel/%s/getCustomEmbedTag',
                 self::API_URI,
                 $this->getResponseType(),
-                $uid,
-                $this->getApiKey(),
-                ((is_array($params)) ? ('&params=' . implode(';', $params)) : null));
-         $this->_send($url);
+                $uid);
+
+         $this->_send($url, array('key' => $this->getApiKey(), 'params' => implode(';', $params)));
          return $this->getResult()->results;
         
     }
 
     public function listAllChannels($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/listAllChannels?key=%s',
+        $url = sprintf('%s/%s/channel/%s/listAllChannels',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
+        
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
@@ -132,12 +118,12 @@ class Services_Ustream_Channel extends Services_Ustream_Abstract
 
     public function getComments($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/getComments?key=%s',
+        $url = sprintf('%s/%s/channel/%s/getComments',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
+        
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
@@ -151,13 +137,12 @@ class Services_Ustream_Channel extends Services_Ustream_Abstract
         require_once 'Services/Ustream/Exception.php';
         throw new Services_Ustream_Exception('******');
         return;
-        $url = sprintf('%s/%s/channel/%s/getTags?key=%s',
+        $url = sprintf('%s/%s/channel/%s/getTags',
                     self::API_URI,
                     $this->getResponseType(),
-                    $uid,
-                    $this->getApiKey());
-        $this->_send($url);
-        echo $url;
+                    $uid);
+        $this->_send($url, array('key' => $this->getApiKey()));
+        
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];

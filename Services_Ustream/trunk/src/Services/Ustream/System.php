@@ -46,21 +46,19 @@ class Services_Ustream_System extends Services_Ustream_Abstract
 {
     public function heartBeat()
     {
-        $url = sprintf('%s/%s/system/status/heartBeat?key=%s',
+        $url = sprintf('%s/%s/system/status/heartBeat',
                     self::API_URI,
-                    $this->getResponseType(),
-                    $this->getApiKey());
-        $this->_send($url);
+                    $this->getResponseType());
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 
     public function ping()
     {
-        $url = sprintf('%s/%s/system/status/ping?key=%s',
+        $url = sprintf('%s/%s/system/status/ping',
                     self::API_URI,
-                    $this->getResponseType(),
-                    $this->getApiKey());
-        $this->_send($url);
+                    $this->getResponseType());
+        $this->_send($url, array('key' => $this->getApiKey()));
         return $this->getResult()->results;
     }
 }

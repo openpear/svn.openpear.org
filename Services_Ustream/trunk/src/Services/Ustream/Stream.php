@@ -50,11 +50,10 @@ class Services_Ustream_Stream extends Services_Ustream_Abstract
      */
     public function getRecent()
     {
-        $url = sprintf('%s/%s/stream/all/getRecent?key=%s',
+        $url = sprintf('%s/%s/stream/all/getRecent',
                     self::API_URI,
-                    $this->getResponseType(),
-                    $this->getApiKey());
-        $this->_send($url);
+                    $this->getResponseType());
+        $this->_send($url, array('key' => $this->getApiKey()));
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
@@ -70,11 +69,10 @@ class Services_Ustream_Stream extends Services_Ustream_Abstract
      */
     public function getMostViewers()
     {
-        $url = sprintf('%s/%s/stream/all/getMostViewers?key=%s',
+        $url = sprintf('%s/%s/stream/all/getMostViewers',
                     self::API_URI,
-                    $this->getResponseType(),
-                    $this->getApiKey());
-        $this->_send($url);
+                    $this->getResponseType());
+        $this->_send($url, array('key' => $this->getApiKey()));
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
@@ -96,11 +94,10 @@ class Services_Ustream_Stream extends Services_Ustream_Abstract
      */
     public function getRandom()
     {
-        $url = sprintf('%s/%s/stream/all/getRandom?key=%s',
+        $url = sprintf('%s/%s/stream/all/getRandom',
                     self::API_URI,
-                    $this->getResponseType(),
-                    $this->getApiKey());
-        $this->_send($url);
+                    $this->getResponseType());
+        $this->_send($url, array('key' => $this->getApiKey()));
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
@@ -111,11 +108,10 @@ class Services_Ustream_Stream extends Services_Ustream_Abstract
 
     public function getAllNew()
     {
-        $url = sprintf('%s/%s/stream/all/getAllNew?key=%s',
+        $url = sprintf('%s/%s/stream/all/getAllNew',
                     self::API_URI,
-                    $this->getResponseType(),
-                    $this->getApiKey());
-        $this->_send($url);
+                    $this->getResponseType());
+        $this->_send($url, array('key' => $this->getApiKey()));
         if ($this->getResponseType() == 'xml') {
             $results = $this->getResult()->results;
             return $results['array'];
