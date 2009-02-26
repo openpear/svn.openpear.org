@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<title>NorfDocTest</title>
+<link rel="stylesheet" href="doctest.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="norfdoctest">
+<h1 class="title">NorfDocTest</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr class="field"><th class="docinfo-name">著者:</th><td class="field-body">鈴木鉄也 &lt;<a class="reference" href="mailto:suzuki&#64;spice-of-life.net">suzuki&#64;spice-of-life.net</a>&gt;</td>
+</tr>
+<tr class="field"><th class="docinfo-name">日付:</th><td class="field-body">2009-02-26</td>
+</tr>
+<tr class="field"><th class="docinfo-name">バージョン:</th><td class="field-body">NorfDocTest 0.7</td>
+</tr>
+</tbody>
+</table>
+<!-- -*- coding: utf-8 -*- -->
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#id1" id="id23" name="id23">概要</a></li>
+<li><a class="reference" href="#id2" id="id24" name="id24">ライセンス</a></li>
+<li><a class="reference" href="#id3" id="id25" name="id25">インストール</a><ul>
+<li><a class="reference" href="#openpear" id="id26" name="id26">openpearによるインストール</a></li>
+<li><a class="reference" href="#text-diff" id="id27" name="id27">差分表示オプション (Text_Diff)</a></li>
+<li><a class="reference" href="#norf" id="id28" name="id28">Norfについて</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id4" id="id29" name="id29">例</a></li>
+<li><a class="reference" href="#id5" id="id30" name="id30">使い方</a><ul>
+<li><a class="reference" href="#id6" id="id31" name="id31">テストの対象となるテキスト</a></li>
+<li><a class="reference" href="#id7" id="id32" name="id32">ブロック</a><ul>
+<li><a class="reference" href="#id8" id="id33" name="id33">コメント</a></li>
+<li><a class="reference" href="#id9" id="id34" name="id34">期待値</a></li>
+<li><a class="reference" href="#id10" id="id35" name="id35">例外の扱い</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id11" id="id36" name="id36">テストのオーバーライド</a></li>
+<li><a class="reference" href="#id12" id="id37" name="id37">抽象クラスと抽象メソッドのテスト</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id13" id="id38" name="id38">テストの実行</a><ul>
+<li><a class="reference" href="#id14" id="id39" name="id39">テストを実行するコードを書く</a></li>
+<li><a class="reference" href="#id15" id="id40" name="id40">テストの実行順序</a></li>
+<li><a class="reference" href="#id16" id="id41" name="id41">テスト対象の指定</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id17" id="id42" name="id42">指示子</a><ul>
+<li><a class="reference" href="#id18" id="id43" name="id43">ブロック指示子</a><ul>
+<li><a class="reference" href="#setup" id="id44" name="id44"><tt class="docutils literal"><span class="pre">#setUp</span></tt></a></li>
+<li><a class="reference" href="#localsetup" id="id45" name="id45"><tt class="docutils literal"><span class="pre">#localSetUp</span></tt></a></li>
+<li><a class="reference" href="#teardown" id="id46" name="id46"><tt class="docutils literal"><span class="pre">#tearDown</span></tt></a></li>
+<li><a class="reference" href="#localteardown" id="id47" name="id47"><tt class="docutils literal"><span class="pre">#localTearDown</span></tt></a></li>
+<li><a class="reference" href="#test" id="id48" name="id48"><tt class="docutils literal"><span class="pre">#test</span></tt></a></li>
+<li><a class="reference" href="#todo" id="id49" name="id49"><tt class="docutils literal"><span class="pre">#toDo</span></tt></a></li>
+<li><a class="reference" href="#super" id="id50" name="id50"><tt class="docutils literal"><span class="pre">#super</span></tt></a></li>
+<li><a class="reference" href="#id19" id="id51" name="id51"><tt class="docutils literal"><span class="pre">#...</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id20" id="id52" name="id52">入力文指示子</a><ul>
+<li><a class="reference" href="#class" id="id53" name="id53"><tt class="docutils literal"><span class="pre">#class</span></tt></a></li>
+<li><a class="reference" href="#new" id="id54" name="id54"><tt class="docutils literal"><span class="pre">#new(...)</span></tt></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#bnf" id="id55" name="id55">BNF</a></li>
+</ul>
+</div>
+<!--  -->
+<div class="section">
+<h1><a class="toc-backref" href="#id23" id="id1" name="id1">概要</a></h1>
+<p>NorfDocTestはPHP用のDocTestツールです。
+Pythonのdoctestモジュール風のフォーマットで、
+テストを兼ねた使用例を見やすく書けます。</p>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id24" id="id2" name="id2">ライセンス</a></h1>
+<p>NorfDocTestはMITライセンスで配布します。</p>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id25" id="id3" name="id3">インストール</a></h1>
+<p>アーカイブごと任意のディレクトリにコピーしてください。
+特に他に必要なライブラリはありません。</p>
+<p>ソースをリポジトリからクローンする場合は、ディレクトリ名を
+<tt class="docutils literal"><span class="pre">NorfDocTest</span></tt> に変更してください（しなくても問題ありませんが、
+このマニュアルでは変更したものとして扱います）。</p>
+<div class="section">
+<h2><a class="toc-backref" href="#id26" id="openpear" name="openpear">openpearによるインストール</a></h2>
+<p>NorfDocTestは <a class="reference" href="http://openpear.org/">openpear</a> でもインストールできます。
+まずPEARコマンドが使える環境で次のコマンドを入力し、openpearの準備をします。</p>
+<pre class="literal-block">
+% pear channel-discover openpear.org
+</pre>
+<p>成功したら、次のコマンドでNorfDocTestをインストールできます。</p>
+<pre class="literal-block">
+% pear install openpear/NorfDocTest
+</pre>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id27" id="text-diff" name="text-diff">差分表示オプション (Text_Diff)</a></h2>
+<p>PEARのText_Diffパッケージがインストールされていれば、
+文字列の期待値が結果と異なる場合に詳細な違いを表示します。
+PEARが使える環境でなければ、Text_Diffパッケージの
+ソースコードをインクルードパスに置いても大丈夫です。</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id28" id="norf" name="norf">Norfについて</a></h2>
+<p>NorfDocTestは <a class="reference" href="http://code.google.com/p/norf/">Norf</a> からライブラリを一部抜き出して使っていますが、
+単体で動作しますのでNorfのインストールは不要です。
+ただ、Norfに頼ってばっかりでPHPの基本的なライブラリをあまり使っていないため、
+実装を把握するのが面倒かもしれません。</p>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id29" id="id4" name="id4">例</a></h1>
+<p>簡単な例を次に示します。</p>
+<p><tt class="docutils literal"><span class="pre">fib.php</span></tt>:</p>
+<pre class="literal-block">
+/**
+ * フィボナッチ数列を計算する。
+ *
+ * #test n = 0 の場合
+ * &gt;&gt;&gt; fib(0);
+ * 0;
+ *
+ * #test n = 1 の場合
+ * &gt;&gt;&gt; fib(1);
+ * 1;
+ *
+ * #test n = 10 の場合
+ * &gt;&gt;&gt; fib(10);
+ * 55;
+ *
+ * #test n &lt; 0 であれば例外
+ * &gt;&gt;&gt; fib(-1);
+ * InvalidArgumentException: n must be &gt;= 0
+ */
+function fib($n)
+{
+     if ($n &lt; 0)
+         throw new InvalidArgumentException('error');
+     else if ($n == 0)
+         return 0;
+     else if ($n == 1)
+         return 1;
+     else
+         return fib($n-1) + fib($n-2);
+}
+</pre>
+<p>これはおなじみのフィボナッチ数列を求める関数です。
+NorfDocTestディレクトリと同じディレクトリにこのファイルを置き、
+次にテストを実行するファイルを書きます。</p>
+<p><tt class="docutils literal"><span class="pre">fibtest.php</span></tt>:</p>
+<pre class="literal-block">
+&lt;?php
+
+require_once 'NorfDocTest/NorfDocTest.php';
+
+$group = NorfDocTestModuleGroup::defaultGroup();
+$group-&gt;addModuleWithFile('fib.php');
+
+$request = new NorfDocTestRequest('Fibonacci');
+$group-&gt;executeRequest($request);
+</pre>
+<p>この実行ファイルをコマンドラインで実行すると、
+NorfDocTestはコメント内の使用例をテストとして実行します。</p>
+<pre class="literal-block">
+% php fibtest.php
+Testing Fibonacci
+
+...
+
+3 tests, 0 failures, 0 errors, 0 skips, 0 todos
+Total time: 0.002 seconds
+</pre>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id30" id="id5" name="id5">使い方</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id31" id="id6" name="id6">テストの対象となるテキスト</a></h2>
+<p>NorfDocTestは、クラス・メソッド・関数の直前にある
+<tt class="docutils literal"><span class="pre">/**</span> <span class="pre">...</span> <span class="pre">*/</span></tt> で囲まれたテキストをテストの対象とします。
+phpDocumertorなどで利用されるテキストとテストを
+同じコメント内に書くことになりますが、
+NorfDocTestの文法はドキュメント生成ツールには影響しません。</p>
+<p>テスト対象のテキストは行単位で解析します。
+NorfDocTestが扱う文法は次の三つです。
+これ以外のテキストはすべて無視します。</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">#</span></tt> で始まる行（指示子）</li>
+<li><tt class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></tt> で始まる行（入力文）</li>
+<li>入力文に続く行（期待値）</li>
+</ul>
+<p>行の先頭の空白とアスタリスクは無視されます。
+次の例はどちらも有効です。</p>
+<pre class="literal-block">
+/**
+   #test
+   &gt;&gt;&gt; ...
+   ...
+ */
+ function myMethod()
+ ...
+
+/**
+ * #test
+ * &gt;&gt;&gt; ...
+ * ...
+ */
+ function myMethod()
+ ...
+</pre>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id32" id="id7" name="id7">ブロック</a></h2>
+<p>テストの基本単位は、「指示子、入力文、期待値」の組み合わせで
+構成されるブロックです。
+ドキュメント（テスト対象のテキスト）には複数のブロックを記述できます。</p>
+<p>ブロックの文法:</p>
+<pre class="literal-block">
+/**
+ * # 指示子
+ * &gt;&gt;&gt; 入力文
+ * &gt;&gt;&gt; ...
+ * 期待値式
+ *
+ * ...
+ */
+function ...
+</pre>
+<p>次に基本的なブロックの例を示します。</p>
+<p>ブロックの例:</p>
+<pre class="literal-block">
+/**
+ * #test 文字列を数値に変換
+ * &gt;&gt;&gt; intval('12345');
+ * 12345
+ */
+</pre>
+<p><tt class="docutils literal"><span class="pre">#test</span></tt> はブロックをテストとして実行する指示子です。
+指示子は必ず <tt class="docutils literal"><span class="pre">#</span></tt> で始まります。
+他の指示子については <a class="reference" href="#id17">指示子</a> を参照してください。</p>
+<p>続く <tt class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></tt> で始まる行は入力文です。
+入力文はPHPのコードとして実行されます。
+複数行に渡って入力文を記述するには、空行を挟まずに続けて
+<tt class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></tt> から始めます。</p>
+<p>最後の行は期待値です。
+期待値は入力文の最後の式を評価した値と <tt class="docutils literal"><span class="pre">===</span></tt> で比較されます。
+入力文に複数の式を記述した例を次に示します。</p>
+<pre class="literal-block">
+/**
+ * #test
+ * &gt;&gt;&gt; $value = 0;
+ * &gt;&gt;&gt; for ($i = 1; $i &lt;= 10; $i++)
+ * &gt;&gt;&gt;     $value += $i;
+ * &gt;&gt;&gt; $value; // この式の評価値を期待値と比較する
+ * 55
+ *
+ */
+</pre>
+<p>例外の発生が期待されるテストブロックや
+<tt class="docutils literal"><span class="pre">#setUp</span></tt> などの指示子が指定されたセットアップブロックでは、
+最後の文が式文でなくても構いません。
+例外については <a class="reference" href="#id10">例外の扱い</a> を参照してください。</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id33" id="id8" name="id8">コメント</a></h3>
+<p>入力文と期待値では、 <tt class="docutils literal"><span class="pre">//</span></tt> で始まる行を無視します。
+次の例では、内容が <tt class="docutils literal"><span class="pre">1,</span> <span class="pre">3</span></tt> の配列同士を比較することになります。</p>
+<pre class="literal-block">
+#test
+&gt;&gt;&gt; array(1,
+// &gt;&gt;&gt; 2,
+&gt;&gt;&gt; 3);
+[1,
+// 2,
+3]
+</pre>
+<p>複数行をコメントアウトするには、各行で <tt class="docutils literal"><span class="pre">//</span></tt> を使います。
+PHPの <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">...</span> <span class="pre">*/</span></tt> のコメントはネストできないため、
+<tt class="docutils literal"><span class="pre">/*</span> <span class="pre">...</span> <span class="pre">*/</span></tt> は使えません。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id34" id="id9" name="id9">期待値</a></h3>
+<p>期待値はJSONフォーマットで記述します。
+なぜJSONフォーマットを使うのか、次に各フォーマットの利点と欠点を挙げます。
+最終的にDocTestとしての見やすさと書きやすさのバランスを考え、
+期待値をJSONフォーマットで記述することにしました。</p>
+<ul class="simple">
+<li>入力文と同様にPHPのコードを記述する場合、
+どちらもPHPのコードが続くので、思考を切り替えることなく書きやすい。
+ただし、テスト結果を知るのに期待値のコードを読む必要がある。</li>
+<li><tt class="docutils literal"><span class="pre">var_export()</span></tt> や <tt class="docutils literal"><span class="pre">var_dump()</span></tt> の出力を記述する場合、
+期待値の内容は見てわかりやすくなる。
+ただし、特に配列やオブジェクトは書くのに手間がかかる。</li>
+<li>JSONフォーマットの場合、配列（キーが整数でもそれ以外でも）が書きやすく、
+見てわかりやすい。
+ただし、使える型は限定され、入力文と思考を切り替える必要がある。</li>
+</ul>
+<p>また、JSONの制約上、期待値に指定できる型は
+「文字列、数値、配列、オブジェクト」の四つに限定されます。
+NorfDocTestではJSONの解析を自前の実装で行っており、
+これらの型を次のPHPの型として扱います。</p>
+<dl class="docutils">
+<dt>文字列</dt>
+<dd><tt class="docutils literal"><span class="pre">string</span></tt> 。</dd>
+<dt>数値</dt>
+<dd>整数は <tt class="docutils literal"><span class="pre">int</span></tt> 、浮動小数点数は <tt class="docutils literal"><span class="pre">float</span></tt> 。</dd>
+<dt>配列</dt>
+<dd><tt class="docutils literal"><span class="pre">NorfArray</span></tt> 。 <tt class="docutils literal"><span class="pre">array</span></tt> とも比較可。</dd>
+<dt>オブジェクト</dt>
+<dd><tt class="docutils literal"><span class="pre">NorfDictionary</span></tt> 。 <tt class="docutils literal"><span class="pre">array</span></tt> とも比較可。</dd>
+</dl>
+<p>JSONの配列とオブジェクトはそれぞれ <tt class="docutils literal"><span class="pre">NorfArray</span></tt> と
+<tt class="docutils literal"><span class="pre">NorfDictionary</span></tt> に変換されますが、
+PHPの配列と比較できるようになっています。
+入力文の最後の式の評価値を <tt class="docutils literal"><span class="pre">NorfArray</span></tt>, <tt class="docutils literal"><span class="pre">NorfDictionary</span></tt>
+にする必要はありません。</p>
+<p>配列の比較:</p>
+<pre class="literal-block">
+#test
+&gt;&gt;&gt; array(1, 2, 3);
+[1, 2, 3]
+
+#test
+&gt;&gt;&gt; array('a'=&gt;'A', 'b'=&gt;'B', 'c'=&gt;'C');
+{&quot;a&quot;:&quot;A&quot;, &quot;b&quot;:&quot;B&quot;, &quot;c&quot;:&quot;C&quot;}
+</pre>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id35" id="id10" name="id10">例外の扱い</a></h3>
+<p>例外が発生しなければならない場合、期待値に発生すべき例外とメッセージを
+コロンで区切って記述します。
+先のフィボナッチ関数の例を見てみましょう。</p>
+<p>フィボナッチ関数の例:</p>
+<pre class="literal-block">
+#test n &lt; 0 であれば例外
+&gt;&gt;&gt; fib(-1);
+InvalidArgumentException: n must be &gt;= 0
+</pre>
+<p>このテストは、 <tt class="docutils literal"><span class="pre">fib(-1)</span></tt> を評価すると例外
+<tt class="docutils literal"><span class="pre">InvalidArgumentException</span></tt> が発生し、
+かつメッセージが <tt class="docutils literal"><span class="pre">&quot;n</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">&gt;=</span> <span class="pre">0&quot;</span></tt> でなければパスしません。</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id36" id="id11" name="id11">テストのオーバーライド</a></h2>
+<p>テストのオーバーライドとは、
+テストを書いたクラスのサブクラスを定義するか、
+テストを書いたメソッドをサブクラスでオーバーライドすることです。
+どちらの場合も、デフォルトではスーパークラスのテストは実行されません。</p>
+<p>スーパークラスのテストを実行するには``#super`` 指示子を記述します。
+<tt class="docutils literal"><span class="pre">#super</span></tt> は同一のドキュメント内でのみ有効です。
+クラスドキュメントに <tt class="docutils literal"><span class="pre">#super</span></tt> を記述しても、
+すべてのメソッドでスーパークラスのテストが実行されることはありません。</p>
+<p>次に <tt class="docutils literal"><span class="pre">#super</span></tt> を使ったテストの例を示します。</p>
+<pre class="literal-block">
+/**
+ * #test AlphaClass
+ * &gt;&gt;&gt; ...
+ * ...
+ */
+class Alpha
+{
+   /**
+    * #test AlphaMethod
+    * &gt;&gt;&gt; ...
+    * ...
+    */
+   function method()
+   {
+       return ...;
+   }
+}
+
+/**
+ * テスト AlphaClass が実行された後、テスト BravoClass が実行される。
+ *
+ * #super
+ *
+ * #test BravoClass
+ * &gt;&gt;&gt; ...
+ * ...
+ */
+class Bravo extends Alpha
+{
+   /**
+    * テスト AlphaMethod が実行された後、テスト BravoMethod が実行される。
+    *
+    * #super
+    *
+    * #test BravoMethod
+    * &gt;&gt;&gt; ...
+    * ...
+    */
+   function method()
+   {
+       return ...;
+   }
+}
+</pre>
+<p><tt class="docutils literal"><span class="pre">#super</span></tt> を書かなければ、スーパークラスのテストは実行されません。</p>
+<p>この例では省略してごまかしましたが、
+サブクラスを考慮したテストを書くには、
+入力文中のクラス名とコンストラクタが
+テスト実行時にサブクラスのものに置き換えられなければなりません。</p>
+<p>これには <tt class="docutils literal"><span class="pre">#class</span></tt> と <tt class="docutils literal"><span class="pre">#new</span></tt> の指示子を使います。
+どちらも入力文でのみ使える指示子です。
+<tt class="docutils literal"><span class="pre">#class</span></tt> はテスト実行時のサブクラス名に、
+<tt class="docutils literal"><span class="pre">#new</span></tt> はサブクラスのコンストラクタに置き換えられます。
+次に例を示します。</p>
+<pre class="literal-block">
+/**
+ * #test
+ * &gt;&gt;&gt; $obj = #new();
+ * &gt;&gt;&gt; is_subclass_of($obj, 'Alpha');
+ * true
+ */
+class Alpha
+{
+    ...
+}
+
+/**
+ * #super
+ */
+class Bravo extends Alpha
+{
+    ...
+}
+</pre>
+<p>Bravo クラスのテストを実行するときには
+<tt class="docutils literal"><span class="pre">#new()</span></tt> が <tt class="docutils literal"><span class="pre">new</span> <span class="pre">Bravo()</span></tt> に置換され、
+Bravo クラスのインスタンスが生成されます。</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id37" id="id12" name="id12">抽象クラスと抽象メソッドのテスト</a></h2>
+<p>抽象クラスと抽象メソッドにもテストを書くことができますが、
+抽象クラス・抽象メソッドのテストは実行されません。
+テストが実行するには、サブクラスを定義して <tt class="docutils literal"><span class="pre">#super</span></tt> を指定します。</p>
+<pre class="literal-block">
+abstract class AbstractClass
+{
+    /**
+     * サブクラスから実行される。
+     *
+     * #test
+     * &gt;&gt;&gt; $obj = #new();
+     * &gt;&gt;&gt; is_int($obj-&gt;anyIntValue());
+     * true
+     */
+    abstract function anyIntValue();
+}
+
+class ConcreteClass extends AbstractClass
+{
+    /**
+     * #super
+     */
+    function anyIntValue()
+    {
+        return 1;
+    }
+}
+</pre>
+<p>ただし、抽象クラスのメソッドのテストがすべて無視されるわけではなく、
+抽象クラスで実装されたメソッドのテストは実行されます。
+この場合もちろん抽象クラスはインスタンス化できないので、
+テスト用のサブクラスを用意する必要があります。
+次に例を示します。</p>
+<pre class="literal-block">
+abstract class AbstractClass
+{
+    /**
+     * #test
+     * &gt;&gt;&gt; $obj = new ConcreteClassForTest();
+     * &gt;&gt;&gt; is_int($obj-&gt;anyIntValue());
+     * true
+     */
+    function anyIntValue()
+    {
+        return 1;
+    }
+}
+
+class ConcreteClassForTest extends AbstractClass
+{
+}
+</pre>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id38" id="id13" name="id13">テストの実行</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id39" id="id14" name="id14">テストを実行するコードを書く</a></h2>
+<p>テストを実行するには、実行用のコードを別のファイルに記述します。
+次に例を示します。</p>
+<pre class="literal-block">
+&lt;?php
+
+require_once 'NorfDocTest/NorfDocTest.php';        // 1.
+
+$group = NorfDocTestModuleGroup::defaultGroup();
+$group-&gt;addModuleWithFile('fib.php');              // 2.
+
+$request = new NorfDocTestRequest('Fibonacci');    // 3.
+$group-&gt;executeRequest($request);                  // 4.
+</pre>
+<p>テスト実行ファイルの基本的な流れを次に示します。</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">NorfDocTest.php</span></tt> をロードする。</li>
+<li>テストを記述したファイルを追加する。
+(<tt class="docutils literal"><span class="pre">NorfDocTestModuleGroup::addModuleWithFile()</span></tt>)</li>
+<li>任意のテスト名を指定してリクエストを生成する。 (<tt class="docutils literal"><span class="pre">NorfDocTestRequest</span></tt>)</li>
+<li>リクエストを実行する。 (<tt class="docutils literal"><span class="pre">NorfDocTestModelGroup::executeRequest()</span></tt>)</li>
+</ol>
+<p>テスト実行ファイルを簡単に書くには、
+このコードをコピーして 2. の行をファイル分だけ追加し、
+3. のテスト名を書き換えます。</p>
+<p>将来的にはテストをグループに分けて実行できるようにしたり、
+テスト実行用のコマンドを用意するかもしれません。</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id40" id="id15" name="id15">テストの実行順序</a></h2>
+<p>現在、テストは登場した順序で実行されます。
+ファイル中にクラスと関数が両方定義されている場合は、
+クラスのテストが先に実行されます。</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id41" id="id16" name="id16">テスト対象の指定</a></h2>
+<p>※この仕様は試験的もので、今後変更する可能性があります。</p>
+<p>テスト対象のクラス、メソッド、関数を指定することができます。
+リクエストにテスト対象としたい、もしくはテスト対象から外したい
+クラス、メソッド、関数の名前を指定します。
+テスト対象を何も指定しなければ、すべてのテストが実行されます。</p>
+<pre class="literal-block">
+$request = new NorfDocTestRequest('Example');
+
+// 特定のクラスをテストする
+$request-&gt;addTestingClassName('TestClass');
+
+// テスト対象から外す
+$request-&gt;addIgnoringClassName('IgnoreClass');
+
+// テスト実行
+$group-&gt;executeRequest($request);
+</pre>
+<p><tt class="docutils literal"><span class="pre">NorfDocTestRequest</span></tt> のAPIを次に示します。</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">testingClassNames()</span></tt></dt>
+<dd>テスト対象のクラス名を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addTestingClassName($name)</span></tt></dt>
+<dd>テスト対象のクラス名を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeTestingClassName($name)</span></tt></dt>
+<dd>追加されたテスト対象のクラス名を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">ignoringClassNames()</span></tt></dt>
+<dd>テスト対象外のクラス名を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addIgnoringClassName($name)</span></tt></dt>
+<dd>テスト対象外のクラス名を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeIgnoringClassName($name)</span></tt></dt>
+<dd>追加されたテスト対象外のクラス名を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">classPattern()</span></tt></dt>
+<dd>テスト対象のクラスを指定する正規表現を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addClassPattern($pattern)</span></tt></dt>
+<dd>テスト対象のクラスを指定する正規表現を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeClassPattern($pattern)</span></tt></dt>
+<dd>テスト対象のクラスを指定する正規表現を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">testingMethodNamesForClassNamed($name)</span></tt></dt>
+<dd>指定したクラスのうち、テスト対象のメソッド名を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addTestingMethodNameForClassNamed($methName,</span> <span class="pre">$className)</span></tt></dt>
+<dd>テスト対象のメソッド名を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeTestingMethodNameForClassNamed($methName,</span> <span class="pre">$className)</span></tt></dt>
+<dd>テスト対象のメソッド名を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">ignoringMethodNamesForClassNamed($name)</span></tt></dt>
+<dd>指定したクラスのうち、テスト対象外のメソッド名を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addIgnoringMethodNameForClassNamed($methName,</span> <span class="pre">$className)</span></tt></dt>
+<dd>テスト対象外のメソッド名を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeIgnoringMethodNameForClassNamed($methName,</span> <span class="pre">$className)</span></tt></dt>
+<dd>テスト対象外のメソッド名を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">methodPatternsForClassNamed($name)</span></tt></dt>
+<dd>指定したクラスのうち、テスト対象のメソッドを指定する
+正規表現を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addMethodPatternForClassNamed($pattern,</span> <span class="pre">$name)</span></tt></dt>
+<dd>テスト対象のメソッドを指定する正規表現を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeMethodPatternForClassNamed($pattern,</span> <span class="pre">$name)</span></tt></dt>
+<dd>テスト対象のメソッドを指定する正規表現を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">testingFunctionNames()</span></tt></dt>
+<dd>テスト対象の関数名を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addTestingFunctionName($name)</span></tt></dt>
+<dd>テスト対象の関数名を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeTestingFunctionName($name)</span></tt></dt>
+<dd>追加されたテスト対象の関数名を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">ignoringFunctionNames()</span></tt></dt>
+<dd>テスト対象外の関数名を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addIgnoringFunctionName($name)</span></tt></dt>
+<dd>テスト対象外の関数名を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeIgnoringFunctionName($name)</span></tt></dt>
+<dd>追加されたテスト対象外の関数名を取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">functionPattern()</span></tt></dt>
+<dd>テスト対象の関数を指定する正規表現を含む配列を返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">addFunctionPattern($pattern)</span></tt></dt>
+<dd>テスト対象の関数を指定する正規表現を追加します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeFunctionPattern($pattern)</span></tt></dt>
+<dd>テスト対象の関数を指定する正規表現を取り除きます。</dd>
+</dl>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id42" id="id17" name="id17">指示子</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id43" id="id18" name="id18">ブロック指示子</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id44" id="setup" name="setup"><tt class="docutils literal"><span class="pre">#setUp</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+#setUp
+# コメント ...
+&gt;&gt;&gt; 入力文 ...
+</pre>
+<p>この指示子に続く入力文は、各テストの実行前に評価されます。
+この指示子をクラスかメソッドのコメントで指定すると、
+同クラス内のすべての各テストの実行前に評価されます。
+関数のコメントで指定すると、同関数内のテストの実行前に評価されます。</p>
+<p>各テストの入力文と実行コンテキストを共有するので、
+この入力文で定義した変数は各テストの入力文から参照できます。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id45" id="localsetup" name="localsetup"><tt class="docutils literal"><span class="pre">#localSetUp</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+#localSetUp
+# コメント ...
+&gt;&gt;&gt; 入力文 ...
+</pre>
+<p>この指示子はメソッドのコメントでのみ有効です。
+この指示子に続く入力文は、同メソッドの各テストの実行前に評価されます。</p>
+<p><tt class="docutils literal"><span class="pre">#setUp</span></tt> と同様に、各テストの入力文と実行コンテキストを共有します。
+<tt class="docutils literal"><span class="pre">#setUp</span></tt> の使用例も定義されている場合、
+<tt class="docutils literal"><span class="pre">#setUp</span></tt>, <tt class="docutils literal"><span class="pre">#localSetUp</span></tt> の順に入力文が評価されます。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id46" id="teardown" name="teardown"><tt class="docutils literal"><span class="pre">#tearDown</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+#tearDown
+# コメント ...
+&gt;&gt;&gt; 入力文 ...
+</pre>
+<p>この指示子に続く入力文は、各テストの実行後に評価されます。
+この指示子をクラスかメソッドのコメントで指定すると、
+同クラス内のすべての各テストの実行前に評価されます。
+関数のコメントで指定すると、同関数内のテストの実行後に評価されます。</p>
+<p>各テストの入力文と実行コンテキストを共有するので、
+<tt class="docutils literal"><span class="pre">#setUp</span></tt>, <tt class="docutils literal"><span class="pre">#localSetUp</span></tt>, テストの入力文で定義した変数は
+この指示子に続く入力文から参照できます。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id47" id="localteardown" name="localteardown"><tt class="docutils literal"><span class="pre">#localTearDown</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+#localTearDown
+# コメント ...
+&gt;&gt;&gt; 入力文 ...
+</pre>
+<p>この指示子はメソッドのコメントでのみ有効です。
+この指示子に続く入力文は、同メソッドの各テストの実行後に評価されます。</p>
+<p><tt class="docutils literal"><span class="pre">#tearDown</span></tt> と同様に、各テストの入力文と実行コンテキストを共有します。
+<tt class="docutils literal"><span class="pre">#tearDown</span></tt> の使用例も定義されている場合、
+<tt class="docutils literal"><span class="pre">#localTearDown</span></tt>, <tt class="docutils literal"><span class="pre">#tearDown</span></tt> の順に入力文が評価されます。
+<tt class="docutils literal"><span class="pre">#setUp</span></tt>, <tt class="docutils literal"><span class="pre">#localSetUp</span></tt> と評価順序が異なるので注意してください。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id48" id="test" name="test"><tt class="docutils literal"><span class="pre">#test</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+#test [テスト名]
+# コメント ...
+&gt;&gt;&gt; 入力文 ...
+期待値
+</pre>
+<p>続く入力文をテストとして実行し、入力文の最後の式の結果を期待値を比較します。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id49" id="todo" name="todo"><tt class="docutils literal"><span class="pre">#toDo</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+#toDo
+#test [テスト名]
+# コメント ...
+&gt;&gt;&gt; 入力文 ...
+期待値
+</pre>
+<p>続くテストブロックをToDoとして数えます。
+ブロックは実行されません。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id50" id="super" name="super"><tt class="docutils literal"><span class="pre">#super</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+#super
+</pre>
+<p>クラスのドキュメントで指定すると、スーパークラスのテストを実行します。
+メソッドで指定すると、 スーパークラスの同名メソッドのテストを実行します。
+この指示子は単体で使い、入力文と期待値をとりません。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id51" id="id19" name="id19"><tt class="docutils literal"><span class="pre">#...</span></tt></a></h3>
+<p>文法:</p>
+<pre class="literal-block">
+# コメント
+# ...
+</pre>
+<p>使用例についてのコメントを記述します。
+続く <tt class="docutils literal"><span class="pre">#...</span></tt> で始まる行を一連のコメントとみなします。</p>
+<p>現在コメントは特に使われていませんが、
+将来のリリースではテスト結果をHTMLファイルに出力する場合などに
+使われる予定です。</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id52" id="id20" name="id20">入力文指示子</a></h2>
+<p>次の指示子は入力文でのみ使えます。</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id53" id="class" name="class"><tt class="docutils literal"><span class="pre">#class</span></tt></a></h3>
+<p>ブロック評価時のクラス名に置き換えられます。
+主に抽象クラスや抽象メソッドのテストで使います。
+サブクラスのテストで <tt class="docutils literal"><span class="pre">#super</span></tt> を指定した場合に、
+テスト実行時にそのサブクラスに置き換えられます。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id54" id="new" name="new"><tt class="docutils literal"><span class="pre">#new(...)</span></tt></a></h3>
+<p>ブロック評価時のクラスのコンストラクタに置き換えられます。
+<tt class="docutils literal"><span class="pre">new</span> <span class="pre">#class(...)</span></tt> と同じ意味です。</p>
+</div>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id55" id="bnf" name="bnf">BNF</a></h1>
+<pre class="literal-block">
+Documentation ::= Block*
+
+Block ::= BlockToSetUp
+        | BlockToLocalSetUp
+        | BlockToTest
+        | ToDoBlock
+        | SuperBlock
+
+BlockToSetUp ::= &quot;#setUp&quot; BlockBody
+
+BlockBody ::= [Comment] Statement+
+
+Comment ::= (&quot;#&quot; String NewLine)+
+
+Statement ::= &quot;&gt;&gt;&gt;&quot; PHPStatement+ NewLine
+
+PHPStatement ::= &lt;any PHP statement&gt;
+
+BlockToLocalSetUp ::= &quot;#localSetUp&quot; BlockBody
+
+BlockToTest ::= &quot;#test&quot; BlockBody ExpectedResult
+
+ExpectedResult ::= (ExpectedValue | ExpectedException) NewLine
+
+ExpcetdValue ::= &lt;JSON representation&gt;
+
+ExpectedException ::= &lt;exception eame&gt; &quot;:&quot; &lt;exception message&gt;
+
+ToDoBlock ::= &quot;#toDo&quot; BlockToTest
+
+SuperBlock ::= &quot;#super&quot;
+</pre>
+</div>
+</div>
+</body>
+</html>
