@@ -7,28 +7,29 @@
 class PEG_Choice implements PEG_IParser
 {
     protected $parsers = array();
+    
     function __construct(Array $parsers = array())
     {
         foreach ($parsers as $parser) $this->with($parser);
     }
-    function with(PEG_IParser $p)
+
+    protected function with(PEG_IParser $p)
     {
         $this->parsers[] = $p;
-        return $this;
     }
+    
     function parse(PEG_IContext $c)
     {
         $offset = $c->tell();
         foreach ($this->parsers as $p) {
-            try {
-                $result = $p->parse($c);
-            } catch (PEG_Failure $e) {
-                $last_exception = $e;
+            $result = $p->parse($c);
+            
+            if ($result instanceof PEG_Failure) {
                 $c->seek($offset);
                 continue;
             }
-            return $result;
+            else return $result;
         }
-        throw isset($last_exception) ? $last_exception : new PEG_Failure;
+        return PEG::failure();
     }
 }

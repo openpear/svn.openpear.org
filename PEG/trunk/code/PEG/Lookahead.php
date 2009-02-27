@@ -10,8 +10,8 @@ class PEG_Lookahead implements PEG_IParser
     function parse(PEG_IContext $context)
     {
         $offset = $context->tell();
-        $this->parser->parse($context);
+        $result = $this->parser->parse($context);
         $context->seek($offset);
-        return false;
+        return $result;
     }
 }

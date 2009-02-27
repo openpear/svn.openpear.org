@@ -4,9 +4,8 @@ class PEG_LineEnd extends PEG_Action
 {
     function __construct()
     {
-        $parser = PEG::choice(PEG::token("\r"),
-                              PEG::token("\n"),
-                              PEG::token("\r\n"),
+        $parser = PEG::choice(PEG::token("\r\n"),
+                              PEG::char("\r\n"),
                               PEG::eos());
         parent::__construct($parser);
     }

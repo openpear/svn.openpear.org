@@ -10,18 +10,19 @@ class PEG_Many1 implements PEG_IParser
     function parse(PEG_IContext $context)
     {
         $result = $this->parser->parse($context);
-        $ret = array();
-        if ($result !== null) $ret[] = $result;
+        
+        if ($result instanceof PEG_Failure) {
+            return $result;
+        } elseif (!is_null($result)) $ret = array($result);
         
         while (!$context->eos()) {
-            try {
-                $offset = $context->tell();
-                $result = $this->parser->parse($context);
-                if ($result !== null) $ret[] = $result;
-            } catch (PEG_Failure $e) {
+            $offset = $context->tell();
+            $result = $this->parser->parse($context);
+            if ($result instanceof PEG_Failure) {
                 $context->seek($offset);
                 break;
             }
+            elseif (!is_null($result)) $ret[] = $result;
         }
         return $ret;
     }

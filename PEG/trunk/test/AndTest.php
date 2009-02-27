@@ -7,9 +7,5 @@ $parser = PEG::andalso(PEG::token('hoge'), PEG::token('h'));
 $lime->is($parser->parse($c = PEG::context('hoge')), 'h');
 $lime->is($c->read(3), 'oge');
 
-try {
-    $parser->parse(PEG::context('hogaaa'));
-    $lime->fail();
-} catch (PEG_Failure $e) {
-    $lime->pass();
-}
+$result = $parser->parse(PEG::context('hogaaa'));
+$lime->ok($result instanceof PEG_Failure);

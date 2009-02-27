@@ -11,13 +11,12 @@ class PEG_Not implements PEG_IParser
     {
         $offset = $context->tell();
 
-        try {
-            $this->parser->parse($context);
-        } catch (PEG_Failure $e) {
-            $new_offset = $context->tell();
+        $result = $this->parser->parse($context);
+        if ($result instanceof PEG_Failure) {
+            $i = $context->tell() - $offset;
             $context->seek($offset);
-            return $context->read($new_offset - $offset);
+            return $context->read($i);
         }
-        throw new PEG_Failure;
+        return PEG::failure();
     }
 }

@@ -6,5 +6,5 @@ $lime = new lime_test;
 $parser = PEG::lookahead(PEG::token('hoge'));
 $context = PEG::context('hogehoge');
 
-$lime->is($parser->parse($context), false);
+$lime->is($parser->parse($context), 'hoge');
 $lime->is($context->tell(), 0);

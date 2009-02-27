@@ -1,7 +1,7 @@
 <?php
 
 /**
- * どのような文字列にでもヒットするパーサ
+ * どのような文字にでもヒットするパーサ
  *
  */
 class PEG_Anything implements PEG_IParser

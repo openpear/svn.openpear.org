@@ -9,10 +9,5 @@ $t->is($token->parse($context), 'hoge');
 $t->is($context->tell(), 4);
 $t->is($token->parse($context), 'hoge');
 
-try {
-    $token->parse($context);
-    $t->fail();
-} catch (PEG_Failure $e) {
-    $t->pass();
-}
+$t->is($token->parse($context), PEG::failure());
 
