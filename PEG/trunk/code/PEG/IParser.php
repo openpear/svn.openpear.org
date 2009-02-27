@@ -7,7 +7,7 @@
 interface PEG_IParser
 {
     /**
-     * パースに失敗した場合はPEG_Failureを投げる。
+     * パースに失敗した場合はPEG_Failureを返すこと。
      * 成功した場合はなんらかの値を返す。
      * 
      * @param PEG_IContext $c

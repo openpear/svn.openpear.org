@@ -9,7 +9,6 @@ include_once dirname(__FILE__) . '/PEG/Context.php';
 include_once dirname(__FILE__) . '/PEG/EOS.php';
 include_once dirname(__FILE__) . '/PEG/Failure.php';
 include_once dirname(__FILE__) . '/PEG/Lookahead.php';
-include_once dirname(__FILE__) . '/PEG/LookaheadNot.php';
 include_once dirname(__FILE__) . '/PEG/Many.php';
 include_once dirname(__FILE__) . '/PEG/Many1.php';
 include_once dirname(__FILE__) . '/PEG/Not.php';
@@ -41,6 +40,17 @@ class PEG
 {
     const VER = 0.15;
     
+    static function parser($val)
+    {
+        return is_string($val) ?  self::token($val) : $val;
+    }
+    
+    static function parserArray(Array $arr)
+    {
+        foreach ($arr as &$val) $val = self::parser($val);
+        return $arr;
+    }
+    
     /**
      * PEG_Contextインスタンスを生成する。
      * 
@@ -57,13 +67,13 @@ class PEG
      * PEG_CallbackActionインスタンスを生成する。
      * 
      * @param callback $callback
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_CallbackAction
      * @see PEG_CallbackAction
      */
-    static function callbackAction($callback, PEG_IParser $p)
+    static function callbackAction($callback, $p)
     {
-        return new PEG_CallbackAction($callback, $p);
+        return new PEG_CallbackAction($callback, self::parser($p));
     }
     
     /**
@@ -84,12 +94,12 @@ class PEG
      * 全てのパーサが失敗したならば、このパーサは失敗する。
      * 
      * @return PEG_Choice
-     * @param PEG_IParser ...
+     * @param ...
      * @see PEG_Choice
      */
     static function choice()
     {
-        return new PEG_Choice(func_get_args());
+        return new PEG_Choice(self::parserArray(func_get_args()));
     }
     
     /**
@@ -109,21 +119,21 @@ class PEG
      * PEG_Notインスタンスを得る。
      * このパーサは、$pパーサが成功したならば失敗し、$pパーサが失敗したならば成功する。
      * 
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Not
      */
-    static function not(PEG_IParser $p)
+    static function not($p)
     {
-        return new PEG_Not($p);
+        return new PEG_Not(self::parser($p));
     }
     
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Optional
      */
-    static function optional(PEG_IParser $p)
+    static function optional($p)
     {
-        return new PEG_Optional($p);
+        return new PEG_Optional(self::parser($p));
     }
     
     /**
@@ -131,7 +141,7 @@ class PEG
      */
     static function sequence()
     {
-        return new PEG_Sequence(func_get_args());
+        return new PEG_Sequence(self::parserArray(func_get_args()));
     }
     
     /**
@@ -139,25 +149,25 @@ class PEG
      */
     static function seq()
     {
-        return new PEG_Sequence(func_get_args());
+        return new PEG_Sequence(self::parserArray(func_get_args()));
     }
     
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Many
      */
-    static function many(PEG_IParser $p)
+    static function many($p)
     {
-        return new PEG_Many($p);
+        return new PEG_Many(self::parser($p));
     }
     
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Many1
      */
-    static function many1(PEG_IParser $p)
+    static function many1($p)
     {
-        return new PEG_Many1($p);
+        return new PEG_Many1(self::parser($p));
     }
     
     /**
@@ -170,21 +180,21 @@ class PEG
     }
     
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Lookahead
      */
-    static function lookahead(PEG_IParser $p)
+    static function lookahead($p)
     {
-        return new PEG_Lookahead($p);
+        return new PEG_Lookahead(self::parser($p));
     }
     
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_LookaheadNot
      */
-    static function lookaheadNot(PEG_IParser $p)
+    static function lookaheadNot($p)
     {
-        return new PEG_LookaheadNot($p);
+        return new PEG_Lookahead(PEG::not(self::parser($p)));
     }
 
     /**
@@ -192,7 +202,7 @@ class PEG
      */
     static function andalso()
     {
-        return new PEG_And(func_get_args());
+        return new PEG_And(self::parserArray(func_get_args()));
     }
 
     /**
@@ -268,127 +278,142 @@ class PEG
 
     /**
      * @param int $i
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Nth
      */
-    static function nth($i, PEG_IParser $p)
+    static function nth($i, $p)
     {
-        return new PEG_Nth($i, $p);
+        return new PEG_Nth($i, self::parser($p));
     }
 
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Nth
      */
-    static function first(PEG_IParser $p)
+    static function first($p)
     {
-        return self::nth(0, $p);
+        return self::nth(0, self::parser($p));
     }
 
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Nth
      */
-    static function second(PEG_IParser $p)
+    static function second($p)
     {
-        return self::nth(1, $p);
+        return self::nth(1, self::parser($p));
     }
 
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Nth
      */
-    static function third(PEG_IParser $p)
+    static function third($p)
     {
-        return self::nth(2, $p);
+        return self::nth(2, self::parser($p));
     }
 
     /**
-     * @param PEG_IParser $start
-     * @param PEG_IParser $body
-     * @param PEG_IParser $end
+     * @param $start
+     * @param $body
+     * @param $end
      * @return PEG_Nth
      */
-    static function pack(PEG_IParser $start, PEG_IParser $body, PEG_IParser $end)
+    static function pack($start, $body, $end)
     {
-        return self::second(self::sequence($start, $body, $end));
+        return self::second(self::sequence(self::parser($start), self::parser($body), self::parser($end)));
     }
 
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Flatten
      */
-    static function flatten(PEG_IParser $p)
+    static function flatten($p)
     {
-        return new PEG_Flatten($p);
+        return new PEG_Flatten(self::parser($p));
     }
 
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Sequence
      */
-    static function bi(PEG_IParser $p)
+    static function bi($p)
     {
+        $p = self::parser($p);
         return self::sequence($p, $p);
     }
     
     /**
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Sequence
      */
-    static function tri(PEG_IParser $p)
+    static function tri($p)
     {
+        $p = self::parser($p);
         return self::sequence($p, $p, $p);
     }
 
     /**
-     * @param PEG_IParse $p
+     * @param $p
      * @return PEG_Drop 
      */
-    static function drop(PEG_IParser $p)
+    static function drop($p)
     {
-        return new PEG_Drop($p);
-    }
-    
-    /**
-     * 
-     * @param PEG_IParser $p
-     * @param String $str
-     */
-    static function parse(PEG_IParser $p, $str)
-    {
-        return $p->parse(PEG::context($str));
+        if (func_num_args() > 1) {
+            return new PEG_Drop(new PEG_Sequence(self::parserArray(func_get_args())));
+        }
+        return new PEG_Drop(self::parser($p));
     }
 
     /**
      * @param string $klass
-     * @param PEG_IParser $p
+     * @param $p
      * @return PEG_Create
      */
-    static function create($klass, PEG_IParser $p)
+    static function create($klass, $p)
     {
-        return new PEG_Create($klass, $p);
+        return new PEG_Create($klass, self::parser($p));
     }
     
     /**
      * 
      *
-     * @param PEG_IParser $p
+     * @param $p
      * @param string $glue
      */
-    static function join(PEG_IParser $p, $glue = '')
+    static function join($p, $glue = '')
     {
-        return new PEG_Join($p, $glue);
+        return new PEG_Join(self::parser($p), $glue);
     }
 
-    static function count(PEG_IParser $p)
+    static function count($p)
     {
-        return new PEG_Count($p);
+        return new PEG_Count(self::parser($p));
     }
 
     static function blank()
     {
         static $obj = null;
         return $obj ? $obj : $obj = PEG::char(" \t");
+    }
+    
+    static function firstSeq()
+    {
+        return self::first(new PEG_Sequence(self::parserArray(func_get_args())));
+    }
+    
+    static function secondSeq()
+    {
+        return self::second(new PEG_Sequence(self::parserArray(func_get_args())));
+    }
+    
+    static function thirdSeq()
+    {
+        return self::third(new PEG_Sequence(self::parserArray(func_get_args())));
+    }
+    
+    static function failure()
+    {
+        return PEG_Failure::it();
     }
 }

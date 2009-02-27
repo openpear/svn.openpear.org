@@ -10,12 +10,11 @@ class PEG_Optional implements PEG_IParser
     function parse(PEG_IContext $context)
     {
         $offset = $context->tell();
-        try {
-            $result = $this->parser->parse($context);
-            return $result;
-        } catch (PEG_Failure $e) {
+        $result = $this->parser->parse($context);
+        if ($result instanceof PEG_Failure) {
             $context->seek($offset);
             return false;
         }
+        return $result;
     }
 }

@@ -7,7 +7,7 @@ class PEG_Sequence implements PEG_IParser
     {
         foreach ($parsers as $p) $this->with($p);
     }
-    function with(PEG_IParser $p)
+    protected function with(PEG_IParser $p)
     {
         $this->parsers[] = $p;
         return $this;
@@ -18,7 +18,8 @@ class PEG_Sequence implements PEG_IParser
         foreach ($this->parsers as $parser) {
             $offset = $context->tell();
             $result = $parser->parse($context);
-            if ($result !== null) $ret[] = $result;
+            if ($result instanceof PEG_Failure) return $result;
+            elseif ($result !== null) $ret[] = $result;
         }
         return $ret;
     }

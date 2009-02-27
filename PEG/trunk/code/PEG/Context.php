@@ -30,7 +30,7 @@ class PEG_Context implements PEG_IContext
      */
     function read($i)
     {
-        if ($this->eos() && $i > 0) throw new PEG_Failure();
+        if ($this->eos() && $i > 0) return false;
         $this->i += $i;
         return substr($this->s, $this->i - $i, $i);
     }
