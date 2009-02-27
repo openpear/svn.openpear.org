@@ -7,7 +7,7 @@
  */
 class PEG_Context implements PEG_IContext
 {
-    protected $s, $i = 0, $len, $enc;
+    protected $s, $i = 0, $len, $encoding;
     
     /**
      * 与えられた文字列とその位置を保持するPEG_Contextインスタンスを生成する。
@@ -67,6 +67,6 @@ class PEG_Context implements PEG_IContext
      */
     function encoding()
     {
-        return $this->encoding;
+        return $this->enconding;
     }
 }

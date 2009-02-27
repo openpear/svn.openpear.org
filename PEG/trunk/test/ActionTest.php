@@ -10,6 +10,6 @@ class MyActionParser extends PEG_Action
 }
 
 $lime = new lime_test;
-$action = new MyActionParser(new PEG_Many(PEG::token('hoge')));
+$action = new MyActionParser(PEG::many(PEG::token('hoge')));
 
-$lime->is('hogehogehogehoge', $action->parse(PEG::context('hogehogehogehoge')));
+$lime->is($action->parse(PEG::context('hogehogehogehoge')), 'hogehogehogehoge');

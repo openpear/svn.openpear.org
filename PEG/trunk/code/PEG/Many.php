@@ -10,7 +10,7 @@ class PEG_Many implements PEG_IParser
     function parse(PEG_IContext $context)
     {
         $ret = array();
-        for(;;) {
+        do {
             $offset = $context->tell();
             try {
                 $result = $this->parser->parse($context);
@@ -19,6 +19,7 @@ class PEG_Many implements PEG_IParser
                 $context->seek($offset);
                 return $ret;
             }
-        }
+        } while(!$context->eos());
+        return $ret;
     }
 }   
