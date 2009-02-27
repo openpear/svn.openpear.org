@@ -24,10 +24,7 @@ class PEG_Choice implements PEG_IParser
         foreach ($this->parsers as $p) {
             $result = $p->parse($c);
             
-            if ($result instanceof PEG_Failure) {
-                $c->seek($offset);
-                continue;
-            }
+            if ($result instanceof PEG_Failure) $c->seek($offset);
             else return $result;
         }
         return PEG::failure();
