@@ -19,7 +19,7 @@ include_once dirname(__FILE__) . '/PEG/And.php';
 include_once dirname(__FILE__) . '/PEG/LineEnd.php';
 include_once dirname(__FILE__) . '/PEG/Ref.php';
 include_once dirname(__FILE__) . '/PEG/Char.php';
-include_once dirname(__FILE__) . '/PEG/Nth.php';
+include_once dirname(__FILE__) . '/PEG/At.php';
 include_once dirname(__FILE__) . '/PEG/Flatten.php';
 include_once dirname(__FILE__) . '/PEG/Drop.php';
 include_once dirname(__FILE__) . '/PEG/Create.php';
@@ -277,47 +277,47 @@ class PEG
     }
 
     /**
-     * @param int $i
+     * @param $key
      * @param $p
-     * @return PEG_Nth
+     * @return PEG_At
      */
-    static function nth($i, $p)
+    static function at($key, $p)
     {
-        return new PEG_Nth($i, self::parser($p));
+        return new PEG_At($key, self::parser($p));
     }
 
     /**
      * @param $p
-     * @return PEG_Nth
+     * @return PEG_At
      */
     static function first($p)
     {
-        return self::nth(0, self::parser($p));
+        return self::at(0, self::parser($p));
     }
 
     /**
      * @param $p
-     * @return PEG_Nth
+     * @return PEG_At
      */
     static function second($p)
     {
-        return self::nth(1, self::parser($p));
+        return self::at(1, self::parser($p));
     }
 
     /**
      * @param $p
-     * @return PEG_Nth
+     * @return PEG_At
      */
     static function third($p)
     {
-        return self::nth(2, self::parser($p));
+        return self::at(2, self::parser($p));
     }
 
     /**
      * @param $start
      * @param $body
      * @param $end
-     * @return PEG_Nth
+     * @return PEG_At
      */
     static function pack($start, $body, $end)
     {
