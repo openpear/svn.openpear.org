@@ -10,7 +10,7 @@ class PEG_EOS implements PEG_IParser
     function parse(PEG_IContext $c)
     {
         if ($c->eos()) return false;
-        throw new PEG_Failure;
+        return PEG::failure();
     }
     static function getInstance()
     {
