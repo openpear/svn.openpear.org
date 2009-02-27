@@ -9,7 +9,8 @@ abstract class PEG_Action implements PEG_IParser
     }
     function parse(PEG_IContext $context)
     {
-        return $this->process($this->parser->parse($context));
+        $result = $this->parser->parse($context);
+        return $result instanceof PEG_Failure ? $result : $this->process($result);
     }
     abstract protected function process($result);
 }

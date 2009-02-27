@@ -1,6 +1,6 @@
 <?php
 
-class PEG_Nth implements PEG_IParser
+class PEG_At extends PEG_Action
 {
     /**
      * @param int $i 配列の添え字
@@ -9,12 +9,11 @@ class PEG_Nth implements PEG_IParser
     function __construct($i, PEG_IParser $p)
     {
         $this->i = $i;
-        $this->p = $p;
+        parent::__construct($p);
     }
 
-    function parse(PEG_IContext $context)
+    function process($result)
     {
-        $result = $this->p->parse($context);
         return $result[$this->i];
     }
 }
