@@ -227,7 +227,7 @@ class PEG
     static function newLine()
     {
         static $obj = null;
-        return $obj ? $obj : $obj = self::choice(self::char("\r\n"), self::token("\r\n"));
+        return $obj ? $obj : $obj = self::choice(self::token("\r\n"), self::char("\r\n"));
     }
     
     /**
