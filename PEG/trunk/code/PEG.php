@@ -333,25 +333,6 @@ class PEG
         return new PEG_Flatten(self::parser($p));
     }
 
-    /**
-     * @param $p
-     * @return PEG_Sequence
-     */
-    static function bi($p)
-    {
-        $p = self::parser($p);
-        return self::sequence($p, $p);
-    }
-    
-    /**
-     * @param $p
-     * @return PEG_Sequence
-     */
-    static function tri($p)
-    {
-        $p = self::parser($p);
-        return self::sequence($p, $p, $p);
-    }
 
     /**
      * @param $p
