@@ -38,8 +38,6 @@ include_once dirname(__FILE__) . '/PEG/Count.php';
  */
 class PEG
 {
-    const VER = 0.15;
-    
     static function parser($val)
     {
         return is_string($val) ?  self::token($val) : $val;
