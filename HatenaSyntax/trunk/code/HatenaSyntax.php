@@ -1,23 +1,23 @@
 <?php
 include_once 'PEG.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/BlockQuote.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Definition.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/DefinitionList.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Element.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/EndOfLine.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Footnote.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Header.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/HttpLink.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Line.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/LineChar.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/LineElement.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/LineSegment.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Link.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/List.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/NewLine.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Parser.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Pre.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/SuperPre.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/SuperPreElement.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Table.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/TableCell.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Node.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Locator.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Factory.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/NodeCreater.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Renderer.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Util.php';
+
+class HatenaSyntax
+{
+    static function parse($str)
+    {
+        return HatenaSyntax_Locator::it()->parser->parse(PEG::context($str));
+    }
+    
+    static function render($str, $config = array())
+    {
+        $node = self::parse($str);
+        $renderer = new HatenaSyntax_Renderer($config);
+        return $renderer->render($node);
+    }
+}
