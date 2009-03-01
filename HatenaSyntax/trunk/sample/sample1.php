@@ -103,4 +103,3 @@ echo &quot;hogehoge&quot;;
   <p><a href="#sec49aa86912d059_1" name="sec49aa86912d059_footntoe_1">*1</a>: footnote</p>
 </div>
 */
- */
