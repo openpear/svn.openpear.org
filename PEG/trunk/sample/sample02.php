@@ -13,8 +13,8 @@ $word = PEG::join(PEG::seq(
     PEG::many(PEG::choice(PEG::alphabet(), PEG::digit(), PEG::token('_')))
 ));
 
-var_dump(PEG::parse($word, 'a')); //=> 'a'
-var_dump(PEG::parse($word, 'hogehoge')); //=> 'hogehoge'
-var_dump(PEG::parse($word, 'some_id')); //=> 'some_id'
-var_dump(PEG::parse($word, '  ')); //=> パースに失敗する
-var_dump(PEG::parse($word, 'hoge fuga')); //=> パースはコンテキストの途中で止まり 'hoge'が返る
+var_dump($word->parse(PEG::context('a'))); //=> 'a'
+var_dump($word->parse(PEG::context('hogehoge'))); //=> 'hogehoge'
+var_dump($word->parse(PEG::context('some_id'))); //=> 'some_id'
+var_dump($word->parse(PEG::context('  '))); //=> パースに失敗する
+var_dump($word->parse(PEG::context('hoge fuga'))); //=> パースはコンテキストの途中で止まり 'hoge'が返る
