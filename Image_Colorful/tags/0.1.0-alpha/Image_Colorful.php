@@ -2,8 +2,6 @@
 /**
  * Class for colorful generator
  *
- * PHP versions 4 and 5
- *
  * LICENSE:
  *
  * Copyright (c) 2009, Masahiro Saito
@@ -13,12 +11,12 @@
  * @author      Masahiro Saito <camelmasa@gmail.com>
  * @copyright   2009 Masahiro Saito
  * @license     http://opensource.org/licenses/bsd-license.php New BSD License
- * @version     0.01
+ * @version     0.1.0-alpha
  * @link        http://camelmasa.com/
  */
 
 
-class Colorful_Generator
+class Image_Colorful
 {
 
   var $_imageheight;
@@ -33,7 +31,7 @@ class Colorful_Generator
 
   var $_content_type = "image/gif";
 
-  function Colorful_Generator($height = '', $width = '', $split_height = 1, $split_width = 1 )
+  function Image_Colorful($height = '', $width = '', $split_height = 1, $split_width = 1 )
   {
     if(!preg_match('/^[0-9]+$/',$width)) {
       $this->showError();

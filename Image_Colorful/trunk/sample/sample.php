@@ -1,6 +1,6 @@
 <?php
-require_once('colorful_generator.php');
+require_once('Image_Colorful.php');
 
-$image = new Colorful_Generator(200,200,1,99);
+$image = new Image_Colorful(200,200,1,99);
 $image->getGenerateImage();
 ?>
