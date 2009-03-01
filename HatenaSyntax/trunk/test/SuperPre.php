@@ -2,25 +2,12 @@
 include_once dirname(__FILE__) . '/t/t.php';
 
 $lime = new lime_test;
+$parser = HatenaSyntax_Locator::it()->superPre;
 
-$p = HatenaSyntax_SuperPre::getInstance();
+//--
 
-$c = context('>|hoge|
-hh
-oo
-gg
-ee||<');
-$lime->is($p->parse($c),
-          array('type' => 'superpre',
-                'ext' => 'hoge',
-                'body' => array('hh', 'oo', 'gg', 'ee')));
+$context = context(">|hoge|\na||<");
+$lime->is($parser->parse($context)->getData(), array('type' => 'hoge', 'body' => array('a')));
 
-$c = context('>|hoge|
-hh
-oo
-gg
-||<');
-$lime->is($p->parse($c),
-          array('type' => 'superpre',
-                'ext' => 'hoge',
-                'body' => array('hh', 'oo', 'gg')));
+$context = context(">||\na\n||<");
+$lime->is($parser->parse($context)->getData(), array('type' => '', 'body' => array('a')));
