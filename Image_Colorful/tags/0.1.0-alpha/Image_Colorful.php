@@ -19,72 +19,78 @@
 class Image_Colorful
 {
 
-  var $_imageheight;
+	var $_imageheight;
 
-  var $_imagewidth;
+	var $_imagewidth;
 
-  var $_splitheight;
+	var $_splitheight;
 
-  var $_splitwidth;
+	var $_splitwidth;
 
-  var $_flag = true;
+	var $_flag = true;
 
-  var $_content_type = "image/gif";
+	function Image_Colorful($height = '', $width = '', $split_height = 1, $split_width = 1 )
+	{
+		if(!preg_match('/^[0-9]+$/',$width)) {
+			$this->showError();
+		}
+		if(!preg_match('/^[0-9]+$/',$height)) {
+			$this->showError();
+		}
+		if(!preg_match('/^[0-9]+$/',$split_height)) {
+			$this->showError();
+		}
+		if(!preg_match('/^[0-9]+$/',$split_width)) {
+			$this->showError();
+		}
 
-  function Image_Colorful($height = '', $width = '', $split_height = 1, $split_width = 1 )
-  {
-    if(!preg_match('/^[0-9]+$/',$width)) {
-      $this->showError();
-    }
-    if(!preg_match('/^[0-9]+$/',$height)) {
-      $this->showError();
-    }
-    if(!preg_match('/^[0-9]+$/',$split_height)) {
-      $this->showError();
-    }
-    if(!preg_match('/^[0-9]+$/',$split_width)) {
-      $this->showError();
-    }
+		$this->_imageheight = $height; 
+		$this->_imagewidth = $width; 
+		$this->_splitheight = $split_height; 
+		$this->_splitwidth = $split_width; 
+	}
 
-    $this->_imageheight = $height; 
-    $this->_imagewidth = $width; 
-    $this->_splitheight = $split_height; 
-    $this->_splitwidth = $split_width; 
-  }
+	function getGenerateImage($image_type = 'gif'){
+		if($this->flag == false){
+			$this->showError();
+		}
 
-  function getGenerateImage(){
-    if($this->flag == false){
-      $this->showError();
-    }
-    $image = imagecreatetruecolor($this->_imageheight, $this->_imagewidth);
-    imagecolorallocate($image, 0, 0, 0);
-    for($i=0;$i<$this->_splitheight;$i++){//height
-      for($j=0;$j<$this->_splitwidth;$j++){//width
-        $color = imagecolorallocate($image, rand(0,255), rand(0,255), rand(0,255));
-        imagefilledpolygon($image, array(floor((($this->_imagewidth / $this->_splitwidth) * ($j))), 0,
-                                         floor(($this->_imagewidth / $this->_splitwidth) * ($j + 1)), 0,
-                                         floor(($this->_imagewidth / $this->_splitwidth) * ($j + 1)),floor(($this->_imageheight / $this->_splitheight) * ($i + 1)),
-                                         floor(($this->_imagewidth / $this->_splitwidth) * ($j)), floor(($this->_imageheight / $this->_splitheight) * ($i + 1))), 4, $color);
-      }
-    }
-    header('Content-type: '.$this->_content_type);
-    imagegif($image);
-  }
+		$image = imagecreatetruecolor($this->_imageheight, $this->_imagewidth);
+		imagecolorallocate($image, 0, 0, 0);
+		for($i=0;$i<$this->_splitheight;$i++){//height
+			for($j=0;$j<$this->_splitwidth;$j++){//width
+				$color = imagecolorallocate($image, rand(0,255), rand(0,255), rand(0,255));
+				imagefilledpolygon($image, array(floor((($this->_imagewidth / $this->_splitwidth) * ($j))), 0,
+							floor(($this->_imagewidth / $this->_splitwidth) * ($j + 1)), 0,
+							floor(($this->_imagewidth / $this->_splitwidth) * ($j + 1)),floor(($this->_imageheight / $this->_splitheight) * ($i + 1)),
+							floor(($this->_imagewidth / $this->_splitwidth) * ($j)), floor(($this->_imageheight / $this->_splitheight) * ($i + 1))), 4, $color);
+			}
+		}
 
-  function showError(){
-    $this->flag = false;
-    return false;
-  }
+		switch($image_type){
+			case 'gif':
+				header('Content-type: image/gif');
+				imagegif($image);
+				break;
+			case 'png':
+				header('Content-type: image/png');
+				imagepng($image);
+				break;
+			case 'jpg':
+			case 'jpeg':
+				header('Content-type: image/jpeg');
+				imagejpeg($image);
+				break;
+			default:
+				$this->showError();
+				break;
+		}
 
-  function Debug(){
-    $this->_content_type = "text/html";
-    echo $this->_imageheight."<br>";
-    echo $this->_imagewidth."<br>";
-    echo $this->_splitheight."<br>";
-    echo $this->_splitwidth."<br>";
-    echo $this->_flag."<br>";
-    echo $this->_content_type."<br>";
-    exit;
-  }
+	}
+
+	function showError(){
+		$this->flag = false;
+		return false;
+	}
 
 }
