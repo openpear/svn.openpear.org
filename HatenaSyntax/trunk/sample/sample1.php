@@ -1,35 +1,41 @@
 <?php
-set_include_path(dirname(__FILE__) . '/../code' . PATH_SEPARATOR . get_include_path());
-include_once 'HatenaSyntax.php';
+include_once dirname(__FILE__) . '/../test/t/t.php';
 
-$p = new HatenaSyntax_Parser;
-$result = $p->parse('*見出し
 
-**小見出し
+$str = '*header1
 
-:定義:説明
-::説明2
+**header2
 
--リスト
--+順序付きリスト
--+順序付きリスト
--+-リスト
--+-リスト
--リスト
+:definition term:definition description
+::description2
 
-本文です((脚注の内容))
+-list1
+++fuga2
+++hoge3
+---list4
+---list5
+-list6
 
-|*種類 |*数  |
-|りんご|1    |
-|みかん|2    |
+paragraph((footnote))
+
+|*table header |*table header2 |
+|apple         |1              |
+|orange        |2              |
+
+>|
+hoge
+fuga|<
+
 
 >>
-***引用
-ですよー
+***blockquote header
+fuga
 <<
 
 >|php|
 echo "hogehoge";||<
-');
 
-var_dump($result);
+[http://google.com]
+';
+
+echo HatenaSyntax::render($str);

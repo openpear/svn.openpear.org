@@ -64,13 +64,6 @@ if (!function_exists('include_relative')) {
   }
 }
 
-if (!function_exists('is_main')) {
-  function is_main()
-  {
-    return count(debug_backtrace()) === 1;
-  }
-}
-
 if (!function_exists('raise')) {
   function raise($e) { throw $e; }
 }
