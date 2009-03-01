@@ -6,10 +6,13 @@
  */
 class PEG_Ref implements PEG_IParser
 {
-    function set(PEG_IParser $p)
+    protected $parser;
+    
+    function is(PEG_IParser $p)
     {
         $this->parser = $p;
     }
+    
     function parse(PEG_IContext $c)
     {
         return $this->parser->parse($c);

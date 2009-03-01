@@ -10,21 +10,16 @@ include_once dirname(__FILE__) . '/PEG/EOS.php';
 include_once dirname(__FILE__) . '/PEG/Failure.php';
 include_once dirname(__FILE__) . '/PEG/Lookahead.php';
 include_once dirname(__FILE__) . '/PEG/Many.php';
-include_once dirname(__FILE__) . '/PEG/Many1.php';
 include_once dirname(__FILE__) . '/PEG/Not.php';
 include_once dirname(__FILE__) . '/PEG/Optional.php';
 include_once dirname(__FILE__) . '/PEG/Sequence.php';
 include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/And.php';
-include_once dirname(__FILE__) . '/PEG/LineEnd.php';
 include_once dirname(__FILE__) . '/PEG/Ref.php';
 include_once dirname(__FILE__) . '/PEG/Char.php';
-include_once dirname(__FILE__) . '/PEG/At.php';
-include_once dirname(__FILE__) . '/PEG/Flatten.php';
-include_once dirname(__FILE__) . '/PEG/Drop.php';
-include_once dirname(__FILE__) . '/PEG/Create.php';
-include_once dirname(__FILE__) . '/PEG/Join.php';
-include_once dirname(__FILE__) . '/PEG/Count.php';
+include_once dirname(__FILE__) . '/PEG/Util.php';
+include_once dirname(__FILE__) . '/PEG/Curry.php';
+include_once dirname(__FILE__) . '/PEG/Memoize.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス。<br/>
@@ -83,7 +78,8 @@ class PEG
      */
     static function anything()
     {
-        return PEG_Anything::getInstance();
+        static $obj = null;
+        return $obj ? $obj : $obj = new PEG_Anything;
     }
     
     /**
@@ -165,7 +161,7 @@ class PEG
      */
     static function many1($p)
     {
-        return new PEG_Many1(self::parser($p));
+        return self::callbackAction(array('PEG_Util', 'cons'), self::seq($p, self::many($p)));
     }
     
     /**
@@ -243,8 +239,8 @@ class PEG
      */
     static function lineEnd()
     {
-        static $obj = null;
-        return $obj ? $obj : $obj = self::choice(self::newLine(), self::eos());
+        static $p = null;
+        return $p ? $p : $p = self::choice(self::newLine(), self::eos());
     }
     
     /**
@@ -281,7 +277,8 @@ class PEG
      */
     static function at($key, $p)
     {
-        return new PEG_At($key, self::parser($p));
+        $curry = PEG_Curry::make(array('PEG_Util', 'at'), $key);
+        return self::callbackAction($curry, $p);
     }
 
     /**
@@ -328,7 +325,7 @@ class PEG
      */
     static function flatten($p)
     {
-        return new PEG_Flatten(self::parser($p));
+        return self::callbackAction(array('PEG_Util', 'flatten'), $p);
     }
 
 
@@ -339,9 +336,10 @@ class PEG
     static function drop($p)
     {
         if (func_num_args() > 1) {
-            return new PEG_Drop(new PEG_Sequence(self::parserArray(func_get_args())));
+            $args = func_get_args();
+            return self::callbackAction(array('PEG_Util', 'drop'), new PEG_Sequence(self::parserArray($args)));
         }
-        return new PEG_Drop(self::parser($p));
+        return self::callbackAction(array('PEG_Util', 'drop'), $p);
     }
 
     /**
@@ -351,7 +349,8 @@ class PEG
      */
     static function create($klass, $p)
     {
-        return new PEG_Create($klass, self::parser($p));
+        $curry = PEG_Curry::make(array('PEG_Util', 'create'), $klass);
+        return self::callbackAction($curry, $p);
     }
     
     /**
@@ -362,12 +361,19 @@ class PEG
      */
     static function join($p, $glue = '')
     {
-        return new PEG_Join(self::parser($p), $glue);
+        $curry = PEG_Curry::make(array('PEG_Util', 'join'), $glue);
+        return self::callbackAction($curry, $p);
     }
 
     static function count($p)
     {
-        return new PEG_Count(self::parser($p));
+        return self::callbackAction(array('PEG_Util', 'count'), $p);
+    }
+    
+    static function listof($item, $glue)
+    {
+        $parser = PEG::seq($item, PEG::many(PEG::secondSeq($glue, $item)));
+        return self::callbackAction(array('PEG_Util', 'cons'), $parser);
     }
 
     static function blank()
@@ -394,5 +400,10 @@ class PEG
     static function failure()
     {
         return PEG_Failure::it();
+    }
+    
+    static function memo($p)
+    {
+        return new PEG_Memoize(self::parser($p));
     }
 }
