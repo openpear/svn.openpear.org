@@ -1,8 +1,8 @@
 <?php
 /**
- * Class for colorful generator
+ * Class for Image_Colorful 
  *
- * LICENSE:
+ * LICENSE:New BSD Licence
  *
  * Copyright (c) 2009, Masahiro Saito
  * All rights reserved.
@@ -10,7 +10,7 @@
  * @package     Image_Colorful
  * @author      Masahiro Saito <camelmasa@gmail.com>
  * @copyright   2009 Masahiro Saito
- * @license     http://opensource.org/licenses/bsd-license.php New BSD License
+ * @license     http://creativecommons.org/licenses/BSD/
  * @version     0.1.0-alpha
  * @link        http://camelmasa.com/
  */
