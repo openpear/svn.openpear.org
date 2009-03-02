@@ -1,5 +1,5 @@
 <?php
-require_once('Image_Colorful.php');
+require_once('Image/0.1.0-alpha/Image_Colorful.php');
 
 $image = new Image_Colorful(700,200,175,1);
 $image->setTitle('ImageColorful', 'altan.ttf', '50', '35', '70');
