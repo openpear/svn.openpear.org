@@ -3,7 +3,8 @@ include_once dirname(__FILE__) . '/../code/PEG.php';
 include_once 'Benchmark/Timer.php';
 
 /**
- * メモ化するのとしないのとでは著しく時間に差が出る文法規則のサンプル
+ * メモ化の有無での処理時間の差を見るサンプル
+ * ここではメモ化するのとしないのとでは著しく違いが出る文法規則を元にパーサを組み立てている
  */
 
 $t = new Benchmark_Timer;
