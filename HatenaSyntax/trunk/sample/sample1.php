@@ -1,5 +1,5 @@
 <?php
-include_once dirname(__FILE__) . '/../test/t/t.php';
+include_once dirname(__FILE__) . '/../code/HatenaSyntax.php';
 
 
 $str = '*header1
