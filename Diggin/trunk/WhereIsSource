@@ -1,0 +1,6 @@
+"Diggin"'s current library source is
+http://diggin.googlecode.com/svn/trunk/library/
+
+"Diggin"の最新のソースはGoogle Codeにコミットしています。
+パッケージはsvn:externalsを使いビルドされるようにしています。
+@see http://d.hatena.ne.jp/sotarok/20090129/1233253588
