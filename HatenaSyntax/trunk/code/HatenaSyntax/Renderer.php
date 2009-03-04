@@ -78,7 +78,7 @@ class HatenaSyntax_Renderer
             $title = $this->escape($title);
         }
         
-        $this->footnote .= sprintf('  <p><a href="#%s_%d" name="%s_footntoe_%d">*%d</a>: %s</p>' . PHP_EOL, $id, $n, $id , $n, $n, $body);
+        $this->footnote .= sprintf('  <p><a href="#%s_%d" name="%s_footnote_%d">*%d</a>: %s</p>' . PHP_EOL, $id, $n, $id , $n, $n, $body);
         return sprintf('(<a href="#%s_footnote_%d" name="%s_%d" title="%s">*%d</a>)', $id, $n, $id, $n, $title, $n);
     }
     
