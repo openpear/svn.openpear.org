@@ -111,8 +111,7 @@ class HatenaSyntax_Renderer
         $ret = array();
         $ret[] = $this->line('<pre>');
         foreach ($data as &$elt) $elt = $this->renderLineSegment($elt);
-        $ret[] = join(PHP_EOL, $data);
-        $ret[] = $this->line('</pre>');
+        $ret[] = join(PHP_EOL, $data) . '</pre>';
         return join(PHP_EOL, $ret);
     }
     
@@ -121,8 +120,7 @@ class HatenaSyntax_Renderer
         $ret = array();
         list($type, $lines) = array($data['type'], $data['body']);
         $ret[] = $this->line('<pre class="superpre ' . $type . '">');
-        $ret[] = call_user_func($this->config['superprehandler'], $type, $lines);
-        $ret[] = $this->line('</pre>');
+        $ret[] = call_user_func($this->config['superprehandler'], $type, $lines) . '</pre>';
         return join(PHP_EOL, $ret);
     }
     
