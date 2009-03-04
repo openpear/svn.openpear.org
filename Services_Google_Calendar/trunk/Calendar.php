@@ -205,11 +205,20 @@ class Services_Google_Calendar
             $max = date('Y-m-d', mktime(0, 0, 0, $range[1]['m'], $range[1]['d'], $range[1]['y']));;
             $data = array('start-min' => $min, 'start-max' => $max);
         }
-        if (!PEAR::isError($this->_client->get($url, isset($data) ? $data : null))) {
-            $result = $this->_client->currentResponse();
+
+        $response_code = $this->_client->get($url, isset($data) ? $data : null);
+        if (PEAR::isError($response_code)) {
+            return $response_code;
+        }
+
+        $result = $this->_client->currentResponse();
+
+        if ($response_code == 400 || $response_code == 403) {
+            return PEAR::raiseError($result['body']);
+        } else {
             return $this->_parseEvents($result['body']);
         }
-        return PEAR::raiseError('Connection failed of GET request');
+ 
     }
 
     /**
