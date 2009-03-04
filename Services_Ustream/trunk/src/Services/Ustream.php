@@ -43,7 +43,7 @@
 
 class Services_Ustream
 {
-    const VERSION = '0.2.0';
+    const VERSION = '0.2.1';
     
     protected static $_commands = array('Channel', 'User', 'Search', 'Stream', 'System', 'Video');
 
