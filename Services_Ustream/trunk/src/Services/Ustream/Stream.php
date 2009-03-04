@@ -44,86 +44,34 @@ require_once 'Services/Ustream/Abstract.php';
 
 class Services_Ustream_Stream extends Services_Ustream_Abstract
 {
-    /**
-     * 
-     * @return array
-     */
+    protected $_subject = 'stream';
+
     public function getRecent()
     {
-        $url = sprintf('%s/%s/stream/all/getRecent',
-                    self::API_URI,
-                    $this->getResponseType());
-        $this->_send($url, array('key' => $this->getApiKey()));
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
+        $this->setParam('uid', 'all');
+        $this->setParam('command', 'getRecent');
+        return $this->_sendRequest();
     }
 
-
-
-    /**
-     * @return array
-     */
     public function getMostViewers()
     {
-        $url = sprintf('%s/%s/stream/all/getMostViewers',
-                    self::API_URI,
-                    $this->getResponseType());
-        $this->_send($url, array('key' => $this->getApiKey()));
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getMostViewers');
+        return $this->_sendRequest();
     }
 
-
-    /**
-     * This command returns all the current live shows
-     * that are new where new is defined as newly created by their owners.
-     * The current default value for new is any show less than 1 hour old.
-     * This default value may be changed by Ustream.TV at any time.
-     * The actual rule used to determine newness will be returned
-     *  in the 'msg' portion of the results set when you use this command.
-     * Note, the user account may or may not be new.
-     * @return array
-     */
     public function getRandom()
     {
-        $url = sprintf('%s/%s/stream/all/getRandom',
-                    self::API_URI,
-                    $this->getResponseType());
-        $this->_send($url, array('key' => $this->getApiKey()));
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
+        $this->setParam('uid', 'all');
+        $this->setParam('command', 'getRandom');
+        return $this->_sendRequest();
     }
 
     public function getAllNew()
     {
-        $url = sprintf('%s/%s/stream/all/getAllNew',
-                    self::API_URI,
-                    $this->getResponseType());
-        $this->_send($url, array('key' => $this->getApiKey()));
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
-    }
-
-    public function search()
-    {
-        $search = $this->_getSearchInstance('stream');
-        
-        return $search;
+        $this->setParam('uid', 'all');
+        $this->setParam('command', 'getAllNew');
+        return $this->_sendRequest();
     }
 }
+

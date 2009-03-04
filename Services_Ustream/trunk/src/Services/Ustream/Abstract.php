@@ -40,163 +40,97 @@
  * @version $Id$
  */
 
+require_once 'HTTP/Request2.php';
+require_once 'Services/Ustream/Exception.php';
 require_once 'Services/Ustream/Result.php';
 
 abstract class Services_Ustream_Abstract
 {
-    const API_URI = 'http://api.ustream.tv';
-    protected $_responseTypes = array('xml', 'json', 'php', 'html');
+    protected $_baseUrl = 'http://api.ustream.tv';
     protected $_apiKey;
-    protected $_respnseType;
-    protected $_page;
-    protected $_limit;
-    
-    protected $_rest;
-    protected $_response;
-    protected $_result;
+    protected $_subject;
+    protected $_params;
+    protected $_responseType;
+    protected $_request;
 
-    /**
-     * Constructor
-     *
-     * @param string $apiKey
-     */
-    public function __construct($apiKey = null, $responseType = 'php')
+    public function __construct($apiKey = '', $responseType = 'php', $config = array())
     {
-        if (!is_null($apiKey)) {
+        if (isset($apiKey)) {
             $this->setApiKey($apiKey);
         }
         $this->setResponseType($responseType);
-        $rest = new HTTP_Request2(self::API_URI);
-        $rest->setAdapter('HTTP_Request2_Adapter_Curl')
-             ->setHeader('User-Agent', 'Services_Ustream/' . Services_Ustream::VERSION);
-        $this->_rest = $rest;
+        
+        if ($this->_request == '') {
+            $this->_request = new HTTP_Request2();
+            $this->_request->setConfig($config);
+            $this->_request->setHeader('User-Agent', 'Services_Ustream');
+        }
     }
 
-    /**
-     * Set API Key.
-     *
-     * @param string $apiKey
-     * @return Services_Ustream_Abstract
-     */
+    protected function _sendRequest()
+    {
+        if (!$this->_apiKey) {
+            throw new Services_Ustream_Exception('Empty API Key');
+        }
+        $this->setParam('key', $this->_apiKey);
+        $this->setParam('subject', $this->_subject);
+        $url = sprintf('%s/%s?%s', $this->_baseUrl, $this->_responseType, http_build_query($this->_params));
+        try {
+            $response = $this->_request->setUrl($url)->send();
+            if ($response->getStatus() == 200) {
+                if ($this->_responseType == 'xml' || $this->_responseType == 'php') {
+                    return new Services_Ustream_Result($response->getBody(), $this->_responseType);
+                } else {
+                    return $response->getBody();
+                }
+            } else {
+                throw new Services_Ustream_Exception('Server returned status: ' . $response->getStatus());
+            }
+        } catch (HTTP_Request2_Exception $e) {
+            throw new Services_Ustream_Exception($e->getMessage(), $e->getCode());
+        }
+    }
+
     public function setApiKey($apiKey)
     {
         $this->_apiKey = $apiKey;
+
         return $this;
     }
 
-    /**
-     * Get API Key.
-     * 
-     * @return string API key.
-     */
-    public function getApiKey()
+    public function setResponseType($type)
     {
-        return $this->_apiKey;
-    }
-
-    /**
-     * Set response type.
-     * 
-     * @param string $responseType
-     * @throws Services_Ustream_Exception
-     * @return Services_Ustream_Abstract
-     */
-    public function setResponseType($responseType = 'php')
-    {
-        if (!in_array($responseType, $this->_responseTypes, TRUE)) {
-            require_once 'Services/Ustream/Exception.php';
-            throw new Services_Ustream_Exception('Invalid Response Type.');
+        if (in_array($type, array('xml', 'json', 'php', 'html'))) {
+            $this->_responseType = $type;
+        } else {
+            throw new Services_Ustream_Exception('Invalid response type.');
         }
-        $this->_respnseType = $responseType;
+        return $this;
+    }
+    
+    public function setParam($name, $value)
+    {
+        $this->_params[$name] = $value;
         return $this;
     }
 
-    /**
-     *  Get response type.
-     * 
-     * @return string Response Type.
-     */
-    public function getResponseType()
-    {
-        return $this->_respnseType;
-    }
-
-    /**
-     *  Set REST Config.
-     * 
-     * @param array $restConfig
-     * @return Services_Ustream_Abstract
-     */
-    public function setRestConfig(Array $restConfig = array())
-    {
-        $this->_rest->setConfig($restConfig);
-        return $this;
-    }
-
-    /**
-     *  Set page num.
-     * @param integer $page
-     * @return Services_Ustream_Abstract
-     */
     public function setPage($page)
     {
-        $this->_page = (int) $page;
-        return $this;
+        return $this->setParam('page', (int) $page);
     }
 
-    /**
-     * Set limit.
-     * @param integer $limit
-     * @return Services_Ustream_Abstract
-     */
     public function setLimit($limit)
     {
-        $this->_limit = (int) $limit;
+        return $this->setParam('limit', (int) $limit);
+    }
+
+
+
+    public function clearParams()
+    {
+        $this->_params = array();
+        
         return $this;
     }
-
-    /**
-     *
-     * @param string $url
-     */
-    protected function _send($url, $params)
-    {
-        if ($this->_response) {
-            unset($this->_response);
-        }
-        if ($this->_result) {
-            unset($this->_result);
-        }
-        if ($this->_page) {
-            $params['page'] = $this->_page;
-        }
-        if ($this->_limit && $this->_limit <= 20) {
-            $params['limit'] = $this->_limit;
-        }
-        $url = $url . '?' . http_build_query($params);
-        $this->_rest->setUrl($url);
-        $response = $this->_rest->send();
-        $this->_response = $response;
-        $this->_result = new Services_Ustream_Result($response, $this->getResponseType());
-    }
-
-    public function getResult()
-    {
-        return $this->_result;
-    }
-
-    /**
-     *
-     * @param string $command
-     * @return Services_Ustream_Search
-     */
-    protected function _getSearchInstance($command)
-    {
-        $search = Services_Ustream::factory('search');
-        $search->setApiKey($this->getApiKey())
-               ->setResponseType($this->getResponseType())
-               ->command($command);
-        return $search;
-    }
-
 }
+

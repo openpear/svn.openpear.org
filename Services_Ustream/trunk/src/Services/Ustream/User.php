@@ -44,68 +44,55 @@ require_once 'Services/Ustream/Abstract.php';
 
 class Services_Ustream_User extends Services_Ustream_Abstract
 {
-    public function getInfo($user)
-    {
-        $url = sprintf('%s/%s/user/%s/getInfo',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $user);
+    protected $_subject = 'user';
 
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
-        
-    }
-    public function getId($user)
+    public function getInfo($uid)
     {
-        $url = sprintf('%s/%s/user/%s/getId',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $user);
-
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
-    }
-    public function getValueOf($user, $key)
-    {
-        $url = sprintf('%s/%s/user/%s/getValueOf/%s',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $user,
-                    $key);
-
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getInfo');
+        return $this->_sendRequest();
     }
 
-    public function listAllChannels($user)
+    public function getValueOf($uid, $property)
     {
-        $url = sprintf('%s/%s/user/%s/listAllChannels',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $user);
-
-        $this->_send($url, array('key' => $this->getApiKey()));
-        $this->_result = new Services_Ustream_Result_User($this->_response, $this->getResponseType());
-        return $this->getResult()->results;
+        $_properties = array('id', 'userName', 'registeredAt', 'url', 'gender',
+                             'website', 'about', 'rating', 'numberOf');
+        if (in_array($property, $_properties)) {
+            $this->setParam('uid', $uid);
+            $this->setParam('command', 'getValueOf');
+            $this->setParam('params', $property);
+            return $this->_sendRequest();
+        } else {
+            throw new Services_Ustream_Exception('Invalid property.');
+        }
     }
 
-    public function listAllVideos($user)
+    public function getId($uid)
     {
-        $url = sprintf('%s/%s/user/%s/listAllVideos',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $user);
-
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getId');
+        return $this->_sendRequest();
     }
 
-    /**
-     *
-     * @return Services_Ustream_Search
-     */
-    public function search()
+    public function listAllChannels($uid)
     {
-        return $this->_getSearchInstance('user');
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'listAllChannels');
+        return $this->_sendRequest();
+    }
+
+    public function listAllVideos($uid)
+    {
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'listAllVideos');
+        return $this->_sendRequest();
+    }
+
+    public function getComments($uid)
+    {
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getComments');
+        return $this->_sendRequest();
     }
 }
+
