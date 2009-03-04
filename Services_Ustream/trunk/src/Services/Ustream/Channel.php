@@ -44,119 +44,69 @@ require_once 'Services/Ustream/Abstract.php';
 
 class Services_Ustream_Channel extends Services_Ustream_Abstract
 {
+    protected $_subject = 'channel';
+
     public function getInfo($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/getInfo',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getInfo');
+        return $this->_sendRequest();
     }
 
-    public function getValueOf($uid, $key)
+    public function getValueOf($uid, $property)
     {
-        $url = sprintf('%s/%s/channel/%s/getValueOf/%s',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid,
-                    $key);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $_properties = array('id', 'user', 'title', 'description', 'urlTitleName',
+                             'url', 'status', 'createdAt', 'lastStreamedAt',
+                             'photoUrl', 'protected', 'rating', 'embedTag',
+                             'embedTagSourceUrl', 'hasTags', 'numberOf', 'tags',
+                             'comments');
+        if (in_array($property, $_properties)) {
+            $this->setParam('uid', $uid);
+            $this->setParam('command', 'getValueOf');
+            $this->setParam('params', $property);
+            return $this->_sendRequest();
+        } else {
+            throw new Services_Ustream_Exception('Invalid property.');
+        }
     }
 
-    public function getId($channel)
+    public function getId()
     {
-        return $this->getValueOf($channel, 'id');
-        
+        throw new Exception(__FUNCTION__ . ' is disable now.');
     }
 
     public function getEmbedTag($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/getEmbedTag',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getEmbedTag');
+        return $this->_sendRequest();
     }
 
-    /**
-     * getCustomEmbedTag
-     * 
-     * @param string|integer $uid
-     * @param array $params
-     * @return string
-     */
-    public function getCustomEmbedTag($uid, $params = array())
+    public function getCustomEmbedTag($uid, $opts = array())
     {
-        $url = sprintf('%s/%s/channel/%s/getCustomEmbedTag',
-                self::API_URI,
-                $this->getResponseType(),
-                $uid);
-
-         $this->_send($url, array('key' => $this->getApiKey(), 'params' => implode(';', $params)));
-         return $this->getResult()->results;
-        
+        $params = '';
+        foreach ($opts as $key => $val) {
+            $params .= $key . ':' . $val . ';';
+        }
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getCustomEmbedTag');
+        if ($params) $this->setParam('params', $params);
+        return $this->_sendRequest();
     }
 
     public function listAllChannels($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/listAllChannels',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
+        throw new Exception(__FUNCTION__ . 'is disable now.');
     }
 
     public function getComments($uid)
     {
-        $url = sprintf('%s/%s/channel/%s/getComments',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
+        throw new Exception(__FUNCTION__ . 'is disable now.');
     }
 
     public function getTags($uid)
     {
-        require_once 'Services/Ustream/Exception.php';
-        throw new Services_Ustream_Exception('******');
-        return;
-        $url = sprintf('%s/%s/channel/%s/getTags',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
-    }
-
-    /**
-     *
-     * @return Services_Ustream_Search
-     */
-    public function search()
-    {
-        return $this->_getSearchInstance('channel');
+        throw new Exception(__FUNCTION__ . 'is disable now.');
     }
 }
+

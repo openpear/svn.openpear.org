@@ -42,15 +42,27 @@
 
 class Services_Ustream_Result
 {
-    protected $_response;
-    protected $_responseType;
     protected $_results;
+    protected $_msg;
+    protected $_error;
+    protected $_processTime;
+    protected $_version;
+    protected $_responseType;
+
     public function __construct($response, $responseType)
     {
-        $this->_response = $response;
-        $this->_responseType = $responseType;
-        $this->_results = array();
-        $this->_parseResponse();
+        switch ($responseType) {
+            case 'xml':
+                $this->_fromXml($response);
+                break;
+            case 'php':
+                $this->_fromPhp($response);
+                break;
+        }
+
+        if ($this->_error) {
+            throw new Services_Ustream_Exception($this->_msg);
+        }
     }
 
     public function getResults()
@@ -58,55 +70,46 @@ class Services_Ustream_Result
         return $this->_results;
     }
 
-    protected function _parseResponse()
+    public function getProcessTime()
     {
-        switch (strtolower($this->_responseType)) {
-            case 'xml':
-                $this->_parseResponseFromXml();
-                break;
-            case 'php':
-                $this->_parseResponseFromPhp();
-                break;
-            case 'html':
-            case 'json':
-                $results = $this->_response->getBody();
-                $this->_results['results'] = $results;
-                break;
-            default:
-                require_once 'Services/Ustream/ResultException.php';
-                throw new Services_Ustream_ResultException('Invalid response type.');
-        }
+        return $this->_processTime;
     }
 
-    protected function _parseResponseFromXml()
+    public function getVersion()
     {
-        require_once 'XML/Unserializer.php';
-        $xml = new XML_Unserializer;
-        $xml->unserialize($this->_response->getBody());
-        $results = $xml->getUnserializedData();
-        if ($results['error']) {
-            require_once 'Services/Ustream/ResultException.php';
-            throw new Services_Ustream_ResultException($results['msg']);
-        }
-        $this->_results = $results;
-    }
-
-    protected function _parseResponseFromPhp()
-    {
-        $results = unserialize($this->_response->getBody());
-        if ($results['error']) {
-            require_once 'Services/Ustream/ResultException.php';
-            throw new Services_Ustream_ResultException($results['msg']);
-        }
-        $this->_results = $results;
+        return $this->_version;
     }
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->_results)) {
+        if (isset($this->_results[$name])) {
             return $this->_results[$name];
         }
+        return null;
+    }
+    
+    protected function _fromXml($response)
+    {
+        require_once 'XML/Unserializer.php';
+        $xml = new XML_Unserializer;
+        $xml->unserialize($response);
+        $results = $xml->getUnserializedData();
+
+        $this->_results = $results['results'];
+        $this->_msg = $results['msg'];
+        $this->_error = $results['error'];
+        $this->_processTime = $results['processTime'];
+        $this->_version = $results['version'];
+    }
+
+    protected function _fromPhp($response)
+    {
+        $results = unserialize($response);
+        $this->_results = $results['results'];
+        $this->_msg = $results['msg'];
+        $this->_error = $results['error'];
+        $this->_processTime = $results['processTime'];
+        $this->_version = $results['version'];
     }
 }
-
 

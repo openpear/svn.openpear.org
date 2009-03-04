@@ -44,98 +44,74 @@ require_once 'Services/Ustream/Abstract.php';
 
 class Services_Ustream_Video extends Services_Ustream_Abstract
 {
+    protected $_subject = 'video';
+
+    /**
+     *
+     * @param integer $uid Video ID.
+     * @return string|Services_Ustream_Result
+     */
     public function getInfo($uid)
     {
-        $url = sprintf('%s/%s/video/%s/getInfo',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getInfo');
+        return $this->_sendRequest();
     }
 
-    public function getValueOf($uid, $key)
+    public function getValueOf($uid, $property)
     {
-        $url = sprintf('%s/%s/video/%s/getValueOf/%s',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid,
-                    $key);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $_properties = array('id', 'user', 'title', 'description', 'createdAt',
+                             'url', 'lengthInSecond', 'photoUrl', 'protected',
+                             'rating', 'embedTag', 'embedTagSourceUrl', 'hasTags',
+                             'numberOf', 'tags', 'sourceChannel');
+
+        if (in_array($property, $_properties)) {
+            $this->setParam('uid', $uid);
+            $this->setParam('command', 'getValueOf');
+            $this->setParam('params', $property);
+            return $this->_sendRequest();
+        } else {
+            throw new Services_Ustream_Exception('Invalid property.');
+        }
     }
 
     public function getId($videoUrl)
     {
-        $url = sprintf('%s/%s/video/%s/getId',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $videoUrl);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $this->setParam('uid', $videoUrl);
+        $this->setParam('command', 'getValueOf');
+        $this->setParam('params', 'id');
+        return $this->_sendRequest();
     }
 
     public function getEmbedTag($uid)
     {
-        $url = sprintf('%s/%s/video/%s/getEmbedTag',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        return $this->getResult()->results;
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getEmbedTag');
+        return $this->_sendRequest();
     }
 
     public function listAllVideos($uid)
     {
-        $url = sprintf('%s/%s/video/%s/listAllVideos',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
-
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'listAllVideos');
+        return $this->_sendRequest();
     }
 
     public function getComments($uid)
     {
-        $url = sprintf('%s/%s/video/%s/getComments',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getComments');
+        return $this->_sendRequest();
     }
 
     public function getTags($uid)
     {
-        require_once 'Services/Ustream/Exception.php';
-        throw new Services_Ustream_Exception('******');
-        return;
-        $url = sprintf('%s/%s/video/%s/getTags',
-                    self::API_URI,
-                    $this->getResponseType(),
-                    $uid);
-        $this->_send($url, array('key' => $this->getApiKey()));
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
-        }
+        $this->setParam('uid', $uid);
+        $this->setParam('command', 'getTags');
+        return $this->_sendRequest();
     }
 
-    public function search()
-    {
-        return $this->_getSearchInstance('video');
-    }
+
+
 }
+

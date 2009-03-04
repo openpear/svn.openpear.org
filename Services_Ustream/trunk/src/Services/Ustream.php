@@ -40,12 +40,10 @@
  * @version $Id$
  */
 
-require_once 'Services/Ustream/Abstract.php';
-require_once 'HTTP/Request2.php';
 
 class Services_Ustream
 {
-    const VERSION = '0.1.1';
+    const VERSION = '0.2.0';
     private static $_commands = array('Channel', 'User', 'Search', 'Stream', 'System', 'Video');
 
     public static function factory($command, $apiKey = null, $responseType = 'php')

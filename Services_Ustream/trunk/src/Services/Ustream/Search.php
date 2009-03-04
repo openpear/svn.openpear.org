@@ -44,163 +44,125 @@ require_once 'Services/Ustream/Abstract.php';
 
 class Services_Ustream_Search extends Services_Ustream_Abstract
 {
+    protected $_subject = 'search';
     protected $_command;
-    protected $_scopeAndSorting;
-    protected $_params = array();
-    protected $_allowedCommands = array('user', 'channel', 'stream', 'video');
-
+    protected $_scopeOrSorting;
+    protected $_searchParams = array();
+    
     public function command($command)
     {
-        if (!in_array($command, $this->_allowedCommands)) {
-            throw new Services_Ustream_Exception('Invalid command.');
-        } else {
+        $_commands = array('user', 'channel', 'stream', 'video');
+        if (in_array($command, $_commands)) {
             $this->_command = $command;
+        } else {
+            throw new Services_Ustream_Exception('Invalid command.');
         }
-
         return $this;
     }
 
     public function scope($scope)
     {
-        $this->_scopeAndSorting = $scope;
-        return $this;
-    }
-    
-    public function uid($uid)
-    {
-        $this->_scopeAndSorting = $uid;
+        $this->_scopeOrSorting = $scope;
         return $this;
     }
 
-    /**
-     * @param bool $flag
-     * @return Services_Ustream_Search
-     */
+    public function uid($uid)
+    {
+        $this->_scopeOrSorting = $uid;
+        return $this;
+    }
+
     public function newest($flag = true)
     {
-        $this->_scopeAndSorting =
+        $this->_scopeOrSorting =
             ($flag) ? 'newest' : '!newest';
         return $this;
     }
 
-    /**
-     * @param bool $flag
-     * @return Services_Ustream_Search
-     */
     public function recent($flag = true)
     {
-        $this->_scopeAndSorting =
+        $this->_scopeOrSorting =
             ($flag) ? 'recent' : '!recent';
         return $this;
     }
 
-    /**
-     * @return Services_Ustream_Search
-     */
     public function all()
     {
-        $this->_scopeAndSorting = 'all';
+        $this->_scopeOrSorting = 'all';
         return $this;
     }
 
-    /**
-     * @return Services_Ustream_Search
-     */
-    public function popular()
-    {
-        $this->_scopeAndSorting = 'popular';
-        return $this;
-    }
-
-    /**
-     * @return Services_Ustream_Search
-     */
     public function live()
     {
-        $this->_scopeAndSorting = 'live';
+        $this->_scopeOrSorting = 'live';
         return $this;
     }
 
-    /**
-     *
-     * @param string $name
-     * @return Services_Ustream_Search
-     */
-    public function where($name)
+    public function popular()
     {
-        $this->_params[0] = $name;
+        $this->_scopeOrSorting = 'popular';
         return $this;
     }
 
-    /**
-     *
-     * @param string $value
-     * @return Services_Ustream_Search
-     */
+    public function where($key)
+    {
+        $this->_searchParams[0] = $key;
+        return $this;
+    }
+
     public function like($value)
     {
-        $this->_params[1] = 'like';
-        $this->_params[2] = $value;
+        $this->_searchParams[1] = 'like:' . $value;
         return $this;
     }
 
-    /**
-     *
-     * @param string $value
-     * @return Services_Ustream_Search
-     */
     public function eq($value)
     {
-        $this->_params[1] = 'eq';
-        $this->_params[2] = $value;
+        $this->_searchParams[1] = 'eq:' . $value;
         return $this;
     }
 
-    /**
-     *
-     * @param string $value
-     * @return Services_Ustream_Search
-     */
     public function lt($value)
     {
-        $this->_params[1] = 'lt';
-        $this->_params[2] = $value;
+        $this->_searchParams[1] = 'lt:' . $value;
         return $this;
     }
 
-    /**
-     *
-     * @param string $value
-     * @return Services_Ustream_Search
-     */
     public function gt($value)
     {
-        $this->_params[1] = 'gt';
-        $this->_params[2] = $value;
+        $this->_searchParams[1] = 'gt:' . $value;
         return $this;
     }
 
-    /**
-     *
-     * @return array
-     */
     public function query()
     {
-        $url = sprintf('%s/%s/%s/%s/search/%s',
-                self::API_URI,
-                $this->getResponseType(),
-                $this->_command,
-                $this->_scopeAndSorting,
-                implode(':', $this->_params));
+        $params = implode(':', $this->_searchParams);
+        $url = sprintf('%s/%s/%s/%s/%s/%s?key=%s',
+                        $this->_baseUrl,
+                        $this->_responseType,
+                        $this->_command,
+                        $this->_scopeOrSorting,
+                        $this->_subject,
+                        $params,
+                        $this->_apiKey);
+        echo $url;
         
-        $this->_send($url, array('key' => $this->getApiKey()));
-
-        if ($this->getResponseType() == 'xml') {
-            $results = $this->getResult()->results;
-            return $results['array'];
-        } else {
-            return $this->getResult()->results;
+        try {
+            $response = $this->_request->setUrl($url)->send();
+            if ($response->getStatus() == 200) {
+                if ($this->_responseType == 'xml' || $this->_responseType == 'php') {
+                    return new Services_Ustream_Result($response->getBody(), $this->_responseType);
+                } else {
+                    return $response->getBody();
+                }
+            } else {
+                throw new Services_Ustream_Exception('Server returned status: ' . $response->getStatus());
+            }
+        } catch (HTTP_Request2_Exception $e) {
+            throw new Services_Ustream_Exception($e->getMessage(), $e->getCode());
         }
     }
+
+
 
 }

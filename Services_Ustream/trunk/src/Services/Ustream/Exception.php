@@ -42,5 +42,5 @@
 
 class Services_Ustream_Exception extends Exception
 {
-    
 }
+
