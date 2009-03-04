@@ -44,9 +44,20 @@
 class Services_Ustream
 {
     const VERSION = '0.2.0';
-    private static $_commands = array('Channel', 'User', 'Search', 'Stream', 'System', 'Video');
+    
+    protected static $_commands = array('Channel', 'User', 'Search', 'Stream', 'System', 'Video');
 
-    public static function factory($command, $apiKey = null, $responseType = 'php')
+
+    /**
+     * factory
+     * 
+     * @param string channel,user,search,stream,system,video
+     * @param string xml,json,php,html
+     * @param array  HTTP_Request2 config.
+     * @return Services_Ustream_Abstract
+     * @throws Services_Ustream_Exception
+     */
+    public static function factory($command, $apiKey = null, $responseType = 'php', $config = array())
     {
         if (!in_array(ucwords($command), self::$_commands)) {
             require_once 'Services/Ustream/Exception.php';
@@ -55,6 +66,6 @@ class Services_Ustream
         require_once 'Services/Ustream/' . ucwords($command) . '.php';
         $class = 'Services_Ustream_' . ucwords($command);
 
-        return new $class($apiKey, $responseType);
+        return new $class($apiKey, $responseType, $config);
     }
 }
