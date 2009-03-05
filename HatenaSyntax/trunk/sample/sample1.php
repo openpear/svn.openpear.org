@@ -64,7 +64,7 @@ echo HatenaSyntax::render($str);
     <li>list6</li>
   </ul>
 
-  <p>paragraph(<a href="#sec49aa86912d059_footnote_1" name="sec49aa86912d059_1" title="footnote">*1</a>)</p>
+  <p>paragraph(<a href="#sec49ae6bd29d6ab_footnote_1" name="sec49ae6bd29d6ab_1" title="footnote">*1</a>)</p>
 
   <table>
     <tr>
@@ -83,8 +83,7 @@ echo HatenaSyntax::render($str);
 
   <pre>
 hoge
-fuga
-  </pre>
+fuga</pre>
   <br>
   <blockquote>
     <h3>blockquote header</h3>
@@ -92,14 +91,13 @@ fuga
   </blockquote>
 
   <pre class="superpre php">
-echo &quot;hogehoge&quot;;
-  </pre>
+echo &quot;hogehoge&quot;;</pre>
 
   <p><a href="http://google.com">http://google.com</a></p>
 </div>
 
 
 <div class="footnote">
-  <p><a href="#sec49aa86912d059_1" name="sec49aa86912d059_footntoe_1">*1</a>: footnote</p>
+  <p><a href="#sec49ae6bd29d6ab_1" name="sec49ae6bd29d6ab_footnote_1">*1</a>: footnote</p>
 </div>
 */
