@@ -33,43 +33,22 @@ class Image_Colorful
 
 	var $_addblue  = 0;
 
-	var $_author;
+	var $_text =  array();
 
-	var $_author_size  = 0;
+	var $_text_size = array();
 
-	var $_author_font;
+	var $_text_font = array();
 
-	var $_author_width  = 0;
+	var $_text_width = array();
 
-	var $_author_height  = 0;
+	var $_text_height = array();
 
-	var $_author_color_red;
-
-	var $_author_color_green;
-
-	var $_author_color_blue;
-
-	var $_author_color_flag;
-
-	var $_title_size  = 0;
-
-	var $_title_font;
-
-	var $_title_width  = 0;
-
-	var $_title_height  = 0;
-
-	var $_title_color_red;
-
-	var $_title_color_green;
-
-	var $_title_color_blue;
-
-	var $_title_color_flag;
+	var $_text_color = array();
 
 	var $_error_message = "";
 
 	var $_flag = true;
+
 
 	function Image_Colorful($width = '', $height = '', $split_width = 1, $split_height = 1 )
 	{
@@ -102,63 +81,85 @@ class Image_Colorful
 		$this->_addblue = $blue;
 	}
 
-	function setAuthor($author, $font, $size, $width=0, $height=0){
+	function addTexts($text, $font, $size, $width=0, $height=0, $color=array(255,255,255)){
 		$this->checkError();
-		$this->checkChracter($author);
+		$this->checkCharacter($text);
 		$this->checkFont($font);
 		$this->checkNumber($size);
 		$this->checkNumber($width);
 		$this->checkNumber($height);
+		$this->checkColor($color[0]);
+		$this->checkColor($color[1]);
+		$this->checkColor($color[2]);
 
-		$this->_author = $author;
-		$this->_author_font = $font;
-		$this->_author_size = $size;
-		$this->_author_width = $width;
-		$this->_author_height = $height;
+		$this->_text[] = $text;
+		$this->_text_font[] = $font;
+		$this->_text_size[] = $size;
+		$this->_text_width[] = $width;
+		$this->_text_height[] = $height;
+		$this->_text_color[] = $color;
 	}
 
-	function setAuthorColor($red, $green, $blue){
+	/*
+	function getOdds(){
 		$this->checkError();
-		$this->checkColor($red);
-		$this->checkColor($green);
-		$this->checkColor($blue);
+		$this->_splitheight;
+		$this->_splitwidth;
+		$this->_addred;
+		$this->_addgreen;
+		$this->_addblue;
 
-		$this->_author_color_red = $red;
-		$this->_author_color_green = $green;
-		$this->_author_color_blue = $blue;
-		$this->_author_color_flag = true;
-	}
-
-	function setTitle($title, $font, $size, $width=0, $height=0){
-		$this->checkError();
-		$this->checkChracter($title);
-		$this->checkFont($font);
-		$this->checkNumber($size);
-		$this->checkNumber($width);
-		$this->checkNumber($height);
-
-		$this->_title = $title;
-		$this->_title_font = $font;
-		$this->_title_size = $size;
-		$this->_title_width = $width;
-		$this->_title_height = $height;
-	}
-
-	function setTitleColor($red, $green, $blue){
-		$this->checkError();
-		$this->checkColor($red);
-		$this->checkColor($green);
-		$this->checkColor($blue);
-
-		$this->_title_color_red = $red;
-		$this->_title_color_green = $green;
-		$this->_title_color_blue = $blue;
-		$this->_title_color_flag = true;
-	}
-
-
+	}*/
 
 	function getGenerateImage($image_type = 'gif'){
+		$this->checkError();
+		$image = $this->GenerateImage();
+
+		switch($image_type){
+			case 'gif':
+				header('Content-type: image/gif');
+				imagegif($image);
+				break;
+			case 'png':
+				header('Content-type: image/png');
+				imagepng($image);
+				break;
+			case 'jpg':
+			case 'jpeg':
+				header('Content-type: image/jpeg');
+				imagejpeg($image);
+				break;
+			default:
+				$this->showError();
+				break;
+		}
+
+	}
+
+	function saveGenerateImage($image_name = 'image.gif', $image_type = 'gif'){
+		$this->checkError();
+		$this->checkCharacter($image_name);
+		$image = $this->GenerateImage();
+
+		switch($image_type){
+			case 'gif':
+				imagegif($image, $image_name);
+				break;
+			case 'png':
+				imagepng($image, $image_name);
+				break;
+			case 'jpg':
+			case 'jpeg':
+				imagejpeg($image, $image_name);
+				break;
+			default:
+				$this->showError();
+				break;
+		}
+
+	}
+
+	function GenerateImage(){
 		$this->checkError();
 
 		$image = imagecreatetruecolor($this->_imagewidth, $this->_imageheight);
@@ -198,53 +199,26 @@ class Image_Colorful
 			}
 		}
 
-		//setAuthor
-		if(!$this->_author_color_flag){
-			$author_font_color = imagecolorallocate($image, 255, 255, 255);
-		} else {
-			$author_font_color = imagecolorallocate($image, $this->_author_color_red,  $this->_author_color_green, $this->_author_color_blue);
+		//addTexts
+		if(count($this->_text)){
+			for($i=0;$i<count($this->_text);$i++){
+				$font_color = imagecolorallocate($image, $this->_text_color[$i][0], $this->_text_color[$i][1], $this->_text_color[$i][2]);
+				imagefttext($image, $this->_text_size[$i], '0', $this->_text_width[$i], $this->_text_height[$i], $font_color, $this->_text_font[$i], $this->_text[$i]);
+			}
 		}
-		imagefttext($image, $this->_author_size, '0', $this->_author_width, $this->_author_height, $author_font_color, $this->_author_font, $this->_author);
-
-		//setTitle
-		if(!$this->_title_color_flag){
-			$title_font_color = imagecolorallocate($image, 255, 255, 255);
-		} else {
-			$title_font_color = imagecolorallocate($image, $this->_title_color_red,  $this->_title_color_green, $this->_title_color_blue);
-		}
-		imagefttext($image, $this->_title_size, '0', $this->_title_width, $this->_title_height, $title_font_color, $this->_title_font, $this->_title);
-
-		switch($image_type){
-			case 'gif':
-				header('Content-type: image/gif');
-				imagegif($image);
-				break;
-			case 'png':
-				header('Content-type: image/png');
-				imagepng($image);
-				break;
-			case 'jpg':
-			case 'jpeg':
-				header('Content-type: image/jpeg');
-				imagejpeg($image);
-				break;
-			default:
-				$this->showError();
-				break;
-		}
-
+		return $image;
 	}
 
 	function checkError(){
-		if($this->flag == false){
-			$this->error_message = "Image_Colorful function error";
+		if($this->_flag == false){
+			$this->_error_message = "Image_Colorful function error";
 			$this->showError();
 		}
 	}
 
 	function checkColor($color){
-		if(!preg_match('/^[0-9]+$/',$number) || $color <= 255 && $color >= -255) {
-			$this->error_message = "The color is from -255 from -255 to 255 ranges";
+		if(!preg_match('/^[0-9]+$/',$color) || $color <= 255 && $color >= -255) {
+			$this->_error_message = "The color is from -255 from -255 to 255 ranges";
 			$this->showError();
 		}
 
@@ -252,15 +226,15 @@ class Image_Colorful
 
 	function checkNumber($number){
 		if(!preg_match('/^[0-9]+$/',$number)) {
-			$this->error_message = "No number error";
+			$this->_error_message = "No number error";
 			$this->showError();
 		}
 
 	}
 
-	function checkChracter($char){
+	function checkCharacter($char){
 		if(!$char) {
-			$this->error_message = "No message error";
+			$this->_error_message = "No message error";
 			$this->showError();
 		}
 
@@ -268,20 +242,17 @@ class Image_Colorful
 
 	function checkFont($font){
 		if(!$font) {
-			$this->error_message = "No font error";
+			$this->_error_message = "No font error";
 			$this->showError();
 		}
 
 	}
 	function showError(){
-		$this->flag = false;
+		$this->_flag = false;
 		return false;
 	}
 
 	function getErrorMessage(){
-		return $this->error_message;
+		return $this->_error_message;
 	}
-
-
-
 }
