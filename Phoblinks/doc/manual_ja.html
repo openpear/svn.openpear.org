@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<title>Phoblinks</title>
+<link rel="stylesheet" href="doc.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="phoblinks">
+<h1 class="title">Phoblinks</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr class="field"><th class="docinfo-name">著者:</th><td class="field-body">鈴木鉄也 &lt;<a class="reference" href="mailto:suzuki&#64;spice-of-life.net">suzuki&#64;spice-of-life.net</a>&gt;</td>
+</tr>
+<tr class="field"><th class="docinfo-name">日付:</th><td class="field-body">2009-03-07</td>
+</tr>
+<tr class="field"><th class="docinfo-name">バージョン:</th><td class="field-body">Phoblinks 0.7</td>
+</tr>
+</tbody>
+</table>
+<!-- -*- coding: utf-8 -*- -->
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#id1" id="id46" name="id46">概要</a><ul>
+<li><a class="reference" href="#id2" id="id47" name="id47">メソッド名の表記について</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id3" id="id48" name="id48">オブジェクトとクラス</a></li>
+<li><a class="reference" href="#id4" id="id49" name="id49">クラスの定義</a><ul>
+<li><a class="reference" href="#id5" id="id50" name="id50">クラスの定義</a><ul>
+<li><a class="reference" href="#id6" id="id51" name="id51">クラスビルダ</a></li>
+<li><a class="reference" href="#id7" id="id52" name="id52">クラスメソッドの定義</a></li>
+<li><a class="reference" href="#id8" id="id53" name="id53">まとめ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#id9" id="id54" name="id54">プロパティ</a><ul>
+<li><a class="reference" href="#id10" id="id55" name="id55">概要</a></li>
+<li><a class="reference" href="#id11" id="id56" name="id56">プロパティの設定</a><ul>
+<li><a class="reference" href="#id12" id="id57" name="id57">基本的な設定</a></li>
+<li><a class="reference" href="#id13" id="id58" name="id58">初期値の設定</a></li>
+<li><a class="reference" href="#id14" id="id59" name="id59">その他の設定</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id15" id="id60" name="id60">セッターメソッドの処理の流れ</a></li>
+<li><a class="reference" href="#id16" id="id61" name="id61">値変形器</a><ul>
+<li><a class="reference" href="#id17" id="id62" name="id62">用意済みの値変形器</a><ul>
+<li><a class="reference" href="#phobvaluetransformer-negativebooleantransformername" id="id63" name="id63"><tt class="docutils literal"><span class="pre">PhobValueTransformer::NegativeBooleanTransformerName</span></tt></a></li>
+<li><a class="reference" href="#phobvaluetransformer-isnulltransformername" id="id64" name="id64"><tt class="docutils literal"><span class="pre">PhobValueTransformer::IsNullTransformerName</span></tt></a></li>
+<li><a class="reference" href="#phobvaluetransformer-isnotnulltransformername" id="id65" name="id65"><tt class="docutils literal"><span class="pre">PhobValueTransformer::IsNotNullTransformerName</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id18" id="id66" name="id66">値変形器の実装と登録</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id19" id="id67" name="id67">値検証器</a><ul>
+<li><a class="reference" href="#id20" id="id68" name="id68">値検証器の使用</a></li>
+<li><a class="reference" href="#id21" id="id69" name="id69">用意済みの値検証器</a><ul>
+<li><a class="reference" href="#phobstringvaluevalidator" id="id70" name="id70"><tt class="docutils literal"><span class="pre">PhobStringValueValidator</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id22" id="id71" name="id71">値検証器の実装</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#id23" id="id72" name="id72">プロパティのカスタマイズ</a><ul>
+<li><a class="reference" href="#id24" id="id73" name="id73">プロパティビルダの作成</a><ul>
+<li><a class="reference" href="#id25" id="id74" name="id74">プロパティビルダの役割</a></li>
+<li><a class="reference" href="#id26" id="id75" name="id75">流れるようなインターフェース</a></li>
+<li><a class="reference" href="#id27" id="id76" name="id76">プロパティビルダの作成</a></li>
+<li><a class="reference" href="#id28" id="id77" name="id77">プロパティビルダクラスの登録</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id29" id="id78" name="id78">プロパティクラスの作成</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id30" id="id79" name="id79">補助メソッド</a><ul>
+<li><a class="reference" href="#id31" id="id80" name="id80">補助メソッドの指定</a></li>
+<li><a class="reference" href="#id32" id="id81" name="id81">メソッド修飾子</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id33" id="id82" name="id82">オブジェクトの生成と初期化</a><ul>
+<li><a class="reference" href="#id34" id="id83" name="id83">オブジェクトの生成と初期化</a></li>
+<li><a class="reference" href="#id35" id="id84" name="id84">初期化メソッドの実装</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#traits" id="id85" name="id85">トレイト (Traits)</a><ul>
+<li><a class="reference" href="#id36" id="id86" name="id86">トレイトとは何か</a></li>
+<li><a class="reference" href="#id37" id="id87" name="id87">トレイトの定義</a></li>
+<li><a class="reference" href="#id38" id="id88" name="id88">トレイトの使用</a></li>
+<li><a class="reference" href="#id39" id="id89" name="id89">トレイトの合成とカスタマイズ</a><ul>
+<li><a class="reference" href="#id40" id="id90" name="id90">変更可能なトレイト</a></li>
+<li><a class="reference" href="#id41" id="id91" name="id91">トレイトの生成</a></li>
+<li><a class="reference" href="#id42" id="id92" name="id92">トレイト同士の演算</a></li>
+<li><a class="reference" href="#id43" id="id93" name="id93">メソッドの編集</a></li>
+<li><a class="reference" href="#id44" id="id94" name="id94">トレイトの登録</a></li>
+<li><a class="reference" href="#id45" id="id95" name="id95">競合するメソッドの解決</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<!--  -->
+<div class="section">
+<h1><a class="toc-backref" href="#id46" id="id1" name="id1">概要</a></h1>
+<p>PhoblinksはPHP5のオブジェクトシステムを拡張するライブラリです。
+SmalltalkとObjective-Cを中心として、
+Ruby, Python, CLOSなどの言語と、
+Cocoa, WebObjects, Mooseなどのフレームワークやライブラリを参考にしています。</p>
+<p>Phoblinksは次の機能を提供します。</p>
+<ul class="simple">
+<li><strong>クラスオブジェクト。</strong>
+Phoblinksでは、クラスもまたオブジェクトです。
+PHPにはないクラスメソッドを実装できるほか、
+クラスインスタンス変数を定義することができます。</li>
+<li><strong>プロパティの管理。</strong>
+オブジェクトのプロパティの仕様を設定でき、
+その仕様を元にアクセサメソッドを生成します。</li>
+<li><strong>トレイト。</strong>
+トレイト (Traits) は任意のクラスにメソッド実装を提供する仕組みです。
+ミックスインと異なり、トレイトはクラスの継承階層に影響しません。</li>
+<li><strong>補助メソッド。</strong>
+補助メソッドは、メソッド実行の前後にフックとして実行されるメソッドです。
+元のメソッドを変更せずにフックをかけることができます。</li>
+</ul>
+<div class="section">
+<h2><a class="toc-backref" href="#id47" id="id2" name="id2">メソッド名の表記について</a></h2>
+<p>Phoblinksではメソッド名の表記について、
+クラスメソッドならば <tt class="docutils literal"><span class="pre">+</span></tt> 、インスタンスメソッドならば <tt class="docutils literal"><span class="pre">-</span></tt> を
+メソッド名の先頭につけることにしています
+（この表記はObjective-Cから採りました）。
+<tt class="docutils literal"><span class="pre">PhobObject</span></tt> のインスタンスメソッド <tt class="docutils literal"><span class="pre">isEqual()</span></tt> であれば
+<tt class="docutils literal"><span class="pre">-[PhobObject</span> <span class="pre">isEqual()]</span></tt> 、
+<tt class="docutils literal"><span class="pre">PhobClass</span></tt> のクラスメソッド <tt class="docutils literal"><span class="pre">name()</span></tt> であれば
+<tt class="docutils literal"><span class="pre">+[PhobClass</span> <span class="pre">name()]</span></tt> などと表します。</p>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id48" id="id3" name="id3">オブジェクトとクラス</a></h1>
+<p>PHPやPhoblinksで言うオブジェクトとは、何らかのクラスのインスタンスになります。
+Phoblinksのオブジェクトはすべて、
+<tt class="docutils literal"><span class="pre">PhobObject</span></tt> クラス（のサブクラス）のインスタンスです。</p>
+<p>ただしPHPでは、クラスそのものはオブジェクトではありません。
+クラスを指定する必要のある関数やメソッドでは、
+クラス名の文字列を引数として受け付けます。</p>
+<p>Phoblinksでは、クラスもオブジェクトとして扱います
+（クラスも何らかのクラスのインスタンスということになりますが、
+クラスのクラスのことをメタクラスと呼びます）。
+オブジェクトということはメソッドを持ちますから、
+クラスも自分のメソッドを持てることになります。
+これがクラスメソッドとなります。</p>
+<p>PHPには静的メソッドがありますが、これはクラスメソッドではありません。
+静的メソッドにはレシーバ (<tt class="docutils literal"><span class="pre">$this</span></tt> に相当する) がなく、継承もできません。
+<tt class="docutils literal"><span class="pre">self</span></tt> の指すクラス名は実装時のクラス名に固定されてしまいます。</p>
+<p>例えば、Phoblinksのクラスにはクラス名を返す <tt class="docutils literal"><span class="pre">name()</span></tt> という
+クラスメソッドが定義されています。
+これと同じことを静的メソッドでやろうと思えば、次のようなコードを書くでしょう。</p>
+<pre class="literal-block">
+class MyClass
+{
+    static function name()
+    {
+        return get_class(new self);
+    }
+}
+</pre>
+<p>しかし、この <tt class="docutils literal"><span class="pre">name()</span></tt> が意図通りに動作するのは <tt class="docutils literal"><span class="pre">MyClass</span></tt> に限ります。
+<tt class="docutils literal"><span class="pre">MyClass</span></tt> のサブクラスを定義して <tt class="docutils literal"><span class="pre">name()</span></tt> を呼び出してみると、
+結果は <tt class="docutils literal"><span class="pre">MyClass</span></tt> のままです。
+静的メソッドは呼び出し元のサブクラスの情報を持たず、
+<tt class="docutils literal"><span class="pre">self</span></tt> の内容は静的に決まるので、継承させることはできません。</p>
+<pre class="literal-block">
+class NewMyClass extends MyClass {}
+print NewMyClass::name(); //=&gt; &quot;MyClass&quot;
+</pre>
+<p>Phoblinksではクラスもオブジェクトとして扱うことで、
+オブジェクトを中心とするプログラミングを
+より広い範囲で行うことができるようになります。</p>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id49" id="id4" name="id4">クラスの定義</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id50" id="id5" name="id5">クラスの定義</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id51" id="id6" name="id6">クラスビルダ</a></h3>
+<p>Phoblinksクラスの定義は、クラスビルダとPHPクラス定義で構成されます。
+クラスビルダはクラスの設定と生成を行うオブジェクトで、
+<tt class="docutils literal"><span class="pre">+[Phoblinks</span> <span class="pre">toDefineClass()]</span></tt> で生成できます。</p>
+<p>まずは次の簡単な例を見てください
+（このコードはサンプルの <tt class="docutils literal"><span class="pre">BankAccount.php</span></tt> のものです）。</p>
+<p><tt class="docutils literal"><span class="pre">BankAccount</span></tt> クラス:</p>
+<pre class="literal-block">
+// クラスビルダを生成する。
+$cls = Phoblinks()-&gt;toDefineClass('BankAccount');
+
+// プロパティを設定する。
+$cls-&gt;property('ballance')
+    -&gt;defaultValue(0);
+
+// クラス定義開始
+$cls-&gt;begin(); // BankAccount
+
+class BankAccount extends PhobObject
+{
+
+    function deposit($x)
+    {
+        $this-&gt;_ballance += $x;
+    }
+
+    function withdraw($x)
+    {
+        $this-&gt;_ballance = max(array(0, $this-&gt;_ballance-$x));
+    }
+
+}
+
+// クラス定義終了
+$cls-&gt;end(); // BankAccount
+</pre>
+<p>最初に <tt class="docutils literal"><span class="pre">+[Phoblinks</span> <span class="pre">toDefineClass()]</span></tt> でクラスビルダを生成します。
+このクラスビルダにクラスの様々な情報を設定していき、
+最後にPhoblinksクラスを生成します。
+<tt class="docutils literal"><span class="pre">+toDefineClass()</span></tt> では定義するクラス名とスーパークラス
+（Phoblinksクラスオブジェクト）を指定します。
+スーパークラスを省略すると、 <tt class="docutils literal"><span class="pre">PhobObject</span></tt> を指定したことになります。</p>
+<p>次のコードはプロパティの設定です。
+Phoblinksはプロパティの設定に応じたアクセサメソッドを生成します。
+ここでは初期値が <tt class="docutils literal"><span class="pre">0</span></tt> の <tt class="docutils literal"><span class="pre">ballance</span></tt> プロパティを指定しています。
+デフォルトの設定では、プロパティ値にはアンダーバーつきのフィールド名で
+アクセスすることができます。
+<tt class="docutils literal"><span class="pre">ballance</span></tt> プロパティなら <tt class="docutils literal"><span class="pre">$this-&gt;_ballance</span></tt> となります。</p>
+<p>必要な設定を終えたらPHPクラスを定義し、その前後をクラスビルダの
+<tt class="docutils literal"><span class="pre">-begin()</span></tt> と <tt class="docutils literal"><span class="pre">-end()</span></tt> の呼び出しで囲みます。
+PHPクラスのスーパークラスには、
+クラスビルダで指定したスーパークラスと同じクラスを指定します。</p>
+<p>最後の <tt class="docutils literal"><span class="pre">-end()</span></tt> の呼び出しで、
+Phoblinksクラスオブジェクトが生成され、登録されます。
+以降はクラスと同名の関数（ <tt class="docutils literal"><span class="pre">BankAccount</span></tt> クラスなら <tt class="docutils literal"><span class="pre">BankAccount()</span></tt> ）
+でクラスオブジェクトを取得できます。</p>
+<p>さらにPHPクラスのサブクラスが一つ定義され、
+そのクラスにプロパティのアクセサメソッドとトレイトのメソッドが実装されます。
+このサブクラスをラッパークラスと呼ぶことにします。
+ラッパークラスの名前はクラス名の前後に <tt class="docutils literal"><span class="pre">__</span></tt> をつけたもので、
+<tt class="docutils literal"><span class="pre">BankAccount</span></tt> なら <tt class="docutils literal"><span class="pre">__BankAccount__</span></tt> となります。
+<tt class="docutils literal"><span class="pre">BankAccount</span></tt> のサブクラスのPHPクラス定義では、
+このラッパークラスを継承する必要があります
+（Phoblinksライブラリのクラスにはラッパークラスはありません）。
+次に <tt class="docutils literal"><span class="pre">BankAccount</span></tt> クラスのサブクラスの例を示します。</p>
+<p><tt class="docutils literal"><span class="pre">StockAccount</span></tt> クラス:</p>
+<pre class="literal-block">
+$cls = Phoblinks()-&gt;toDefineClass('StockAccount', BankAccount());
+...
+$cls-&gt;begin(); // StockAccount
+
+class StockAccount extends __BankAccount__
+{
+    ...
+}
+
+$cls-&gt;end(); // StockAccount
+</pre>
+<p>スーパークラスに <tt class="docutils literal"><span class="pre">BankAccount</span></tt> クラスオブジェクトを、
+PHPクラス定義のスーパークラスに <tt class="docutils literal"><span class="pre">__BankAccount__</span></tt> を指定しています。
+<tt class="docutils literal"><span class="pre">BankAccount</span></tt> を継承するとエラーになります。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id52" id="id7" name="id7">クラスメソッドの定義</a></h3>
+<p>クラスメソッドは「 <tt class="docutils literal"><span class="pre">ClassOf</span></tt> + クラス名」のPHPクラスで定義できます。
+このPHPクラスは、インスタンスメソッドを定義するPHPクラスと
+同じクラスの <tt class="docutils literal"><span class="pre">ClassOf...</span></tt> クラスを継承しなければいけません。</p>
+<p>先の <tt class="docutils literal"><span class="pre">BankAccount</span></tt> クラスであれば、
+<tt class="docutils literal"><span class="pre">BankAccount</span></tt> クラスは``PhobObject`` を継承しているので
+<tt class="docutils literal"><span class="pre">ClassOfBankAccount</span></tt> クラスは <tt class="docutils literal"><span class="pre">ClassOfPhobObject</span></tt>
+を継承しなければいけません。</p>
+<pre class="literal-block">
+class ClassOfBankAccount extends ClassOfPhobObject
+{
+    ...
+}
+</pre>
+<pre class="literal-block">
+class ClassOfStockAccount extends __ClassOfBankAccount__
+{
+    ...
+}
+</pre>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id53" id="id8" name="id8">まとめ</a></h3>
+<p>まとめると、クラス定義の手順は次のようになります。</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">+[Phoblinks</span> <span class="pre">toDefineClass()]</span></tt> でクラスビルダを生成する。</li>
+<li>プロパティなどのクラス情報を設定する。</li>
+<li>クラスビルダの <tt class="docutils literal"><span class="pre">-begin()</span></tt> メソッドを呼ぶ。</li>
+<li>PHPクラスを定義する。</li>
+<li>クラスビルダの <tt class="docutils literal"><span class="pre">-end()</span></tt> メソッドを呼ぶ。</li>
+</ol>
+<p>クラス定義するとこうなります。</p>
+<ul class="simple">
+<li>クラスオブジェクトを返す、クラスと同名の関数が定義されます。</li>
+<li>アクセサメソッドやトレイトのメソッドを追加したラッパークラスが定義されます。
+ラッパークラスの名前は、デフォルトでは元のクラス名の前後に
+<tt class="docutils literal"><span class="pre">__</span></tt> がつきます。
+サブクラスのPHPクラス定義をするときに、このラッパークラスを指定します。
+ただし、Phoblinksライブラリなどラッパークラスがないクラスもあります。</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id54" id="id9" name="id9">プロパティ</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id55" id="id10" name="id10">概要</a></h2>
+<p>オブジェクトのプロパティの準備には手間がかかります。
+大抵の場合は、フィールド宣言に加えて
+アクセサメソッドを実装することが多いでしょう。
+外部ストレージにオブジェクトを保存したければ、
+プロパティ値を検証するメソッドと、
+プロパティ値をストレージに保存できるよう変形するメソッドを
+実装する必要があります。
+PHPらしく複数の型の値をセッターで受け取りたいこともあるでしょうし、
+初期値の代入を要求があるまで遅らせたいこともあるでしょう。
+Phoblinksでは、プロパティを宣言することで多くの手間を省くことができます。
+次にプロパティを宣言する利点を示します。</p>
+<ul class="simple">
+<li><strong>フィールドの宣言。</strong>
+プロパティ値を保持するフィールドを宣言します。</li>
+<li><strong>アクセサメソッドの生成。</strong>
+プロパティ値の読み書きを行うメソッドを生成します。
+セッターは代入値の変形と検証を行います。
+変形と検証にはそれぞれ値変形器 (PhobValueTransformer) と値検証器 (PhobValueValidator) を使います。</li>
+<li><strong>初期値の準備。</strong>
+オブジェクトの初期化時、プロパティのフィールドに初期値を代入します。
+初期値を代入するタイミングを遅らせることもできます。</li>
+<li><strong>代入値の変形。</strong>
+セッターで代入値を任意の値に変形できます。</li>
+<li><strong>代入値の検証。</strong>
+セッターで代入値を検証できます。</li>
+</ul>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id56" id="id11" name="id11">プロパティの設定</a></h2>
+<p>プロパティの設定はクラスビルダで行います。
+<tt class="docutils literal"><span class="pre">property($name)</span></tt> でプロパティビルダを生成し、必要な設定を行います。
+クラスビルダと同様に、メソッドは連鎖可能です。</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id57" id="id12" name="id12">基本的な設定</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">valueType($type)</span></tt></dt>
+<dd>プロパティ値の型名を指定します。
+セッターを使って異なる型を代入しようとすると例外を投げます。</dd>
+<dt><tt class="docutils literal"><span class="pre">memberName($name)</span></tt></dt>
+<dd>プロパティのフィールド名を指定します。
+デフォルトはプロパティ名の先頭にアンダースコアをつけた名前です。
+<tt class="docutils literal"><span class="pre">name</span></tt> プロパティならフィールド名は <tt class="docutils literal"><span class="pre">_name</span></tt> になります。</dd>
+<dt><tt class="docutils literal"><span class="pre">allowsNull($flag=true)</span></tt></dt>
+<dd>真ならプロパティ値に <tt class="docutils literal"><span class="pre">null</span></tt> を許します。
+偽であれば、代入値が厳密に <tt class="docutils literal"><span class="pre">null</span></tt> の場合に例外を投げます。</dd>
+<dt><tt class="docutils literal"><span class="pre">accessors($rw)</span></tt></dt>
+<dd>生成するアクセサメソッドを文字列で指定します。
+&quot;r&quot; ならゲッターのみ、 &quot;w&quot; ならセッターのみ、 &quot;rw&quot; なら両方を生成します。</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id58" id="id13" name="id13">初期値の設定</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">defaultValue($value)</span></tt></dt>
+<dd>初期値を指定します。
+初期値はオブジェクトの初期化時にフィールドに代入されます。</dd>
+<dt><tt class="docutils literal"><span class="pre">defaultValueInitializer($init)</span></tt></dt>
+<dd>初期値を生成するソースコードを指定します。
+このソースコードは無名関数として定義され、
+オブジェクトの引数を一つ受け取ります。
+代入する初期値は必ず <tt class="docutils literal"><span class="pre">return</span></tt> で返す必要があります。</dd>
+<dt><tt class="docutils literal"><span class="pre">delaysDefaultValueInitialization($flag=true)</span></tt></dt>
+<dd>真であれば、初期値の代入をゲッターの呼び出しまで遅らせます。</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id59" id="id14" name="id14">その他の設定</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">trait($trait)</span></tt></dt>
+<dd>トレイトを指定します。</dd>
+<dt><tt class="docutils literal"><span class="pre">auxiliaryMethodForMethod($meth,</span> <span class="pre">$modifier,</span> <span class="pre">$primary)</span></tt></dt>
+<dd>補助メソッドを指定します。引数は先頭から補助メソッド名、
+メソッド修飾子、主メソッド名です。</dd>
+<dt><tt class="docutils literal"><span class="pre">valueTransformerName($name)</span></tt></dt>
+<dd>値変形器の名前を指定します。</dd>
+<dt><tt class="docutils literal"><span class="pre">valueValidator($validator)</span></tt></dt>
+<dd>値検証器を指定します。
+値検証器は複数指定することができます。</dd>
+</dl>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id60" id="id15" name="id15">セッターメソッドの処理の流れ</a></h2>
+<p>セッターメソッドの処理の流れを次に示します。</p>
+<ol class="arabic simple">
+<li>値変形器を使って代入値を変形します。</li>
+<li>値検証器を使って代入値を検証します。
+エラーがあれば例外を投げます。</li>
+<li>プロパティの設定に基づいて代入値を検証します。
+エラーがあれば例外を投げます。</li>
+<li>代入値をフィールドに代入します。</li>
+</ol>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id61" id="id16" name="id16">値変形器</a></h2>
+<p>値変形器 (PhobValueTransformer) は、与えられた値を任意の値に変形するオブジェクトです。
+プロパティのセッターメソッドで使われますが、特定のプロパティやクラスに依存せず、汎用的に使えます。</p>
+<p>値変形器は名前をつけて登録することができ、
+プロパティで使う値変形器はプロパティビルダの <tt class="docutils literal"><span class="pre">valueTransformerName($name)</span></tt> で名前を指定します。</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id62" id="id17" name="id17">用意済みの値変形器</a></h3>
+<div class="section">
+<h4><a class="toc-backref" href="#id63" id="phobvaluetransformer-negativebooleantransformername" name="phobvaluetransformer-negativebooleantransformername"><tt class="docutils literal"><span class="pre">PhobValueTransformer::NegativeBooleanTransformerName</span></tt></a></h4>
+<p>真偽値を逆にして返します。
+引数が真偽値でなければ、真偽値にキャストしてから逆にして返します。</p>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id64" id="phobvaluetransformer-isnulltransformername" name="phobvaluetransformer-isnulltransformername"><tt class="docutils literal"><span class="pre">PhobValueTransformer::IsNullTransformerName</span></tt></a></h4>
+<p>引数が <tt class="docutils literal"><span class="pre">null</span></tt> であれば真を、そうでなければ偽を返します。</p>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id65" id="phobvaluetransformer-isnotnulltransformername" name="phobvaluetransformer-isnotnulltransformername"><tt class="docutils literal"><span class="pre">PhobValueTransformer::IsNotNullTransformerName</span></tt></a></h4>
+<p>引数が <tt class="docutils literal"><span class="pre">null</span></tt> でなければ真を、そうでなければ偽を返します。</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id66" id="id18" name="id18">値変形器の実装と登録</a></h3>
+<p>PhobValueTranformerのサブクラスを定義し、値を変形する <tt class="docutils literal"><span class="pre">transformedValue($value)</span></tt> メソッドを実装します。
+そのインスタンスを <tt class="docutils literal"><span class="pre">+[PhobValueTransformer</span> <span class="pre">setValueTransformerForName($transformer,</span> <span class="pre">$name)]</span></tt>
+で名前をつけて登録します。
+登録した値変形器は <tt class="docutils literal"><span class="pre">+valueTransformerForName($name)</span></tt> で取得できます。</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id67" id="id19" name="id19">値検証器</a></h2>
+<p>値検証器 (<tt class="docutils literal"><span class="pre">PhobValueValidator</span></tt>) は、与えられた値が任意の制約に
+従っているかどうかを検証するオブジェクトです。
+値が制約に従っていない場合、制約に合わせて値を変えるか
+検証エラーの例外を投げるかします。
+値変形器と同様に、プロパティ以外にも汎用的に使えます。</p>
+<p>値変形器と異なるのは、制約条件を設定できることです。
+メールアドレスの長さやフォーマットを検査したり、
+商品価格の最小値を制限するなどができます。</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id68" id="id20" name="id20">値検証器の使用</a></h3>
+<p>値検証器はプロパティビルダの <tt class="docutils literal"><span class="pre">valueValidator($validator)</span></tt> で指定します。
+値検証器は複数指定できます。
+複数の値検証器を使う場合は <tt class="docutils literal"><span class="pre">valueValidator()</span></tt> を回数分呼びます。
+次に例を示します。</p>
+<pre class="literal-block">
+// 文字列用の値検証器の生成
+$strValidator = PhobStringValueValidator()-&gt;make();
+$strValidator-&gt;setAllowsEmpty(false);
+$strValidator-&gt;setMaximumLength(255);
+
+// プロパティにセット
+$cls-&gt;property('name')
+    -&gt;valueValidator($strValidator);
+</pre>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id69" id="id21" name="id21">用意済みの値検証器</a></h3>
+<div class="section">
+<h4><a class="toc-backref" href="#id70" id="phobstringvaluevalidator" name="phobstringvaluevalidator"><tt class="docutils literal"><span class="pre">PhobStringValueValidator</span></tt></a></h4>
+<p>文字列のプロパティを検証します。</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">allowsEmpty()</span></tt>, <tt class="docutils literal"><span class="pre">setAllowsEmpty($flag)</span></tt></dt>
+<dd>真であれば空文字列の代入を許可します。
+偽であれば空文字列を代入しようとすると例外を投げます。</dd>
+<dt><tt class="docutils literal"><span class="pre">maximumLength</span></tt>, <tt class="docutils literal"><span class="pre">setMaximumLength($value)</span></tt></dt>
+<dd>文字列の最大の長さです。
+代入する文字列の長さがこの値より大きければ例外を投げます。
+最大長を指定しない場合は負の数を指定してください。</dd>
+<dt><tt class="docutils literal"><span class="pre">minimumLength</span></tt>, <tt class="docutils literal"><span class="pre">setminimumLength($value)</span></tt></dt>
+<dd>文字列の最小の長さです。
+代入する文字列の長さがこの値より小さければ例外を投げます。
+最小長を指定しない場合は負の数を指定してください。</dd>
+</dl>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id71" id="id22" name="id22">値検証器の実装</a></h3>
+<p><tt class="docutils literal"><span class="pre">PhobValueValidator</span></tt> クラスのサブクラスを定義し、
+<tt class="docutils literal"><span class="pre">validateValue($value)</span></tt> メソッドを実装します。
+引数の値が制約に従っていなければ、値を制約に収まるように変更して返すか
+例外 <tt class="docutils literal"><span class="pre">PhobValidationException</span></tt> を投げてください。</p>
+</div>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id72" id="id23" name="id23">プロパティのカスタマイズ</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id73" id="id24" name="id24">プロパティビルダの作成</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id74" id="id25" name="id25">プロパティビルダの役割</a></h3>
+<p>プロパティビルダは、プロパティの生成に必要な次の機能を提供します。</p>
+<ul class="simple">
+<li>プロパティの設定を行います。</li>
+<li>プロパティクラスを提供します。</li>
+<li>プロパティ値のアクセサメソッドを生成します。</li>
+</ul>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id75" id="id26" name="id26">流れるようなインターフェース</a></h3>
+<p><tt class="docutils literal"><span class="pre">+[Phoblinks</span> <span class="pre">toDefineClass()]</span></tt> で生成できるクラスビルダと、
+そのクラスビルダが返すプロパティビルダは、
+実際には「流れるようなインターフェース (fluent interface) 」を
+備えた各ビルダのラッパーです。
+各メソッドの戻り値がラッパー自身になるので
+ビルダの設定を続けて行うことができ、
+メソッドには <tt class="docutils literal"><span class="pre">set</span></tt> などの接頭辞も不要です。</p>
+<p>このラッパーは、呼ばれたメソッドの名前から
+次に示すビルダのアクセサメソッドを探して実行します。</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">set</span></tt> + メソッド名</dt>
+<dd>メソッド名の先頭の文字を大文字にし、接頭辞に <tt class="docutils literal"><span class="pre">set</span></tt> をつけたメソッドを
+ビルダから探して実行します。
+<tt class="docutils literal"><span class="pre">$wrapper-&gt;valueType(...)</span></tt> なら <tt class="docutils literal"><span class="pre">$builder-&gt;setValueType(...)</span></tt>
+を実行します。
+メソッド名が <tt class="docutils literal"><span class="pre">is</span></tt> で始まる場合のみ、 <tt class="docutils literal"><span class="pre">is</span></tt>
+を省略したセッターも探します。
+<tt class="docutils literal"><span class="pre">isOptional</span></tt> なら <tt class="docutils literal"><span class="pre">setIsOptional</span></tt> に加えて <tt class="docutils literal"><span class="pre">setOptional</span></tt> も有効です。</dd>
+<dt><tt class="docutils literal"><span class="pre">add</span></tt> + メソッド名</dt>
+<dd>メソッド名の先頭の文字を大文字にし、接頭辞に <tt class="docutils literal"><span class="pre">add</span></tt> をつけたメソッドを
+ビルダから探して実行します。</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id76" id="id27" name="id27">プロパティビルダの作成</a></h3>
+<p><tt class="docutils literal"><span class="pre">PhobPropertyBuilder</span></tt> クラスのサブクラスを定義し、
+プロパティに必要な設定のアクセサメソッドを実装します。
+デフォルト以外のプロパティクラスを使うならば、
+<tt class="docutils literal"><span class="pre">-propertyClass()</span></tt> をオーバーライドして
+使用するプロパティクラスを返すようにします。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id77" id="id28" name="id28">プロパティビルダクラスの登録</a></h3>
+<p>新しく作ったプロパティビルダクラスは、
+<tt class="docutils literal"><span class="pre">+[PhobClassBuilder</span> <span class="pre">setPropertyBuilderClassForName($class,</span> <span class="pre">$name)]</span></tt>
+メソッドで名前をつけて登録する必要があります。
+あとはクラスビルダでプロパティを作成するときに
+<tt class="docutils literal"><span class="pre">property($name,</span> <span class="pre">$builderName)</span></tt> の二番目の引数に登録した名前を
+指定すれば、新しいプロパティビルダを使えるようになります。</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id78" id="id29" name="id29">プロパティクラスの作成</a></h2>
+<p><tt class="docutils literal"><span class="pre">PhobProperty</span></tt> クラスのサブクラスを定義し、
+<tt class="docutils literal"><span class="pre">-initWithPropertyBuilder($builder,</span> <span class="pre">$owner)</span></tt>
+メソッドをオーバーライドします。
+引数の <tt class="docutils literal"><span class="pre">$builder</span></tt> はプロパティビルダ、 <tt class="docutils literal"><span class="pre">$owner</span></tt>
+はプロパティの所属するクラスです。
+プロパティビルダを使って必要な初期化を行ってください。</p>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id79" id="id30" name="id30">補助メソッド</a></h1>
+<p>補助メソッド (auxiliary method) は、
+メソッドの実行前後にフックとして実行されるメソッドです。
+このフックの対象となるメソッドを主メソッド (primary method) と呼びます。</p>
+<p>次の例は、 <tt class="docutils literal"><span class="pre">sayHello</span></tt> メソッドの前後に補助メソッドを実行します。
+<tt class="docutils literal"><span class="pre">sayHello()</span></tt> の実行前に <tt class="docutils literal"><span class="pre">willSayHello()</span></tt> が、
+実行後に <tt class="docutils literal"><span class="pre">didSayHello()</span></tt> が実行されます。</p>
+<pre class="literal-block">
+$cls = Phoblinks()-&gt;toDefineClass('NewClass')
+    -&gt;auxiliaryMethod('willSayHello', 'before', 'sayHello')
+    -&gt;auxiliaryMethod('didSayHello', 'after', 'sayHello');
+    -&gt;begin();
+
+class NewClass extends PhobObject
+{
+    function willSayHello()
+    {
+        print &quot;=== Begin sayHello()\n&quot;;
+    }
+
+    function sayHello()
+    {
+        print &quot;Hello, world!\n&quot;;
+    }
+
+    function sayHello()
+    {
+        print &quot;=== Did sayHello()\n&quot;;
+    }
+}
+
+$cls-&gt;end();
+
+=== Begin sayHello()
+Hello, world!
+=== Did sayHello()
+</pre>
+<div class="section">
+<h2><a class="toc-backref" href="#id80" id="id31" name="id31">補助メソッドの指定</a></h2>
+<p>補助メソッドを指定するには、クラス定義時に
+<tt class="docutils literal"><span class="pre">auxiliaryMethod($auxMeth,</span> <span class="pre">$modifier,</span> <span class="pre">$primMeth)</span></tt>
+メソッドに必要な引数を渡します。
+<tt class="docutils literal"><span class="pre">$auxMeth</span></tt> が補助メソッド名、 <tt class="docutils literal"><span class="pre">$modifier</span></tt> がメソッド修飾子、
+<tt class="docutils literal"><span class="pre">$primMeth</span></tt> が主メソッド名です。</p>
+<p>現在、主にパフォーマンス上の理由から、一度決定した補助メソッドは変更できません。</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id81" id="id32" name="id32">メソッド修飾子</a></h2>
+<p>メソッド修飾子には次のものがあります。</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">before</span></tt></dt>
+<dd>主メソッドの実行前に実行されます。
+戻り値は主メソッドのものになります。</dd>
+<dt><tt class="docutils literal"><span class="pre">after</span></tt></dt>
+<dd>主メソッドの実行後に実行されます。
+戻り値は主メソッドのものになります。</dd>
+<dt><tt class="docutils literal"><span class="pre">around</span></tt></dt>
+<dd>主メソッドの代わりに実行され、戻り値も補助メソッドのものになります。
+主メソッドは実行されません。</dd>
+</dl>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id82" id="id33" name="id33">オブジェクトの生成と初期化</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id83" id="id34" name="id34">オブジェクトの生成と初期化</a></h2>
+<p>Phoblinksでは、オブジェクトの生成と初期化を分けて行います。
+オブジェクトの生成には <tt class="docutils literal"><span class="pre">new</span></tt> 演算子の代わりに
+<tt class="docutils literal"><span class="pre">+alloc()</span></tt> メソッドを使い、 <tt class="docutils literal"><span class="pre">-init</span></tt> とつくメソッドで初期化をします。
+そのため、通常は <tt class="docutils literal"><span class="pre">+alloc()</span></tt> と <tt class="docutils literal"><span class="pre">-init...()</span></tt>
+の一連の処理を続けて行います。</p>
+<p><tt class="docutils literal"><span class="pre">+alloc()</span></tt> で生成されるオブジェクトは、
+空のコンストラクタで <tt class="docutils literal"><span class="pre">new</span></tt> されたものと同じです。
+クラス以外のプロパティ値はセットされていません。</p>
+<p>オブジェクトの生成と初期化の例:</p>
+<pre class="literal-block">
+$obj = PhobObject()-&gt;alloc()-&gt;init();
+</pre>
+<p><tt class="docutils literal"><span class="pre">+alloc()</span></tt> と <tt class="docutils literal"><span class="pre">-init()</span></tt> の組み合わせを使う場合に限り、
+<tt class="docutils literal"><span class="pre">+make()</span></tt> を省略形として使えます
+（本当は <tt class="docutils literal"><span class="pre">+new()</span></tt> にしたかったのですが、予約語の都合で
+<tt class="docutils literal"><span class="pre">new</span></tt> をメソッド名に使うことはできません）。</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id84" id="id35" name="id35">初期化メソッドの実装</a></h2>
+<p>Phoblinksではオブジェクトの生成と初期化を分けて行うので、
+必要なだけ初期化メソッドを用意できます。
+最も基本的な初期化メソッドは、デフォルトで用意されている <tt class="docutils literal"><span class="pre">-init()</span></tt> です。
+すべての初期化メソッドでは必ず <tt class="docutils literal"><span class="pre">-init()</span></tt> を実行しなければいけません。
+その際、 <tt class="docutils literal"><span class="pre">-init()</span></tt> 以外の初期化メソッドでは <tt class="docutils literal"><span class="pre">parent::init()</span></tt> ではなく
+<tt class="docutils literal"><span class="pre">$this-&gt;init()</span></tt> を呼んでください。
+これはラッパークラスの <tt class="docutils literal"><span class="pre">init()</span></tt> でプロパティ値の初期化が行われるためです。</p>
+<p>初期化メソッドの名前は自由につけて構いませんが、
+<tt class="docutils literal"><span class="pre">init</span></tt> で始まる名前を推奨します。
+引数が名前を表す値であれば <tt class="docutils literal"><span class="pre">initWithName()</span></tt> などとします。</p>
+<p>注意: <tt class="docutils literal"><span class="pre">new</span></tt> 演算子はPhoblinks内部で使われるので、
+通常のコンストラクタメソッド (<tt class="docutils literal"><span class="pre">__construct</span></tt>)
+をオーバーライドしないでください。</p>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id85" id="traits" name="traits">トレイト (Traits)</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id86" id="id36" name="id36">トレイトとは何か</a></h2>
+<p>トレイトとは、任意のクラスに追加できるメソッドの集合です。
+PhoblinksではトレイトもPHPのクラスとして定義しますが、
+そのクラスをインスタンス化することはありません。
+クラスの定義時にトレイトを指定することで、
+そのトレイトのメソッドをクラスにコピーできます。
+ミックスインと異なり、トレイトはクラスの継承階層に影響しません。
+トレイトは純粋にメソッドの実装をクラスに追加するだけです。</p>
+<p>次のコードは、標準出力に自身の情報を出力するメソッド <tt class="docutils literal"><span class="pre">inspect()</span></tt> を持つ
+トレイトの定義です。
+このトレイトをクラスビルダで指定すると、そのクラスのインスタンスで
+<tt class="docutils literal"><span class="pre">inspect()</span></tt> メソッドが使えるようになります。
+<tt class="docutils literal"><span class="pre">Inspecting</span></tt> トレイトはPHPクラスとして定義されていますが、
+このトレイトを使うクラスの継承階層に
+<tt class="docutils literal"><span class="pre">Inspecting</span></tt> クラスが入ることはありません。</p>
+<pre class="literal-block">
+class Inspecting
+{
+    static function inspect($self)
+    {
+        var_dump($self);
+    }
+}
+
+Phoblinks()-&gt;defineTrait('Inspecting');
+</pre>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id87" id="id37" name="id37">トレイトの定義</a></h2>
+<p>トレイトは次の手順で定義します。</p>
+<ol class="arabic simple">
+<li>PHPクラスを定義します。</li>
+<li>トレイトメソッドを静的メソッドで定義します。</li>
+<li><tt class="docutils literal"><span class="pre">Phoblinks</span></tt> オブジェクトに登録する。</li>
+</ol>
+<p>先の例をもう一度見てみます。</p>
+<pre class="literal-block">
+class Inspecting
+{
+    static function inspect($self)
+    {
+        var_dump($self);
+    }
+}
+
+Phoblinks()-&gt;defineTrait('Inspecting');
+</pre>
+<p><tt class="docutils literal"><span class="pre">Inspecting</span></tt> クラスは静的メソッド <tt class="docutils literal"><span class="pre">inspect()</span></tt> を定義しています。
+この静的メソッドが、このトレイトを使うクラスから呼ばれます。
+トレイトを使うクラスのインスタンスは、
+最初の引数をそのインスタンスにして静的メソッドを呼び出します。
+そのため静的メソッドには最低一つの引数が必要です。
+この引数名に <tt class="docutils literal"><span class="pre">$this</span></tt> は使えないので、適当な名前に変えてください。</p>
+<p>クラスを定義したら、そのクラス名を引数にして
+<tt class="docutils literal"><span class="pre">+[Phoblinks</span> <span class="pre">defineTrait()]</span></tt> を呼びます。
+そのクラス名と同名のトレイトオブジェクトと、
+トレイトオブジェクトを返す同名の関数が定義されます。
+この例では、 <tt class="docutils literal"><span class="pre">Inspecting()</span></tt> 関数で <tt class="docutils literal"><span class="pre">Inspecting</span></tt>
+トレイトを取得できるようになります。</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id88" id="id38" name="id38">トレイトの使用</a></h2>
+<p>クラスビルダの <tt class="docutils literal"><span class="pre">trait()</span></tt> メソッドでトレイトを指定します。
+一つのクラスに指定できるトレイトは一つです。
+複数のトレイトを使いたい場合は、合成して一つのトレイトにします。
+次に例を示します。</p>
+<pre class="literal-block">
+$cls-&gt;Phoblinks()-&gt;toDefineClass('NewClass');
+$cls-&gt;trait($trait);
+</pre>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id89" id="id39" name="id39">トレイトの合成とカスタマイズ</a></h2>
+<p>複数のトレイトを足したり、必要なメソッドを個別に選ぶことで
+新しいトレイトを作ることができます。</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id90" id="id40" name="id40">変更可能なトレイト</a></h3>
+<p>新しく生成したトレイトや、 <tt class="docutils literal"><span class="pre">traitByUnioningTrait()</span></tt> か
+<tt class="docutils literal"><span class="pre">traitByMinusingTrait($trait)</span></tt> で返されるトレイトは変更可能です。
+これらのトレイトは <tt class="docutils literal"><span class="pre">Phoblinks</span></tt> オブジェクトに登録されるか
+新しいクラスで使われると変更不可になり、メソッドの編集ができなくなります。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id91" id="id41" name="id41">トレイトの生成</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">init()</span></tt></dt>
+<dd>トレイトを初期化します。
+トレイトの名前とメソッドは空です。</dd>
+<dt><tt class="docutils literal"><span class="pre">initWithName($name,</span> <span class="pre">$meths)</span></tt></dt>
+<dd>トレイト名とメソッドの配列でトレイトを初期化します。</dd>
+<dt><tt class="docutils literal"><span class="pre">copy()</span></tt></dt>
+<dd>レシーバのトレイトと同じメソッドを持つ、新しいトレイトを生成して返します。</dd>
+<dt><tt class="docutils literal"><span class="pre">setName($name)</span></tt></dt>
+<dd>トレイト名を変更します。</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id92" id="id42" name="id42">トレイト同士の演算</a></h3>
+<p>二つのトレイトを演算して、新しいトレイトを作ることができます。</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">unionTrait($trait)</span></tt></dt>
+<dd>レシーバのトレイトに引数のトレイトのメソッドをすべて足します。
+トレイトが変更不可になっているか、メソッドが重複すると例外を投げます。</dd>
+<dt><tt class="docutils literal"><span class="pre">traitByUnioningTrait($trait)</span></tt></dt>
+<dd>両トレイトのメソッドをすべて含む、新しいトレイトを生成して返します。
+トレイトのメソッドが重複すると例外を投げます。</dd>
+<dt><tt class="docutils literal"><span class="pre">minusTrait($trait)</span></tt></dt>
+<dd>レシーバのトレイトから、
+引数のトレイトと重複するメソッドを取り除きます。
+トレイトが変更不可であれば例外を投げます。</dd>
+<dt><tt class="docutils literal"><span class="pre">traitByMinusingTrait($trait)</span></tt></dt>
+<dd>レシーバのトレイトのメソッドのうち、
+引数のトレイトのものと重複しないメソッドを持つ
+新しいトレイトを生成して返します。</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id93" id="id43" name="id43">メソッドの編集</a></h3>
+<p>次のメソッドで、トレイトのメソッドを編集できます。
+どの操作もトレイトが変更不可であれば例外を投げます。</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">addMethod($className,</span> <span class="pre">$methName,</span> <span class="pre">$rename=null)</span></tt></dt>
+<dd>トレイトにメソッドを追加します。 <tt class="docutils literal"><span class="pre">$className</span></tt> は追加するメソッドのクラス名、
+<tt class="docutils literal"><span class="pre">$methName</span></tt> は追加するメソッドです。
+トレイトのメソッド名を変更したい場合は <tt class="docutils literal"><span class="pre">$rename</span></tt> を指定します。</dd>
+<dt><tt class="docutils literal"><span class="pre">removeMethodForName($name)</span></tt></dt>
+<dd>トレイトからメソッドを取り除きます。</dd>
+<dt><tt class="docutils literal"><span class="pre">renameMethod($name,</span> <span class="pre">$replace)</span></tt></dt>
+<dd>トレイトのメソッド名を変更します。</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id94" id="id44" name="id44">トレイトの登録</a></h3>
+<p>トレイトを登録すると、そのトレイトを取得するための同名の関数が定義されます。
+登録は <tt class="docutils literal"><span class="pre">+[Phoblinks</span> <span class="pre">addTrait($trait)]</span></tt> で行います。
+登録前に <tt class="docutils literal"><span class="pre">setName($name)</span></tt> でトレイト名を設定してください。</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id95" id="id45" name="id45">競合するメソッドの解決</a></h3>
+<p>トレイト同士を加算したりメソッドを追加するなどして、
+新しいトレイトのメソッドに重複があるとエラーになります。
+その場合は、重複したメソッドを取り除くか名前を変えてください。</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
