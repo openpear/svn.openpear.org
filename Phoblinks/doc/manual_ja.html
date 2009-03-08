@@ -16,9 +16,9 @@
 <tbody valign="top">
 <tr class="field"><th class="docinfo-name">著者:</th><td class="field-body">鈴木鉄也 &lt;<a class="reference" href="mailto:suzuki&#64;spice-of-life.net">suzuki&#64;spice-of-life.net</a>&gt;</td>
 </tr>
-<tr class="field"><th class="docinfo-name">日付:</th><td class="field-body">2009-03-07</td>
+<tr class="field"><th class="docinfo-name">日付:</th><td class="field-body">2009-03-09</td>
 </tr>
-<tr class="field"><th class="docinfo-name">バージョン:</th><td class="field-body">Phoblinks 0.7</td>
+<tr class="field"><th class="docinfo-name">バージョン:</th><td class="field-body">Phoblinks 0.7 beta</td>
 </tr>
 </tbody>
 </table>
@@ -356,8 +356,14 @@ Phoblinksでは、プロパティを宣言することで多くの手間を省�
 <h3><a class="toc-backref" href="#id57" id="id12" name="id12">基本的な設定</a></h3>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">valueType($type)</span></tt></dt>
-<dd>プロパティ値の型名を指定します。
-セッターを使って異なる型を代入しようとすると例外を投げます。</dd>
+<dd><p class="first">プロパティ値の型名及びクラス名を指定します。
+Phoblinksクラスオブジェクトでも指定できます。
+この項目を指定した場合、
+セッターを使って異なる型、またはサブクラスでもない
+異なるクラスのインスタンスを代入しようとすると例外を投げます。</p>
+<p class="last">指定できる型名は <tt class="docutils literal"><span class="pre">string</span></tt>, <tt class="docutils literal"><span class="pre">boolean</span></tt>, <tt class="docutils literal"><span class="pre">array</span></tt>, <tt class="docutils literal"><span class="pre">numeric</span></tt>,
+<tt class="docutils literal"><span class="pre">int</span></tt>, <tt class="docutils literal"><span class="pre">float</span></tt> のいずれかです。</p>
+</dd>
 <dt><tt class="docutils literal"><span class="pre">memberName($name)</span></tt></dt>
 <dd>プロパティのフィールド名を指定します。
 デフォルトはプロパティ名の先頭にアンダースコアをつけた名前です。
@@ -366,8 +372,11 @@ Phoblinksでは、プロパティを宣言することで多くの手間を省�
 <dd>真ならプロパティ値に <tt class="docutils literal"><span class="pre">null</span></tt> を許します。
 偽であれば、代入値が厳密に <tt class="docutils literal"><span class="pre">null</span></tt> の場合に例外を投げます。</dd>
 <dt><tt class="docutils literal"><span class="pre">accessors($rw)</span></tt></dt>
-<dd>生成するアクセサメソッドを文字列で指定します。
-&quot;r&quot; ならゲッターのみ、 &quot;w&quot; ならセッターのみ、 &quot;rw&quot; なら両方を生成します。</dd>
+<dd><p class="first">生成するアクセサメソッドを文字列で指定します。
+&quot;r&quot; ならゲッターのみ、 &quot;w&quot; ならセッターのみ、 &quot;rw&quot; なら両方を生成します。</p>
+<p class="last">この設定は以降のバージョンで &quot;<tt class="docutils literal"><span class="pre">isReadOnly($flag)</span></tt>&quot;
+に変更する可能性があります。</p>
+</dd>
 </dl>
 </div>
 <div class="section">
