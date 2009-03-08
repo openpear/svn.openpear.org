@@ -123,14 +123,36 @@ class PhobProperty extends PhobObject
 
     function validateValue($value)
     {
+        if (!$this->_allowsNull && $value === null)
+            throw new PhobValidationException
+                ("$this->_name: the value must not be null.");
+
         if ($this->_valueType) {
-            switch ($this->_valueType) {
-                case 'string':
-                    if (!is_string($value))
-                        throw new PhobValidationException
-                            ("value is not string for '$this->_name'");
-                    break;
-            }
+            $msg = null;
+            if ($this->_valueType === 'string' && !is_string($value))
+                $msg = "$this->_name: the value must be a string.";
+            else if ($this->_valueType === 'boolean' && !is_bool($value))
+                $msg = "$this->_name: the value must be a boolean value.";
+            else if ($this->_valueType === 'array' && !is_array($value))
+                $msg = "$this->_name: the value must be an array.";
+            else if ($this->_valueType === 'int' && !is_int($value))
+                $msg = "$this->_name: the value must be an integer value.";
+            else if ($this->_valueType === 'float' && !is_float($value))
+                $msg = "$this->_name: the value must be a floating-point number.";
+            else if ($this->_valueType === 'numeric' && !is_numeric($value))
+                $msg = "$this->_name: the value must be a numeric value.";
+            else if (class_exists($this->_valueType) &&
+                     !is_a($value, $this->_valueType))
+                $msg = "$this->_name: the value must be an " .
+                    "instance of $this->_valueType.";
+            else if (is_a($this->_valueType, 'PhobBehavior') &&
+                     (!is_a($value, 'PhobObject') ||
+                      !$value->isKindOfClass($this->_valueType)))
+                $msg = "$this->_name: the value must be an instance of " .
+                    $this->_valueType->name() . '.';
+
+            if ($msg)
+                throw new PhobValidationException($msg);
         }
         foreach ($this->_valueValidators as $validator)
             $value = $validator->validateValue($value);

@@ -11,7 +11,7 @@ function PhobInit()
 
     $PhobClass = new ClassOfPhobClass();
     $PhobObject = new ClassOfPhobObject();
-    $PhobObject->initCoreClass('PhobObject', $PhobClass,
+    $PhobObject->initCoreClass('PhobObject', null,
                                $classOfPhobObject);
     $PhobBehavior = new ClassOfPhobBehavior();
     $PhobBehavior->initCoreClass('PhobBehavior', $PhobObject,
