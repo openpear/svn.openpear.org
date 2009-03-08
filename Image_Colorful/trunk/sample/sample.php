@@ -1,11 +1,12 @@
 <?php
-//require_once('Image/0.1.0-alpha/Image_Colorful.php');
 require_once('./Image_Colorful.php');
 
-$image = new Image_Colorful(700,200,175,1);
-$image->addTexts('ImageColorful', './font/altan.ttf', '50', '35', '70');
-$image->addTexts('camelmasa', './font/altan.ttf', '35', '400', '170');
+$image = new Image_Colorful(685,100,175,1);
 $image->addColors(150,150,150);
+$image->addTexts('upperleft', './font/altan.ttf', '30', '10', '10', array(255,255,255), 'UPPER_LEFT');
+$image->addTexts('upperright', './font/altan.ttf', '30', '10', '10', array(255,255,255), 'UPPER_RIGHT');
+$image->addTexts('center', './font/altan.ttf', '30', '0', '0', array(255,255,255), 'CENTER');
+$image->addTexts('leftlower', './font/altan.ttf', '30', '10', '10', array(255,255,255), 'LEFT_LOWER');
+$image->addTexts('rightlower', './font/altan.ttf', '30', '10', '10', array(255,255,255), 'RIGHT_LOWER');
 $image->getGenerateImage('png');
-$image->saveGenerateImage('a.png','png');
 ?>
