@@ -15,7 +15,7 @@
  * @link        http://camelmasa.com/
  */
 
-require_once('./Colorful.php');
+require_once('Image/Colorful.php');
 
 class Image_Colorful_Word extends Colorful
 {
