@@ -1,5 +1,5 @@
 <?php
-require_once('./Image_Colorful.php');
+require_once('Image/Image_Colorful.php');
 
 $image = new Image_Colorful(685,100,175,1);
 $image->addColors(150,150,150);
