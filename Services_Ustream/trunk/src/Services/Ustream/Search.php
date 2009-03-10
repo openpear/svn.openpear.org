@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,128 +37,240 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
+/**
+ * Uses Services_Ustream_Abstract
+ */
 require_once 'Services/Ustream/Abstract.php';
 
+/**
+ * Search class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ */
 class Services_Ustream_Search extends Services_Ustream_Abstract
 {
-    protected $_subject = 'search';
-    protected $_command;
-    protected $_scopeOrSorting;
-    protected $_searchParams = array();
-    
+    protected $subject = 'search';
+    protected $command;
+    protected $scopeOrSorting;
+    protected $searchParams = array();
+
+    /**
+     * Set command
+     *
+     * @param string $command Command name
+     *
+     * @return object
+     * @throws Services_Ustream_Exception
+     */
     public function command($command)
     {
-        $_commands = array('user', 'channel', 'stream', 'video');
-        if (in_array($command, $_commands)) {
-            $this->_command = $command;
+        $commands = array('user', 'channel', 'stream', 'video');
+        if (in_array($command, $commands)) {
+            $this->command = $command;
         } else {
             throw new Services_Ustream_Exception('Invalid command.');
         }
         return $this;
     }
 
+    /**
+     * Set scope
+     *
+     * @param string $scope scope
+     *
+     * @return object
+     */
     public function scope($scope)
     {
-        $this->_scopeOrSorting = $scope;
+        $this->scopeOrSorting = $scope;
         return $this;
     }
 
+    /**
+     * Set uid
+     *
+     * @param string $uid UID
+     *
+     * @return object
+     */
     public function uid($uid)
     {
-        $this->_scopeOrSorting = $uid;
+        $this->scopeOrSorting = $uid;
         return $this;
     }
 
+    /**
+     * newest
+     *
+     * @param bool $flag newst or not
+     *
+     * @return object
+     */
     public function newest($flag = true)
     {
-        $this->_scopeOrSorting =
-            ($flag) ? 'newest' : '!newest';
+        $this->scopeOrSorting = ($flag) ? 'newest' : '!newest';
+        
         return $this;
     }
 
+    /**
+     * recent
+     *
+     * @param bool $flag recent or not
+     *
+     * @return object
+     */
     public function recent($flag = true)
     {
-        $this->_scopeOrSorting =
-            ($flag) ? 'recent' : '!recent';
+        $this->scopeOrSorting = ($flag) ? 'recent' : '!recent';
         return $this;
     }
 
+    /**
+     * all
+     *
+     * @return Services_Ustream_Search
+     */
     public function all()
     {
-        $this->_scopeOrSorting = 'all';
+        $this->scopeOrSorting = 'all';
         return $this;
     }
 
+    /**
+     * live
+     *
+     * @return Services_Ustream_Search
+     */
     public function live()
     {
-        $this->_scopeOrSorting = 'live';
+        $this->scopeOrSorting = 'live';
         return $this;
     }
 
+    /**
+     * popular
+     *
+     * @return Services_Ustream_Search
+     */
     public function popular()
     {
-        $this->_scopeOrSorting = 'popular';
+        $this->scopeOrSorting = 'popular';
         return $this;
     }
 
+    /**
+     * where
+     *
+     * @param string $key Search key
+     *
+     * @return Services_Ustream_Search
+     */
     public function where($key)
     {
-        $this->_searchParams[0] = $key;
+        $this->searchParams[0] = $key;
         return $this;
     }
 
+    /**
+     * like
+     *
+     * @param string $value value
+     *
+     * @return Services_Ustream_Search
+     */
     public function like($value)
     {
-        $this->_searchParams[1] = 'like:' . $value;
+        $this->searchParams[1] = 'like:' . $value;
         return $this;
     }
 
+    /**
+     * eq
+     *
+     * @param string $value value
+     *
+     * @return Services_Ustream_Search
+     */
     public function eq($value)
     {
-        $this->_searchParams[1] = 'eq:' . $value;
+        $this->searchParams[1] = 'eq:' . $value;
         return $this;
     }
 
+    /**
+     * lt
+     *
+     * @param string $value value
+     *
+     * @return Services_Ustream_Search
+     */
     public function lt($value)
     {
-        $this->_searchParams[1] = 'lt:' . $value;
+        $this->searchParams[1] = 'lt:' . $value;
         return $this;
     }
 
+    /**
+     * gt
+     *
+     * @param string $value value
+     *
+     * @return Services_Ustream_Search
+     */
     public function gt($value)
     {
-        $this->_searchParams[1] = 'gt:' . $value;
+        $this->searchParams[1] = 'gt:' . $value;
         return $this;
     }
 
+    /**
+     * Send request and get result
+     *
+     * @return mixed Services_Ustream_Result | string
+     * @throws Services_Ustream_Exception
+     */
     public function query()
     {
-        $params = implode(':', $this->_searchParams);
-        $url = sprintf('%s/%s/%s/%s/%s/%s?key=%s',
-                        $this->_baseUrl,
-                        $this->_responseType,
-                        $this->_command,
-                        $this->_scopeOrSorting,
-                        $this->_subject,
-                        $params,
-                        $this->_apiKey);
+        $params = implode(':', $this->searchParams);
+        $url = sprintf(
+            '%s/%s/%s/%s/%s/%s?key=%s',
+            $this->baseUrl,
+            $this->responseType,
+            $this->command,
+            $this->scopeOrSorting,
+            $this->subject,
+            $params,
+            $this->apiKey
+        );
         echo $url;
         
         try {
-            $response = $this->_request->setUrl($url)->send();
+            $response = $this->request->setUrl($url)->send();
             if ($response->getStatus() == 200) {
-                if ($this->_responseType == 'xml' || $this->_responseType == 'php') {
-                    return new Services_Ustream_Result($response->getBody(), $this->_responseType);
+                if ($this->responseType == 'xml'
+                    || $this->responseType == 'php'
+                ) {
+                    return new Services_Ustream_Result($response->getBody(),
+                                                       $this->responseType);
                 } else {
                     return $response->getBody();
                 }
             } else {
-                throw new Services_Ustream_Exception('Server returned status: ' . $response->getStatus());
+                throw new Services_Ustream_Exception('Server returned status: '
+                                                     . $response->getStatus());
             }
         } catch (HTTP_Request2_Exception $e) {
             throw new Services_Ustream_Exception($e->getMessage(), $e->getCode());

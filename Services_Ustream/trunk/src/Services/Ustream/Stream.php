@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,43 +37,80 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
+
+/**
+ * Uses Services_Ustream_Abstract
+ */
 require_once 'Services/Ustream/Abstract.php';
+
+/**
+ * Abstract class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ */
 
 class Services_Ustream_Stream extends Services_Ustream_Abstract
 {
-    protected $_subject = 'stream';
+    protected $subject = 'stream';
 
+    /**
+     * getRecent
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getRecent()
     {
         $this->setParam('uid', 'all');
         $this->setParam('command', 'getRecent');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getMostViewers
+     * 
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getMostViewers()
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getMostViewers');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getRandom
+     * 
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getRandom()
     {
         $this->setParam('uid', 'all');
         $this->setParam('command', 'getRandom');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getAllNews
+     * 
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getAllNew()
     {
         $this->setParam('uid', 'all');
         $this->setParam('command', 'getAllNew');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 }
 

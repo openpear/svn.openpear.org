@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,29 +37,56 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
+/**
+ * Uses Services_Ustream_Abstract
+ */
 require_once 'Services/Ustream/Abstract.php';
 
+/**
+ * System class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ */
 class Services_Ustream_System extends Services_Ustream_Abstract
 {
-    protected $_subject = 'system';
+    protected $subject = 'system';
 
+    /**
+     * heartBeat
+     * 
+     * @return mixed Services_Ustream_Result | string
+     */
     public function heartBeat()
     {
         $this->setParam('command', 'heartBeat');
         $this->setParam('uid', 'status');
-        return $this->_sendRequest();
+
+        return $this->sendRequest();
     }
 
+    /**
+     * ping
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function ping()
     {
         $this->setparam('command', 'ping');
         $this->setParam('uid', 'status');
-        return $this->_sendRequest();
+
+        return $this->sendRequest();
     }
 }
 

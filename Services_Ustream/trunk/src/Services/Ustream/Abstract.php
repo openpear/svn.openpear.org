@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,24 +37,58 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
+
+/**
+ * Uses HTTP_Request2 class to send and receive data from Ustream API server.
+ */
 require_once 'HTTP/Request2.php';
+
+/**
+ * Uses Services_Ustream_Exception class for exception.
+ */
 require_once 'Services/Ustream/Exception.php';
+
+/**
+ * Uses Services_Ustream_Result class for result
+ */
 require_once 'Services/Ustream/Result.php';
+
+
+/**
+ * Abstract class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ */
 
 abstract class Services_Ustream_Abstract
 {
-    protected $_baseUrl = 'http://api.ustream.tv';
-    protected $_apiKey;
-    protected $_subject;
-    protected $_params;
-    protected $_responseType;
-    protected $_request;
+    protected $baseUrl = 'http://api.ustream.tv';
+    protected $apiKey;
+    protected $subject;
+    protected $requestParams;
+    protected $responseType;
+    protected $request;
 
+    /**
+     * Constructor
+     *
+     * @param string $apiKey       Ustream API Key.
+     * @param string $responseType Response type (xml,json,php,html)
+     * @param array  $config       Settings for HTTP_Request2
+     */
+    
     public function __construct($apiKey = '', $responseType = 'php', $config = array())
     {
         if (isset($apiKey)) {
@@ -60,75 +96,129 @@ abstract class Services_Ustream_Abstract
         }
         $this->setResponseType($responseType);
         
-        if ($this->_request == '') {
-            $this->_request = new HTTP_Request2();
-            $this->_request->setConfig($config);
-            $this->_request->setHeader('User-Agent', 'Services_Ustream');
+        if ($this->request == '') {
+            $this->request = new HTTP_Request2();
+            $this->request->setConfig($config);
+            $this->request->setHeader('User-Agent', 'Services_Ustream');
         }
     }
 
-    protected function _sendRequest()
+    /**
+     * Send request to server.
+     *
+     * @return mixed Services_Ustream_Result object or result string.
+     */
+    protected function sendRequest()
     {
-        if (!$this->_apiKey) {
+        if (!$this->apiKey) {
             throw new Services_Ustream_Exception('Empty API Key');
         }
-        $this->setParam('key', $this->_apiKey);
-        $this->setParam('subject', $this->_subject);
-        $url = sprintf('%s/%s?%s', $this->_baseUrl, $this->_responseType, http_build_query($this->_params));
+        $this->setParam('key', $this->apiKey);
+        $this->setParam('subject', $this->subject);
+        $url = sprintf(
+            '%s/%s?%s',
+            $this->baseUrl,
+            $this->responseType,
+            http_build_query($this->requestParams)
+        );
         try {
-            $response = $this->_request->setUrl($url)->send();
+            $response = $this->request->setUrl($url)->send();
             if ($response->getStatus() == 200) {
-                if ($this->_responseType == 'xml' || $this->_responseType == 'php') {
-                    return new Services_Ustream_Result($response->getBody(), $this->_responseType);
+                if ($this->responseType == 'xml'
+                    || $this->responseType == 'php'
+                ) {
+                    return new Services_Ustream_Result($response->getBody(),
+                                                       $this->responseType);
                 } else {
                     return $response->getBody();
                 }
             } else {
-                throw new Services_Ustream_Exception('Server returned status: ' . $response->getStatus());
+                throw new Services_Ustream_Exception('Server returned status: '
+                                                     . $response->getStatus());
             }
         } catch (HTTP_Request2_Exception $e) {
             throw new Services_Ustream_Exception($e->getMessage(), $e->getCode());
         }
     }
 
+    /**
+     * Set API Key
+     *
+     * @param string $apiKey Ustream API key.
+     *
+     * @return object
+     */
     public function setApiKey($apiKey)
     {
-        $this->_apiKey = $apiKey;
+        $this->apiKey = $apiKey;
 
         return $this;
     }
 
+    /**
+     * Set API response type.
+     *
+     * @param string $type Response type (xml,json,php,html)
+     *
+     * @return object
+     */
     public function setResponseType($type)
     {
         if (in_array($type, array('xml', 'json', 'php', 'html'))) {
-            $this->_responseType = $type;
+            $this->responseType = $type;
         } else {
             throw new Services_Ustream_Exception('Invalid response type.');
         }
         return $this;
     }
     
+    /**
+     * Set parameter for request
+     *
+     * @param string $name  name
+     * @param string $value value
+     *
+     * @return object
+     */
     public function setParam($name, $value)
     {
-        $this->_params[$name] = $value;
+        $this->requestParams[$name] = $value;
         return $this;
     }
 
+    /**
+     * Set page of result.
+     *
+     * @param integer $page page num
+     *
+     * @return object
+     */
     public function setPage($page)
     {
         return $this->setParam('page', (int) $page);
     }
-
+    
+    /**
+     * Set limit of result
+     *
+     * @param interger $limit Limit
+     *
+     * @return object
+     */
     public function setLimit($limit)
     {
         return $this->setParam('limit', (int) $limit);
     }
 
 
-
+    /**
+     * Clear parameters
+     *
+     * @return object
+     */
     public function clearParams()
     {
-        $this->_params = array();
+        $this->requestParams = array();
         
         return $this;
     }
