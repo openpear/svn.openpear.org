@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,24 +37,55 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
+/**
+ * Uses Services_Ustream_Abstract
+ */
 require_once 'Services/Ustream/Abstract.php';
+
+/**
+ * Access to User command class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ */
 
 class Services_Ustream_User extends Services_Ustream_Abstract
 {
-    protected $_subject = 'user';
+    protected $subject = 'user';
 
+    /**
+     * getInfo
+     * 
+     * @param string $uid UID
+     * 
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getInfo($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getInfo');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getValueOf
+     * 
+     * @param string $uid      UID
+     * @param string $property property
+     * 
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getValueOf($uid, $property)
     {
         $_properties = array('id', 'userName', 'registeredAt', 'url', 'gender',
@@ -61,38 +94,66 @@ class Services_Ustream_User extends Services_Ustream_Abstract
             $this->setParam('uid', $uid);
             $this->setParam('command', 'getValueOf');
             $this->setParam('params', $property);
-            return $this->_sendRequest();
+            return $this->sendRequest();
         } else {
             throw new Services_Ustream_Exception('Invalid property.');
         }
     }
 
+    /**
+     * getId
+     *
+     * @param string $uid UID
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getId($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getId');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * listAllChannels
+     *
+     * @param string $uid UID
+     * 
+     * @return mixed Services_Ustream_Result | string
+     */
     public function listAllChannels($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'listAllChannels');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * listAllVideos
+     *
+     * @param string $uid UID
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function listAllVideos($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'listAllVideos');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getComments
+     *
+     * @param string $uid UID
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getComments($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getComments');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 }
 

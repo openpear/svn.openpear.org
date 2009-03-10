@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,37 +37,49 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
 
+/**
+ * Factory class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
+ */
 class Services_Ustream
 {
-    const VERSION = '0.2.1';
-    
-    protected static $_commands = array('Channel', 'User', 'Search', 'Stream', 'System', 'Video');
-
+    const VERSION = '0.2.0';
+    private static $_commands = array(
+        'Channel', 'User', 'Search', 'Stream', 'System', 'Video');
 
     /**
      * factory
-     * 
-     * @param string channel,user,search,stream,system,video
-     * @param string xml,json,php,html
-     * @param array  HTTP_Request2 config.
-     * @return Services_Ustream_Abstract
-     * @throws Services_Ustream_Exception
+     *
+     * @param string $command      Ustream API command.
+     * @param string $apiKey       Ustream API Key.
+     * @param string $responseType Response type.
+     *
+     * @return object Services_Ustream_Abstract
      */
-    public static function factory($command, $apiKey = null, $responseType = 'php', $config = array())
+    public static function factory($command, $apiKey = null, $responseType = 'php')
     {
         if (!in_array(ucwords($command), self::$_commands)) {
-            require_once 'Services/Ustream/Exception.php';
+            include 'Services/Ustream/Exception.php';
             throw new Services_Ustream_Exception('Invalid API command.');
         }
-        require_once 'Services/Ustream/' . ucwords($command) . '.php';
+        include 'Services/Ustream/' . ucwords($command) . '.php';
         $class = 'Services_Ustream_' . ucwords($command);
 
-        return new $class($apiKey, $responseType, $config);
+        return new $class($apiKey, $responseType);
     }
 }

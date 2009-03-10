@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,29 +37,55 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
+/**
+ * Uses Services_Ustream_Abstract
+ */
 require_once 'Services/Ustream/Abstract.php';
 
+/**
+ * Video class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ */
 class Services_Ustream_Video extends Services_Ustream_Abstract
 {
-    protected $_subject = 'video';
+    protected $subject = 'video';
 
     /**
+     * getInfo
      *
      * @param integer $uid Video ID.
+     *
      * @return string|Services_Ustream_Result
      */
     public function getInfo($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getInfo');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getValueOf
+     *
+     * @param integer $uid      Video ID.
+     * @param string  $property property
+     * 
+     * @return string|Services_Ustream_Result
+     * @throws Services_Ustream_Exception
+     */
     public function getValueOf($uid, $property)
     {
         $_properties = array('id', 'user', 'title', 'description', 'createdAt',
@@ -69,49 +97,81 @@ class Services_Ustream_Video extends Services_Ustream_Abstract
             $this->setParam('uid', $uid);
             $this->setParam('command', 'getValueOf');
             $this->setParam('params', $property);
-            return $this->_sendRequest();
+            return $this->sendRequest();
         } else {
             throw new Services_Ustream_Exception('Invalid property.');
         }
     }
 
+    /**
+     * getId
+     *
+     * @param string $videoUrl Video URL
+     *
+     * @return string|Services_Ustream_Result
+     */
     public function getId($videoUrl)
     {
         $this->setParam('uid', $videoUrl);
         $this->setParam('command', 'getValueOf');
         $this->setParam('params', 'id');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getEmbedTag
+     *
+     * @param integer $uid Video ID.
+     *
+     * @return string|Services_Ustream_Result
+     */
     public function getEmbedTag($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getEmbedTag');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * listAllVideos
+     *
+     * @param integer $uid Video ID.
+     *
+     * @return string|Services_Ustream_Result
+     */
     public function listAllVideos($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'listAllVideos');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getComments
+     *
+     * @param integer $uid Video ID.
+     *
+     * @return string|Services_Ustream_Result
+     */
     public function getComments($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getComments');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getTags
+     *
+     * @param integer $uid Video ID.
+     *
+     * @return string|Services_Ustream_Result
+     */
     public function getTags($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getTags');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
-
-
-
 }
 

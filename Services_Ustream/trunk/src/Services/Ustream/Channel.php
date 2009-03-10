@@ -3,6 +3,8 @@
 /**
  * Services_Ustream
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * Copyright (c) 2009, Kimiaki Makino <makino@gagne.jp>
@@ -35,24 +37,54 @@
  * @category  Services
  * @package   Services_Ustream
  * @author    Kimiaki Makino <makino@gagne.jp>
- * @copyright  2009 Kimiaki Makino
- * @license http://opensource.org/licenses/bsd-license.php New BSD License
- * @version $Id$
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   SVN: $Id$
+ * @link      http://openpear.otg/package/Services_Ustream
+ * @since     File available since Release 0.1
  */
 
+/**
+ * Uses Services_Ustream_Abstract
+ */
 require_once 'Services/Ustream/Abstract.php';
 
+/**
+ * Access to Channel command class for Services_Ustream
+ *
+ * @category  Services
+ * @package   Services_Ustream
+ * @author    Kimiaki Makino <makino@gagne.jp>
+ * @copyright 2009 Kimiaki Makino
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://openpear.otg/package/Services_Ustream
+ */
 class Services_Ustream_Channel extends Services_Ustream_Abstract
 {
-    protected $_subject = 'channel';
+    protected $subject = 'channel';
 
+    /**
+     * getInfo
+     *
+     * @param string $uid UID
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getInfo($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getInfo');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getValueOf
+     *
+     * @param string $uid      UID
+     * @param string $property property
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getValueOf($uid, $property)
     {
         $_properties = array('id', 'user', 'title', 'description', 'urlTitleName',
@@ -64,24 +96,45 @@ class Services_Ustream_Channel extends Services_Ustream_Abstract
             $this->setParam('uid', $uid);
             $this->setParam('command', 'getValueOf');
             $this->setParam('params', $property);
-            return $this->_sendRequest();
+            return $this->sendRequest();
         } else {
             throw new Services_Ustream_Exception('Invalid property.');
         }
     }
 
+    /**
+     * getId
+     *
+     * @return void
+     * @throws Exception
+     */
     public function getId()
     {
         throw new Exception(__FUNCTION__ . ' is disable now.');
     }
 
+    /**
+     * getEmbedTag
+     *
+     * @param string $uid UID
+     *
+     * @return mixed Services_Ustream_Result | string
+     */
     public function getEmbedTag($uid)
     {
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getEmbedTag');
-        return $this->_sendRequest();
+        return $this->sendRequest();
     }
 
+    /**
+     * getCustomEmbedTags
+     *
+     * @param string $uid  UID
+     * @param array  $opts Embed options
+     * 
+     * @return mixed  Services_Ustream_Result | string
+     */
     public function getCustomEmbedTag($uid, $opts = array())
     {
         $params = '';
@@ -90,20 +143,46 @@ class Services_Ustream_Channel extends Services_Ustream_Abstract
         }
         $this->setParam('uid', $uid);
         $this->setParam('command', 'getCustomEmbedTag');
-        if ($params) $this->setParam('params', $params);
-        return $this->_sendRequest();
+        if ($params) {
+            $this->setParam('params', $params);
+        }
+        return $this->sendRequest();
     }
 
+    /**
+     * listAllChannels
+     *
+     * @param string $uid UID
+     *
+     * @return void
+     * @throws Exception
+     */
     public function listAllChannels($uid)
     {
         throw new Exception(__FUNCTION__ . 'is disable now.');
     }
 
+    /**
+     * getComments
+     *
+     * @param string $uid UID
+     *
+     * @return void
+     * @throws Exception
+     */
     public function getComments($uid)
     {
         throw new Exception(__FUNCTION__ . 'is disable now.');
     }
 
+    /**
+     * getTags
+     *
+     * @param string $uid UID
+     *
+     * @return void
+     * @throws Exception
+     */
     public function getTags($uid)
     {
         throw new Exception(__FUNCTION__ . 'is disable now.');
