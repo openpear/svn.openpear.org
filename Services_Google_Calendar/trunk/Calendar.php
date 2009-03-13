@@ -257,37 +257,65 @@ class Services_Google_Calendar
      * @return  string      event id of Google Calendar
      * @throws  PEAR_Error
      */
-    function addEvent($entry)
+    function addEvent($entry, $url = null)
     {
         if ($this->_authToken === '') {
             if (!$authResult = $this->_authentication()) {
                 return $authResult;
             }
         }
+
         if (is_array($entry)) {
             $entry = $this->_buildAtom($entry);
         }
+
+        if ($url === null) {
+            $url = SERVICES_GOOGLE_CALENDAR_URL_POST;
+        }
+
         $this->_client->setDefaultHeader('Content-type', 'application/atom+xml');
         $this->_client->setDefaultHeader('Content-length', strlen($entry));
         $this->_client->setMaxRedirects(0);
-        if (!PEAR::isError($this->_client->post(SERVICES_GOOGLE_CALENDAR_URL_POST, $entry, true))) {
-            $result = $this->_client->currentResponse();
-            if ($result['code'] == 302) {
-                if (!PEAR::isError($this->_client->post($result['headers']['location'], $entry, true))) {
-                    $result = $this->_client->currentResponse();
-                    if ($result['code'] == 201) {
-                        $unserializer =& new XML_Unserializer();
-                        if (!PEAR::isError($unserializer->unserialize($result['body']))) {
-                            $xml = $unserializer->getUnserializedData();
-                            return $this->getId($xml['id']);
-                        }
-                        return PEAR::raiseError('Atom Feed was not unserialized successfully');
-                    }
-                    return PEAR::raiseError($result['body']);
-                }
-            }
+        $result = $this->_client->post(
+            $url,
+            $entry,
+            true
+        );
+
+        if (PEAR::isError($result)) {
+            return $result;
         }
-        return PEAR::raiseError('Connection failed of POST request');
+
+        $result = $this->_client->currentResponse();
+        if (PEAR::isError($result)) {
+            return $result;
+        }
+        
+        if ($result['code'] == 302) {
+            if (!PEAR::isError($this->_client->post($result['headers']['location'], $entry, true))) {
+                $result = $this->_client->currentResponse();
+                if ($result['code'] >= 200 && $result['code'] <= 226) {
+                    $unserializer =& new XML_Unserializer();
+                    if (!PEAR::isError($unserializer->unserialize($result['body']))) {
+                        $xml = $unserializer->getUnserializedData();
+                        return $this->getId($xml['id']);
+                    }
+                    return PEAR::raiseError('Atom Feed was not unserialized successfully');
+                }
+                return PEAR::raiseError($result['body']);
+            }
+        } else if ($result['code'] == 401) {
+            return PEAR::raiseError("401 Unauthorized");
+        } else if ($result['code'] == 201) {
+            $unserializer =& new XML_Unserializer();
+            if (!PEAR::isError($unserializer->unserialize($result['body']))) {
+                $xml = $unserializer->getUnserializedData();
+                return $this->getId($xml['id']);
+            }
+            return PEAR::raiseError('Atom Feed was not unserialized successfully');
+        } else {
+            return PEAR::raiseError("Invalid http status code:" . $result['code']);
+        }
     }
 
     /**
@@ -344,16 +372,19 @@ class Services_Google_Calendar
      * @return  void
      * @throws  PEAR_Error
      */
-    function removeEvent($id)
+    function removeEvent($id, $cal_id = false)
     {
         if ($this->_authToken === '') {
             if (!$authResult = $this->_authentication()) {
                 return $authResult;
             }
         }
-        if (PEAR::isError($url = $this->getEditUri($id))) {
+
+        $url = $this->getEditUri($id, $cal_id);
+        if (PEAR::isError($url)) {
             return $url;
         }
+
         $entry = "test data";
         $this->_client->setDefaultHeader('Content-Length', strlen($entry));
         $this->_client->setDefaultHeader('X-Http-Method-Override', 'DELETE');
@@ -381,14 +412,20 @@ class Services_Google_Calendar
      * @return  string      edit URI
      * @throws  PEAR_Error
      */
-    function getEditUri($eid)
+    function getEditUri($eid, $id = false)
     {
         if ($this->_authToken === '') {
             if (!$authResult = $this->_authentication()) {
                 return $authResult;
             }
         }
-        $url = SERVICES_GOOGLE_CALENDAR_URL_POST . '/' . $eid;
+
+        if ($id !== false) {
+            $url = "http://www.google.com/calendar/feeds/{$id}/private/full/{$eid}";
+        } else {
+            $url = SERVICES_GOOGLE_CALENDAR_URL_POST . '/' . $eid;
+        }
+
         if (!PEAR::isError($this->_client->get($url))) {
             $result = $this->_client->currentResponse();
             if ($result['code'] == 200) {
