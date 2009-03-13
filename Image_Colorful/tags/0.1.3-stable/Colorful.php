@@ -11,6 +11,7 @@
  * @author      Masahiro Saito <camelmasa@gmail.com>
  * @copyright   2009 Masahiro Saito
  * @license     http://creativecommons.org/licenses/BSD/
+ * @version     0.1.3-stable
  * @link        http://camelmasa.com/
  */
 
