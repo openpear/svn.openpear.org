@@ -48,12 +48,13 @@ class PEG
      * PEG_Contextインスタンスを生成する。
      * 
      * @param string $str
+     * @param string $enc 文字コード
      * @return PEG_Context
      * @see PEG_Context
      */
-    static function context($str, $enc = null)
+    static function context($str)
     {
-        return new PEG_Context($str, $enc);
+        return new PEG_Context($str);
     }
     
     /**
@@ -321,7 +322,6 @@ class PEG
 
     /**
      * @param $p
-     * @return PEG_Flatten
      */
     static function flatten($p)
     {
@@ -345,7 +345,6 @@ class PEG
     /**
      * @param string $klass
      * @param $p
-     * @return PEG_Create
      */
     static function create($klass, $p)
     {
