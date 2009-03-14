@@ -6,6 +6,7 @@ include_once dirname(__FILE__) . '/PEG/Anything.php';
 include_once dirname(__FILE__) . '/PEG/CallbackAction.php';
 include_once dirname(__FILE__) . '/PEG/Choice.php';
 include_once dirname(__FILE__) . '/PEG/Context.php';
+include_once dirname(__FILE__) . '/PEG/ArrayContext.php';
 include_once dirname(__FILE__) . '/PEG/EOS.php';
 include_once dirname(__FILE__) . '/PEG/Failure.php';
 include_once dirname(__FILE__) . '/PEG/Lookahead.php';
@@ -20,6 +21,7 @@ include_once dirname(__FILE__) . '/PEG/Char.php';
 include_once dirname(__FILE__) . '/PEG/Util.php';
 include_once dirname(__FILE__) . '/PEG/Curry.php';
 include_once dirname(__FILE__) . '/PEG/Memoize.php';
+include_once dirname(__FILE__) . '/PEG/Leaf.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス。<br/>
@@ -45,16 +47,15 @@ class PEG
     }
     
     /**
-     * PEG_Contextインスタンスを生成する。
+     * PEG_IContextインスタンスを生成する。
      * 
-     * @param string $str
-     * @param string $enc 文字コード
-     * @return PEG_Context
-     * @see PEG_Context
+     * @param string|Array $str
+     * @return PEG_IContext
+     * @see PEG_IContext, PEG_Context, PEG_ArrayContext
      */
-    static function context($str)
+    static function context($val)
     {
-        return new PEG_Context($str);
+        return is_string($val) ? new PEG_Context($val) :  new PEG_ArrayContext($val);
     }
     
     /**
@@ -404,5 +405,11 @@ class PEG
     static function memo($p)
     {
         return new PEG_Memoize(self::parser($p));
+    }
+
+    static function leaf()
+    {
+        $args = func_get_args();
+        return new PEG_Leaf($args);
     }
 }
