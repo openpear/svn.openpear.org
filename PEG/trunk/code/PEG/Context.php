@@ -13,7 +13,6 @@ class PEG_Context implements PEG_IContext
      * 与えられた文字列とその位置を保持するPEG_Contextインスタンスを生成する。
      *
      * @param string $s 文字列
-     * @param string $enc 文字コード
      */
     function __construct($s) { 
         $this->s = $s; 
