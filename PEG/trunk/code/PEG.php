@@ -410,6 +410,6 @@ class PEG
     static function leaf()
     {
         $args = func_get_args();
-        return new PEG_Leaf($args);
+        return count($args) === 1 ? self::first(new PEG_Leaf($args)) : new PEG_Leaf($args);
     }
 }
