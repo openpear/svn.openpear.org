@@ -72,10 +72,12 @@ class File_HyperEstraier_SearchResult implements SeekableIterator {
 	/** Iterator */
 	function next(){
 		$this->pos++;
+		return next($this->docs);
 	}
 	
 	/** Iterator */
 	function rewind(){
+		reset($this->docs);
 		$this->pos=0;
 	}
 	
