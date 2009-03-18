@@ -84,7 +84,7 @@ class Services_Ustream_Stream extends Services_Ustream_Abstract
      */
     public function getMostViewers()
     {
-        $this->setParam('uid', $uid);
+        $this->setParam('uid', 'all');
         $this->setParam('command', 'getMostViewers');
         return $this->sendRequest();
     }
