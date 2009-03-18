@@ -89,8 +89,8 @@ class Services_Ustream_Video extends Services_Ustream_Abstract
     public function getValueOf($uid, $property)
     {
         $_properties = array('id', 'user', 'title', 'description', 'createdAt',
-                             'url', 'lengthInSecond', 'imageUrl', 'protected',
-                             'rating', 'embedTag', 'embedTagSourceUrl', 'hasTags',
+                             'url', 'lengthInSecond', 'imageUrl', 'rating', 
+                             'embedTag', 'embedTagSourceUrl', 'hasTags',
                              'numberOf', 'tags', 'sourceChannel');
 
         if (in_array($property, $_properties)) {
