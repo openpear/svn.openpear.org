@@ -89,7 +89,7 @@ class Services_Ustream_Channel extends Services_Ustream_Abstract
     {
         $_properties = array('id', 'user', 'title', 'description', 'urlTitleName',
                              'url', 'status', 'createdAt', 'lastStreamedAt',
-                             'photoUrl', 'protected', 'rating', 'embedTag',
+                             'imageUrl', 'rating', 'embedTag',
                              'embedTagSourceUrl', 'hasTags', 'numberOf', 'tags',
                              'comments');
         if (in_array($property, $_properties)) {
