@@ -61,6 +61,11 @@ require_once dirname(__FILE__) . '/Fixture/Exception.php';
 class Db_Fixture
 {
     /**
+     * Db_Fixture version
+     */
+    const VERSION = '0.1.0';
+
+    /**
      * Fixture
      *
      * @var    mixed
