@@ -63,7 +63,7 @@ $t->ok($ret === true, 'Success to create table');
 $t->ok($obj instanceof Db_Fixture, 'Db_Fixture::load should return Db_Fixture object');
 $t->ok($pdo instanceof Pdo , 'Db_Fixture::getConnection should return Pdo object');
 
-$f = $obj->insert()->fixture();
+$f = $obj->insert()->fixtures();
 
 // test1.row1
 $t->ok($f['test1']['auto_increment'] === 'id', 'test1 auto increment should be id');
@@ -162,7 +162,7 @@ $stmt = null;
 // Delete object
 $obj->after();
 $t->ok($obj->getConnection() === null, 'Pdo object should be null');
-$t->ok($obj->fixture() === null, 'fixture should be null');
+$t->ok($obj->fixtures() === null, 'fixture should be null');
 $t->ok($obj->getLastInsertedId() === null, 'last inserted id should be null');
 
 // Exception

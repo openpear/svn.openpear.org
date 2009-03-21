@@ -71,7 +71,7 @@ class Db_Fixture
      * @var    mixed
      * @access private
      */
-    private static $_fixture = null;
+    private static $_fixtures = null;
 
     /**
      * Pdo
@@ -105,15 +105,15 @@ class Db_Fixture
      * @access public
      * @return Db_Fixture Fluent interface
      */
-    public static function load($fixture, $config = null)
+    public static function load($fixtures, $config = null)
     {
-        if (is_string($fixture)) {
-            $fixture = array(
-                pathinfo($fixture, PATHINFO_FILENAME) => $fixture
+        if (is_string($fixtures)) {
+            $fixtures = array(
+                pathinfo($fixtures, PATHINFO_FILENAME) => $fixtures
             );
         }
 
-        foreach ($fixture as $fixtureName => $fixturePath) {
+        foreach ($fixtures as $fixtureName => $fixturePath) {
             if (!file_exists($fixturePath)) {
                 throw new Db_Fixture_Exception($fixturePath . ' not found.');
             }
@@ -146,7 +146,7 @@ class Db_Fixture
             self::$_pdo = $parser->createPdo($config);
 
             // Parse fixture file
-            self::$_fixture = $parser->parse($fixturePath);
+            self::$_fixtures = $parser->parse($fixturePath);
 
             return new self();
         }
@@ -160,12 +160,12 @@ class Db_Fixture
      */
     public static function insert()
     {
-        $fixture = self::$_fixture;
-        if (is_null($fixture)) {
+        $fixtures = self::$_fixtures;
+        if (is_null($fixtures)) {
             throw new Db_Fixture_Exception('Fixture does not set.');
         }
 
-        foreach ($fixture as $tablename => $rows) {
+        foreach ($fixtures as $tablename => $rows) {
             $autoIncrement = null;
             $primarykey    = null;
             $insertedData  = null;
@@ -254,8 +254,8 @@ class Db_Fixture
     public static function after()
     {
         self::$_lastInsertedId = null;
-        self::$_pdo     = null;
-        self::$_fixture = null;
+        self::$_pdo      = null;
+        self::$_fixtures = null;
 
         return new self();
     }
@@ -332,9 +332,9 @@ class Db_Fixture
      * @access public
      * @return mixed Fixture
      */
-    public static function fixture()
+    public static function fixtures()
     {
-        return self::$_fixture;
+        return self::$_fixtures;
     }
 
     /**
