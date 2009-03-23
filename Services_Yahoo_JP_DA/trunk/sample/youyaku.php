@@ -6,8 +6,12 @@
 require_once 'Services/Yahoo/JP/DA.php';
 
 $stdin = fopen('php://stdin', 'r');
-while (($line = trim(fgets(STDIN))) !== false) {
-    echo $line . PHP_EOL;
+while (!feof($stdin) && ($line = fgets(STDIN)) !== false) {
+    $line = trim($line);
+    if ($line === '') {
+        continue;
+    }
+//    echo $line . PHP_EOL;
     try {
         $yahoo = Services_Yahoo_JP_DA::factory('parse');
         $yahoo->withAppID(getenv('YAHOO_APP_ID'));
@@ -31,10 +35,13 @@ while (($line = trim(fgets(STDIN))) !== false) {
         }
 
         $str = null;
-        foreach ($dependency[$base_id] as $id) {
-            $str .= $morphs[$id];
+        if (isset($dependency[$base_id])) {
+            foreach ($dependency[$base_id] as $id) {
+                $str .= $morphs[$id];
+            }
         }
-        echo 'SUMMARY:' . $str . $morphs[$base_id] . PHP_EOL;
+//        echo 'SUMMARY:' . $str . $morphs[$base_id] . PHP_EOL;
+        echo $str . $morphs[$base_id] . PHP_EOL;
 
     } catch (Services_Yahoo_Exception $e) {
         die($e->getMessage());
