@@ -1,0 +1,85 @@
+「PHP使いはもう正規表現をblogに書くな」と言わせないでくれ
+
+ああ、まただよ...
+
+
+正規表現って、プログラミング言語間の差が少ないサブ言語なのに、なぜ「PHP」がつくとダメ正規表現ばかり登場するのか。
+うんざりだ。
+
+
+かなり使えるPHPの正規表現まとめ - IDEA*IDEA ～ 百式管理人のライフハックブログ ～
+
+メールアドレスは厳密にチェックしようとするとなかなか難しいのですが、簡単なチェックだったらこれでOKぽいですね。
+
+
+/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/
+
+全然OKじゃない。
+
+var re = /^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/; alert(re.test('ばka@manuke.com')); /* これ、どうなる? */
+
+最初の[^0-9]にしてからもうだめ。
+
+
+メールアドレスの正規表現が一筋縄では行かないことは、ちょっとぐぐればすぐに出てくるし、しかも正規表現でマッチできるのはたかだかnobody@example.com、すなわちaddr-specまでで、From: Anonymous <nobody@example.com>、すなわちmailboxを正規表現でマッチするのは不可能なのはもう10年以上前から知られている(Perl 5.6以降の拡張正規表現であれば可能だが、それだともう狭義の正規表現からは逸脱してしまう)。
+
+Perlメモ
+
+Jeffrey E. F. Friedl氏原著による 「詳説 正規表現」にはメールアドレスはネストした コメントを持つことができるので正規表現で表わすのは不可能であると 書いてあります
+
+で、nobody@example.com、すなわちaddr-specのみにマッチする正規表現は、以下のとおりとなる。
+
+404 Blog Not Found:ドコモもauはとりあえず"da..me."@を受け取れるようにしとくべし
+perlfaq9 - Networking ($Revision: 8539 $) - search.cpan.org
+
+If you want to just check part a to see that the address is valid according to the mail header standard with a simple regular expression, you can have problems, because there are deliverable addresses that aren't RFC-2822 (the latest mail header standard) compliant, and addresses that aren't deliverable which, are compliant. However, the following will match valid RFC-2822 addresses that do not have comments, folding whitespace, or any other obsolete or non-essential elements. This just matches the address itself:
+
+my $atom       = qr{[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+};
+my $dot_atom   = qr{$atom(?:\.$atom)*};
+my $quoted     = qr{"(?:\\[^\r\n]|[^\\"])*"};
+my $local      = qr{(?:$dot_atom|$quoted)};
+my $domain_lit = qr{\[(?:\\\S|[\x21-\x5a\x5e-\x7e])*\]};
+my $domain     = qr{(?:$dot_atom|$domain_lit)};
+my $addr_spec  = qr{$local\@$domain};
+
+Just match an address against /^${addr_spec}$/ to see if it follows the RFC2822 specification.
+
+ちなみに、これをまとめると、
+/^(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+))*)|(?:"(?:\\[^\r\n]|[^\\"])*")))\@(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+))*)|(?:\[(?:\\\S|[\x21-\x5a\x5e-\x7e])*\])))$/
+
+という正規表現になる。
+ここではコピペしやすいように、textareaタグの中に入れてある。
+以下、それをJavaScriptで簡易チェック。
+
+はRF2822非準拠
+かなり使えるPHPの正規表現まとめ - IDEA*IDEA ～ 百式管理人のライフハックブログ ～
+
+正規表現は慣れないと使いづらいですよね。
+しかし使えると超絶便利。
+よく使うパターンを覚えておいて応用を利かせていきたいものです。
+
+
+誰だって間違いはおかすし、そして今や正規表現を間違えるというのは最も間違えることの多い部分でもあり、達人でもそこから逃れるすべがほとんどない以上、間違った正規表現を見つける都度「そうじゃない」と指摘し、そして指摘されたらすぐ直し、お互いにハッピーというのが本来の作法だと私は信じている。
+どの言語を使っていても、その点は変わらない。
+
+
+でもね....これを見てくれ。
+
+
+
+トップにくるのは、「正規表現：メールアドレスかどうか調べる - phpspot」なのである。
+そしてここで紹介されている正規表現、^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$は。
+悪名高きda.me..@docomo.ne.jpを引っ掛ける一方で、dankogai+regexp@gmail.comを弾いてしまう。
+
+
+これでは、
+もうおまえらPHPerは正規表現をブログにうpするんじゃねえ!
+
+と言われても無理もなくなってしまうのではないか。
+
+
+GoogleはGoogleで、ペイドリンクとかはつぶさにつぶす癖に、こういうものは対策してくれないんだろうか....
+悪化が良貨を駆逐していく様が悪化の一途をたどる前に。
+
+
+Dan the Regular Expressionist
