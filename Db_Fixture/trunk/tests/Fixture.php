@@ -45,7 +45,7 @@
 $rootPath = dirname(dirname(__FILE__));
 $libPath  = $rootPath . DIRECTORY_SEPARATOR . 'src';
 
-set_include_path(get_include_path() . PATH_SEPARATOR . $libPath);
+set_include_path($libPath . PATH_SEPARATOR . get_include_path());
 
 require_once 'lime.php';
 require_once 'Db/Fixture.php';
@@ -183,3 +183,15 @@ try {
 } catch (Db_Fixture_Exception $e) {
     $t->ok($e->getMessage() === 'Fixture does not set.', 'exception should be occured when fixture not set');
 }
+
+// Exec sql
+$obj = Db_Fixture::load(dirname(__FILE__) . '/testdata/test.json');
+$obj->execute(dirname(__FILE__) . '/testdata/insert.sql');
+$t->ok($ret === true, 'Execute sql file should success.');
+
+$pdo  = $obj->getConnection();
+$stmt = $pdo->prepare('SELECT * FROM test1');
+$ret  = $stmt->execute();
+$rows = $stmt->fetchAll();
+$t->ok(count($rows) === 2, 'Inserted row count should be 2');
+$stmt = null;

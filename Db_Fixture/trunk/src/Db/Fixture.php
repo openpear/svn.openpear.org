@@ -358,4 +358,30 @@ class Db_Fixture
     {
         return self::$_lastInsertedId;
     }
+
+    /**
+     * Execute sql file
+     *
+     * @param  mixed $file Path to sql file
+     * @access public
+     * @return mixed Db_Fixture Fluent interface
+     */
+    public static function execute($file)
+    {
+        if (!file_exists($file)) {
+            return new self();
+        }
+
+        $pdo = self::$_pdo;
+        if (is_null($pdo)) {
+            return new self();
+        }
+
+        $sql  = file_get_contents($file);
+        $stmt = $pdo->prepare($sql);
+        $ret  = $stmt->execute();
+        $stmt = null;
+
+        return new self();
+    }
 }
