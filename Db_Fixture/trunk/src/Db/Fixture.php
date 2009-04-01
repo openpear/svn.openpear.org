@@ -63,7 +63,7 @@ class Db_Fixture
     /**
      * Db_Fixture version
      */
-    const VERSION = '0.1.2';
+    const VERSION = '0.1.3';
 
     /**
      * Fixture
@@ -126,21 +126,11 @@ class Db_Fixture
                         . 'config' . DIRECTORY_SEPARATOR . 'database.'
                         . strtolower($extension);
             }
-
             if (!file_exists($config)) {
                 throw new Db_Fixture_Exception($config . ' not found.');
             }
 
-            $className  = __CLASS__ . '_Parser_' . ucfirst($extension);
-            $parserPath = str_replace('_', DIRECTORY_SEPARATOR, $className);
-            $parserPath = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR
-                        . $parserPath . '.php';
-
-            if (!class_exists($className, false)) {
-                require_once $parserPath;
-            }
-            // Create instance
-            $parser = new $className();
+            $parser = self::_getParser($extension);
 
             // Get pdo object
             self::$_pdo = $parser->createPdo($config);
@@ -366,13 +356,19 @@ class Db_Fixture
      * @access public
      * @return mixed Db_Fixture Fluent interface
      */
-    public static function execute($file)
+    public static function execute($file, $config = null)
     {
         if (!file_exists($file)) {
             return new self();
         }
 
+        if (!is_null($config)) {
+            $extension = pathinfo($config, PATHINFO_EXTENSION);
+
+            self::$_pdo = self::_getParser($extension)->createPdo($config);
+        }
         $pdo = self::$_pdo;
+
         if (is_null($pdo)) {
             return new self();
         }
@@ -383,5 +379,29 @@ class Db_Fixture
         $stmt = null;
 
         return new self();
+    }
+
+    /**
+     * Get parser object
+     *
+     * @param  mixed $name Parser name
+     * @access private
+     * @return Db_Fixture_Parser Parser object
+     */
+    private static function _getParser($name)
+    {
+        $className  = __CLASS__ . '_Parser_' . ucfirst($name);
+        $parserPath = str_replace('_', DIRECTORY_SEPARATOR, $className);
+        $parserPath = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR
+                    . $parserPath . '.php';
+
+        if (!class_exists($className, false)) {
+            require_once $parserPath;
+        }
+
+        // Create instance
+        $parser = new $className();
+
+        return $parser;
     }
 }

@@ -185,9 +185,8 @@ try {
 }
 
 // Exec sql
-$obj = Db_Fixture::load(dirname(__FILE__) . '/testdata/test.json');
-$obj->execute(dirname(__FILE__) . '/testdata/insert.sql');
-$t->ok($ret === true, 'Execute sql file should success.');
+$path = dirname(__FILE__);
+$obj = Db_Fixture::execute($path . '/testdata/insert.sql', $path . '/config/database.json');
 
 $pdo  = $obj->getConnection();
 $stmt = $pdo->prepare('SELECT * FROM test1');
@@ -195,3 +194,6 @@ $ret  = $stmt->execute();
 $rows = $stmt->fetchAll();
 $t->ok(count($rows) === 2, 'Inserted row count should be 2');
 $stmt = null;
+$pdo  = null;
+$obj->after();
+
