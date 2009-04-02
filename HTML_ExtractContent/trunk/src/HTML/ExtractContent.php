@@ -3,30 +3,41 @@
 
 /**
  * HTML_ExtractContent
+ *
+ * extract the text from web page(html).
+ *
  * fork from "Extract Content Module for html"
  * @link http://www.systemfriend.co.jp/node/326
  * @link http://hakaselab.sakura.ne.jp/make/extractcontent/extractcontent.phps
- * PHP-version original author is Junichi Takahashi
+ * PHP-version author is Junichi Takahashi
  * 
+ *
  * @license BSD
  */
 
 class HTML_ExtractContent
 {
     /**
-     * Configuration array, set using ::setOpt()
+     * optional array, set using ::setOpt()
      *
-     * @var config
+     * @var opt
      */ 
-    protected $opt = array('threshold'  => 100,
-                           'min_length' => 80,
-                           'decay_factor' => 0.73,
+    protected $opt = array('threshold'  => 100, //threhold for score of cluster
+                           'min_length' => 80,  // minimum length of blocks
+                           'decay_factor' => 0.73, //decay factor for block scores
                            'continuous_factor' => 1.62,
                            'punctuation_weight' => 10,
                            'punctuations' =>  '/([、。，．！？]|\.[^A-Za-z0-9]|,[^0-9]|!|\?)/',
                            'waste_expressions' => '/Copyright|All Rights Reserved/i',
-                           'debug'=> false);
-
+                           'debug'=> false
+                           );
+    /**
+     * Analyses the given HTML text, extracts body and title  
+     *
+     * @param string $html
+     * @param array $opt
+     * @return 
+     */
     public function analyze($html, $opt = array())
     {
         //frameset or redirect
@@ -44,9 +55,10 @@ class HTML_ExtractContent
             $title = $this->title($html);
         }
 
-        
+        // Google AdSense Section Target       
         $html = $this->section($html);
         
+        //eliminate useles text
         $html = $this->eliminateUselessTags($html);
         
         //$this->hBlock
@@ -96,6 +108,9 @@ class HTML_ExtractContent
 
     /**
      * Google AdSense Section Target
+     *
+     * @param string $html
+     * @param string $sectionStylye
      */
     protected function section($html, $sectionStylye = 'googlead')
     {
@@ -121,7 +136,10 @@ class HTML_ExtractContent
     
     }
 
-    function bdSort($a,$b) {
+    /**
+     *
+     */
+    private function bdSort($a,$b) {
         if ($a[1] == $b[1]) {
             return 0;
         }
@@ -195,6 +213,7 @@ class HTML_ExtractContent
         return 9 * pow((1.0 * $h / count($list)), 2) + 1;
     } 
 
+
     private function stripTags($html)
     {
         $str = preg_replace('/<.+?>/', '', $html);
@@ -206,9 +225,9 @@ class HTML_ExtractContent
 
 
     /**
-     * Set configuration parameters
+     * Set option parameters
      *
-     * @param array $config
+     * @param array $opt
      */
     public function setOpt(array $opt)
     {
@@ -223,3 +242,7 @@ $extract->setOpt(array('debug' => true));
 $url = (isset($argv[1])) ? $argv[1] : 'http://www.systemfriend.co.jp/node/312';
 $html = file_get_contents($url);
 var_dump($extract->analyze($html));
+
+//my notes
+//http://labs.cybozu.co.jp/blog/nakatani/downloads/extractcontent.rb  
+//http://cpansearch.perl.org/src/TARAO/HTML-ExtractContent-0.06/lib/HTML/ExtractContent.pm
