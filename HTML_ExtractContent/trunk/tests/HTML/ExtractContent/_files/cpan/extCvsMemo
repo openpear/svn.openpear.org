@@ -1,0 +1,2 @@
+extphp -x '//following-sibling::a[4]' -v @href http://cpansearch.perl.org/src/TARAO/HTML-ExtractContent-0.06/t/ | xargs wget 
+
