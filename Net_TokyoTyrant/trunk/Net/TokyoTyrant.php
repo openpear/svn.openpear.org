@@ -13,6 +13,8 @@ class Net_TokyoTyrant
       $socket;
     private
       $errorNo, $errorMessage;
+    private
+      $socket_timeout;
 
     const RDBXOLCKNON = 0;
     const RDBXOLCKREC = 1;
@@ -21,11 +23,22 @@ class Net_TokyoTyrant
     public function connect($server, $port, $timeout = 10)
     {
         $this->close();
-        $this->socket = @fsockopen($server,$port, $this->errorNo, $errorMessage);
+        $this->socket = @fsockopen($server,$port, $this->errorNo, $errorMessage, $timeout);
         if (! $this->socket) {
             throw new Net_TokyoTyrantNetworkException(sprintf('%s, %s', $this->errorNo, $errorMessage));
         }
         $this->connect = true;
+    }
+
+    public function setTimeout($timeout)
+    {
+        $this->socket_timeout = $timeout;
+        stream_set_timeout($this->socket, $timeout);
+    }
+
+    public function getTimeout()
+    {
+        return $this->socket_timeout;
     }
 
     public function close()
