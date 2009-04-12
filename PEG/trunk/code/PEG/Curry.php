@@ -9,12 +9,10 @@ class PEG_Curry
         $this->callback = $callback;
         $this->args = $args;
     }
-    function process($last)
+    function invoke()
     {
-        $args = $this->args;
-        $args[] = $last;
-        
-        return call_user_func_array($this->callback, $args);
+        $args = func_get_args();
+        return call_user_func_array($this->callback, array_merge($this->args, $args));
     }
     
     static function make($callback)
@@ -22,6 +20,6 @@ class PEG_Curry
         $args = func_get_args();
         array_shift($args);
         $curry = new self($callback, $args);
-        return array($curry, 'process');
+        return array($curry, 'invoke');
     }
 }

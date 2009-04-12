@@ -54,5 +54,13 @@ class PEG_ArrayContext implements PEG_IContext
     {
         return $this->len <= $this->i;
     }
+    
+    /**
+     * @return array
+     */
+    function get()
+    {
+        return $this->arr;
+    }
 
 }

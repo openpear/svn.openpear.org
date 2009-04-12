@@ -1,28 +1,28 @@
 <?php
 
 /**
- * PEG_IParserインターフェイスが文字列を読み込む際に必要とするインターフェイス。
+ * PEG_IParserインターフェイスが必要とするインターフェイス。
  *
  * @see PEG_IParser
  */
 interface PEG_IContext
 {
     /**
-     * 文字列のインデックスの位置を得る。
+     * 対象の現在の位置を得る。
      * 
      * @return int
      */
     function tell();
     
     /**
-     * 文字列のインデックスの位置を設定する。
+     * 対象の現在の位置を設定する。
      *
      * @param int $i
      */
     function seek($i);
     
     /**
-     * 文字列を読み込む。その際にインデックスの位置も変更する。
+     * 対象の一部を返す。その際に現在位置も変更する。
      *
      * @param int $i
      * @return string
@@ -30,8 +30,13 @@ interface PEG_IContext
     function read($i);
     
     /**
-     * 読み込むべき文字列がもう無い場合trueを返す。
+     * 読み込むべきものが無い場合trueを返す。
      * @return bool
      */
     function eos();
+    
+    /**
+     * コンテキストが持つ対象全体を返す
+     */
+    function get();
 }
