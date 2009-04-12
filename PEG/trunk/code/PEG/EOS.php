@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package PEG
+ * @author anatoo<anatoo@nequal.jp>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @version $Id$
+ */
 
 /**
  * 文字列の終端にヒットするパーサ。

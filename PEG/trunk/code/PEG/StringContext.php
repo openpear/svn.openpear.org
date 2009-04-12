@@ -1,10 +1,11 @@
 <?php
-
 /**
- * PEG_IContextの実装クラス
- *
- * @see PEG::context()
+ * @package PEG
+ * @author anatoo<anatoo@nequal.jp>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @version $Id$
  */
+
 class PEG_StringContext implements PEG_IContext
 {
     protected $str, $i = 0, $len;
