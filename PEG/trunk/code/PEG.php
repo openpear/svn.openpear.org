@@ -17,6 +17,7 @@ include_once dirname(__FILE__) . '/PEG/Many.php';
 include_once dirname(__FILE__) . '/PEG/Memoize.php';
 include_once dirname(__FILE__) . '/PEG/Not.php';
 include_once dirname(__FILE__) . '/PEG/Optional.php';
+include_once dirname(__FILE__) . '/PEG/Preg.php';
 include_once dirname(__FILE__) . '/PEG/Ref.php';
 include_once dirname(__FILE__) . '/PEG/Sequence.php';
 include_once dirname(__FILE__) . '/PEG/StringContext.php';
@@ -24,26 +25,24 @@ include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/Util.php';
                                
 /**
- * PEG以下のクラスを生成するFactoryクラス。<br/>
- * このクラスのファクトリーメソッドを通じて様々なパーサを生成することができる。
- * 
- * 言葉の定義:<br/>
- * パーサ : ここではPEG_IParserインターフェイスの実装クラスを指す  <br/>
- * コンテキスト : PEG_IContextインターフェイスの実装クラスを指す  <br/>
- * (パーサが)成功する : parseメソッド実行時にPEG_Failure例外が投げれずに済み、parseメソッドがが何らかの値を返す事を指す  <br/>
- * (パーサが)失敗する : parseメソッド実行時にPEG_Failureが投げられること  <br/>
+ * このクラスのstaticメソッドを通じて様々なパーサ等を生成できる。
  */
 class PEG
 {
-    static function parser($val)
+    protected static function parser($val)
     {
         return is_string($val) ?  self::token($val) : $val;
     }
     
-    static function parserArray(Array $arr)
+    protected static function parserArray(Array $arr)
     {
         foreach ($arr as &$val) $val = self::parser($val);
         return $arr;
+    }
+    
+    static function preg($pattern)
+    {
+        return new PEG_Preg($pattern);
     }
     
     /**
@@ -100,7 +99,7 @@ class PEG
     
     /**
      * PEG_EOSインスタンスを得る。
-     * このパーサは、パース時に文字列が終端に来た、
+     * このパーサは、パース時に対象が終端に来た、
      * つまり$aContext->eos() === trueの時の
      * PEG_IContextインスタンスを与えられたときのみ成功する。
      * 
@@ -108,7 +107,8 @@ class PEG
      */
     static function eos()
     {
-        return PEG_EOS::getInstance();
+        static $obj = null;
+        return $obj ? $obj : $obj = new PEG_EOS;
     }
     
     /**
