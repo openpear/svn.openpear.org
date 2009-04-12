@@ -1,4 +1,13 @@
 <?php
+/**
+ * このPEGクラスは、静的メソッドから様々なパーサやコンテキスト等を生成するのに使われる。
+ * 
+ * @package PEG
+ * @author anatoo<anatoo@nequal.jp>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @version $Id$
+ */
+
 include_once dirname(__FILE__) . '/PEG/IContext.php';
 include_once dirname(__FILE__) . '/PEG/IParser.php';
 
@@ -23,10 +32,7 @@ include_once dirname(__FILE__) . '/PEG/Sequence.php';
 include_once dirname(__FILE__) . '/PEG/StringContext.php';
 include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/Util.php';
-                               
-/**
- * このクラスのstaticメソッドを通じて様々なパーサ等を生成できる。
- */
+
 class PEG
 {
     protected static function parser($val)
@@ -354,8 +360,6 @@ class PEG
     }
     
     /**
-     * 
-     *
      * @param $p
      * @param string $glue
      */

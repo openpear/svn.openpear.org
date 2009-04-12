@@ -1,10 +1,13 @@
 <?php
-
 /**
- * PEG_IParserインターフェイスが必要とするインターフェイス。
- *
- * @see PEG_IParser
+ * PEG_IParserが必要とするコンテキスト
+ * 
+ * @package PEG
+ * @author anatoo<anatoo@nequal.jp>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @version $Id$
  */
+
 interface PEG_IContext
 {
     /**
