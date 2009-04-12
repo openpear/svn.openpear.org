@@ -1,4 +1,5 @@
 <?php
+ini_set('memory_limit', -1);
 require_once dirname(dirname(__FILE__)) . '/Net/TokyoTyrant.php';
 
 $tt = new Net_TokyoTyrant();
@@ -17,7 +18,7 @@ try {
 assert(is_string($error) && strlen($error) > 1);
 
 
-$tt->connect('localhost', 1978);
+$tt->connect('localhost', 1978, 1000);
 
 assert($tt->vanish() === true);
 assert($tt->put($key, $data) === true);
@@ -79,6 +80,17 @@ assert($tt->addint($count_key, -3) === -1);
 //assert($tt->ext($extname, $key, $value, Net_TokyoTyrant::RDBXOLCKREC) === $value);
 //assert($tt->ext($extname, $key, $value, Net_TokyoTyrant::RDBXOLCKGLB) === $value);
 
+//big size data
+//$big_data = str_repeat('1', 1024 * 128);
+//for ($i = 0; $i < 1000; $i++) {
+//    assert($tt->put('bigdata', $big_data));
+//}
+
+//$tt->setTimeout(60);
+$big_data = str_repeat('1', 1024 * 1024 * 32);
+// limit size fllow code is error.... fummm....
+//$big_data = str_repeat('1', 1024 * 1024 * 33);
+assert($tt->put('bigdata', $big_data));
 
 assert($tt->sync() === true);
 assert(is_array($tt->size()));
