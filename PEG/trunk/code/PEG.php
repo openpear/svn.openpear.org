@@ -1,27 +1,28 @@
 <?php
 include_once dirname(__FILE__) . '/PEG/IContext.php';
 include_once dirname(__FILE__) . '/PEG/IParser.php';
+
 include_once dirname(__FILE__) . '/PEG/Action.php';
+include_once dirname(__FILE__) . '/PEG/And.php';
 include_once dirname(__FILE__) . '/PEG/Anything.php';
-include_once dirname(__FILE__) . '/PEG/CallbackAction.php';
-include_once dirname(__FILE__) . '/PEG/Choice.php';
-include_once dirname(__FILE__) . '/PEG/Context.php';
 include_once dirname(__FILE__) . '/PEG/ArrayContext.php';
+include_once dirname(__FILE__) . '/PEG/CallbackAction.php';
+include_once dirname(__FILE__) . '/PEG/Char.php';
+include_once dirname(__FILE__) . '/PEG/Choice.php';
+include_once dirname(__FILE__) . '/PEG/Curry.php';
 include_once dirname(__FILE__) . '/PEG/EOS.php';
 include_once dirname(__FILE__) . '/PEG/Failure.php';
+include_once dirname(__FILE__) . '/PEG/Leaf.php';
 include_once dirname(__FILE__) . '/PEG/Lookahead.php';
 include_once dirname(__FILE__) . '/PEG/Many.php';
+include_once dirname(__FILE__) . '/PEG/Memoize.php';
 include_once dirname(__FILE__) . '/PEG/Not.php';
 include_once dirname(__FILE__) . '/PEG/Optional.php';
-include_once dirname(__FILE__) . '/PEG/Sequence.php';
-include_once dirname(__FILE__) . '/PEG/Token.php';
-include_once dirname(__FILE__) . '/PEG/And.php';
 include_once dirname(__FILE__) . '/PEG/Ref.php';
-include_once dirname(__FILE__) . '/PEG/Char.php';
+include_once dirname(__FILE__) . '/PEG/Sequence.php';
+include_once dirname(__FILE__) . '/PEG/StringContext.php';
+include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/Util.php';
-include_once dirname(__FILE__) . '/PEG/Curry.php';
-include_once dirname(__FILE__) . '/PEG/Memoize.php';
-include_once dirname(__FILE__) . '/PEG/Leaf.php';
                                
 /**
  * PEG以下のクラスを生成するFactoryクラス。<br/>
@@ -55,7 +56,7 @@ class PEG
      */
     static function context($val)
     {
-        return is_string($val) ? new PEG_Context($val) :  new PEG_ArrayContext($val);
+        return is_string($val) ? new PEG_StringContext($val) :  new PEG_ArrayContext($val);
     }
     
     /**
