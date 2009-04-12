@@ -5,5 +5,6 @@ $lime = new lime_test;
 $p = HatenaSyntax_Locator::it()->list;
 
 //--
-$context = context('-h');
-$lime->is(array_val(array_val($p->parse($context)->getData(), 0), 0), '-');
+$context = PEG::context('-h');
+list(list($result)) = $p->parse($context)->getData();
+$lime->is($result, '-');

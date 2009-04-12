@@ -5,5 +5,5 @@ $lime = new lime_test;
 $elt = HatenaSyntax_Locator::it()->lineElement;
 
 //--
-$context = context('a');
+$context = PEG::context('a');
 $lime->is($elt->parse($context), 'a');
