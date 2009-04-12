@@ -6,6 +6,6 @@ $link = HatenaSyntax_Locator::it()->link;
 
 //--
 
-$context = context('[http://google.com:title=hoge]');
+$context = PEG::context('[http://google.com:title=hoge]');
 $lime->is($link->parse($context)->getData(), 
           array('href' => 'http://google.com', 'title' => 'hoge'));

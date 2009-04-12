@@ -6,8 +6,10 @@ $pre = HatenaSyntax_Locator::it()->pre;
 
 //--
 
-$context = context(">|\nh\n|<");
-$lime->is(array_val($pre->parse($context)->getData(), 0), array('h'));
+$context = PEG::context(">|\nh\n|<");
+list($result) = $pre->parse($context)->getData();
+$lime->is($result, array('h'));
 
-$context = context(">|\nha|<");
-$lime->is(array_val($pre->parse($context)->getData(), 0), array('ha'));
+$context = PEG::context(">|\nha|<");
+list($result) = $pre->parse($context)->getData();
+$lime->is($result, array('ha'));

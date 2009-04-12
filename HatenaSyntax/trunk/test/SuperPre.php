@@ -6,8 +6,8 @@ $parser = HatenaSyntax_Locator::it()->superPre;
 
 //--
 
-$context = context(">|hoge|\na||<");
+$context = PEG::context(">|hoge|\na||<");
 $lime->is($parser->parse($context)->getData(), array('type' => 'hoge', 'body' => array('a')));
 
-$context = context(">||\na\n||<");
+$context = PEG::context(">||\na\n||<");
 $lime->is($parser->parse($context)->getData(), array('type' => '', 'body' => array('a')));
