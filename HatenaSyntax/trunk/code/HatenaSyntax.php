@@ -1,4 +1,11 @@
 <?php
+/**
+ * @package HatenaSyntax
+ * @author anatoo<anatoo@nequal.jp>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @version $Id$
+ */
+
 include_once 'PEG.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Node.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Locator.php';
