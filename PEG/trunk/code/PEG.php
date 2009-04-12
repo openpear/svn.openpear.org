@@ -12,7 +12,6 @@ include_once dirname(__FILE__) . '/PEG/Choice.php';
 include_once dirname(__FILE__) . '/PEG/Curry.php';
 include_once dirname(__FILE__) . '/PEG/EOS.php';
 include_once dirname(__FILE__) . '/PEG/Failure.php';
-include_once dirname(__FILE__) . '/PEG/Leaf.php';
 include_once dirname(__FILE__) . '/PEG/Lookahead.php';
 include_once dirname(__FILE__) . '/PEG/Many.php';
 include_once dirname(__FILE__) . '/PEG/Memoize.php';
