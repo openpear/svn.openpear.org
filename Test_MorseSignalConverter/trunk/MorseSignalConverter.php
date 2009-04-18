@@ -55,5 +55,20 @@
 						),
 					);
 
+		$length = mb_strlen( $str, $encoding );
+
+		//メインループ
+		for( $i=0, $mstr='', $isEng=0, $isKana=0 ; $i < $length ; $i++ ) {
+			$tmp = mb_substr( $str, $i, 1, $encoding );
+
+			//文字コード判定
+			if( preg_match( '/^[a-zA-Z]+$/', $tmp ) ) {	//微妙だこれ
+				$code = $table['eng'][strtolower($tmp)];
+				//短点・頂点を指定されたものに置換して追加
+				$mstr .= str_replace( '1', $long, str_replace( '0', $short, $code ) );
+			}
+		}
+
+		return $mstr;
 	}
 ?>
