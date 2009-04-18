@@ -62,11 +62,18 @@
 			$tmp = mb_substr( $str, $i, 1, $encoding );
 
 			//文字コード判定
-			if( preg_match( '/^[a-zA-Z]+$/', $tmp ) ) {	//微妙だこれ
+			if( preg_match( '/^[a-zA-Z\.\,\:\?\'\-\(\)\/\=\+\"\@]+$/', $tmp ) ) {	//微妙だこの書き方 欧文の場合
 				$code = $table['eng'][strtolower($tmp)];
-				//短点・頂点を指定されたものに置換して追加
-				$mstr .= str_replace( '1', $long, str_replace( '0', $short, $code ) );
 			}
+			else if( preg_match( '/^[0-9]+$/', $tmp) ) {	//数値の場合
+				$code = $table['numeric'][$tmp];
+			}
+			else if( preg_match( '/^[ア-ン、ー]+$/', mb_convert_kana($tmp, 'sKC' ) ) ) {	//和文の場合
+				$code = $table['kana'][mb_convert_kana($tmp, 'sKC')];
+			}
+
+			//短点・頂点を指定されたものに置換して追加
+			$mstr .= str_replace( '1', $long, str_replace( '0', $short, $code ) ) . " ";
 		}
 
 		return $mstr;
