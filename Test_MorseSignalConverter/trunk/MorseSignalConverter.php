@@ -2,6 +2,7 @@
 	/**
 	 * 2009/04/18 LOCAL PHP部勉強会 "openpearを使ってみよう"ねた
 	 * あまり真面目なもの作りたくないから役に立たないものを作ってみる
+	 * つうかすげえ適当 たぶん使えない
 	 * @access public
 	 * @author Shu Sawada (luna@lunanet.gr.jp)
 	 * @create 2009/04/18
@@ -15,7 +16,7 @@
 	 * @param String	$encoding	入力文字列の文字コード指定 省略時 auto
 	 * @param String	$long	モールス信号の長音を何で表現するか
 	 * @param String	$short	モールス信号の短音を何で表現するか
-	 * @return String	$string	変換結果
+	 * @return mixed	変換結果 変換失敗の場合はfalseを返す
 	**/
 	function test_MorseSignalConverter( $str, $encoding = 'auto', $long = '－', $short = '・' ) {
 
@@ -56,6 +57,9 @@
 					);
 
 		$length = mb_strlen( $str, $encoding );
+		if( $encoding != "auto" ) {
+			mb_regex_encoding( $encoding );
+		}
 
 		//メインループ
 		for( $i=0, $mstr='', $isEng=0, $isKana=0 ; $i < $length ; $i++ ) {
@@ -64,12 +68,26 @@
 			//文字コード判定
 			if( preg_match( '/^[a-zA-Z\.\,\:\?\'\-\(\)\/\=\+\"\@]+$/', $tmp ) ) {	//微妙だこの書き方 欧文の場合
 				$code = $table['eng'][strtolower($tmp)];
+				$isEng = 1;
 			}
 			else if( preg_match( '/^[0-9]+$/', $tmp) ) {	//数値の場合
 				$code = $table['numeric'][$tmp];
 			}
-			else if( preg_match( '/^[ア-ン、ー]+$/', mb_convert_kana($tmp, 'sKC' ) ) ) {	//和文の場合
+			else if( mb_ereg( '^[ア-ン、ー]+$', mb_convert_kana($tmp, 'sKC' ) ) ) {	//和文の場合
 				$code = $table['kana'][mb_convert_kana($tmp, 'sKC')];
+				$isKana = 1;
+			} else if( $tmp != ' ' ){
+				//半角スペースはそのまま通す 知らない文字の場合はエラー
+				// todo: このままじゃカタカナの濁点・半濁点が処理できてない
+				echo "unknown string:";
+				var_dump($tmp);
+				return false;
+			}
+
+			//和文・欧文が混じったらエラーにする
+			//(和文と欧文モールスは被ってる。たとえば、イとＡは同じトンツー
+			if( $isEng && $isKana ) {
+				return false;
 			}
 
 			//短点・頂点を指定されたものに置換して追加
