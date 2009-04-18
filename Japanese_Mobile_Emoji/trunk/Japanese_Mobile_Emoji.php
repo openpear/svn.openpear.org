@@ -90,7 +90,7 @@ class Japanese_Mobile_Emoji{
 		//絵文字指定文字列を分割する
 		$emoji_num_array = array();
 		list($emoji_num_array["docomo"],$emoji_num_array["au"],$emoji_num_array["softbank"]) 
-			= 	explode(",", $emoji_num_csv);
+			= 	explode(":", $emoji_num_csv);
 			
 		if(in_array($this->outputCareer,array("docomo","au","softbank"))){
 			$convert_to = $this->outputCareer;
