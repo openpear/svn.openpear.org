@@ -1,4 +1,7 @@
 <?php
+	ini_set( "display_errors", "on" );
+
+
 	include "MorseSignalConverter.php";
 
 	$str = 'Hello, World';
