@@ -62,7 +62,7 @@ class Japanese_Mobile_Emoji{
 		}
 
 		//絵文字コンバート用のクラスのインスタンスを作成	
-		$this->emojiConvert = JpMobileEmojiConvert::singleton(
+		$this->emojiConvert = Japanese_Mobile_Emoji_Convert::singleton(
 															$this->outputCareer,
 															$this->options["emoji_dir_path"],
 															$this->options["emoji_ext"]
