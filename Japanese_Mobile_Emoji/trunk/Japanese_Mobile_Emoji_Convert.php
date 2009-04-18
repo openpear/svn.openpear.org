@@ -70,7 +70,17 @@ class Japanese_Mobile_Emoji_Convert{
 		//読み込むファイル名を取得する
 		$filepath = $this->getLoadEmojiCodeFilename($career);
 		//パスがnull以外且つ読み込み可能ならファイルを読み込んでjsonでコードする
-		if(!is_null($filepath) && is_readable($filepath)){
+		if($career == "pc" && is_readable($filepath)){
+			$this->emoji_code = new stdClass();
+			$this->emoji_code->img = new stdClass();
+			$lines = file($filepath);
+			$line_cnt = count($lines);
+			for($i=0; $i<$line_cnt; $i++){
+				list($num,$name) = explode(",",$lines[$i]);
+				$this->emoji_code->img->{$num} = trim($name);
+			}
+			//pr($this->emoji_code);
+		}elseif(!is_null($filepath) && is_readable($filepath)){
 			$json = file_get_contents($filepath);
 			$this->emoji_code = json_decode($json);
 		}else{
@@ -100,7 +110,7 @@ class Japanese_Mobile_Emoji_Convert{
 				$path .= "softbank_emoji.json";
 				break;
 			default:
-				$path = "";
+				$path .= "img.csv";
 		}
 		return $path;
 	}
@@ -249,11 +259,12 @@ class Japanese_Mobile_Emoji_Convert{
 		}
 
 		protected function getEmojiImgTag($emoji_num){
-//		pr($this->img_path);
-//		pr($this->img_ext);
 			
-			$str = '<img src="'.$this->img_path.$emoji_num.'.'.$this->img_ext
-					.' class="emoji emoji_'.$emoji_num.'" />';
+			$str = '<img src="'
+				.	$this->img_path
+				.	$this->emoji_code->img->{$emoji_num}.'.'.$this->img_ext
+				.	'" '
+				.	'class="emoji emoji_'.$emoji_num.'" />';
 			return $str;
 		}
 
