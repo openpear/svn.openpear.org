@@ -124,6 +124,7 @@ class Japanese_Mobile_Emoji_Convert{
 	 * @return string		絵文字コード
 	 */
 	public function doNumberConvert($to_career,$emoji_num_array){
+		pr(func_get_args());
 		$number = '';
 		switch ($to_career){
 			case "docomo":
@@ -132,15 +133,15 @@ class Japanese_Mobile_Emoji_Convert{
 			case "au":
 				$number = $this->convert2au($emoji_num_array);
 				break;
-			case "au":
+			case "softbank":
 				$number = $this->convert2softbank($emoji_num_array);
 				break;
 			default:
-				if(isset($emoji_num_array["docomo"])){
+				if(isset($emoji_num_array["docomo"]) && $emoji_num_array["docomo"]){
 					$number = $emoji_num_array["docomo"];
-				}elseif(isset($emoji_num_array["au"])){
+				}elseif(isset($emoji_num_array["au"]) && $emoji_num_array["au"]){
 					$number = $this->convert2docomo($emoji_num_array,"au");
-				}elseif($isset($emoji_num_array["softbank"])){
+				}elseif(isset($emoji_num_array["softbank"]) && $emoji_num_array["softbank"]){
 					$number = $this->convert2docomo($emoji_num_array,"softbank");
 				}
 		}
@@ -159,11 +160,12 @@ class Japanese_Mobile_Emoji_Convert{
 			if(isset($emoji_num_array["docomo"]) && $emoji_num_array["docomo"]){
 				$emoji_num = $emoji_num_array["docomo"];
 			}else{
-				$this->loadConvertFile("docomo");	//コンバートファイル読み込み
-				if(isset($emoji_num_array["au"])){
-					$emoji_num = $this->convert_array["ezweb"]->{$emoji_num_array["docomo"]}->docomo;
-				}elseif(isset($emoji_num_array["softbank"])){
-					$emoji_num = $this->convert_array["softbank"]->{$emoji_num_array["docomo"]}->docomo;
+				if(isset($emoji_num_array["au"]) && $emoji_num_array["au"]){
+					$this->loadConvertFile("ezweb");	//コンバートファイル読み込み
+					$emoji_num = $this->convert_array["ezweb"]->{$emoji_num_array["au"]}->docomo;
+				}elseif(isset($emoji_num_array["softbank"]) && $emoji_num_array["softbank"]){
+					$this->loadConvertFile("softbank");	//コンバートファイル読み込み
+					$emoji_num = $this->convert_array["softbank"]->{$emoji_num_array["softbank"]}->docomo;
 				}
 			}
 			return $emoji_num;
@@ -174,14 +176,21 @@ class Japanese_Mobile_Emoji_Convert{
 		 * @param $from_career	絵文字番号キャリア
 		 * @return string		絵文字コード
 		 */
-		protected function convert2au($emoji_num){
-			$this->loadConvertFile("ezweb");
-			if($from_career == "docomo"){
-				$str = $this->convert_array["docomo"]->{$emoji_num}->ezweb;
-			}elseif($from_career == "softbank"){
-				$str = $this->convert_array["softbank"]->{$emoji_num}->ezweb;
+		protected function convert2au($emoji_num_array){
+			$emoji_num = 0;
+			if(isset($emoji_num_array["au"]) && $emoji_num_array["au"]){
+				$emoji_num = $emoji_num_array["au"];
+			}else{
+			
+				if(isset($emoji_num_array["docomo"]) && $emoji_num_array["docomo"]){
+					$this->loadConvertFile("docomo");	//コンバートファイル読み込み
+					$emoji_num = $this->convert_array["docomo"]->{$emoji_num_array["docomo"]}->ezweb;
+				}elseif(isset($emoji_num_array["softbank"]) && $emoji_num_array["softbank"]){
+					$this->loadConvertFile("softbank");	//コンバートファイル読み込み
+					$emoji_num = $this->convert_array["softbank"]->{$emoji_num_array["softbank"]}->ezweb;
+				}
 			}
-			return $str;
+			return $emoji_num;
 		}
 		
 		/**
@@ -190,14 +199,21 @@ class Japanese_Mobile_Emoji_Convert{
 		 * @param $from_career	絵文字番号キャリア
 		 * @return string		絵文字コード
 		 */
-		protected function convert2softbank($emoji_num){
-			$this->loadConvertFile("softbank");
-			if($from_career == "au"){
-				$str = $this->convert_array["ezweb"]->{$emoji_num}->softbank;
-			}elseif($from_career == "docomo"){
-				$str = $this->convert_array["docomo"]->{$emoji_num}->softbank;
+		protected function convert2softbank($emoji_num_array){
+			$emoji_num = 0;
+			if(isset($emoji_num_array["softbank"]) && $emoji_num_array["softbank"]){
+				$emoji_num = $emoji_num_array["softbank"];
+			}else{
+			
+				if(isset($emoji_num_array["docomo"]) && $emoji_num_array["docomo"]){
+					$this->loadConvertFile("docomo");	//コンバートファイル読み込み
+					$emoji_num = $this->convert_array["docomo"]->{$emoji_num_array["docomo"]}->softbank;
+				}elseif(isset($emoji_num_array["au"]) && $emoji_num_array["au"]){
+					$this->loadConvertFile("ezweb");	//コンバートファイル読み込み
+					$emoji_num = $this->convert_array["ezweb"]->{$emoji_num_array["au"]}->softbank;
+				}
 			}
-			return $str;
+			return $emoji_num;
 		}
 		
 		
@@ -213,6 +229,7 @@ class Japanese_Mobile_Emoji_Convert{
 					$obj = json_decode($json);
 					$this->convert_array[$career] = $obj->{$career};
 				}else{
+					die("convert data not found.");
 				}
 			}		
 		}
@@ -251,11 +268,21 @@ class Japanese_Mobile_Emoji_Convert{
 		}
 		
 		protected function getEmojiCode4au($emoji_num){
-			
+//				pr($emoji_num);
+//				pr($this->emoji_code->ezweb);
+			if($emoji_num){
+				$str = "&#x".$this->emoji_code->ezweb->{$emoji_num}->unicode.";";
+			return $str;
+			}
 		}
 		
 		protected function getEmojiCode4softbank($emoji_num){
-			
+//				pr($emoji_num);
+//				pr($this->emoji_code->ezweb);
+			if($emoji_num){
+				$str = "&#x".$this->emoji_code->softbank->{$emoji_num}->unicode.";";
+			return $str;
+			}
 		}
 
 		protected function getEmojiImgTag($emoji_num){

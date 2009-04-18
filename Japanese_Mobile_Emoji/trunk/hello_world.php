@@ -36,6 +36,8 @@ $this_url .= $_SERVER["SERVER_NAME"].$_SERVER["SCRIPT_NAME"];
 ?>
 
 [emoji:1]
+[emoji::1]
+[emoji:::1]
 
 <br />
 
