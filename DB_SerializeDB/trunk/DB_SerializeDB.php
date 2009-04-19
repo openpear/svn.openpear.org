@@ -1,6 +1,6 @@
 <?php
 
-class SerializeDB
+class DB_SerializeDB
 {
 	private $model;
 
