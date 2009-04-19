@@ -124,7 +124,7 @@ class Japanese_Mobile_Emoji_Convert{
 	 * @return string		絵文字コード
 	 */
 	public function doNumberConvert($to_career,$emoji_num_array){
-		pr(func_get_args());
+		//pr(func_get_args());
 		$number = '';
 		switch ($to_career){
 			case "docomo":
