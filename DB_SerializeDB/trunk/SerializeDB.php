@@ -16,7 +16,7 @@ class DB_SerializeDB
 
 	private $file_handles = array();
 
-	const DATA_DIR = "data\\";
+	const DATA_DIR = "data/";
 
 	const INDEX_SIZE = 6;
 
@@ -25,13 +25,13 @@ class DB_SerializeDB
 		$this->model = $model;
 
 		$this->index_filepath = self::DATA_DIR . $model . ".index";
-		
+
 		$this->data_filepath = self::DATA_DIR . $model . ".dat";
 
 		$this->space_filepath = self::DATA_DIR . $model . ".space";
 
 		$this->lock_filepath = self::DATA_DIR . $model . ".lock";
-		
+
 		$this->pre_lock_filepath = uniqid( self::DATA_DIR . $model, true );
 	}
 
@@ -45,7 +45,7 @@ class DB_SerializeDB
 
 		if( $res != 0 )
 		{
-			trigger_error("Invalid id");
+			trigger_error("Invalid id: $id");
 			return false;
 		}
 
@@ -61,6 +61,17 @@ class DB_SerializeDB
 		if( strlen($data) < self::INDEX_SIZE) return false;
 
 		return unpack("N1start/n1size", $data);
+	}
+
+	private function getIndexSize()
+	{
+		$ih = $this->getIndexHandle();
+
+		fseek($ih, 0, SEEK_END);
+
+		$size = ftell($ih);
+
+		return $size / self::INDEX_SIZE;
 	}
 
 	private function getIndexHandle()
@@ -99,7 +110,7 @@ class DB_SerializeDB
 	public function Add($data)
 	{
 		$this->lock();
-		
+
 		//データの書き込み
 		$data = serialize($data);
 
@@ -206,23 +217,47 @@ class DB_SerializeDB
 		return $data;
 	}
 
-	public function Slice($condition, $offset = 0, $length = 0)
+	public function Slice($condition = array(), $offset = 1, $length = 0)
 	{
 		$ih = $this->getIndexHandle();
+
+		$index_size = $this->getIndexSize();
+
+		//length処理
+		if($length > $index_size || $length == 0) $length = $index_size;
+
+		//offset処理
+		$reverse = false;
+		if($offset == -1)
+		{
+			$reverse = true;
+			$offset = $index_size;
+		}
 
 		rewind($ih);
 
 		$res = array();
 
-		for($id = $offset; count($res) < $length; $id++)
+		$id = $offset;
+		while(count($res) < $length && $id > 0)
 		{
 			$data = $this->Read($id);
-			
-			if($data === false) break;//最後まで読み込んだ場合　TODO:データがfalseの時は？
 
-			if($data !== null) $res[] = $data;
+			if($data !== null)
+			{
+				$valid = true;
+
+				foreach($condition as $key => $value)
+				{
+					$valid = isset($data[$key]) && $data[$key] == $value;
+					if(!$valid) break;
+				}
+
+				if($valid) $res[$id] = $data;
+			}
+			(!$reverse) ? $id++ : $id--;
 		}
-		
+
 		return $res;
 	}
 
@@ -241,19 +276,17 @@ class DB_SerializeDB
 		for($i = 0; true; $i++)
 		{
 			$n_space = $this->readIndexRecord($sh);
-			var_dump($n_space);
+
 			if($n_space == false) break;
 
 			if($n_space["size"] > 0)
 			{
 				if( $index["start"] == $n_space["start"] + $n_space["size"]) //始点がどっかの終端と一致するか。
 				{
-					debug("start_matched:" . $index["start"]);
 					$start_matched_at = array($i, $n_space);
 				}
 				elseif($index["end"] == $n_space["start"]) //終端がどっかの始点に一致するか
 				{
-					debug("end_matched:" . $index["end"]);
 					$end_matched_at = array($i, $n_space);
 				}
 			}
@@ -407,7 +440,7 @@ class DB_SerializeDB
 	private function unlock()
 	{
 		unlink($this->lock_filepath);
-		
+
 		if(file_exists($this->pre_lock_filepath)) unlink($this->pre_lock_filepath);
 	}
 }
