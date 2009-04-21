@@ -50,7 +50,7 @@ class PocketbellTest extends PHPUnit_Framework_TestCase
         //
         $class = new $this->className();
 
-        $this->assertNotNull($class);
+        $this->assertNotNull($class->def);
     }
 
 
