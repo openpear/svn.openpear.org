@@ -1,2 +1,0 @@
-config/mobile_ips.yml:
-  class: sfMobileIPConfigHandler
