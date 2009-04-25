@@ -21,6 +21,7 @@ assert(is_string($error) && strlen($error) > 1);
 $tt->connect('localhost', 1978, 1000);
 
 assert($tt->vanish() === true);
+
 assert($tt->put($key, $data) === true);
 $getdata = $tt->get($key);
 assert($getdata === $data);
@@ -99,4 +100,9 @@ assert(is_array($tt->rnum()));
 assert($tt->copy('/tmp/test.net_tokyotyrant.db') === true);
 assert(file_exists('/tmp/test.net_tokyotyrant.db') === true);
 assert(strlen($tt->stat()) > 1);
+
+
+assert($tt->optimize('') === true);
+assert($tt->copy('/tmp/test.net_tokyotyrant.db') === true);
+
 $tt->close();

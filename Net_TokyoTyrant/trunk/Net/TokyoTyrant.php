@@ -375,9 +375,17 @@ class Net_TokyoTyrant
         return true;
     }
     
-    public function vanish()
+    public function optimize($param)
     {
         $cmd = pack('c*', 0xC8,0x71);
+        $this->_doRequest($cmd, array((string) $param));
+        $this->_getResponse();
+        return true;
+    }
+
+    public function vanish()
+    {
+        $cmd = pack('c*', 0xC8,0x72);
         $this->_doRequest($cmd);
         $this->_getResponse();
         return true;
@@ -385,19 +393,19 @@ class Net_TokyoTyrant
     
     public function copy($path)
     {
-        $cmd = pack('c*', 0xC8,0x72);
-        $this->_doRequest($cmd, array((string) $path));
-        $this->_getResponse();
-        return true;
-    }
-    
-    public function restore($path)
-    {
         $cmd = pack('c*', 0xC8,0x73);
         $this->_doRequest($cmd, array((string) $path));
         $this->_getResponse();
         return true;
     }
+    
+//    public function restore($path)
+//    {
+//        $cmd = pack('c*', 0xC8,0x74);
+//        $this->_doRequest($cmd, array((string) $path));
+//        $this->_getResponse();
+//        return true;
+//    }
     
     public function setmst($host, $port)
     {
