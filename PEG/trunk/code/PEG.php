@@ -416,4 +416,26 @@ class PEG
         $args = func_get_args();
         return count($args) === 1 ? self::first(new PEG_Leaf($args)) : new PEG_Leaf($args);
     }
+    
+    /**
+     * @param PEG_IParser
+     * @param string
+     * @return array
+     */
+    static function matchAll(PEG_IParser $parser, $str)
+    {
+        $context = self::context($str);
+        $matches = array();
+        while (!$context->eos()) {
+            $result = $parser->parse($context);
+            if (!$result instanceof PEG_Failure) {
+                $matches[] = $result;
+            }
+            else {
+                $context->read(1);
+            }
+        }
+        
+        return $matches;
+    }
 }
