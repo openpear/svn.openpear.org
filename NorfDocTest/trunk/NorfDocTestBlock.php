@@ -183,7 +183,7 @@ class NorfDocTestBlock
             ($this, $status, $return, $catch, $msg, $diff, $elapsedTime);
     }
 
-    const _RESERVED_WORDS = '/\Gfor|if|else|throw|try/';
+    const _RESERVED_WORDS = '/\G(for|if|else|throw|try)/';
 
     function prepareSourceCode($source, $context)
     {
