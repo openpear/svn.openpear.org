@@ -2,7 +2,7 @@
 
 class Text_VariationProducer implements Iterator {
   private $patterns = null;
-  private $remains_producer = null;
+  private $rest_producer = null;
   private $current_producer = null;
 
   private $needs_multiple_producer = null;
@@ -25,16 +25,21 @@ class Text_VariationProducer implements Iterator {
       $this->needs_multiple_producer = true;
       $this->patterns = $string_patterns;
     } elseif (is_string($string_patterns)) {
-      if (preg_match('/^\{('.
+      if ($string_patterns === "") {
+        $this->needs_multiple_producer = false;
+        $this->patterns = array("");
+      } elseif (preg_match('/^\{('.
                      '(?:[^\}\\\\]|\\\\.)+(?:,(?:(?:[^\}\\\\]|\\\\.)+))*'.
                      ')\}(.*)$/s',
                      $string_patterns, $matches)) {
+        // 中カッコで囲まれた部分
         $this->needs_multiple_producer = true;
         $this->patterns = self::BraceToArray($matches[1]);
       } elseif (preg_match('/^\[('.
                            '(?:[^\]\\\\]|\\\\.)+'.
                            ')\](.*)$/s',
                            $string_patterns, $matches)) {
+        // 角カッコで囲まれた部分
         $this->needs_multiple_producer = false;
         $this->patterns = self::characterClassToArray($matches[1]);
       } elseif (preg_match('/^('.
@@ -42,13 +47,15 @@ class Text_VariationProducer implements Iterator {
                            ')(.*)$/s',
                            $string_patterns, $matches) ||
                 preg_match('/^(.)(.*)$/s', $string_patterns, $matches)) {
+        // 「開き角カッコ」、「開き中カッコ」以外の文字の連続
+        // または中途半端な1文字（対応の取れていない開き角カッコなど）
         $this->needs_multiple_producer = false;
         $this->patterns = array(self::ParseString($matches[1]));
       } else {
         throw new Exception('invalid pattern is specified: '. $string_patterns);
       }
       if (isset($matches[2]) && $matches[2] !== "") {
-        $this->remains_producer = new Text_VariationProducer($matches[2]);
+        $this->rest_producer = new Text_VariationProducer($matches[2]);
       }
     }
     $this->rewind();
@@ -63,8 +70,8 @@ class Text_VariationProducer implements Iterator {
       $current = $this->patterns[$this->current_index];
     }
 
-    if (is_object($this->remains_producer)) {
-      $current .= $this->remains_producer->current();
+    if (is_object($this->rest_producer)) {
+      $current .= $this->rest_producer->current();
     }
     return $current;
   }
@@ -78,13 +85,13 @@ class Text_VariationProducer implements Iterator {
   {
     $this->position++;
 
-    if ($this->remains_producer instanceof Text_VariationProducer) {
-      $this->remains_producer->next();
-      if ($this->remains_producer->valid()) {
+    if ($this->rest_producer instanceof Text_VariationProducer) {
+      $this->rest_producer->next();
+      if ($this->rest_producer->valid()) {
         return;
       } else {
         // if invalid, try current->next() or next pattern
-        $this->remains_producer->rewind();
+        $this->rest_producer->rewind();
       }
     }
     if ($this->current_producer instanceof Text_VariationProducer) {
@@ -123,8 +130,18 @@ class Text_VariationProducer implements Iterator {
 
   private function characterClassToArray($charclass_string)
   {
+    $negate_characters = false;
     $characters = array();
+    if (preg_match('/^\^(.*)$/s', $charclass_string, $matches)) {
+      $negate_characters = true;
+      $charclass_string = $matches[1];
+    }
+    for ($i = 0; $i <= 0xff; $i++) {
+      $characters_occurred[$i] = 0;
+    }
+
     while ($charclass_string !== "") {
+      if ($charclass_string === false) {exit;}
       if (preg_match('/^'.
                      '([^\]\\\\]|\\\\[nrtvf]|\\\\[0-9]{1,3}|\\\\x[0-9A-Fa-f]{1,2})'.
                      '(?:-([^\]\\\\]|\\\\[nrtvf]|\\\\[0-9]{1,3}|\\\\x[0-9A-Fa-f]{1,2}))?'.
@@ -134,18 +151,27 @@ class Text_VariationProducer implements Iterator {
           $end = self::ParseString($matches[2]);
           $start_ord = ord($start);
           $end_ord = ord($end);
-          if ($start_ord <= $end_ord) {
-            for ($i = $start_ord; $i <= $end_ord; $i++) {
-              $characters[] = chr($i);
-            }
+          if ($start_ord > $end_ord) {
+            $start_ord = $end_ord;
+            $end_ord = ord($start);
+          }
+          for ($i = $start_ord; $i <= $end_ord; $i++) {
+            $characters_occurred[$i] = 1;
           }
         } else {
-          $characters[] = $start;
+          $characters_occurred[ord($start)] = 1;
         }
         $charclass_string = $matches[3];
-      } else {
+      } elseif (preg_match('/^(.)(.*)$/s', $charclass_string, $matches)) {
         // unknown character class string: skip 1st character.
-        $charclass_string = substr($charclass_string, 1);
+        $characters_occurred[ord($match[1])] = 1;
+        $charclass_string = $matches[2];
+      }
+    }
+    for ($i = 0; $i <= 0xff; $i++) {
+      if (($negate_characters && !$characters_occurred[$i]) ||
+          (!$negate_characters && $characters_occurred[$i])) {
+        $characters[] = chr($i);
       }
     }
     return $characters;
@@ -157,12 +183,26 @@ class Text_VariationProducer implements Iterator {
   }
   private function ParseString($str)
   {
-    while (preg_match('/^((?:[^\"\$\\\\]|\\\\.)*)([\"\$])/', $str)) {
-      $str = preg_replace('/^((?:[^\"\$\\\\]|\\\\.)*)([\"\$])/', '\\1\\\\\\2', $str);
+    $parsed_string = "";
+    while ($str !== "") {
+      if (preg_match('/^([^\\\\]+)(.*)$/s', $str, $matches)) {
+        // \以外の文字連続
+        $parsed_string .= $matches[1];
+        $str = $matches[2];
+      } elseif (preg_match('/^((?:\\\\[nrtvf]|\\\\[0-9]{1,3}|\\\\x[0-9A-Fa-f]{1,2})+)(.*)$/s', $str, $matches)) {
+        // \からはじまる、PHPが解釈可能な文字列表現
+        $parsed_string .= eval('return "'.$matches[1].'";');
+        $str = $matches[2];
+      } elseif (preg_match('/^\\\\(.)(.*)$/s', $str, $matches) ||
+                preg_match('/^(.)(.*)$/s', $str, $matches)) {
+        // 他の何にもマッチしない\であれば、次の文字を残す
+        // または、解釈できない文字があれば（単体の\など）そのまま残す
+        $parsed_string .= $matches[1];
+        $str = $matches[2];
+      } else {
+        throw new Exception('invalid pattern is specified: '. $str);
+      }
     }
-    if ($str === '\\') {
-      $str = '\\\\';
-    }
-    return eval('return "'.$str.'";');
+    return $parsed_string;
   }
 }
