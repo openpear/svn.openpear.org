@@ -78,7 +78,7 @@ class Text_VariationProducer implements Iterator {
   {
     $this->position++;
 
-    if ($this->remains_producer instanceof StringVariationProducer) {
+    if ($this->remains_producer instanceof Text_VariationProducer) {
       $this->remains_producer->next();
       if ($this->remains_producer->valid()) {
         return;
@@ -87,7 +87,7 @@ class Text_VariationProducer implements Iterator {
         $this->remains_producer->rewind();
       }
     }
-    if ($this->current_producer instanceof StringVariationProducer) {
+    if ($this->current_producer instanceof Text_VariationProducer) {
       $current = $this->current_producer->next();
       if ($this->current_producer->valid()) {
         return;
