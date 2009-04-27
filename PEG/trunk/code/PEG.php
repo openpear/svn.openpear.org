@@ -46,13 +46,13 @@ class PEG
         return $arr;
     }
     
-    static function preg($pattern)
+    static function preg($pattern, $i = 0)
     {
-        return new PEG_Preg($pattern);
+        return new PEG_Preg($pattern, $i);
     }
     
     /**
-     * PEG_IContextインスタンスを生成する。
+     * 引数に応じて適切なPEG_IContextインスタンスを生成する。
      * 
      * @param string|Array $str
      * @return PEG_IContext
@@ -60,7 +60,9 @@ class PEG
      */
     static function context($val)
     {
-        return is_string($val) ? new PEG_StringContext($val) :  new PEG_ArrayContext($val);
+        if (is_string($val)) return new PEG_StringContext($val);
+        if (is_array($val)) return new PEG_ArrayContext($val);
+        throw new InvalidArgumentException();
     }
     
     /**
@@ -411,20 +413,14 @@ class PEG
         return new PEG_Memoize(self::parser($p));
     }
 
-    static function leaf()
-    {
-        $args = func_get_args();
-        return count($args) === 1 ? self::first(new PEG_Leaf($args)) : new PEG_Leaf($args);
-    }
-    
     /**
      * @param PEG_IParser
      * @param string
      * @return array
      */
-    static function matchAll(PEG_IParser $parser, $str)
+    static function matchAll(PEG_IParser $parser, $subject)
     {
-        $context = self::context($str);
+        $context = self::context($subject);
         $matches = array();
         while (!$context->eos()) {
             $result = $parser->parse($context);
