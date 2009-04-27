@@ -1,0 +1,823 @@
+.. -*- coding: utf-8 -*-
+
+===================
+    NorfDocTest
+===================
+
+.. |date| date::
+
+:Author: SUZUKI Tetsuya <suzuki@spice-of-life.net>
+:Date: |date|
+:Version: NorfDocTest 0.7
+
+.. _Japanese: doctest_ja.html
+
+.. contents::
+
+..
+
+---------------------------------
+        About NorfDocTest
+---------------------------------
+
+NorfDocTest is a DocTest tool for PHP that finds usage examples
+like format of ``doctest`` module of Python and executes those as test.
+
+
+--------------------------
+        License
+--------------------------
+
+NorfDocTest is distributed by MIT License.
+
+
+----------------------------
+        Installation
+----------------------------
+
+Copy the archive to your project directory or PHP library path.
+If you clone from the repository, rename directory name to ``NorfDocTest``.
+(optional)
+
+
+Installing with openpear
+==========================
+
+You can install NorfDocTest with openpear_ which is a PEAR channel server.
+First, set up to use openpear with typing the following command
+on the environment which ``pear`` command is installed.
+
+::
+
+ % pear channel-discover openpear.org
+
+If the command is succeeded, you can install NorfDocTest with this command:
+
+::
+
+ % pear install openpear/NorfDocTest
+
+
+Printing Differences Option (Text_Diff)
+=========================================
+
+If Text_Diff package of PEAR is installed,
+NorfDocTest prints differences between the expected string and
+the returned string of tests.
+If you cannot use PEAR in your environment,
+install the package into include path directly.
+
+
+-------------------------
+        An Example
+-------------------------
+
+This is a simple example using NorfDocTest.
+
+``fib.php``::
+
+ /**
+  * Calculates the Nth Fibonacci number.
+  *
+  * #test n = 0
+  * >>> fib(0);
+  * 0;
+  *
+  * #test n = 1
+  * >>> fib(1);
+  * 1;
+  *
+  * #test n = 10
+  * >>> fib(10);
+  * 55;
+  *
+  * #test Throws an exception if n < 0
+  * >>> fib(-1);
+  * InvalidArgumentException: n must be >= 0
+  */
+ function fib($n)
+ {
+      if ($n < 0)
+          throw new InvalidArgumentException('error');
+      else if ($n == 0)
+          return 0;
+      else if ($n == 1)
+          return 1;
+      else
+          return fib($n-1) + fib($n-2);
+ }
+
+The function ``fib()`` is a Fibonacci calculator function.
+To test it, you need a script to find and execute tests in the file.
+Create the ``fibtest.php`` to execute tests and put both of the files
+in the same directory as the archive.
+
+``fibtest.php``::
+
+ <?php
+
+ require_once 'NorfDocTest/NorfDocTest.php';
+
+ $group = NorfDocTestModuleGroup::defaultGroup();
+ $group->addModuleWithFile('fib.php');
+
+ $request = new NorfDocTestRequest('Fibonacci');
+ $group->executeRequest($request);
+
+Try execute the file in command line.
+Examples in documentation comments are executed as test.
+
+::
+
+ % php fibtest.php
+ Testing Fibonacci
+
+ ...
+
+ 3 tests, 0 failures, 0 errors, 0 skips, 0 todos
+ Total time: 0.002 seconds
+
+
+----------------------
+        Usage
+----------------------
+
+Tested Text
+===========
+
+NorfDocTest parses documentation comment (``/** ... */``) before
+class, method or function definition.
+
+Tested text is parsed by line the followings.
+Other lines are ignored.
+
+* Line begins with ``#`` (directive)
+* Line begins with ``>>>`` (input statement)
+* Line after input statements (expected result)
+
+Spaces and asterisks at beginning of the lines are ignored.
+
+Valid::
+
+ /**
+    #test
+    >>> ...
+    ...
+  */
+  function myMethod()
+  ...
+
+ /**
+  * #test
+  * >>> ...
+  * ...
+  */
+  function myMethod()
+  ...
+
+
+Blocks
+======
+
+Block which contains directive, input statements and expected result
+is base unit of testing.
+Documentation comments inculde multiple blocks.
+
+Syntax::
+
+ /**
+  * # Directive
+  * >>> Input statements
+  * >>> ...
+  * Expected result
+  *
+  * ...
+  */
+ function ...
+
+The following example is a simple block.
+
+::
+
+ /**
+  * #test Converts string to integer
+  * >>> intval('12345');
+  * 12345
+  */
+
+``#test`` is a directive to test the block.
+Directives begin with ``#``.
+See Directives_ about other directives.
+
+Lines beginning with ``>>>`` are input statements that executed as PHP code.
+If the lines include comment beginning with ``//``,
+the comment lines are ignored.
+
+The last line is expected result.
+Expected result is expected value in JSON format or expected exception.
+Expected value is compared with value of last expression of input statements
+by ``===`` operator.
+
+The following is an example for input statements in multiple lines.
+
+::
+
+ /**
+  * #test
+  * >>> $value = 0;
+  * >>> for ($i = 1; $i <= 10; $i++)
+  * >>>     $value += $i;
+  * >>> $value;
+  * 55
+  *
+  */
+
+In test blocks expecting exception or any setup blocks (``#setUp``, etc.),
+last statement of input statements does not need
+to be an expression statement.
+For more information about exception, see Exception_.
+
+Comment
+--------
+
+Lines beginning ``//`` in input statements and expected results
+are ignored.
+The following compares arrays containing ``1`` and ``3``.
+
+::
+
+ #test
+ >>> array(1,
+ // >>> 2,
+ >>> 3);
+ [1,
+ // 2,
+ 3]
+
+To comment out lines, write ``//`` for each lines.
+You cannot use ``/* ... */`` because it cannot be nested.
+
+
+Expected Value
+--------------
+
+Format
+''''''
+
+Format of expected value is JSON.
+The reasons are the following:
+
+**PHP code** 
+ * Easy to write in.
+ * Needs reading the code to understand.
+
+**Output of var_export() or var_dump()**
+ * Easy to understand the value.
+ * Redandunt.
+
+**JSON**
+ * Easy to write in.
+ * Easy to understand the value.
+ * Mixed non-PHP format.
+
+Types
+'''''
+
+Usable types in JSON format are string, number, array or object.
+NorfDocTest converts the value of types to the following:
+
+Strings
+  ``string``.
+Numbers
+  Integers are ``int``, floating point numbers are ``float``.
+Arrays
+  ``NorfArray`` comparable with ``array``.
+Objects
+  ``NorfDictionary`` comparable with ``array``.
+
+Comparing PHP arrays::
+
+ #test
+ >>> array(1, 2, 3);
+ [1, 2, 3]
+
+ #test
+ >>> array('a'=>'A', 'b'=>'B', 'c'=>'C');
+ {"a":"A", "b":"B", "c":"C"}
+
+
+Exception
+----------
+
+If tests should throw any exception, write expected exception and message
+with colon separator at expected result.
+The following example is a test of the Fibonacci function.
+
+::
+
+  #test Throws an exception if n < 0
+  >>> fib(-1);
+  InvalidArgumentException: n must be >= 0
+
+The test will pass if evaluated ``fib(-1)`` throw 
+``InvalidArgumentException`` with message ``"n must be >= 0"``.
+
+
+Overriding Tests
+================
+
+Overriding tests means definition subclasses of classes including tests or
+overriding methods which super implementations include tests.
+In both cases, tests of superclasss or methods of superclasses are executed
+by default.
+
+To execute the tests, use ``#super`` directive in each documentation comments.
+The following example executes super tests.
+
+::
+
+ /**
+  * #test AlphaClass
+  * >>> ...
+  * ...
+  */
+ class Alpha
+ {
+    /**
+     * #test AlphaMethod
+     * >>> ...
+     * ...
+     */
+    function method()
+    {
+        return ...;
+    }
+ }
+
+ /**
+  * Tests of BravoClass are executed after executing tests of AlphaClass.
+  *
+  * #super
+  *
+  * #test BravoClass
+  * >>> ...
+  * ...
+  */
+ class Bravo extends Alpha
+ {
+    /**
+     * Tests of BravoMethod are executed after executing tests of AlphaMethod.
+     *
+     * #super
+     *
+     * #test BravoMethod
+     * >>> ...
+     * ...
+     */
+    function method()
+    {
+        return ...;
+    }
+ }
+
+This example omits an important thing.
+Created instances in input statements must be of the subclasses in tests of one.
+
+``#class`` and ``#new`` directives will be replaced name or constructor
+of subclasses.
+The directives can be used in input statements.
+An example is the following:
+
+::
+
+ /**
+  * #test
+  * >>> $obj = #new();
+  * >>> is_subclass_of($obj, 'Alpha');
+  * true
+  */
+ class Alpha
+ {
+     ...
+ }
+
+ /**
+  * #super
+  */
+ class Bravo extends Alpha
+ {
+     ...
+ }
+
+``#new()`` will be replaced with ``new Bravo()`` when executing tests of
+``Bravo`` class.
+
+
+Testing Abstract Classes and Methods
+====================================
+
+Abstract classes and methods can have tests, however,
+the tests cannot be executed without concrete implementation.
+To execute them, write ``#super`` directive in subclasses' implementation.
+
+::
+
+ abstract class AbstractClass
+ {
+     /**
+      * This test is executed in subclasses.
+      *
+      * #test
+      * >>> $obj = #new();
+      * >>> is_int($obj->anyIntValue());
+      * true
+      */
+     abstract function anyIntValue();
+ }
+
+ class ConcreteClass extends AbstractClass
+ {
+     /**
+      * #super
+      */
+     function anyIntValue()
+     {
+         return 1;
+     }
+ }
+
+
+Tests of normal methods of abstract classes are executed.
+You need to use any subclass of the classes or define new subclass
+to execute the tests.
+
+::
+
+ abstract class AbstractClass
+ {
+     /**
+      * #test
+      * >>> $obj = new ConcreteClassForTest();
+      * >>> is_int($obj->anyIntValue());
+      * true
+      */
+     function anyIntValue()
+     {
+         return 1;
+     }
+ }
+
+ class ConcreteClassForTest extends AbstractClass
+ {
+ }
+
+
+--------------------------------
+        Executing Tests
+--------------------------------
+
+Writing code to execute tests
+=============================
+
+To execute tests, write code like the following in other file.
+
+::
+
+ <?php
+
+ require_once 'NorfDocTest/NorfDocTest.php';        // 1.
+
+ $group = NorfDocTestModuleGroup::defaultGroup();
+ $group->addModuleWithFile('fib.php');              // 2.
+
+ $request = new NorfDocTestRequest('Fibonacci');    // 3.
+ $group->executeRequest($request);                  // 4.
+
+The following is a scenario to execute tests.
+
+1. Loads ``NorfDocTest.php``.
+2. Adds files including tests.
+   (``NorfDocTestModuleGroup::addModuleWithFile()``) 
+3. Creates a request object with test name. (``NorfDocTestRequest``) 
+4. Executes the request. (``NorfDocTestModelGroup::executeRequest()``)
+
+Easy to write execution files:
+
+* Copy the code to your projects.
+* Add code of 2. for testing files.
+* Rewrite test name of 3.
+
+NorfDocTest will be able to execute tests by group and
+have a commond-line interface to test in future versions.
+
+
+Order of execution
+==================
+
+In current implementation, tests are executed in order by definition.
+If both classes and functions are defined in same file,
+tests of classes are executed first.
+
+
+Specifying Targets to Test
+==========================
+
+**Note:** This is an experimental specification.
+
+To specify targets (classes, methods or functions) to test,
+add target names to requests.
+If requests have no targets, all tests will be executed.
+
+::
+
+ $request = new NorfDocTestRequest('Example');
+
+ // Specifies a target class.
+ $request->addTestingClassName('TestClass');
+
+ // Excludes a class from targets.
+ $request->addIgnoringClassName('IgnoreClass');
+
+ $group->executeRequest($request);
+
+``NorfDocTestRequest``'s APIs are the following:
+
+``testingClassNames()``
+  Returns an array including class names to test.
+
+``addTestingClassName($name)``
+  Adds a class name to test.
+
+``removeTestingClassName($name)``
+  Removes a class name to test.
+
+``ignoringClassNames()``
+  Returns an array including class names not to test.
+
+``addIgnoringClassName($name)``
+  Adds a class name not to test.
+
+``removeIgnoringClassName($name)``
+  Removes a class name not to test.
+
+``classPattern()``
+  Returns an array including regular-expression matching class names to
+  test.
+
+``addClassPattern($pattern)``
+  Adds a regular-expression matching class names to test.
+
+``removeClassPattern($pattern)``
+  Removes a regular-expression matching class names to test.
+
+``testingMethodNamesForClassNamed($name)``
+  Returns an array including method names of class named ``$name`` to test.
+
+``addTestingMethodNameForClassNamed($methName, $className)``
+  Adds a method name of class named ``$className`` to test.
+
+``removeTestingMethodNameForClassNamed($methName, $className)``
+  Removes a method name of class named ``$className`` to test.
+
+``ignoringMethodNamesForClassNamed($name)``
+  Returns an array including method names of class named ``$name`` not to test.
+
+``addIgnoringMethodNameForClassNamed($methName, $className)``
+  Adds a method name of class named ``$className`` not to test.
+
+``removeIgnoringMethodNameForClassNamed($methName, $className)``
+  Removes a method name of class named ``$className`` not to test.
+
+``methodPatternsForClassNamed($name)``
+  Returns an array including regular-expressions matching
+  method names of class named ``$name`` to test.
+
+``addMethodPatternForClassNamed($pattern, $name)``
+  Adds a regular-expression matching method names of
+  class named ``$name`` to test.
+
+``removeMethodPatternForClassNamed($pattern, $name)``
+  Removes a regular-expression matching method names of
+  class named ``$name`` to test.
+
+``testingFunctionNames()``
+  Returns an array containing function names to test.
+
+``addTestingFunctionName($name)``
+  Adds a function name to test.
+
+``removeTestingFunctionName($name)``
+  Removes a function name to test.
+
+``ignoringFunctionNames()``
+  Returns an array containing function names not to test.
+
+``addIgnoringFunctionName($name)``
+  Adds a function name not to test.
+
+``removeIgnoringFunctionName($name)``
+  Removes a function name not to test.
+
+``functionPattern()``
+  Returns an array containing regular-expression matching
+  function names to test.
+
+``addFunctionPattern($pattern)``
+  Adds a regular-expression matching function names to test.
+
+``removeFunctionPattern($pattern)``
+  Removes a regular-expression matching function names to test.
+
+
+--------------------------
+        Directives
+--------------------------
+
+Block Directives
+=================
+
+``#setUp``
+----------
+
+Syntax::
+
+ #setUp
+ # Comments ...
+ >>> Input statements ...
+
+この指示子に続く入力文は、各テストの実行前に評価されます。
+この指示子をクラスかメソッドのコメントで指定すると、
+同クラス内のすべての各テストの実行前に評価されます。
+関数のコメントで指定すると、同関数内のテストの実行前に評価されます。
+
+各テストの入力文と実行コンテキストを共有するので、
+この入力文で定義した変数は各テストの入力文から参照できます。
+
+``#localSetUp``
+---------------
+
+Syntax::
+
+ #localSetUp
+ # Comments ...
+ >>> Input statements ...
+
+この指示子はメソッドのコメントでのみ有効です。
+この指示子に続く入力文は、同メソッドの各テストの実行前に評価されます。
+
+``#setUp`` と同様に、各テストの入力文と実行コンテキストを共有します。
+``#setUp`` の使用例も定義されている場合、
+``#setUp``, ``#localSetUp`` の順に入力文が評価されます。
+
+``#tearDown``
+-------------
+
+Syntax::
+
+ #tearDown
+ # Comments ...
+ >>> Input statements ...
+
+この指示子に続く入力文は、各テストの実行後に評価されます。
+この指示子をクラスかメソッドのコメントで指定すると、
+同クラス内のすべての各テストの実行前に評価されます。
+関数のコメントで指定すると、同関数内のテストの実行後に評価されます。
+
+各テストの入力文と実行コンテキストを共有するので、
+``#setUp``, ``#localSetUp``, テストの入力文で定義した変数は
+この指示子に続く入力文から参照できます。
+
+``#localTearDown``
+------------------
+
+Syntax::
+
+ #localTearDown
+ # Comments ...
+ >>> Input statements ...
+
+この指示子はメソッドのコメントでのみ有効です。
+この指示子に続く入力文は、同メソッドの各テストの実行後に評価されます。
+
+``#tearDown`` と同様に、各テストの入力文と実行コンテキストを共有します。
+``#tearDown`` の使用例も定義されている場合、
+``#localTearDown``, ``#tearDown`` の順に入力文が評価されます。
+``#setUp``, ``#localSetUp`` と評価順序が異なるので注意してください。
+
+``#test``
+----------------
+
+Syntax::
+
+ #test [Title]
+ # Comments ...
+ >>> Input statements ...
+ 期待値
+ 
+続く入力文をテストとして実行し、入力文の最後の式の結果を期待値を比較します。
+
+
+``#toDo``
+---------
+
+Syntax::
+
+ #toDo
+ #test [Title]
+ # Comments ...
+ >>> Input statements ...
+ Expected result
+
+続くテストブロックをToDoとして数えます。
+ブロックは実行されません。
+
+
+``#super``
+----------
+
+Syntax::
+
+ #super
+
+クラスのドキュメントで指定すると、スーパークラスのテストを実行します。
+メソッドで指定すると、 スーパークラスの同名メソッドのテストを実行します。
+この指示子は単体で使い、入力文と期待値をとりません。
+
+
+``#...``
+--------
+
+Syntax::
+
+ # Comment
+ # ...
+
+使用例についてのコメントを記述します。
+続く ``#...`` で始まる行を一連のコメントとみなします。
+
+現在コメントは特に使われていませんが、
+将来のリリースではテスト結果をHTMLファイルに出力する場合などに
+使われる予定です。
+
+
+Input Statement Directives
+==========================
+
+次の指示子は入力文でのみ使えます。
+
+``#class``
+----------
+
+ブロック評価時のクラス名に置き換えられます。
+主に抽象クラスや抽象メソッドのテストで使います。
+サブクラスのテストで ``#super`` を指定した場合に、
+テスト実行時にそのサブクラスに置き換えられます。
+
+
+``#new(...)``
+-------------
+
+ブロック評価時のクラスのコンストラクタに置き換えられます。
+``new #class(...)`` と同じ意味です。
+
+
+-------------------
+        BNF
+-------------------
+
+::
+
+ Documentation ::= Block*
+
+ Block ::= BlockToSetUp
+         | BlockToLocalSetUp
+         | BlockToTest
+         | ToDoBlock
+         | SuperBlock
+
+ BlockToSetUp ::= "#setUp" BlockBody
+
+ BlockBody ::= [Comment] Statement+
+
+ Comment ::= ("#" String NewLine)+
+
+ Statement ::= ">>>" PHPStatement+ NewLine
+
+ PHPStatement ::= <any PHP statement>
+
+ BlockToLocalSetUp ::= "#localSetUp" BlockBody
+
+ BlockToTest ::= "#test" BlockBody ExpectedResult
+
+ ExpectedResult ::= (ExpectedValue | ExpectedException) NewLine
+
+ ExpcetdValue ::= <JSON representation>
+
+ ExpectedException ::= <exception eame> ":" <exception message>
+
+ ToDoBlock ::= "#toDo" BlockToTest
+
+ SuperBlock ::= "#super"
+
+.. _openpear: http://openpear.org/
+

@@ -1,0 +1,849 @@
+.. -*- coding: utf-8 -*-
+
+===================
+    NorfDocTest
+===================
+
+.. |date| date::
+
+:著者: 鈴木鉄也 <suzuki@spice-of-life.net>
+:日付: |date|
+:バージョン: NorfDocTest 0.7
+
+.. _English: doctest_en.html
+
+.. contents::
+
+..
+
+--------------------
+        概要
+--------------------
+
+NorfDocTestはPHP用のDocTestツールです。
+Pythonのdoctestモジュール風のフォーマットで、
+テストを兼ねた使用例を見やすく書けます。
+
+
+--------------------------
+        ライセンス
+--------------------------
+
+NorfDocTestはMITライセンスで配布します。
+
+
+----------------------------
+        インストール
+----------------------------
+
+アーカイブごと任意のディレクトリにコピーしてください。
+特に他に必要なライブラリはありません。
+
+ソースをリポジトリからクローンする場合は、ディレクトリ名を
+``NorfDocTest`` に変更してください（しなくても問題ありませんが、
+このマニュアルでは変更したものとして扱います）。
+
+
+openpearによるインストール
+==========================
+
+NorfDocTestは openpear_ でもインストールできます。
+まずPEARコマンドが使える環境で次のコマンドを入力し、openpearの準備をします。
+
+::
+
+ % pear channel-discover openpear.org
+
+成功したら、次のコマンドでNorfDocTestをインストールできます。
+
+::
+
+ % pear install openpear/NorfDocTest
+
+
+差分表示オプション (Text_Diff)
+==============================
+
+PEARのText_Diffパッケージがインストールされていれば、
+文字列の期待値が結果と異なる場合に詳細な違いを表示します。
+PEARが使える環境でなければ、Text_Diffパッケージの
+ソースコードをインクルードパスに置いても大丈夫です。
+
+
+Norfについて
+============
+
+NorfDocTestは Norf_ からライブラリを一部抜き出して使っていますが、
+単体で動作しますのでNorfのインストールは不要です。
+ただ、Norfに頼ってばっかりでPHPの基本的なライブラリをあまり使っていないため、
+実装を把握するのが面倒かもしれません。
+
+
+----------------------
+        例
+----------------------
+
+簡単な例を次に示します。
+
+``fib.php``::
+
+ /**
+  * フィボナッチ数列を計算する。
+  *
+  * #test n = 0 の場合
+  * >>> fib(0);
+  * 0;
+  *
+  * #test n = 1 の場合
+  * >>> fib(1);
+  * 1;
+  *
+  * #test n = 10 の場合
+  * >>> fib(10);
+  * 55;
+  *
+  * #test n < 0 であれば例外
+  * >>> fib(-1);
+  * InvalidArgumentException: n must be >= 0
+  */
+ function fib($n)
+ {
+      if ($n < 0)
+          throw new InvalidArgumentException('error');
+      else if ($n == 0)
+          return 0;
+      else if ($n == 1)
+          return 1;
+      else
+          return fib($n-1) + fib($n-2);
+ }
+
+これはおなじみのフィボナッチ数列を求める関数です。
+NorfDocTestディレクトリと同じディレクトリにこのファイルを置き、
+次にテストを実行するファイルを書きます。
+
+``fibtest.php``::
+
+ <?php
+
+ require_once 'NorfDocTest/NorfDocTest.php';
+
+ $group = NorfDocTestModuleGroup::defaultGroup();
+ $group->addModuleWithFile('fib.php');
+
+ $request = new NorfDocTestRequest('Fibonacci');
+ $group->executeRequest($request);
+
+この実行ファイルをコマンドラインで実行すると、
+NorfDocTestはコメント内の使用例をテストとして実行します。
+
+::
+
+ % php fibtest.php
+ Testing Fibonacci
+
+ ...
+
+ 3 tests, 0 failures, 0 errors, 0 skips, 0 todos
+ Total time: 0.002 seconds
+
+
+----------------------
+        使い方
+----------------------
+
+テストの対象となるテキスト
+==========================
+
+NorfDocTestは、クラス・メソッド・関数の直前にある
+``/** ... */`` で囲まれたテキストをテストの対象とします。
+phpDocumertorなどで利用されるテキストとテストを
+同じコメント内に書くことになりますが、
+NorfDocTestの文法はドキュメント生成ツールには影響しません。
+
+テスト対象のテキストは行単位で解析します。
+NorfDocTestが扱う文法は次の三つです。
+これ以外のテキストはすべて無視します。
+
+* ``#`` で始まる行（指示子）
+* ``>>>`` で始まる行（入力文）
+* 入力文に続く行（期待値）
+
+行の先頭の空白とアスタリスクは無視されます。
+次の例はどちらも有効です。
+
+::
+
+ /**
+    #test
+    >>> ...
+    ...
+  */
+  function myMethod()
+  ...
+
+ /**
+  * #test
+  * >>> ...
+  * ...
+  */
+  function myMethod()
+  ...
+
+
+ブロック
+========
+
+テストの基本単位は、「指示子、入力文、期待値」の組み合わせで
+構成されるブロックです。
+ドキュメント（テスト対象のテキスト）には複数のブロックを記述できます。
+
+ブロックの文法::
+
+ /**
+  * # 指示子
+  * >>> 入力文
+  * >>> ...
+  * 期待値式
+  *
+  * ...
+  */
+ function ...
+
+次に基本的なブロックの例を示します。
+
+ブロックの例::
+
+ /**
+  * #test 文字列を数値に変換
+  * >>> intval('12345');
+  * 12345
+  */
+
+``#test`` はブロックをテストとして実行する指示子です。
+指示子は必ず ``#`` で始まります。
+他の指示子については 指示子_ を参照してください。
+
+続く ``>>>`` で始まる行は入力文です。
+入力文はPHPのコードとして実行されます。
+複数行に渡って入力文を記述するには、空行を挟まずに続けて
+``>>>`` から始めます。
+
+最後の行は期待値です。
+期待値は入力文の最後の式を評価した値と ``===`` で比較されます。
+入力文に複数の式を記述した例を次に示します。
+
+::
+
+ /**
+  * #test
+  * >>> $value = 0;
+  * >>> for ($i = 1; $i <= 10; $i++)
+  * >>>     $value += $i;
+  * >>> $value; // この式の評価値を期待値と比較する
+  * 55
+  *
+  */
+
+例外の発生が期待されるテストブロックや
+``#setUp`` などの指示子が指定されたセットアップブロックでは、
+最後の文が式文でなくても構いません。
+例外については 例外の扱い_ を参照してください。
+
+コメント
+--------
+
+入力文と期待値では、 ``//`` で始まる行を無視します。
+次の例では、内容が ``1, 3`` の配列同士を比較することになります。     
+
+::
+
+ #test
+ >>> array(1,
+ // >>> 2,
+ >>> 3);
+ [1,
+ // 2,
+ 3]
+
+複数行をコメントアウトするには、各行で ``//`` を使います。
+PHPの ``/* ... */`` のコメントはネストできないため、
+``/* ... */`` は使えません。
+
+
+期待値
+------
+
+期待値はJSONフォーマットで記述します。
+なぜJSONフォーマットを使うのか、次に各フォーマットの利点と欠点を挙げます。
+最終的にDocTestとしての見やすさと書きやすさのバランスを考え、
+期待値をJSONフォーマットで記述することにしました。
+
+* 入力文と同様にPHPのコードを記述する場合、
+  どちらもPHPのコードが続くので、思考を切り替えることなく書きやすい。
+  ただし、テスト結果を知るのに期待値のコードを読む必要がある。
+* ``var_export()`` や ``var_dump()`` の出力を記述する場合、
+  期待値の内容は見てわかりやすくなる。
+  ただし、特に配列やオブジェクトは書くのに手間がかかる。
+* JSONフォーマットの場合、配列（キーが整数でもそれ以外でも）が書きやすく、
+  見てわかりやすい。
+  ただし、使える型は限定され、入力文と思考を切り替える必要がある。
+
+また、JSONの制約上、期待値に指定できる型は
+「文字列、数値、配列、オブジェクト」の四つに限定されます。
+NorfDocTestではJSONの解析を自前の実装で行っており、
+これらの型を次のPHPの型として扱います。
+
+文字列
+  ``string`` 。
+数値
+  整数は ``int`` 、浮動小数点数は ``float`` 。
+配列
+  ``NorfArray`` 。 ``array`` とも比較可。
+オブジェクト
+  ``NorfDictionary`` 。 ``array`` とも比較可。
+
+JSONの配列とオブジェクトはそれぞれ ``NorfArray`` と
+``NorfDictionary`` に変換されますが、
+PHPの配列と比較できるようになっています。
+入力文の最後の式の評価値を ``NorfArray``, ``NorfDictionary``
+にする必要はありません。
+
+配列の比較::
+
+ #test
+ >>> array(1, 2, 3);
+ [1, 2, 3]
+
+ #test
+ >>> array('a'=>'A', 'b'=>'B', 'c'=>'C');
+ {"a":"A", "b":"B", "c":"C"}
+
+
+例外の扱い
+----------
+
+例外が発生しなければならない場合、期待値に発生すべき例外とメッセージを
+コロンで区切って記述します。
+先のフィボナッチ関数の例を見てみましょう。
+
+フィボナッチ関数の例::
+
+  #test n < 0 であれば例外
+  >>> fib(-1);
+  InvalidArgumentException: n must be >= 0
+
+このテストは、 ``fib(-1)`` を評価すると例外
+``InvalidArgumentException`` が発生し、
+かつメッセージが ``"n must be >= 0"`` でなければパスしません。
+
+
+テストのオーバーライド
+======================
+
+テストのオーバーライドとは、
+テストを書いたクラスのサブクラスを定義するか、
+テストを書いたメソッドをサブクラスでオーバーライドすることです。
+どちらの場合も、デフォルトではスーパークラスのテストは実行されません。
+
+スーパークラスのテストを実行するには``#super`` 指示子を記述します。
+``#super`` は同一のドキュメント内でのみ有効です。
+クラスドキュメントに ``#super`` を記述しても、
+すべてのメソッドでスーパークラスのテストが実行されることはありません。
+
+次に ``#super`` を使ったテストの例を示します。
+
+::
+
+ /**
+  * #test AlphaClass
+  * >>> ...
+  * ...
+  */
+ class Alpha
+ {
+    /**
+     * #test AlphaMethod
+     * >>> ...
+     * ...
+     */
+    function method()
+    {
+        return ...;
+    }
+ }
+
+ /**
+  * テスト AlphaClass が実行された後、テスト BravoClass が実行される。
+  *
+  * #super
+  *
+  * #test BravoClass
+  * >>> ...
+  * ...
+  */
+ class Bravo extends Alpha
+ {
+    /**
+     * テスト AlphaMethod が実行された後、テスト BravoMethod が実行される。
+     *
+     * #super
+     *
+     * #test BravoMethod
+     * >>> ...
+     * ...
+     */
+    function method()
+    {
+        return ...;
+    }
+ }
+
+``#super`` を書かなければ、スーパークラスのテストは実行されません。
+
+この例では省略してごまかしましたが、
+サブクラスを考慮したテストを書くには、
+入力文中のクラス名とコンストラクタが
+テスト実行時にサブクラスのものに置き換えられなければなりません。
+
+これには ``#class`` と ``#new`` の指示子を使います。
+どちらも入力文でのみ使える指示子です。
+``#class`` はテスト実行時のサブクラス名に、
+``#new`` はサブクラスのコンストラクタに置き換えられます。
+次に例を示します。
+
+::
+
+ /**
+  * #test
+  * >>> $obj = #new();
+  * >>> is_subclass_of($obj, 'Alpha');
+  * true
+  */
+ class Alpha
+ {
+     ...
+ }
+
+ /**
+  * #super
+  */
+ class Bravo extends Alpha
+ {
+     ...
+ }
+
+Bravo クラスのテストを実行するときには
+``#new()`` が ``new Bravo()`` に置換され、
+Bravo クラスのインスタンスが生成されます。
+
+
+抽象クラスと抽象メソッドのテスト
+================================
+
+抽象クラスと抽象メソッドにもテストを書くことができますが、
+抽象クラス・抽象メソッドのテストは実行されません。
+テストが実行するには、サブクラスを定義して ``#super`` を指定します。
+
+::
+
+ abstract class AbstractClass
+ {
+     /**
+      * サブクラスから実行される。
+      *
+      * #test
+      * >>> $obj = #new();
+      * >>> is_int($obj->anyIntValue());
+      * true
+      */
+     abstract function anyIntValue();
+ }
+
+ class ConcreteClass extends AbstractClass
+ {
+     /**
+      * #super
+      */
+     function anyIntValue()
+     {
+         return 1;
+     }
+ }
+
+ただし、抽象クラスのメソッドのテストがすべて無視されるわけではなく、
+抽象クラスで実装されたメソッドのテストは実行されます。
+この場合もちろん抽象クラスはインスタンス化できないので、
+テスト用のサブクラスを用意する必要があります。
+次に例を示します。
+
+::
+
+ abstract class AbstractClass
+ {
+     /**
+      * #test
+      * >>> $obj = new ConcreteClassForTest();
+      * >>> is_int($obj->anyIntValue());
+      * true
+      */
+     function anyIntValue()
+     {
+         return 1;
+     }
+ }
+
+ class ConcreteClassForTest extends AbstractClass
+ {
+ }
+
+
+--------------------------------
+        テストの実行
+--------------------------------
+
+テストを実行するコードを書く
+============================
+
+テストを実行するには、実行用のコードを別のファイルに記述します。
+次に例を示します。
+
+::
+
+ <?php
+
+ require_once 'NorfDocTest/NorfDocTest.php';        // 1.
+
+ $group = NorfDocTestModuleGroup::defaultGroup();
+ $group->addModuleWithFile('fib.php');              // 2.
+
+ $request = new NorfDocTestRequest('Fibonacci');    // 3.
+ $group->executeRequest($request);                  // 4.
+
+テスト実行ファイルの基本的な流れを次に示します。
+
+1. ``NorfDocTest.php`` をロードする。
+2. テストを記述したファイルを追加する。 
+   (``NorfDocTestModuleGroup::addModuleWithFile()``) 
+3. 任意のテスト名を指定してリクエストを生成する。 (``NorfDocTestRequest``) 
+4. リクエストを実行する。 (``NorfDocTestModelGroup::executeRequest()``)
+
+テスト実行ファイルを簡単に書くには、
+このコードをコピーして 2. の行をファイル分だけ追加し、
+3. のテスト名を書き換えます。
+
+将来的にはテストをグループに分けて実行できるようにしたり、
+テスト実行用のコマンドを用意するかもしれません。
+
+
+テストの実行順序
+================
+
+現在、テストは登場した順序で実行されます。
+ファイル中にクラスと関数が両方定義されている場合は、
+クラスのテストが先に実行されます。
+
+
+テスト対象の指定
+================
+
+※この仕様は試験的もので、今後変更する可能性があります。
+
+テスト対象のクラス、メソッド、関数を指定することができます。
+リクエストにテスト対象としたい、もしくはテスト対象から外したい
+クラス、メソッド、関数の名前を指定します。
+テスト対象を何も指定しなければ、すべてのテストが実行されます。
+
+::
+
+ $request = new NorfDocTestRequest('Example');
+
+ // 特定のクラスをテストする
+ $request->addTestingClassName('TestClass');
+
+ // テスト対象から外す
+ $request->addIgnoringClassName('IgnoreClass');
+
+ // テスト実行
+ $group->executeRequest($request);
+
+``NorfDocTestRequest`` のAPIを次に示します。 
+
+``testingClassNames()``
+  テスト対象のクラス名を含む配列を返します。
+
+``addTestingClassName($name)``
+  テスト対象のクラス名を追加します。
+
+``removeTestingClassName($name)``
+  追加されたテスト対象のクラス名を取り除きます。
+
+``ignoringClassNames()``
+  テスト対象外のクラス名を含む配列を返します。
+
+``addIgnoringClassName($name)``
+  テスト対象外のクラス名を追加します。
+
+``removeIgnoringClassName($name)``
+  追加されたテスト対象外のクラス名を取り除きます。
+
+``classPattern()``
+  テスト対象のクラスを指定する正規表現を含む配列を返します。
+
+``addClassPattern($pattern)``
+  テスト対象のクラスを指定する正規表現を追加します。
+
+``removeClassPattern($pattern)``
+  テスト対象のクラスを指定する正規表現を取り除きます。
+
+``testingMethodNamesForClassNamed($name)``
+  指定したクラスのうち、テスト対象のメソッド名を含む配列を返します。
+
+``addTestingMethodNameForClassNamed($methName, $className)``
+  テスト対象のメソッド名を追加します。
+
+``removeTestingMethodNameForClassNamed($methName, $className)``
+  テスト対象のメソッド名を取り除きます。
+
+``ignoringMethodNamesForClassNamed($name)``
+  指定したクラスのうち、テスト対象外のメソッド名を含む配列を返します。
+
+``addIgnoringMethodNameForClassNamed($methName, $className)``
+  テスト対象外のメソッド名を追加します。
+
+``removeIgnoringMethodNameForClassNamed($methName, $className)``
+  テスト対象外のメソッド名を取り除きます。
+
+``methodPatternsForClassNamed($name)``
+  指定したクラスのうち、テスト対象のメソッドを指定する
+  正規表現を含む配列を返します。
+
+``addMethodPatternForClassNamed($pattern, $name)``
+  テスト対象のメソッドを指定する正規表現を追加します。
+
+``removeMethodPatternForClassNamed($pattern, $name)``
+  テスト対象のメソッドを指定する正規表現を取り除きます。
+
+``testingFunctionNames()``
+  テスト対象の関数名を含む配列を返します。
+
+``addTestingFunctionName($name)``
+  テスト対象の関数名を追加します。
+
+``removeTestingFunctionName($name)``
+  追加されたテスト対象の関数名を取り除きます。
+
+``ignoringFunctionNames()``
+  テスト対象外の関数名を含む配列を返します。
+
+``addIgnoringFunctionName($name)``
+  テスト対象外の関数名を追加します。
+
+``removeIgnoringFunctionName($name)``
+  追加されたテスト対象外の関数名を取り除きます。
+
+``functionPattern()``
+  テスト対象の関数を指定する正規表現を含む配列を返します。
+
+``addFunctionPattern($pattern)``
+  テスト対象の関数を指定する正規表現を追加します。
+
+``removeFunctionPattern($pattern)``
+  テスト対象の関数を指定する正規表現を取り除きます。
+
+
+----------------------
+        指示子
+----------------------
+
+ブロック指示子
+==============
+
+``#setUp``
+----------
+
+文法::
+
+ #setUp
+ # コメント ...
+ >>> 入力文 ...
+
+この指示子に続く入力文は、各テストの実行前に評価されます。
+この指示子をクラスかメソッドのコメントで指定すると、
+同クラス内のすべての各テストの実行前に評価されます。
+関数のコメントで指定すると、同関数内のテストの実行前に評価されます。
+
+各テストの入力文と実行コンテキストを共有するので、
+この入力文で定義した変数は各テストの入力文から参照できます。
+
+``#localSetUp``
+---------------
+
+文法::
+
+ #localSetUp
+ # コメント ...
+ >>> 入力文 ...
+
+この指示子はメソッドのコメントでのみ有効です。
+この指示子に続く入力文は、同メソッドの各テストの実行前に評価されます。
+
+``#setUp`` と同様に、各テストの入力文と実行コンテキストを共有します。
+``#setUp`` の使用例も定義されている場合、
+``#setUp``, ``#localSetUp`` の順に入力文が評価されます。
+
+``#tearDown``
+-------------
+
+文法::
+
+ #tearDown
+ # コメント ...
+ >>> 入力文 ...
+
+この指示子に続く入力文は、各テストの実行後に評価されます。
+この指示子をクラスかメソッドのコメントで指定すると、
+同クラス内のすべての各テストの実行前に評価されます。
+関数のコメントで指定すると、同関数内のテストの実行後に評価されます。
+
+各テストの入力文と実行コンテキストを共有するので、
+``#setUp``, ``#localSetUp``, テストの入力文で定義した変数は
+この指示子に続く入力文から参照できます。
+
+``#localTearDown``
+------------------
+
+文法::
+
+ #localTearDown
+ # コメント ...
+ >>> 入力文 ...
+
+この指示子はメソッドのコメントでのみ有効です。
+この指示子に続く入力文は、同メソッドの各テストの実行後に評価されます。
+
+``#tearDown`` と同様に、各テストの入力文と実行コンテキストを共有します。
+``#tearDown`` の使用例も定義されている場合、
+``#localTearDown``, ``#tearDown`` の順に入力文が評価されます。
+``#setUp``, ``#localSetUp`` と評価順序が異なるので注意してください。
+
+``#test``
+----------------
+
+文法::
+
+ #test [テスト名]
+ # コメント ...
+ >>> 入力文 ...
+ 期待値
+ 
+続く入力文をテストとして実行し、入力文の最後の式の結果を期待値を比較します。
+
+
+``#toDo``
+---------
+
+文法::
+
+ #toDo
+ #test [テスト名]
+ # コメント ...
+ >>> 入力文 ...
+ 期待値
+
+続くテストブロックをToDoとして数えます。
+ブロックは実行されません。
+
+
+``#super``
+----------
+
+文法::
+
+ #super
+
+クラスのドキュメントで指定すると、スーパークラスのテストを実行します。
+メソッドで指定すると、 スーパークラスの同名メソッドのテストを実行します。
+この指示子は単体で使い、入力文と期待値をとりません。
+
+
+``#...``
+--------
+
+文法::
+
+ # コメント
+ # ...
+
+使用例についてのコメントを記述します。
+続く ``#...`` で始まる行を一連のコメントとみなします。
+
+現在コメントは特に使われていませんが、
+将来のリリースではテスト結果をHTMLファイルに出力する場合などに
+使われる予定です。
+
+
+入力文指示子
+============
+
+次の指示子は入力文でのみ使えます。
+
+``#class``
+----------
+
+ブロック評価時のクラス名に置き換えられます。
+主に抽象クラスや抽象メソッドのテストで使います。
+サブクラスのテストで ``#super`` を指定した場合に、
+テスト実行時にそのサブクラスに置き換えられます。
+
+
+``#new(...)``
+-------------
+
+ブロック評価時のクラスのコンストラクタに置き換えられます。
+``new #class(...)`` と同じ意味です。
+
+
+-------------------
+        BNF
+-------------------
+
+::
+
+ Documentation ::= Block*
+
+ Block ::= BlockToSetUp
+         | BlockToLocalSetUp
+         | BlockToTest
+         | ToDoBlock
+         | SuperBlock
+
+ BlockToSetUp ::= "#setUp" BlockBody
+
+ BlockBody ::= [Comment] Statement+
+
+ Comment ::= ("#" String NewLine)+
+
+ Statement ::= ">>>" PHPStatement+ NewLine
+
+ PHPStatement ::= <any PHP statement>
+
+ BlockToLocalSetUp ::= "#localSetUp" BlockBody
+
+ BlockToTest ::= "#test" BlockBody ExpectedResult
+
+ ExpectedResult ::= (ExpectedValue | ExpectedException) NewLine
+
+ ExpcetdValue ::= <JSON representation>
+
+ ExpectedException ::= <exception eame> ":" <exception message>
+
+ ToDoBlock ::= "#toDo" BlockToTest
+
+ SuperBlock ::= "#super"
+
+
+.. _Norf: http://code.google.com/p/norf/
+.. _openpear: http://openpear.org/
+
+
