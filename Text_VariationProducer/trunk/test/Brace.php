@@ -14,6 +14,9 @@ $strings9 = new Text_VariationProducer('A{,0}B');
 $strings10 = new Text_VariationProducer('A{0,,}B');
 $strings11 = new Text_VariationProducer('{\,\\,\\\,\\\\,}');
 $strings12 = new Text_VariationProducer('{\x5c,\x2c,\x7d}');
+$strings13 = new Text_VariationProducer('{,[kstnhmyrwgzdbp]}[aiueo]');
+$strings14 = new Text_VariationProducer('{,[kstnhmyrwgzdbp]}[aiueo]{,[kstnhmyrwgzdbp]}[aiueo]');
+$strings15 = new Text_VariationProducer('{a,a,a,[a],\x61}{,,}');
 
 //--
 
@@ -29,6 +32,6 @@ $lime->ok(iterator_to_array($strings9) === array('AB', 'A0B'));
 $lime->ok(iterator_to_array($strings10) ===  array('A0B', 'AB', 'AB'));
 $lime->ok(iterator_to_array($strings11) ===  array(',,\\', '\\', ''));
 $lime->ok(iterator_to_array($strings12) ===  array('\\', ',', '}'));
-
-
-
+$lime->ok(iterator_count($strings13) ===  75);
+$lime->ok(iterator_count($strings14) ===  5625);
+$lime->ok(iterator_to_array($strings15) ===  array_fill(0, 15, 'a'));
