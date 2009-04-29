@@ -143,8 +143,8 @@ class Text_VariationProducer implements Iterator {
     while ($charclass_string !== "") {
       if ($charclass_string === false) {exit;}
       if (preg_match('/^'.
-                     '([^\]\\\\]|\\\\[nrtvf]|\\\\[0-9]{1,3}|\\\\x[0-9A-Fa-f]{1,2})'.
-                     '(?:-([^\]\\\\]|\\\\[nrtvf]|\\\\[0-9]{1,3}|\\\\x[0-9A-Fa-f]{1,2}))?'.
+                     '([^\]\\\\]|\\\\[0-9]{1,3}|\\\\x[0-9A-Fa-f]{1,2}|\\\\.)'.
+                     '(?:-([^\]\\\\]|\\\\[0-9]{1,3}|\\\\x[0-9A-Fa-f]{1,2}|\\\\.))?'.
                      '(.*)$/s', $charclass_string, $matches)) {
         $start = self::ParseString($matches[1]);
         if ($matches[2] !== "") {
@@ -164,7 +164,7 @@ class Text_VariationProducer implements Iterator {
         $charclass_string = $matches[3];
       } elseif (preg_match('/^(.)(.*)$/s', $charclass_string, $matches)) {
         // unknown character class string: skip 1st character.
-        $characters_occurred[ord($match[1])] = 1;
+        $characters_occurred[ord($matches[1])] = 1;
         $charclass_string = $matches[2];
       }
     }
@@ -178,7 +178,19 @@ class Text_VariationProducer implements Iterator {
   }
   private function BraceToArray($inner_brace)
   {
-    $ret = split(",", $inner_brace);
+    $ret = array();
+    while (1) {
+      // 区切り文字の「,」または文字列最後まで読む。「\,」でエスケープできる。
+      if (preg_match('/^('.
+                     '(?:[^,\\\\]|\\\\.|\\\\)*'.
+                     ')(?:,(.*))?$/s', $inner_brace, $matches)) {
+        $ret[] = self::ParseString($matches[1]);
+        if (!isset($matches[2])) {
+          break;
+        }
+        $inner_brace = $matches[2];
+      }
+    }
     return $ret;
   }
   private function ParseString($str)
