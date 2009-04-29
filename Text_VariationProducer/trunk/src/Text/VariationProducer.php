@@ -29,7 +29,7 @@ class Text_VariationProducer implements Iterator {
         $this->needs_multiple_producer = false;
         $this->patterns = array("");
       } elseif (preg_match('/^\{('.
-                     '(?:[^\}\\\\]|\\\\.)+(?:,(?:(?:[^\}\\\\]|\\\\.)+))*'.
+                     '(?:[^\}\\\\]|\\\\.)+'.
                      ')\}(.*)$/s',
                      $string_patterns, $matches)) {
         // 中カッコで囲まれた部分
@@ -64,13 +64,12 @@ class Text_VariationProducer implements Iterator {
   public function current()
   {
     $child = "";
-    if ($this->needs_multiple_producer) {
+    if ($this->current_producer instanceof Text_VariationProducer) {
       $current = $this->current_producer->current();
     } else {
       $current = $this->patterns[$this->current_index];
     }
-
-    if (is_object($this->rest_producer)) {
+    if ($this->rest_producer instanceof Text_VariationProducer) {
       $current .= $this->rest_producer->current();
     }
     return $current;
@@ -128,7 +127,7 @@ class Text_VariationProducer implements Iterator {
     return false;
   }
 
-  private function characterClassToArray($charclass_string)
+  private static function characterClassToArray($charclass_string)
   {
     $negate_characters = false;
     $characters = array();
@@ -176,7 +175,7 @@ class Text_VariationProducer implements Iterator {
     }
     return $characters;
   }
-  private function BraceToArray($inner_brace)
+  private static function BraceToArray($inner_brace)
   {
     $ret = array();
     while (1) {
@@ -193,7 +192,7 @@ class Text_VariationProducer implements Iterator {
     }
     return $ret;
   }
-  private function ParseString($str)
+  private static function ParseString($str)
   {
     $parsed_string = "";
     while ($str !== "") {
