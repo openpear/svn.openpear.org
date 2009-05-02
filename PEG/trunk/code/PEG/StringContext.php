@@ -8,7 +8,7 @@
 
 class PEG_StringContext implements PEG_IContext
 {
-    protected $str, $i = 0, $len;
+    protected $str, $i = 0, $len, $cache;
     
     /**
      * 与えられた文字列とその位置を保持するPEG_Contextインスタンスを生成する。
@@ -18,6 +18,7 @@ class PEG_StringContext implements PEG_IContext
     function __construct($str) { 
         $this->str = $str; 
         $this->len = strlen($str);
+        $this->cache = new PEG_Cache;
     }
 
     /**
@@ -61,5 +62,15 @@ class PEG_StringContext implements PEG_IContext
     function get()
     {
          return $this->str;   
+    }
+    
+    function save(PEG_IParser $parser, $start, $end, $val)
+    {
+        $this->cache->save($parser, $start, $end, $val);
+    }
+    
+    function cache(PEG_IParser $parser)
+    {
+        return $this->cache->cache($parser, $this->tell());
     }
 }

@@ -16,6 +16,7 @@ include_once dirname(__FILE__) . '/PEG/And.php';
 include_once dirname(__FILE__) . '/PEG/Anything.php';
 include_once dirname(__FILE__) . '/PEG/ArrayContext.php';
 include_once dirname(__FILE__) . '/PEG/CallbackAction.php';
+include_once dirname(__FILE__) . '/PEG/Cache.php';
 include_once dirname(__FILE__) . '/PEG/Char.php';
 include_once dirname(__FILE__) . '/PEG/Choice.php';
 include_once dirname(__FILE__) . '/PEG/Curry.php';

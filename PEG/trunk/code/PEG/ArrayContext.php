@@ -12,7 +12,7 @@
  */
 class PEG_ArrayContext implements PEG_IContext
 {
-    protected $arr, $i = 0, $len;
+    protected $arr, $i = 0, $len, $cache;
     
     /**
      *
@@ -21,6 +21,7 @@ class PEG_ArrayContext implements PEG_IContext
     function __construct(Array $arr) { 
         $this->arr = array_values($arr); 
         $this->len = count($arr);
+        $this->cache = new PEG_Cache;
     }
 
     /**
@@ -69,4 +70,14 @@ class PEG_ArrayContext implements PEG_IContext
         return $this->arr;
     }
 
+    
+    function save(PEG_IParser $parser, $start, $end, $val)
+    {
+        $this->cache->save($parser, $start, $end, $val);
+    }
+    
+    function cache(PEG_IParser $parser)
+    {
+        return $this->cache->cache($parser, $this->tell());
+    }
 }

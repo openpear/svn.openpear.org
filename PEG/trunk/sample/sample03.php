@@ -40,10 +40,11 @@ $p->is(PEG::memo(PEG::choice(
     PEG::seq('(', $a, ')'),
     '1'
 )));
-$a->parse(PEG::context($str));
+$a->parse($c = PEG::context($str));
 $t->setMarker('memoize');
 $t->stop();
 $t->display();
+
 /* 結果
 ---------------------------------------------------------
 marker       time index            ex time         perct   

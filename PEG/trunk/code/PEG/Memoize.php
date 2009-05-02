@@ -8,7 +8,7 @@
 
 class PEG_Memoize implements PEG_IParser
 {
-    protected $parser, $cache = array();
+    protected $parser;
     
     function __construct(PEG_IParser $p)
     {
@@ -17,25 +17,15 @@ class PEG_Memoize implements PEG_IParser
     
     function parse(PEG_IContext $context)
     {
-        return $this->hit($context) ? $this->pull($context) : $this->cache($context);
-    }
-    
-    protected function hit($context)
-    {
-        return isset($this->cache[spl_object_hash($context)][$context->tell()]);
-    }
-    
-    protected function pull($context)
-    {
-        list($result, $newoffset) = $this->cache[spl_object_hash($context)][$context->tell()];
-        $context->seek($newoffset);
-        return $result;
-    }
-    
-    protected function cache($context)
-    {
-        $this->cache[spl_object_hash($context)][$context->tell()] = 
-            array($result = $this->parser->parse($context), $context->tell());
-        return $result;
+        list($hit, list($end, $val)) = $context->cache($this);
+        if ($hit) {
+            $context->seek($end);
+            return $val;
+        }
+        $start = $context->tell();
+        $val = $this->parser->parse($context);
+        $end = $context->tell();
+        $context->save($this, $start, $end, $val);
+        return $val;
     }
 }
