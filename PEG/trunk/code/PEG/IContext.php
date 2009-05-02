@@ -42,4 +42,20 @@ interface PEG_IContext
      * コンテキストが持つ対象全体を返す
      */
     function get();
+    
+    /**
+     * @param PEG_IParser 
+     * @param int 
+     * @param ? 
+     */
+    function save(PEG_IParser $parser, $start, $end, $val);
+    
+    /**
+     * array(hit, array(end, val))を返す
+     * 
+     * @param PEG_IParser
+     * @param int
+     * @return array
+     */
+    function cache(PEG_IParser $parser);
 }
