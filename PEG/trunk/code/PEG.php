@@ -414,6 +414,27 @@ class PEG
         return new PEG_Memoize(self::parser($p));
     }
 
+    static function match(PEG_IParser $parser, $subject)
+    {
+        return self::_match($parser, self::context($subject));
+    }
+    
+    static function _match(PEG_IParser $parser, PEG_IContext $context, $need_matching_start = false)
+    {
+        while(!$context->eos()) {
+            $start = $context->tell();
+            $result = $parser->parse($context);
+            $end = $context->tell();
+            if ($result instanceof PEG_Failure) {
+                $context->seek($start + 1);
+            }
+            else {
+                return $need_matching_start ? array($result, $start) : $result;
+            }
+        }
+        return $need_matching_start ? array(self::failure(), null) : self::failure();
+    }
+    
     /**
      * @param PEG_IParser
      * @param string
@@ -424,12 +445,9 @@ class PEG
         $context = self::context($subject);
         $matches = array();
         while (!$context->eos()) {
-            $result = $parser->parse($context);
+            $result = self::_match($parser, $context);
             if (!$result instanceof PEG_Failure) {
                 $matches[] = $result;
-            }
-            else {
-                $context->read(1);
             }
         }
         
