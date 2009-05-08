@@ -42,12 +42,8 @@ class sfMobileIP
 
   static protected function configFile()
   {
-    $parts = array(
-      sfConfig::get('sf_plugins_dir_name'),
-      __CLASS__.'Plugin',
-      'config',
-      'mobile_ips.yml');
-    $config_file = join($parts, DIRECTORY_SEPARATOR);
+    $config_dir  = sfConfig::get('sf_config_dir_name');
+    $config_file = $config_dir.DIRECTORY_SEPARATOR.'mobile_ips.yml';
     return sfConfigCache::getInstance()->checkConfig($config_file);
   }
 
