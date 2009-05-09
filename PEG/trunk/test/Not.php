@@ -7,3 +7,4 @@ $parser = PEG::not(PEG::token('hoge'));
 
 $lime->is($parser->parse(PEG::context('fuga')), 'fuga');
 $lime->is($parser->parse(PEG::context('hoge')), PEG::failure());
+$lime->is($parser->parse(PEG::context('')), PEG::failure());

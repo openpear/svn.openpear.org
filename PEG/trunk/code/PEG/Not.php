@@ -15,6 +15,7 @@ class PEG_Not implements PEG_IParser
     }
     function parse(PEG_IContext $context)
     {
+        if ($context->eos()) return PEG::failure();
         $offset = $context->tell();
 
         $result = $this->parser->parse($context);
