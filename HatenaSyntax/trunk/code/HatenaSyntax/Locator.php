@@ -224,14 +224,14 @@ class HatenaSyntax_Locator
     protected function setup()
     {
         $this->element->is(PEG::choice($this->header,
-                                        $this->blockQuote,
-                                        $this->definitionList,
-                                        $this->table,
-                                        $this->list,
-                                        $this->pre,
-                                        $this->superpre,
-                                        $this->emptyParagraph,
-                                        $this->paragraph));
+                                       $this->blockQuote,
+                                       $this->definitionList,
+                                       $this->table,
+                                       $this->list,
+                                       $this->pre,
+                                       $this->superpre,
+                                       $this->emptyParagraph,
+                                       $this->paragraph));
     }
 
 

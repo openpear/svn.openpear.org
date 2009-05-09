@@ -7,3 +7,4 @@ $elt = HatenaSyntax_Locator::it()->lineElement;
 //--
 $context = PEG::context('a');
 $lime->is($elt->parse($context), 'a');
+$lime->is($elt->parse(PEG::context('')), PEG::failure());
