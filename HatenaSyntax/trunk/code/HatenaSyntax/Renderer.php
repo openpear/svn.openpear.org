@@ -68,7 +68,7 @@ class HatenaSyntax_Renderer
     protected function renderLineSegment(Array $data)
     {
         foreach ($data as &$elt) 
-            $elt = is_string($elt) ? ($this->config['htmlescape'] ? $this->escape($elt) : $elt) 
+            $elt = !$elt instanceof HatenaSyntax_Node ? ($this->config['htmlescape'] ? $this->escape($elt) : $elt) 
                                    : $this->renderNode($elt);
         return join('', $data);
     }
