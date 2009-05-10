@@ -50,20 +50,33 @@ class HTML_ExtractContentTest extends PHPUnit_Framework_TestCase
      * @todo Implement testTitle().
      */
     public function testTitle() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+
+        $expect = 'TITLE01';
+        $html = <<<HTML
+<title id="test01">$expect</title>
+<title>TITLE02</title>
+HTML;
+
+//        $this->
+        $this->assertEquals($expect,
+                            $this->object->title($html));
     }
 
     /**
      * @todo Implement testSetOpt().
      */
     public function testSetOpt() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+    	
+    	$opt = $this->getObjectAttribute($this->object, 'opt');
+        
+        $set = array('debug' => !$opt['debug']);
+        $this->object->setOpt($set);
+        
+        $opt = $this->getObjectAttribute($this->object, 'opt');
+        
+        $this->assertEquals($set['debug'], $opt['debug']);
+        
     }
 }
+
 ?>
