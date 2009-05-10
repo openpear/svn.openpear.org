@@ -51,7 +51,7 @@ require_once 'HTTP/Request.php';
  * @package   Services_Wedata
  * @author    Sasezaki <sasezaki at gmail.com>
  * @copyright 2008 Sasezaki
- * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
  * @version   0.1.0
  * @see       http://wedata.net/
  */
