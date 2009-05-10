@@ -124,8 +124,12 @@ class HTML_ExtractContent
         return $html;
     }
 
-
-
+    /**
+     * extract title
+     *
+     * @param string
+     * @return string
+     */
     public function title($html)
     {
         if (preg_match('/<title[^>]*>\s*(.*?)\s*<\/title\s*>/i', $html, $matches)) {

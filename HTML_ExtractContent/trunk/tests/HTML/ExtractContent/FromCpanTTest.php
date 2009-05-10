@@ -3,7 +3,6 @@ require_once 'PHPUnit/Framework.php';
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))).'/src/HTML/ExtractContent.php';
 
-$cpanDir = new DirectoryIterator(dirname(__FILE__).'/_files/cpan/');
 
 /**
  * Test class for HTML_ExtractContent.
@@ -17,6 +16,7 @@ class HTML_FromCpanTTest extends PHPUnit_Framework_TestCase
      */
     protected $object;
 
+    protected $cpanDir;
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -26,6 +26,7 @@ class HTML_FromCpanTTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->object = new HTML_ExtractContent;
+        $this->cpanDir = new DirectoryIterator(dirname(__FILE__).'/_files/cpan/');
     }
 
     /**
@@ -38,24 +39,10 @@ class HTML_FromCpanTTest extends PHPUnit_Framework_TestCase
     {
     }
 
-    /**
-     * @todo Implement testAnalyze().
-     */
-    public function testAnalyze() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testTitle().
-     */
-    public function testTitle() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+    //01-util.t
+    public function testStripTags()
+    {
+        
     }
 
     /**
