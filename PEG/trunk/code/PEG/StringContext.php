@@ -32,6 +32,11 @@ class PEG_StringContext implements PEG_IContext
         return substr($this->str, $this->i - $i, $i);
     }
     
+    function readElement()
+    {
+        return $this->read(1);
+    }
+    
     /**
      * @param int $i
      * @return bool

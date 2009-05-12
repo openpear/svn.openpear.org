@@ -35,6 +35,12 @@ class PEG_ArrayContext implements PEG_IContext
         return array_slice($this->arr, $this->i - $i, $i);
     }
     
+    function readElement()
+    {
+        list($elt) = $this->read(1);
+        return $elt;
+    }
+    
     /**
      * @param int $i
      * @return bool
