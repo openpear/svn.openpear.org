@@ -14,9 +14,8 @@ $strings7 = new Text_VariationProducer(Text_VariationProducer::CP51932);
 
 $lime->ok(iterator_count($strings1) === 63488);
 $lime->ok(iterator_count($strings2) === 63488);
-$lime->ok(iterator_count($strings3) === 8995);
-$lime->ok(iterator_count($strings4) === 11439);
-$lime->ok(iterator_count($strings5) === 17861);
-$lime->ok(iterator_count($strings6) === 17861);
-$lime->ok(iterator_count($strings7) === 9025);
-
+$lime->ok(iterator_count($strings3) === 127+94*94+63);
+$lime->ok(iterator_count($strings4) === 127+94*120+63);
+$lime->ok(iterator_count($strings5) === 127+94*94+94+94*94);
+$lime->ok(iterator_count($strings6) === 127+94*94+94+94*94);
+$lime->ok(iterator_count($strings7) === 127+94*94+94);
