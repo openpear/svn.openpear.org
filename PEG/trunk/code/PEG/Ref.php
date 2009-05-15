@@ -11,9 +11,9 @@ class PEG_Ref implements PEG_IParser
 {
     protected $parser;
     
-    function is(PEG_IParser $p)
+    function __construct(&$parser)
     {
-        $this->parser = $p;
+        $this->parser = &$parser;
     }
     
     function parse(PEG_IContext $c)

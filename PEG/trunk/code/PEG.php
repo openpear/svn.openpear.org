@@ -213,9 +213,9 @@ class PEG
     /**
      * @return PEG_Ref
      */
-    static function ref()
+    static function ref(&$parser)
     {
-        return new PEG_Ref;
+        return new PEG_Ref($parser);
     }
 
     /**
