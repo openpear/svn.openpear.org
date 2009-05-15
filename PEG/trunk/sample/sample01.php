@@ -13,14 +13,14 @@ include_once dirname(__FILE__) . '/../code/PEG.php';
  */
 
 
-$paren = PEG::ref();
+$paren = PEG::ref($paren_ref);
 $item = PEG::choice($paren, PEG::anything());
 $paren_item = PEG::andalso(PEG::not(PEG::token(')')), $item);
-$paren->is(PEG::pack(
+$paren_ref = PEG::pack(
     PEG::token('('), 
     PEG::many($paren_item), 
     PEG::token(')')
-));
+);
 $parser = PEG::many($item);
 
 $str = 'abc(def(ghi)(jkl(mno)))';
