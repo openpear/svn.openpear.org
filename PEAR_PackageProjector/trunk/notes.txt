@@ -1,4 +1,5 @@
 [0.2.0]
+- fixed bug getcwd() routine could not get current directory.
 - followed PEAR 1.8.0 API changes. 
 -- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
 - replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
