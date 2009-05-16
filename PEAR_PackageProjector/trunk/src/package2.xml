@@ -27,7 +27,7 @@ ls TestSample/release
   <active>yes</active>
  </contributor>
  <date>2009-05-16</date>
- <time>18:06:54</time>
+ <time>19:51:52</time>
  <version>
   <release>0.2.0</release>
   <api>0.2.0</api>
@@ -39,6 +39,7 @@ ls TestSample/release
  <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
  <notes>
 [0.2.0]
+- fixed bug getcwd() routine could not get current directory.
 - followed PEAR 1.8.0 API changes. 
 -- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
 - replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
@@ -226,6 +227,7 @@ ls TestSample/release
    <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
    <notes>
 [0.2.0]
+- fixed bug getcwd() routine could not get current directory.
 - followed PEAR 1.8.0 API changes. 
 -- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
 - replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
