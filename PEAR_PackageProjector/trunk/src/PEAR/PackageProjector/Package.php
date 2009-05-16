@@ -44,6 +44,7 @@ class PEAR_PackageProjector_Package {
         $this->pkg     = new PEAR_PackageFileManager2();
         $this->options = array();
         $this->options['filelistgenerator'] = 'file';
+        $this->options['packagefile'] = 'package2.xml';
         $this->options['simpleoutput']      = true;
         $this->postInstall = null;
         $this->Installgroups = array();
@@ -155,9 +156,7 @@ class PEAR_PackageProjector_Package {
             $this->pkg->addReplacement($installer, 'pear-config', '@bin_dir@', 'bin_dir');
             $this->pkg->addReplacement($installer, 'pear-config', '@php_dir@', 'php_dir');
         }
-        //
-        $this->pkg->exportCompatiblePackageFile1();
-        //$this->pkg->addRelease();
+        $this->pkg->addRelease();
 
         $this->pkg->generateContents();
         $result = $this->pkg->writePackageFile();
