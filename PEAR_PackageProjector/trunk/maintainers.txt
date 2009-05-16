@@ -1,0 +1,9 @@
+- Note for maintainers.
+
+When you build PEAR_PackageProjector package with PEAR 1.8.0 or higher and
+PEAR_PackageFileManager2, you must do following.
+
+$ svn co http://svn.openpear.org/PEAR_PackageProjector/trunk PEAR_PackageProj
+$ cd PEAR_PackageProj/src
+$ php ../build.php
+
