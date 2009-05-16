@@ -1,3 +1,8 @@
+[0.2.0]
+- followed PEAR 1.8.0 API changes. 
+-- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
+- replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
+
 [0.1.3]
 - Add command option "--tmp" that use temporary directory for .pearproject file.
 - Change _createProject() because it doesn't make README.TXT. And Base class is made automatically. 
