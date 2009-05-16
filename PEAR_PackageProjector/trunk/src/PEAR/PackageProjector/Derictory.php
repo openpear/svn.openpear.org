@@ -307,7 +307,7 @@ class PEAR_PackageProjector_Derictory {
         if (self::isAbsolutePath($path)) {
             return $path;
         }
-        $tmp = (OS_WINDOWS) ? getcwd() :$_ENV['PWD'];
+        $tmp = (OS_WINDOWS) ? getcwd() : getenv('PWD');
         return $tmp .DIRECTORY_SEPARATOR.$path;
     }
 
