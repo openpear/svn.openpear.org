@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.4.11" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -20,18 +20,30 @@ ls TestSample/release
   <email>sakamoto@servlet.sakura.ne.jp</email>
   <active>yes</active>
  </lead>
- <date>2007-01-18</date>
- <time>23:26:33</time>
+ <contributor>
+  <name>Yoshinari Takaoka</name>
+  <user>mumumu</user>
+  <email>mumumu@mumumu.org</email>
+  <active>yes</active>
+ </contributor>
+ <date>2009-05-16</date>
+ <time>18:06:54</time>
  <version>
-  <release>0.1.3</release>
-  <api>0.1.3</api>
+  <release>0.2.0</release>
+  <api>0.2.0</api>
  </version>
  <stability>
   <release>beta</release>
   <api>beta</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
- <notes>[0.1.3]
+ <notes>
+[0.2.0]
+- followed PEAR 1.8.0 API changes. 
+-- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
+- replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
+
+[0.1.3]
 - Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
 - Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
 - When create project directory.  Sample script was generated on the project directory. 
@@ -55,7 +67,8 @@ ls TestSample/release
 - The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
 - The base directory of summary_file, description_file, and notes_file became a directory with config file.
 [0.1.0]
-- First release.</notes>
+- First release.
+ </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="PEAR">
@@ -137,7 +150,7 @@ ls TestSample/release
     <min>5.1.0</min>
    </php>
    <pearinstaller>
-    <min>1.4.0</min>
+    <min>1.8.0</min>
    </pearinstaller>
    <package>
     <name>PHP_CodeSniffer</name>
@@ -148,7 +161,7 @@ ls TestSample/release
     <channel>pear.php.net</channel>
    </package>
    <package>
-    <name>PEAR_PackageFileManager</name>
+    <name>PEAR_PackageFileManager2</name>
     <channel>pear.php.net</channel>
    </package>
   </required>
@@ -159,6 +172,7 @@ ls TestSample/release
    <install as="pearproj.bat" name="scripts/pearproj.bat" />
   </filelist>
  </phprelease>
+ <phprelease />
  <changelog>
   <release>
    <version>
@@ -171,7 +185,8 @@ ls TestSample/release
    </stability>
    <date>2007-01-18</date>
    <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
-   <notes>[0.1.3]
+   <notes>
+[0.1.3]
 - Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
 - Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
 - When create project directory.  Sample script was generated on the project directory. 
@@ -195,7 +210,52 @@ ls TestSample/release
 - The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
 - The base directory of summary_file, description_file, and notes_file became a directory with config file.
 [0.1.0]
-- First release.</notes>
+- First release.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.2.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2009-05-16</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.2.0]
+- followed PEAR 1.8.0 API changes. 
+-- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
+- replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
+
+[0.1.3]
+- Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
+- Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
+- When create project directory.  Sample script was generated on the project directory. 
+- Fixed bug in INI value A is disregarded.
+
+[0.1.2]
+- Support unix
+- Support absolute path on ini file.
+- The installer can be made.
+- The project source directory can be changed. 
+- The project Release directory can be changed. 
+- When create project directory.  Build script was generated on the project directory. 
+- When configure project. .pearproject is cleared.
+- The project directory name is set to package_name on build.conf. And the directory matched to the project directory name is made right under the source directory. 
+
+[0.1.1]
+- Add required dependency package &quot;pear.php.net/Console_Getargs&quot;
+- Add required dependency package &quot;pear.php.net/PEAR_PackageFileManager&quot;
+- Add message to create package2.xml
+- The error that occurs when package2.xml is created is displayed.
+- The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
+- The base directory of summary_file, description_file, and notes_file became a directory with config file.
+[0.1.0]
+- First release.
+   </notes>
   </release>
  </changelog>
 </package>
