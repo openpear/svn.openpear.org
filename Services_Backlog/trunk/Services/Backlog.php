@@ -1,7 +1,6 @@
 <?php
 require_once 'XML/RPC.php';
-//require_once 'Services/Backlog/Exception.php';
-require_once 'Exception/Exception.php';
+require_once 'Services/Backlog/Exception.php';
 /*
  * Backlog(http://backlog.jp)のAPIにアクセスするクラス
  * PHP5以上対象
