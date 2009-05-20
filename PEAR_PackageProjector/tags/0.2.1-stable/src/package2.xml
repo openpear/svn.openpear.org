@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>PEAR_PackageProjector</name>
+ <channel>openpear.org</channel>
+ <summary>Creates PEAR Package. And Manages PEAR Package.</summary>
+ <description>Creates PEAR Package in the way like the Command &quot;make&quot;.
+ex)
+cd &lt;workspace&gt;
+pearproj --create -p TestSample
+pearproj -c --configure TestSample/build.conf -p TestSample
+pearproj --make -p TestSample 
+ls TestSample/release
+ </description>
+ <lead>
+  <name>Kouichi Sakamoto</name>
+  <user>kouichi66</user>
+  <email>sakamoto@servlet.sakura.ne.jp</email>
+  <active>yes</active>
+ </lead>
+ <contributor>
+  <name>Yoshinari Takaoka</name>
+  <user>mumumu</user>
+  <email>mumumu@mumumu.org</email>
+  <active>yes</active>
+ </contributor>
+ <date>2009-05-20</date>
+ <time>23:55:02</time>
+ <version>
+  <release>0.2.1</release>
+  <api>0.2.1</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+ <notes>
+[0.2.1]
+- support PEAR_PackageFileManager2#addReplacement. And it can make command line.
+- can use checkcode().
+
+[0.2.0]
+- fixed bug getcwd() routine could not get current directory.
+- followed PEAR 1.8.0 API changes. 
+-- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
+- replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
+
+[0.1.3]
+- Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
+- Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
+- When create project directory.  Sample script was generated on the project directory. 
+- Fixed bug in INI value A is disregarded.
+
+[0.1.2]
+- Support unix
+- Support absolute path on ini file.
+- The installer can be made.
+- The project source directory can be changed. 
+- The project Release directory can be changed. 
+- When create project directory.  Build script was generated on the project directory. 
+- When configure project. .pearproject is cleared.
+- The project directory name is set to package_name on build.conf. And the directory matched to the project directory name is made right under the source directory. 
+
+[0.1.1]
+- Add required dependency package &quot;pear.php.net/Console_Getargs&quot;
+- Add required dependency package &quot;pear.php.net/PEAR_PackageFileManager&quot;
+- Add message to create package2.xml
+- The error that occurs when package2.xml is created is displayed.
+- The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
+- The base directory of summary_file, description_file, and notes_file became a directory with config file.
+[0.1.0]
+- First release.
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <dir name="PEAR">
+    <dir name="PackageProjector">
+     <dir name="Configure">
+      <file baseinstalldir="/" name="Dependency.php" role="php" />
+      <file baseinstalldir="/" name="File.php" role="php" />
+      <file baseinstalldir="/" name="Installer.php" role="php" />
+      <file baseinstalldir="/" name="License.php" role="php" />
+      <file baseinstalldir="/" name="Maintainer.php" role="php" />
+      <file baseinstalldir="/" name="Package.php" role="php" />
+      <file baseinstalldir="/" name="Project.php" role="php" />
+      <file baseinstalldir="/" name="Role.php" role="php" />
+      <file baseinstalldir="/" name="Version.php" role="php" />
+     </dir> <!-- /PEAR/PackageProjector/Configure -->
+     <dir name="DirectoryEntry">
+      <file baseinstalldir="/" name="Directory.php" role="php" />
+      <file baseinstalldir="/" name="File.php" role="php" />
+      <file baseinstalldir="/" name="Root.php" role="php" />
+     </dir> <!-- /PEAR/PackageProjector/DirectoryEntry -->
+     <dir name="MessageHandler">
+      <file baseinstalldir="/" name="Echo.php" role="php" />
+     </dir> <!-- /PEAR/PackageProjector/MessageHandler -->
+     <dir name="ProjectInfo">
+      <file baseinstalldir="/" name="APIVersion.php" role="php" />
+      <file baseinstalldir="/" name="Attribute.php" role="php" />
+      <file baseinstalldir="/" name="AttributeManager.php" role="php" />
+      <file baseinstalldir="/" name="BaseInstallDir.php" role="php" />
+      <file baseinstalldir="/" name="Channel.php" role="php" />
+      <file baseinstalldir="/" name="Dependencies.php" role="php" />
+      <file baseinstalldir="/" name="Dependency.php" role="php" />
+      <file baseinstalldir="/" name="Description.php" role="php" />
+      <file baseinstalldir="/" name="InstallGroup.php" role="php" />
+      <file baseinstalldir="/" name="InstallGroups.php" role="php" />
+      <file baseinstalldir="/" name="InstallParam.php" role="php" />
+      <file baseinstalldir="/" name="License.php" role="php" />
+      <file baseinstalldir="/" name="Maintainer.php" role="php" />
+      <file baseinstalldir="/" name="Maintainers.php" role="php" />
+      <file baseinstalldir="/" name="Notes.php" role="php" />
+      <file baseinstalldir="/" name="PackageName.php" role="php" />
+      <file baseinstalldir="/" name="PackageType.php" role="php" />
+      <file baseinstalldir="/" name="PearinstallerDep.php" role="php" />
+      <file baseinstalldir="/" name="PhpDep.php" role="php" />
+      <file baseinstalldir="/" name="ReleaseVersion.php" role="php" />
+      <file baseinstalldir="/" name="Role.php" role="php" />
+      <file baseinstalldir="/" name="Roles.php" role="php" />
+      <file baseinstalldir="/" name="Summary.php" role="php" />
+     </dir> <!-- /PEAR/PackageProjector/ProjectInfo -->
+     <file baseinstalldir="/" name="Configure.php" role="php" />
+     <file baseinstalldir="/" name="ConfigureManeger.php" role="php" />
+     <file baseinstalldir="/" name="Derictory.php" role="php" />
+     <file baseinstalldir="/" name="DirectoryEntry.php" role="php" />
+     <file baseinstalldir="/" name="MessageHandler.php" role="php" />
+     <file baseinstalldir="/" name="Package.php" role="php" />
+     <file baseinstalldir="/" name="Packager.php" role="php" />
+     <file baseinstalldir="/" name="Project.php" role="php" />
+     <file baseinstalldir="/" name="ProjectInfo.php" role="php" />
+     <file baseinstalldir="/" name="Visitor.php" role="php" />
+    </dir> <!-- /PEAR/PackageProjector -->
+    <file baseinstalldir="/" name="PackageProjector.php" role="php" />
+   </dir> <!-- /PEAR -->
+   <dir name="scripts">
+    <file baseinstalldir="/" name="pearproj.bat" role="script">
+     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+     <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
+     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    </file>
+    <file baseinstalldir="/" name="pearproj.sh" role="script">
+     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+     <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
+     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    </file>
+   </dir> <!-- /scripts -->
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.8.0</min>
+   </pearinstaller>
+   <package>
+    <name>PHP_CodeSniffer</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>Console_Getargs</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>PEAR_PackageFileManager2</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>PEAR_PackageFileManager_Plugins</name>
+    <channel>pear.php.net</channel>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease>
+  <filelist>
+   <install as="pearproj" name="scripts/pearproj.sh" />
+   <install as="pearproj.bat" name="scripts/pearproj.bat" />
+  </filelist>
+ </phprelease>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.1.3</release>
+    <api>0.1.3</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2007-01-18</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.1.3]
+- Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
+- Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
+- When create project directory.  Sample script was generated on the project directory. 
+- Fixed bug in INI value A is disregarded.
+
+[0.1.2]
+- Support unix
+- Support absolute path on ini file.
+- The installer can be made.
+- The project source directory can be changed. 
+- The project Release directory can be changed. 
+- When create project directory.  Build script was generated on the project directory. 
+- When configure project. .pearproject is cleared.
+- The project directory name is set to package_name on build.conf. And the directory matched to the project directory name is made right under the source directory. 
+
+[0.1.1]
+- Add required dependency package &quot;pear.php.net/Console_Getargs&quot;
+- Add required dependency package &quot;pear.php.net/PEAR_PackageFileManager&quot;
+- Add message to create package2.xml
+- The error that occurs when package2.xml is created is displayed.
+- The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
+- The base directory of summary_file, description_file, and notes_file became a directory with config file.
+[0.1.0]
+- First release.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.2.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2009-05-20</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.2.0]
+- fixed bug getcwd() routine could not get current directory.
+- followed PEAR 1.8.0 API changes. 
+-- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
+- replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
+
+[0.1.3]
+- Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
+- Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
+- When create project directory.  Sample script was generated on the project directory. 
+- Fixed bug in INI value A is disregarded.
+
+[0.1.2]
+- Support unix
+- Support absolute path on ini file.
+- The installer can be made.
+- The project source directory can be changed. 
+- The project Release directory can be changed. 
+- When create project directory.  Build script was generated on the project directory. 
+- When configure project. .pearproject is cleared.
+- The project directory name is set to package_name on build.conf. And the directory matched to the project directory name is made right under the source directory. 
+
+[0.1.1]
+- Add required dependency package &quot;pear.php.net/Console_Getargs&quot;
+- Add required dependency package &quot;pear.php.net/PEAR_PackageFileManager&quot;
+- Add message to create package2.xml
+- The error that occurs when package2.xml is created is displayed.
+- The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
+- The base directory of summary_file, description_file, and notes_file became a directory with config file.
+[0.1.0]
+- First release.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.1</release>
+    <api>0.2.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2009-05-20</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.2.1]
+- support PEAR_PackageFileManager2#addReplacement. And it can make command line.
+- can use checkcode().
+
+[0.2.0]
+- fixed bug getcwd() routine could not get current directory.
+- followed PEAR 1.8.0 API changes. 
+-- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
+- replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
+
+[0.1.3]
+- Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
+- Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
+- When create project directory.  Sample script was generated on the project directory. 
+- Fixed bug in INI value A is disregarded.
+
+[0.1.2]
+- Support unix
+- Support absolute path on ini file.
+- The installer can be made.
+- The project source directory can be changed. 
+- The project Release directory can be changed. 
+- When create project directory.  Build script was generated on the project directory. 
+- When configure project. .pearproject is cleared.
+- The project directory name is set to package_name on build.conf. And the directory matched to the project directory name is made right under the source directory. 
+
+[0.1.1]
+- Add required dependency package &quot;pear.php.net/Console_Getargs&quot;
+- Add required dependency package &quot;pear.php.net/PEAR_PackageFileManager&quot;
+- Add message to create package2.xml
+- The error that occurs when package2.xml is created is displayed.
+- The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
+- The base directory of summary_file, description_file, and notes_file became a directory with config file.
+[0.1.0]
+- First release.
+   </notes>
+  </release>
+ </changelog>
+</package>
