@@ -27,7 +27,7 @@ ls TestSample/release
   <active>yes</active>
  </contributor>
  <date>2009-05-20</date>
- <time>10:57:53</time>
+ <time>23:55:02</time>
  <version>
   <release>0.2.1</release>
   <api>0.2.1</api>
@@ -38,6 +38,10 @@ ls TestSample/release
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
  <notes>
+[0.2.1]
+- support PEAR_PackageFileManager2#addReplacement. And it can make command line.
+- can use checkcode().
+
 [0.2.0]
 - fixed bug getcwd() routine could not get current directory.
 - followed PEAR 1.8.0 API changes. 
@@ -165,6 +169,10 @@ ls TestSample/release
     <name>PEAR_PackageFileManager2</name>
     <channel>pear.php.net</channel>
    </package>
+   <package>
+    <name>PEAR_PackageFileManager_Plugins</name>
+    <channel>pear.php.net</channel>
+   </package>
   </required>
  </dependencies>
  <phprelease>
@@ -271,6 +279,10 @@ ls TestSample/release
    <date>2009-05-20</date>
    <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
    <notes>
+[0.2.1]
+- support PEAR_PackageFileManager2#addReplacement. And it can make command line.
+- can use checkcode().
+
 [0.2.0]
 - fixed bug getcwd() routine could not get current directory.
 - followed PEAR 1.8.0 API changes. 
