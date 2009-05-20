@@ -2,14 +2,16 @@
 require_once 'XML/RPC.php';
 require_once 'Services/Backlog/Exception.php';
 /*
- * Backlog(http://backlog.jp)のAPIにアクセスするクラス
- * PHP5以上対象
+ * PHP Client for Backlog API
  *
- * @package Services_Backlog
- * @author  devworks <smoochynet@gmail.com>
- * @access  public
- * @version Release: 0.10.0
- * @uses    XML_RPC
+ * PHP versions 5
+ *
+ * @category   Services
+ * @package    Services_Backlog
+ * @author     devworks <smoochynet@gmail.com>
+ * @access     public
+ * @version    Release: 0.1.0
+ * @uses       XML_RPC
  */
 class Services_Backlog {
     /**
