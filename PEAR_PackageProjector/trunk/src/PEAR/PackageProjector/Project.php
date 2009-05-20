@@ -113,6 +113,7 @@ class PEAR_PackageProjector_Project {
         if (!$this->ProjectDirectory->loadSetting($this->ProjectInfo, 0)) {
             return ;
         }
+        $oldcwd = getcwd();
         $verbose = false;
         $files = $this->ProjectDirectory->getSrcPath();
         $standard = 'PEAR';
@@ -136,6 +137,8 @@ class PEAR_PackageProjector_Project {
         $buff = ob_get_contents();
         ob_end_clean();
         $handler->buildMessage(5, $buff, true);
+        
+        chdir($oldcwd);
         
         return (0==strlen($buff));
     }
@@ -214,6 +217,7 @@ class PEAR_PackageProjector_Project {
         $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
         //
         try {
+            chdir($this->ProjectDirectory->getSrcPath());
             /*
              * Create package2.xml
              */
