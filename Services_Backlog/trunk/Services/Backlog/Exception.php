@@ -3,11 +3,8 @@
  * Services_Backlogの例外クラス
  * PHP5以上対象
  *
- * @package Services_Backlog
- * @author  devworks <smoochynet@gmail.com>
- * @access  public
- * @version Release: 0.10.0
- * @uses    XML_RPC
+ * @package    Services_Backlog
+ * @author     devworks <smoochynet@gmail.com>
  */
 class Services_Backlog_Exception extends Exception {
     /**
