@@ -26,11 +26,11 @@ ls TestSample/release
   <email>mumumu@mumumu.org</email>
   <active>yes</active>
  </contributor>
- <date>2009-05-20</date>
- <time>23:55:02</time>
+ <date>2009-05-21</date>
+ <time>07:24:14</time>
  <version>
-  <release>0.2.1</release>
-  <api>0.2.1</api>
+  <release>0.2.2</release>
+  <api>0.2.2</api>
  </version>
  <stability>
   <release>stable</release>
@@ -38,6 +38,9 @@ ls TestSample/release
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
  <notes>
+[0.2.2]
+- add PEAR_PackageFileManager_Plugins to required packages list 
+
 [0.2.1]
 - support PEAR_PackageFileManager2#addReplacement. And it can make command line.
 - can use checkcode().
@@ -276,9 +279,64 @@ ls TestSample/release
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2009-05-20</date>
+   <date>2009-05-21</date>
    <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
    <notes>
+[0.2.2]
+- add PEAR_PackageFileManager_Plugins to required packages list 
+
+[0.2.1]
+- support PEAR_PackageFileManager2#addReplacement. And it can make command line.
+- can use checkcode().
+
+[0.2.0]
+- fixed bug getcwd() routine could not get current directory.
+- followed PEAR 1.8.0 API changes. 
+-- PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.
+- replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.
+
+[0.1.3]
+- Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.
+- Change _createProject() because it doesn&apos;t make README.TXT. And Base class is made automatically. 
+- When create project directory.  Sample script was generated on the project directory. 
+- Fixed bug in INI value A is disregarded.
+
+[0.1.2]
+- Support unix
+- Support absolute path on ini file.
+- The installer can be made.
+- The project source directory can be changed. 
+- The project Release directory can be changed. 
+- When create project directory.  Build script was generated on the project directory. 
+- When configure project. .pearproject is cleared.
+- The project directory name is set to package_name on build.conf. And the directory matched to the project directory name is made right under the source directory. 
+
+[0.1.1]
+- Add required dependency package &quot;pear.php.net/Console_Getargs&quot;
+- Add required dependency package &quot;pear.php.net/PEAR_PackageFileManager&quot;
+- Add message to create package2.xml
+- The error that occurs when package2.xml is created is displayed.
+- The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.
+- The base directory of summary_file, description_file, and notes_file became a directory with config file.
+[0.1.0]
+- First release.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.2</release>
+    <api>0.2.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2009-05-21</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.2.2]
+- add PEAR_PackageFileManager_Plugins to required packages list 
+
 [0.2.1]
 - support PEAR_PackageFileManager2#addReplacement. And it can make command line.
 - can use checkcode().
