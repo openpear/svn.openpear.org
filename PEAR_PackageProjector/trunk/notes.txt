@@ -1,3 +1,6 @@
+[0.2.2]
+- add PEAR_PackageFileManager_Plugins to required packages list 
+
 [0.2.1]
 - support PEAR_PackageFileManager2#addReplacement. And it can make command line.
 - can use checkcode().
