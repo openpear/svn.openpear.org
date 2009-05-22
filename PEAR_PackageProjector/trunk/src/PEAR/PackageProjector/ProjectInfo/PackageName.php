@@ -54,6 +54,21 @@ class PEAR_PackageProjector_ProjectInfo_PackageName implements PEAR_PackageProje
         $handler->buildMessage(5, "Setting package name... {$this->name}", true);
         $package->setPackage($this->name);
     }
+
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
+        $handler->buildMessage(5, "Setting Document Title... {$this->name}", true);
+        $doc->setTitle($this->name);
+    }
+    
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
 
 /*

@@ -139,8 +139,60 @@ class PEAR_PackageProjector_Project {
         $handler->buildMessage(5, $buff, true);
         
         chdir($oldcwd);
-        
+        $handler->buildMessage(5, "*** Finished checked source in CodeSniffer. ***", true);
         return (0==strlen($buff));
+    }
+    
+    /**
+     *
+     */
+    public function updatedoc()
+    {
+        //
+        if (!$this->ProjectDirectory->loadSetting($this->ProjectInfo, 0)) {
+            return ;
+        }
+        $srcpath = $this->ProjectDirectory->getSrcPath();
+        $docpath = $this->ProjectDirectory->getDocumentPath();
+        $doc = new PEAR_PackageProjector_Document($docpath);
+        
+        $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
+       
+        /*
+         * Create document files
+         */
+        $handler->buildMessage(5, "*** Create document files ***", true);
+        //
+        $doc->accept($this->ProjectDirectory->getPackageDirectory());
+        $doc->accept($this->ProjectInfo);
+        $doc->build();
+        $handler->buildMessage(5, "*** Finished created document files ***", true);
+        return true;
+    }
+    
+    /**
+     *
+     */
+    public function pearinstall($version=null)
+    {
+        //
+        if (!$this->ProjectDirectory->loadSetting($this->ProjectInfo, 0)) {
+            return ;
+        }
+        $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
+        $pkgfile = $this->ProjectInfo->getPackageFileName($version);
+
+        $handler->buildMessage(5, "*** Install ".$pkgfile." ***", true);
+        $filepath = $this->ProjectDirectory->getRelasePath().$pkgfile;
+        $cmd = 'pear install -a -f "'.$filepath.'"';
+        //$handler->buildMessage(5, $cmd, true);
+        ob_start();
+        system($cmd);
+        $buff = ob_get_contents();
+        ob_end_clean();
+        $handler->buildMessage(5, $buff, true);
+        
+        return true;
     }
 
     /**
@@ -167,12 +219,14 @@ class PEAR_PackageProjector_Project {
         //
         $this->ProjectDirectory->createBuildConf($pathinfo['basename']);
         $this->ProjectDirectory->createBuildScript();
+        $this->ProjectDirectory->createDocScript();
         //$this->ProjectDirectory->createReadme();
         $this->ProjectDirectory->createSrcDir($pathinfo['basename']);
         $this->ProjectDirectory->createBaseSrc($pathinfo['basename']);
         $this->ProjectDirectory->createSampleSrc($pathinfo['basename']);
         $this->ProjectDirectory->createNotesText();
         $this->ProjectDirectory->createDescText();
+        $this->ProjectDirectory->createTutorialText();
         
         //
         //$this->save();

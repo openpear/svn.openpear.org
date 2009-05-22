@@ -1,0 +1,212 @@
+**概要
+PEARパッケージを手軽に作成、管理する為のライブラリです。このライブラリは、プロジェクト内のbuild.confファイルの設定を行うだけで、コマンドラインから自動的にpackage.xmlやパッケージ本体の自動生成を行ってくれます。 Unix/Windowsの双方で使用可能です。
+**インストール
+>||
+pear install pear/PHP_CodeSniffer-beta
+pear install --alldeps http://servlet.sakura.ne.jp/download/PEAR_PackageProjector-0.1.3.tgz
+||<
+**アップグレード
+>||
+pear upgrade http://servlet.sakura.ne.jp/download/PEAR_PackageProjector-0.1.3.tgz
+||<
+**簡単な使用方法
+>||
+cd <workspace>
+pearproj --create -p Test_Sample
+pearproj --configure Test_Sample/build.conf --make -p Test_Sample
+||<
+or
+>||
+cd <workspace>
+pearproj --create -p Test_Sample
+cd Test_Sample
+./build
+||<
+※作成されたパッケージは、Test_Sample/release に出来ます。
+**パッケージをカスタマイズする。
+build.confを編集して、
+>||
+./build
+||<
+すれば、編集内容がパッケージに反映されます。確認は、
+>||
+pear info パッケージファイル
+||<
+とすれば、できます。
+**編集できる内容
+***プロジェクト
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|ソース格納先|[project]|src_dir|未指定の場合、src|
+|パッケージ格納先|[project]|release_dir|未指定の場合、release|
+
+***パッケージ
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|パッケージ名|[package]|package_name|.|
+|パッケージタイプ|[package]|package_type|特殊なことがない限り「php」|
+|インストール先|[package]|baseinstalldir|.|
+|チャンネル|[package]|channel|"__uri" or "pear.php.net" or "pecl.php.net" etc...|
+|概要|[package]|summary, summary_file|summary_fileはファイル指定です|
+|詳細説明|[package]|description, description_file|description_fileはファイル指定です|
+|更新履歴|[package]|notes, notes_file|notes_fileはファイル指定です|
+
+***拡張子
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|拡張子毎のタイプの指定|[role]|拡張子名|"php" or "data" or "doc" or "test" or "script" or "src"|
+
+***バージョン
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|リリースバージョン|[version]|release_ver|.|
+|リリース状態|[version]|release_stab|"alpha" or "bate" or "stable"|
+|APIバージョン|[version]|api_ver|.|
+|API状態|[version]|api_vapi_stab|"alpha" or "bate" or "stable"|
+|PHPバージョン（最小）|[version]|php_min|.|
+|PEARインストーラ（最小）|[version]|pear_min|.|
+
+***ライセンス
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|ライセンス名|[license]|name|sample) PHP License 3.01|
+|ライセンス参照先|[license]|uri|sample) http://www.php.net/license/3_01.txt|
+
+***メンテナー(関係者)
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|フルネーム|[maintainer://ハンドル名]|name, fullname|.|
+|メールアドレス|[maintainer://ハンドル名]|email, mail|.|
+|状態|[maintainer://ハンドル名]|role|"lead" or "developer" or "contributor" or "helper"|
+
+***ファイル毎
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|コマンドスクリプト化|[file://ファイルパス]|commandscript|別名を指定する|
+|無視|[file://ファイルパス]|ignore|.|
+|プラットフォーム|[file://ファイルパス]|platform|.|
+|インストール時のファイルパス|[file://ファイルパス]|install|.|
+|ファイルタイプ|[file://ファイルパス]|role|"php" or "data" or "doc" or "test" or "script" or "src"|
+
+***パッケージ依存関係
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|必須orオプション|[dep://パッケージ名]|type|"required" or "optional"|
+|チャンネル|[dep://パッケージ名]|channel|"__uri" or "pear.php.net" or "pecl.php.net" etc...|
+|最小バージョン|[dep://パッケージ名]|min|.|
+|最大バージョン|[dep://パッケージ名]|max|.|
+
+***インストーラ
+|*内容|*カテゴリー|*パラメータ名|*備考|
+|グループについての説明|[installer://グループ名]|instructions|.|
+|パラメータの説明|[installer://グループ名]|パラメータ.prompt|.|
+|パラメータの型|[installer://グループ名]|パラメータ.type|指定できる値は「string」のみ|
+|パラメータの初期値|[installer://グループ名]|パラメータ.default|.|
+
+**PEAR_PackageProjectorで使っているbuild.conf
+>||
+[project]
+src_dir=src
+release_dir=release
+
+[package]
+package_name = PEAR_PackageProjector
+package_type = php
+baseinstalldir = /
+channel = __uri
+summary =  Creates PEAR Package. And Manages PEAR Package.
+;description = #
+description_file = desc.txt
+;notes = #
+notes_file = notes.txt
+
+[role]
+sh = script
+
+[version]
+release_ver = 0.1.2
+release_stab = alpha
+api_ver = 0.1.2
+api_stab = alpha
+php_min = 5.1.0
+pear_min = 1.4.0
+
+[license]
+name =PHP License 3.01
+uri = http://www.php.net/license/3_01.txt
+
+[maintainer://kouichi66]
+name = Kouichi Sakamoto
+email = sakamoto@servlet.sakura.ne.jp
+role = lead
+
+[file://scripts/pearproj.sh]
+commandscript = pearproj
+
+[file://scripts/pearproj.bat]
+commandscript = pearproj.bat
+
+[dep://PHP_CodeSniffer]
+type = required
+
+[dep://Console_Getargs]
+type = required
+
+[dep://PEAR_PackageFileManager]
+type = required
+||<
+
+**インストーラを設定するサンプル
+>||
+[installer://database]
+instructions = Database settings
+dbHost.prompt = Database host
+dbHost.type = string
+dbHost.default = localhost
+dbName.prompt = Database name
+dbUser.prompt = Database user
+dbPass.prompt = Database password
+dbPass.default = <none>
+
+[installer://webroot]
+instructions = Webroot settings
+webroot.prompt = Webroot directory
+||<
+
+**特定のファイル(ディレクトリー)を無視する設定をするサンプル
+***ディレクトリ構成
+>||
+/Sample_Project
+ +/release
+ +/src
+   +/Sample
+     +/Project
+       +/Foo
+         +sample1.php
+         +sample2.php
+       +Project.php
+ +build
+ +build.bat
+ +build.conf
+ +desc.txt
+ +notes.txt
+ +sample.php
+||<
+***ファイルを設定する
+>||
+[file://Sample/Project/Foo/sample1.php]
+ignore = 1
+||<
+結果
+>||
+Sample_Project-0.1.0.tgz(アーカイブ)
+   +/Sample
+     +/Project
+       +/Foo
+         +sample2.php
+       +Project.php
+||<
+***ディレクトリーを設定する
+>||
+[file://Sample/Project/Foo/]
+ignore = 1
+||<
+結果
+>||
+Sample_Project-0.1.0.tgz(アーカイブ)
+   +/Sample
+     +/Project
+       +Project.php
+||<

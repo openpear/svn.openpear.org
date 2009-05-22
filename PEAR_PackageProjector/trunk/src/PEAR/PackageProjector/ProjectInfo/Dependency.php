@@ -80,6 +80,14 @@ class PEAR_PackageProjector_ProjectInfo_Dependency implements PEAR_PackageProjec
         $handler->buildMessage(5, "Add ".strtolower($this->type)." dependency package ... {$this->channel}/{$this->name}", true);
         $package->addPackageDepWithChannel($this->type, $this->name, $this->channel, $this->min, $this->max, $this->recommended, $this->exclude, $this->providesextension, $this->nodefault);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

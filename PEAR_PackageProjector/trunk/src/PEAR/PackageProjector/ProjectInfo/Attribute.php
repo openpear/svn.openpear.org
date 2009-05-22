@@ -218,6 +218,14 @@ class PEAR_PackageProjector_ProjectInfo_Attribute implements PEAR_PackageProject
             }
         }
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 
 }
 

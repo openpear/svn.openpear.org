@@ -46,6 +46,14 @@ class PEAR_PackageProjector_ProjectInfo_ReleaseVersion implements PEAR_PackagePr
         $this->version   = $version;
         $this->stability = $stability;
     }
+       
+    /**
+     *
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
 
     /**
      *
@@ -57,6 +65,14 @@ class PEAR_PackageProjector_ProjectInfo_ReleaseVersion implements PEAR_PackagePr
         $handler->buildMessage(5, "Setting release stability... {$this->stability}", true);
         $package->setReleaseVersion($this->version);
         $package->setReleaseStability($this->stability);
+    }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        $doc->setReleaseVersion($this->version.'-'.$this->stability);
     }
 }
 

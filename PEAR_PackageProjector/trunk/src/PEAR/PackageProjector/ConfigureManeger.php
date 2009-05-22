@@ -85,7 +85,7 @@ class PEAR_PackageProjector_ConfigureManeger {
      */
     static public function getBuildScriptTextWindows()
     {
-        $text = "pearproj -t --configure ./build.conf --make -p ./";
+        $text = "pearproj -t -i --configure ./build.conf --make -p ./";
         return $text;
     }
 
@@ -95,7 +95,26 @@ class PEAR_PackageProjector_ConfigureManeger {
     static public function getBuildScriptTextUnix()
     {
         $text = "#!/bin/sh\n";
-        $text .= "pearproj -t --configure ./build.conf --make -p ./";
+        $text .= "pearproj -t -i --configure ./build.conf --make -p ./";
+        return $text;
+    }
+
+    /**
+     *
+     */
+    static public function getDocScriptTextWindows()
+    {
+        $text = "pearproj -doc --configure ./build.conf -p ./";
+        return $text;
+    }
+
+    /**
+     *
+     */
+    static public function getDocScriptTextUnix()
+    {
+        $text = "#!/bin/sh\n";
+        $text .= "pearproj -doc --configure ./build.conf -p ./";
         return $text;
     }
 
@@ -104,69 +123,77 @@ class PEAR_PackageProjector_ConfigureManeger {
      */
     static public function getBuildConfigureText($package_name)
     {
-        $text = '[project]'."\n"
-              . 'src_dir = src'."\n"
-              . 'release_dir = release'."\n"
-              . ''."\n"
-              . '[package]'."\n"
-              . 'package_name = '.$package_name."\n"
-              . 'package_type = php'."\n"
-              . 'baseinstalldir = /'."\n"
-              . 'channel = __uri'."\n"
-              . 'summary = #'."\n"
-              . ';description = #'."\n"
-              . ';notes = #'."\n"
-              . ';summary_file = <filepath>'."\n"
-              . 'description_file = desc.txt'."\n"
-              . 'notes_file = notes.txt'."\n"
-              . ''."\n"
-              . '[role]'."\n"
-              . ';; role value is <php|data|doc|test|script|src>'."\n"
-              . ';sh = script'."\n"
-              . ''."\n"
-              . '[version]'."\n"
-              . 'release_ver = 0.1.0'."\n"
-              . 'release_stab = alpha'."\n"
-              . 'api_ver = 0.1.0'."\n"
-              . 'api_stab = alpha'."\n"
-              . 'php_min = 5.1.0'."\n"
-              . 'pear_min = 1.4.11'."\n"
-              . ''."\n"
-              . '[license]'."\n"
-              . 'name =PHP License 3.01'."\n"
-              . 'uri = http://www.php.net/license/3_01.txt'."\n"
-              . ''."\n"
-              . '[maintainer://handlename]'."\n"
-              . 'name = fullname'."\n"
-              . 'email = email@local.local'."\n"
-              . 'role = lead'."\n"
-              . ''."\n"
-              . ';[file://<filepath>]'."\n"
-              . ';commandscript = command'."\n"
-              . ';ignore = 1'."\n"
-              . ';platform = windows'."\n"
-              . ';install = renamefile'."\n"
-              . ';; role value is <php|data|doc|test|script|src>'."\n"
-              . ';role = script'."\n"
-              . ''."\n"
-              . ';[dep://<packagename>]'."\n"
-              . ';; type: <required|optional>'."\n"
-              . ';type = optional'."\n"
-              . ';; channel: pear.php.net or __uri or etc...'."\n"
-              . ';channel = pear.php.net'."\n"
-              . ';min = 0'."\n"
-              . ';max = 0'."\n"
-              . ';recommended = 0'."\n"
-              . ';exclude = 0'."\n"
-              . ';providesextension = 0'."\n"
-              . ';nodefault = 0'."\n"
-              . ''."\n"
-              . ';[installer://<groupname>]'."\n"
-              . ';instructions = <group info message>'."\n"
-              . ';<param_name>.prompt = <param info message>'."\n"
-              . ';<param_name>.type = string'."\n"
-              . ';<param_name>.default = <default value>'."\n"
-              . ''."\n"
+        $text = '[project]'.PHP_EOL
+              . 'src_dir = src'.PHP_EOL
+              . 'release_dir = release'.PHP_EOL
+              . ''.PHP_EOL
+              . '[document]'.PHP_EOL
+              . ''.PHP_EOL
+              . 'doc_dir = doc'.PHP_EOL
+              . 'tutorial_file = tutorial.txt'.PHP_EOL
+              . ';; if stylesheet_file is "@http://...". it download file.'.PHP_EOL
+              . ';stylesheet_file = @http://d.hatena.ne.jp/theme/hatena/hatena.css'.PHP_EOL
+              . 'stylesheet_file = '.PHP_EOL
+              . ''.PHP_EOL
+              . '[package]'.PHP_EOL
+              . 'package_name = '.$package_name.PHP_EOL
+              . 'package_type = php'.PHP_EOL
+              . 'baseinstalldir = /'.PHP_EOL
+              . 'channel = __uri'.PHP_EOL
+              . 'summary = #'.PHP_EOL
+              . ';description = #'.PHP_EOL
+              . ';notes = #'.PHP_EOL
+              . ';summary_file = <filepath>'.PHP_EOL
+              . 'description_file = desc.txt'.PHP_EOL
+              . 'notes_file = notes.txt'.PHP_EOL
+              . ''.PHP_EOL
+              . '[role]'.PHP_EOL
+              . ';; role value is <php|data|doc|test|script|src>'.PHP_EOL
+              . ';sh = script'.PHP_EOL
+              . ''.PHP_EOL
+              . '[version]'.PHP_EOL
+              . 'release_ver = 0.1.0'.PHP_EOL
+              . 'release_stab = alpha'.PHP_EOL
+              . 'api_ver = 0.1.0'.PHP_EOL
+              . 'api_stab = alpha'.PHP_EOL
+              . 'php_min = 5.1.0'.PHP_EOL
+              . 'pear_min = 1.4.11'.PHP_EOL
+              . ''.PHP_EOL
+              . '[license]'.PHP_EOL
+              . 'name =PHP License 3.01'.PHP_EOL
+              . 'uri = http://www.php.net/license/3_01.txt'.PHP_EOL
+              . ''.PHP_EOL
+              . '[maintainer://handlename]'.PHP_EOL
+              . 'name = fullname'.PHP_EOL
+              . 'email = email@local.local'.PHP_EOL
+              . 'role = lead'.PHP_EOL
+              . ''.PHP_EOL
+              . ';[file://<filepath>]'.PHP_EOL
+              . ';commandscript = command'.PHP_EOL
+              . ';ignore = 1'.PHP_EOL
+              . ';platform = windows'.PHP_EOL
+              . ';install = renamefile'.PHP_EOL
+              . ';; role value is <php|data|doc|test|script|src>'.PHP_EOL
+              . ';role = script'.PHP_EOL
+              . ''.PHP_EOL
+              . ';[dep://<packagename>]'.PHP_EOL
+              . ';; type: <required|optional>'.PHP_EOL
+              . ';type = optional'.PHP_EOL
+              . ';; channel: pear.php.net or __uri or etc...'.PHP_EOL
+              . ';channel = pear.php.net'.PHP_EOL
+              . ';min = 0'.PHP_EOL
+              . ';max = 0'.PHP_EOL
+              . ';recommended = 0'.PHP_EOL
+              . ';exclude = 0'.PHP_EOL
+              . ';providesextension = 0'.PHP_EOL
+              . ';nodefault = 0'.PHP_EOL
+              . ''.PHP_EOL
+              . ';[installer://<groupname>]'.PHP_EOL
+              . ';instructions = <group info message>'.PHP_EOL
+              . ';<param_name>.prompt = <param info message>'.PHP_EOL
+              . ';<param_name>.type = string'.PHP_EOL
+              . ';<param_name>.default = <default value>'.PHP_EOL
+              . ''.PHP_EOL
               ;
         return $text;
     }
@@ -176,89 +203,89 @@ class PEAR_PackageProjector_ConfigureManeger {
      */
     static public function getPostInstallerText($name, $groups)
     {
-        $text = '<?php'."\n"
-              . 'class '.$name."\n"
-              . '{'."\n"
-              . ''."\n"
-              . '    // {{{ $_config'."\n"
-              . ''."\n"
-              . '    /**'."\n"
-              . '     * PEAR_Config object '."\n"
-              . '     * '."\n"
-              . '     * @var object(PEAR_Config)'."\n"
-              . '     * @access protected'."\n"
-              . '     */'."\n"
-              . '    private $_config;'."\n"
-              . ''."\n"
-              . '    // }}}'."\n"
-              . '    // {{{ $_ui'."\n"
-              . ''."\n"
-              . '    /**'."\n"
-              . '     * PEAR_Installer_Ui '."\n"
-              . '     * '."\n"
-              . '     * @var object(PEAR_Installer_Ui)'."\n"
-              . '     * @access protected'."\n"
-              . '     */'."\n"
-              . '    private $_ui;'."\n"
-              . ''."\n"
-              . '    // }}}'."\n"
-              . ''."\n"
-              . '    // {{{ init()'."\n"
-              . ''."\n"
-              . '    /**'."\n"
-              . '     * init install.'."\n"
-              . '     *'."\n"
-              . '     * @link http://pear.php.net/package/PEAR/docs/1.4.4/PEAR/PEAR_Config.html'."\n"
-              . '     * @link http://pear.php.net/package/PEAR/docs/1.4.4/PEAR/PEAR_PackageFile_v2.html'."\n"
-              . '     * '."\n"
-              . '     * @param object(PEAR_Config) $config'."\n"
-              . '     * @param object(PEAR_PackageFile_v2) $self'."\n"
-              . '     * @param string $lastInstalledVersion'."\n"
-              . '     * @access public'."\n"
-              . '     * @return bool True if initialized successfully, otherwise false.'."\n"
-              . '     */'."\n"
-              . '    function init(&$config, $self, $lastInstalledVersion = null)'."\n"
-              . '    {'."\n"
-              . '       $this->_config = &$config;'."\n"
-              . '       $this->_ui = &PEAR_Frontend::singleton();'."\n"
-              . '       '."\n"
-              . '       return true;'."\n"
-              . '    }'."\n"
-              . ''."\n"
-              . '    // }}}'."\n"
-              . '    // {{{ run()'."\n"
-              . ''."\n"
-              . '    /**'."\n"
-              . '     * Run install.'."\n"
-              . '     * '."\n"
-              . '     * @param array $infoArray'."\n"
-              . '     * @param string $paramGroup'."\n"
-              . '     * @access public'."\n"
-              . '     * @return bool'."\n"
-              . '     */'."\n"
-              . '    function run($infoArray, $paramGroup)'."\n"
-              . '    {'."\n"
-              . '        if (\'_undoOnError\' == $paramGroup) {'."\n"
-              . '            $this->_ui->outputData(\'An error occured during installation.\');'."\n"
-              . '            return false;'."\n"
-              . '        }'."\n"
-              . '        '."\n"
-              . '        $method = \'run_\'.$paramGroup;'."\n"
-              . '        if (method_exists($this, $method)) {'."\n"
-              . '            return $this->$method($infoArray);'."\n"
-              . '        }'."\n"
-              . '        '."\n"
-              . '        $this->_ui->outputData(\'ERROR: Unknown parameter group <\'.$paramGroup.\'>.\');'."\n"
-              . '        return false;'."\n"
-              . '    }'."\n"
-              . ''."\n"
-              . '    // }}}'."\n";
+        $text = '<?php'.PHP_EOL
+              . 'class '.$name.PHP_EOL
+              . '{'.PHP_EOL
+              . ''.PHP_EOL
+              . '    // {{{ $_config'.PHP_EOL
+              . ''.PHP_EOL
+              . '    /**'.PHP_EOL
+              . '     * PEAR_Config object '.PHP_EOL
+              . '     * '.PHP_EOL
+              . '     * @var object(PEAR_Config)'.PHP_EOL
+              . '     * @access protected'.PHP_EOL
+              . '     */'.PHP_EOL
+              . '    private $_config;'.PHP_EOL
+              . ''.PHP_EOL
+              . '    // }}}'.PHP_EOL
+              . '    // {{{ $_ui'.PHP_EOL
+              . ''.PHP_EOL
+              . '    /**'.PHP_EOL
+              . '     * PEAR_Installer_Ui '.PHP_EOL
+              . '     * '.PHP_EOL
+              . '     * @var object(PEAR_Installer_Ui)'.PHP_EOL
+              . '     * @access protected'.PHP_EOL
+              . '     */'.PHP_EOL
+              . '    private $_ui;'.PHP_EOL
+              . ''.PHP_EOL
+              . '    // }}}'.PHP_EOL
+              . ''.PHP_EOL
+              . '    // {{{ init()'.PHP_EOL
+              . ''.PHP_EOL
+              . '    /**'.PHP_EOL
+              . '     * init install.'.PHP_EOL
+              . '     *'.PHP_EOL
+              . '     * @link http://pear.php.net/package/PEAR/docs/1.4.4/PEAR/PEAR_Config.html'.PHP_EOL
+              . '     * @link http://pear.php.net/package/PEAR/docs/1.4.4/PEAR/PEAR_PackageFile_v2.html'.PHP_EOL
+              . '     * '.PHP_EOL
+              . '     * @param object(PEAR_Config) $config'.PHP_EOL
+              . '     * @param object(PEAR_PackageFile_v2) $self'.PHP_EOL
+              . '     * @param string $lastInstalledVersion'.PHP_EOL
+              . '     * @access public'.PHP_EOL
+              . '     * @return bool True if initialized successfully, otherwise false.'.PHP_EOL
+              . '     */'.PHP_EOL
+              . '    function init(&$config, $self, $lastInstalledVersion = null)'.PHP_EOL
+              . '    {'.PHP_EOL
+              . '       $this->_config = &$config;'.PHP_EOL
+              . '       $this->_ui = &PEAR_Frontend::singleton();'.PHP_EOL
+              . '       '.PHP_EOL
+              . '       return true;'.PHP_EOL
+              . '    }'.PHP_EOL
+              . ''.PHP_EOL
+              . '    // }}}'.PHP_EOL
+              . '    // {{{ run()'.PHP_EOL
+              . ''.PHP_EOL
+              . '    /**'.PHP_EOL
+              . '     * Run install.'.PHP_EOL
+              . '     * '.PHP_EOL
+              . '     * @param array $infoArray'.PHP_EOL
+              . '     * @param string $paramGroup'.PHP_EOL
+              . '     * @access public'.PHP_EOL
+              . '     * @return bool'.PHP_EOL
+              . '     */'.PHP_EOL
+              . '    function run($infoArray, $paramGroup)'.PHP_EOL
+              . '    {'.PHP_EOL
+              . '        if (\'_undoOnError\' == $paramGroup) {'.PHP_EOL
+              . '            $this->_ui->outputData(\'An error occured during installation.\');'.PHP_EOL
+              . '            return false;'.PHP_EOL
+              . '        }'.PHP_EOL
+              . '        '.PHP_EOL
+              . '        $method = \'run_\'.$paramGroup;'.PHP_EOL
+              . '        if (method_exists($this, $method)) {'.PHP_EOL
+              . '            return $this->$method($infoArray);'.PHP_EOL
+              . '        }'.PHP_EOL
+              . '        '.PHP_EOL
+              . '        $this->_ui->outputData(\'ERROR: Unknown parameter group <\'.$paramGroup.\'>.\');'.PHP_EOL
+              . '        return false;'.PHP_EOL
+              . '    }'.PHP_EOL
+              . ''.PHP_EOL
+              . '    // }}}'.PHP_EOL;
               //
               foreach ($groups as $num=>$groupname) {
                   $text .= self::getPostInstallerMethodText($groupname);
               }
 
-        return $text. '}'."\n". '?>'."\n";
+        return $text. '}'.PHP_EOL. '?>'.PHP_EOL;
     }
 
     /**
@@ -266,21 +293,21 @@ class PEAR_PackageProjector_ConfigureManeger {
      */
     static public function getPostInstallerMethodText($groupname)
     {
-        $text = '    // {{{ run_'.$groupname.'()'."\n"
-              . ''."\n"
-              . '    /**'."\n"
-              . '     * Run '.$groupname.' install.'."\n"
-              . '     * '."\n"
-              . '     * @param array $infoArray'."\n"
-              . '     * @access public'."\n"
-              . '     * @return bool'."\n"
-              . '     */'."\n"
-              . '    function run_'.$groupname.'($infoArray)'."\n"
-              . '    {'."\n"
-              . '        return true;'."\n"
-              . '    }'."\n"
-              . ''."\n"
-              . '    // }}}'."\n"
+        $text = '    // {{{ run_'.$groupname.'()'.PHP_EOL
+              . ''.PHP_EOL
+              . '    /**'.PHP_EOL
+              . '     * Run '.$groupname.' install.'.PHP_EOL
+              . '     * '.PHP_EOL
+              . '     * @param array $infoArray'.PHP_EOL
+              . '     * @access public'.PHP_EOL
+              . '     * @return bool'.PHP_EOL
+              . '     */'.PHP_EOL
+              . '    function run_'.$groupname.'($infoArray)'.PHP_EOL
+              . '    {'.PHP_EOL
+              . '        return true;'.PHP_EOL
+              . '    }'.PHP_EOL
+              . ''.PHP_EOL
+              . '    // }}}'.PHP_EOL
               ;
               return $text;
     }

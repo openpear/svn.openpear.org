@@ -63,6 +63,14 @@ class PEAR_PackageProjector_ProjectInfo_Maintainer implements PEAR_PackageProjec
 
         $package->addMaintainer($this->role, $this->handle, $this->name, $this->email);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

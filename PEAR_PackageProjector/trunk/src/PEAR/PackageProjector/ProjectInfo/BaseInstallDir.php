@@ -54,6 +54,14 @@ class PEAR_PackageProjector_ProjectInfo_BaseInstallDir implements PEAR_PackagePr
         $handler->buildMessage(5, "Setting base install directory... {$this->dir}", true);
         $package->setPackageOption('baseinstalldir', $this->dir);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

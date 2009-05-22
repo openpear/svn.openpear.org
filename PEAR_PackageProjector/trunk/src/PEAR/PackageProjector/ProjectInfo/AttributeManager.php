@@ -65,6 +65,14 @@ class PEAR_PackageProjector_ProjectInfo_AttributeManager implements PEAR_Package
             $package->accept($value);
         }
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

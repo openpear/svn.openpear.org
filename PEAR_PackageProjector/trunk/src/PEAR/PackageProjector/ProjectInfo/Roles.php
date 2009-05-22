@@ -62,6 +62,14 @@ class PEAR_PackageProjector_ProjectInfo_Roles implements PEAR_PackageProjector_V
             $package->accept($value);
         }
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

@@ -62,6 +62,14 @@ class PEAR_PackageProjector_ProjectInfo_Dependencies implements PEAR_PackageProj
             $package->accept($value);
         }
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

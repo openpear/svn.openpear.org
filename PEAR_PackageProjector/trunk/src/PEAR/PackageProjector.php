@@ -39,6 +39,7 @@ require_once 'PEAR/PackageProjector/ProjectInfo.php';
 require_once 'PEAR/PackageProjector/MessageHandler.php';
 require_once 'PEAR/PackageProjector/ConfigureManeger.php';
 require_once 'PEAR/PackageProjector/Configure.php';
+require_once 'PEAR/PackageProjector/Document.php';
 
 //
 require_once 'PEAR/PackageProjector/MessageHandler/Echo.php';
@@ -57,6 +58,7 @@ require_once 'PEAR/PackageProjector/Configure/Maintainer.php';
 require_once 'PEAR/PackageProjector/Configure/Dependency.php';
 require_once 'PEAR/PackageProjector/Configure/Project.php';
 require_once 'PEAR/PackageProjector/Configure/Installer.php';
+require_once 'PEAR/PackageProjector/Configure/Document.php';
 //
 require_once 'PEAR/PackageProjector/ProjectInfo/License.php';
 require_once 'PEAR/PackageProjector/ProjectInfo/ReleaseVersion.php';
@@ -123,6 +125,7 @@ class PEAR_PackageProjector {
         $this->confgmgr->addConfigure(new PEAR_PackageProjector_Configure_Role());
         $this->confgmgr->addConfigure(new PEAR_PackageProjector_Configure_Project());
         $this->confgmgr->addConfigure(new PEAR_PackageProjector_Configure_Installer());
+        $this->confgmgr->addConfigure(new PEAR_PackageProjector_Configure_Document());
     }
     
     /**

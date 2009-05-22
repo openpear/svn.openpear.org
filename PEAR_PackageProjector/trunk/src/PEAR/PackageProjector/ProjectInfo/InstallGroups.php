@@ -62,6 +62,14 @@ class PEAR_PackageProjector_ProjectInfo_InstallGroups implements PEAR_PackagePro
             $package->accept($value);
         }
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

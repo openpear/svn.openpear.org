@@ -73,6 +73,14 @@ class PEAR_PackageProjector_ProjectInfo_InstallGroup implements PEAR_PackageProj
         $package->addPostInstallGroup($this->name);
         $postInstall->addParamGroup($this->name, $params, $this->instructions);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

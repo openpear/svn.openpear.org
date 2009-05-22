@@ -55,6 +55,14 @@ class PEAR_PackageProjector_ProjectInfo_Summary implements PEAR_PackageProjector
         $handler->buildMessage(5, "Setting summary... $mssg..", true);
         $package->setSummary($this->summary);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

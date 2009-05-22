@@ -54,6 +54,14 @@ class PEAR_PackageProjector_ProjectInfo_PhpDep implements PEAR_PackageProjector_
         $handler->buildMessage(5, "Setting minimum version of PHP... {$this->min}", true);
         $package->setPhpDep($this->min);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*
