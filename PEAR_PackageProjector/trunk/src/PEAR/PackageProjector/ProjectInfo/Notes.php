@@ -55,6 +55,17 @@ class PEAR_PackageProjector_ProjectInfo_Notes implements PEAR_PackageProjector_V
         $handler->buildMessage(5, "Setting notes... $mssg..", true);
         $package->setNotes($this->notes);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
+        $mssg = preg_replace("/\s/", " ", substr($this->notes, 0, 50));
+        $handler->buildMessage(5, "Setting notes... $mssg..", true);
+        $doc->setChangelog($this->notes);
+    }
 }
 
 /*

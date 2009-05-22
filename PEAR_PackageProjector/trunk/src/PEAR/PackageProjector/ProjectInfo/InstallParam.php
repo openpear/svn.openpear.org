@@ -58,6 +58,14 @@ class PEAR_PackageProjector_ProjectInfo_InstallParam implements PEAR_PackageProj
     {
         ;
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
     
     /**
      *

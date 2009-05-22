@@ -105,6 +105,14 @@ class PEAR_PackageProjector_DirectoryEntry_Root implements PEAR_PackageProjector
     {
         $package->setPackageOption('packagedirectory', $this->getName());
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        $doc->setSrcDir($this->getName());
+    }
 
     /**
      *

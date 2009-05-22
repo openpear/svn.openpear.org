@@ -1,2 +1,1 @@
-call pearproj -c -t --configure ./build.conf --make -p ./
-call pear install -a -f ./release/PEAR_PackageProjector-0.2.2.tgz
+pearproj -c -t -i --configure ./build.conf --make -p ./

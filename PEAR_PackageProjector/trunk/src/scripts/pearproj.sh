@@ -14,17 +14,21 @@ $config['project'] = array(
             'short' => 'p',
             'min'   => 1,
             'max'   => 1,
+            'default'=>'./',
             'desc'  => 'project directory');
 $config['configure'] = array(
             'short' => 'confg',
-            'min'   => 0,
-            'max'   => -1,
+            'min'   => 1,
+            'max'   => 1,
+            'default'=>'build.conf',
             'desc'  => 'clear .pearproject and configure package');
 $config['make'] = array(
             'max'   => 0,
             'desc'  => 'make package');
 $config['create'] = array(
-            'max'   => 0,
+            'min'   => 0,
+            'max'   => 1,
+            'default'=>'',
             'desc'  => 'create project directory.');
 $config['clear'] = array(
             'short' => 'c',
@@ -35,10 +39,25 @@ $config['tmp'] = array(
             'max'   => 0,
             'desc'  => 'use temporary directory');
 $config['checkcode'] = array(
+            'short' => 'check',
             'max'   => 0,
             'desc'  => 'source of project is checked by CodeSniffer.');
+$config['updatedoc'] = array(
+            'short' => 'doc',
+            'max'   => 0,
+            'desc'  => 'update or create document.');
+$config['install'] = array(
+            'short' => 'i',
+            'min'   => 0,
+            'max'   => 1,
+            'default'=>'',
+            'desc'  => 'pear install');
 
 $args =& Console_Getargs::factory($config, $argv);
+if (2>count($argv)) {
+    echo Console_Getargs::getHelp($config)."\n";
+    exit;
+}
 if (PEAR::isError($args)) {
     if ($args->getCode() === CONSOLE_GETARGS_ERROR_USER) {
         echo Console_Getargs::getHelp($config, null, $args->getMessage())."\n";
@@ -53,7 +72,9 @@ $project = null;
 
 try {
 	if ($args->isDefined('create')) {
-	    $project = PEAR_PackageProjector::singleton()->create($projectpath, $args->isDefined('tmp'));
+		$create_proj = $args->getValue('create');
+		$create_proj = '' === $create_proj ? $projectpath : $create_proj;
+	    $project = PEAR_PackageProjector::singleton()->create($create_proj, $args->isDefined('tmp'));
 	} else {
 	    $project = PEAR_PackageProjector::singleton()->load($projectpath, $args->isDefined('tmp'));
 	}
@@ -66,6 +87,15 @@ try {
 	}
 
 	/**
+
+	 * configure
+	 */
+	if ($args->isDefined('configure') && !$args->isDefined('create')) {
+	    $confpath = $args->getValue('configure');
+	    $project->configure($confpath);
+	}
+
+	/**
 	 * checkcode
 	 */
 	if ($args->isDefined('checkcode')) {
@@ -73,19 +103,25 @@ try {
 	}
 
 	/**
-
-	 * configure
-	 */
-	if ($args->isDefined('configure')) {
-	    $confpath = $args->getValue('configure');
-	    $project->configure($confpath);
-	}
-
-	/**
 	 * make
 	 */
 	if ($args->isDefined('make')) {
 	    $project->make();
+	}
+
+	/**
+	 * updatedoc
+	 */
+	if ($args->isDefined('updatedoc')) {
+	    $project->updatedoc();
+	}
+
+	/**
+	 * pearinstall
+	 */
+	if ($args->isDefined('install')) {
+        $version = $args->getValue('install');
+	    $project->pearinstall($version);
 	}
 } catch (Exception $e) {
 	echo $e->getMessage();

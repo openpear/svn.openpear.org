@@ -54,6 +54,14 @@ class PEAR_PackageProjector_ProjectInfo_PackageType implements PEAR_PackageProje
         $handler->buildMessage(5, "Setting package type... {$this->type}", true);
         $package->setPackageType($this->type);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

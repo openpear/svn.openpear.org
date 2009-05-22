@@ -57,6 +57,14 @@ class PEAR_PackageProjector_ProjectInfo_License implements PEAR_PackageProjector
         $handler->buildMessage(5, "Setting license uri... {$this->uri}", true);
         $package->setLicense($this->name, $this->uri);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

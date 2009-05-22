@@ -39,6 +39,11 @@ interface PEAR_PackageProjector_Visitor {
      *
      */
     public function visit(PEAR_PackageProjector_Package $package);
+    
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc);
 }
 
 /*

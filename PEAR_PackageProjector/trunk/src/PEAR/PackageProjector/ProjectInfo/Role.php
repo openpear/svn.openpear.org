@@ -62,6 +62,14 @@ class PEAR_PackageProjector_ProjectInfo_Role implements PEAR_PackageProjector_Vi
         $handler->buildMessage(5, "Add role... {$this->extension} => {$this->role}", true);
         $package->addRole($this->extension, $this->role);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

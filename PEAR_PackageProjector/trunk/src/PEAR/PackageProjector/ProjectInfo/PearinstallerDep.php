@@ -54,6 +54,14 @@ class PEAR_PackageProjector_ProjectInfo_PearinstallerDep implements PEAR_Package
         $handler->buildMessage(5, "Setting minimum version of PEAR Installer... {$this->min}", true);
         $package->setPearinstallerDep($this->min);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

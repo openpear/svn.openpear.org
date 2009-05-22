@@ -54,6 +54,14 @@ class PEAR_PackageProjector_ProjectInfo_Channel implements PEAR_PackageProjector
         $handler->buildMessage(5, "Setting channel... {$this->channel}", true);
         $package->setChannel($this->channel);
     }
+       
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        ;
+    }
 }
 
 /*

@@ -55,10 +55,17 @@ class PEAR_PackageProjector_ProjectInfo implements PEAR_PackageProjector_Visitor
         $this->Roles        = new PEAR_PackageProjector_ProjectInfo_Roles();
         $this->InstallGroups    = new PEAR_PackageProjector_ProjectInfo_InstallGroups();
         $this->AttributeManager = new PEAR_PackageProjector_ProjectInfo_AttributeManager();
-        //
-        $this->setProjectSrcDir('src');
-        $this->setProjectReleaseDir('release');
-        
+    }
+    
+    /**
+     *
+     */
+    public function getPackageFileName($version=null)
+    {
+        $ver = ''.$this->items['PackageName'].'-';
+        $ver .= 0<strlen($version) ? $version : $this->items['ReleaseVersion']->getVersion();
+        $ver .= '.tgz';
+        return $ver;
     }
     
     /**
@@ -210,7 +217,7 @@ class PEAR_PackageProjector_ProjectInfo implements PEAR_PackageProjector_Visitor
      */
     public function getProjectReleaseDir()
     {
-        return $this->projectinfo['relasedir'];
+        return isset($this->projectinfo['relasedir']) ? $this->projectinfo['relasedir'] : 'release';
     }
 
     /**
@@ -218,7 +225,41 @@ class PEAR_PackageProjector_ProjectInfo implements PEAR_PackageProjector_Visitor
      */
     public function getProjectSrcDir()
     {
-        return $this->projectinfo['srcdir'];
+        return isset($this->projectinfo['srcdir']) ? $this->projectinfo['srcdir'] : 'src';
+    }
+
+    /**
+     * Set Document Directory
+     */
+    public function setDocumentDir($dir)
+    {
+        $this->projectinfo['docdir'] = $dir;
+    }
+
+    /**
+     * Get Document Directory
+     * @return string
+     */
+    public function getDocumentDir()
+    {
+        return isset($this->projectinfo['docdir']) ? $this->projectinfo['docdir'] : 'doc';
+    }
+
+    /**
+     * Set Document Tutorial Contents
+     */
+    public function setDocumentTutorial($contents)
+    {
+        $this->projectinfo['docToutorial'] = $contents;
+    }
+
+    /**
+     * Get Document Stylesheet
+     * @return string
+     */
+    public function setDocumentStylesheet($filepath)
+    {
+        $this->projectinfo['docStylesheetFile'] = $filepath;
     }
 
     /**
@@ -244,6 +285,34 @@ class PEAR_PackageProjector_ProjectInfo implements PEAR_PackageProjector_Visitor
         $package->accept($this->AttributeManager);
         $package->accept($this->Dependencies);
         $package->accept($this->InstallGroups);
+    }
+    
+    /**
+     *
+     */
+    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    {
+        $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
+        // Stylesheet
+        $handler->buildMessage(5, "Setting stylesheet... ", true);
+        $stylesheet = isset($this->projectinfo['docStylesheetFile']) ? $this->projectinfo['docStylesheetFile'] : '';
+        $doc->setStylesheet($stylesheet);
+        
+        // Toutorial
+        $handler->buildMessage(5, "Setting toutorial... ", true);
+        $toutorial = isset($this->projectinfo['docToutorial']) ? $this->projectinfo['docToutorial'] : '';
+        $doc->setTutorial($toutorial);
+
+        //
+        foreach ($this->items as $key=>$item) {
+            $doc->accept($item);
+        }
+        //
+        //$doc->accept($this->Roles);
+        //$doc->accept($this->Maintainers);
+        //$doc->accept($this->AttributeManager);
+        //$doc->accept($this->Dependencies);
+        //$doc->accept($this->InstallGroups);
     }
 }
 

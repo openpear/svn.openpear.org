@@ -19,7 +19,7 @@
  * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR_PackageProjector
- * @since      File available since Release 0.1.0
+ * @since      File available since Release 0.3.0
  */
 
 /**
@@ -34,35 +34,47 @@
  * @link       http://pear.php.net/package/PEAR_PackageProjector
  * @since      Class available since Release 0.1.0
  */
-class PEAR_PackageProjector_ProjectInfo_APIVersion implements PEAR_PackageProjector_Visitor {
-    private $version   = '0.1.0';
-    private $stability = 'alpha';
-
+class PEAR_PackageProjector_Configure_Document implements PEAR_PackageProjector_Configure {
+    private $basedir;
     /**
      *
      */
-    public function __construct($version, $stability)
+    public function getName()
     {
-        $this->version   = $version;
-        $this->stability = $stability;
+        return 'document';
     }
-
+    
     /**
      *
      */
-    public function visit(PEAR_PackageProjector_Package $package)
+    public function start($target, $confpath)
     {
-        $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
-        $handler->buildMessage(5, "Setting API version... {$this->version}", true);
-        $handler->buildMessage(5, "Setting API stability... {$this->stability}", true);
-        $package->setAPIVersion($this->version);
-        $package->setAPIStability($this->stability);
+        $this->basedir = dirname($confpath).'/';
+    }
+    
+    /**
+     *
+     */
+    public function setting(PEAR_PackageProjector_ProjectInfo $projinfo, $key, $value)
+    {
+        switch($key) {
+        case 'doc_dir':
+            $projinfo->setDocumentDir($value);
+            return true;
+        case 'tutorial_file':
+            $projinfo->setDocumentTutorial(file_get_contents($this->basedir.$value));
+            return true;
+        case 'stylesheet_file':
+            $projinfo->setDocumentStylesheet($value);
+            return true;
+        }
+        return false;
     }
        
     /**
      *
      */
-    public function visitDocument(PEAR_PackageProjector_Document $doc)
+    public function finish(PEAR_PackageProjector_ProjectInfo $projinfo)
     {
         ;
     }

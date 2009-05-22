@@ -51,6 +51,10 @@ class PEAR_PackageProjector_Derictory {
     /**
      *
      */
+    private $Docdir;
+    /**
+     *
+     */
     private $PackageDirectory;
     /**
      *
@@ -83,9 +87,11 @@ class PEAR_PackageProjector_Derictory {
     {
         $src = $projinfo->getProjectSrcDir().'/';
         $res = $projinfo->getProjectReleaseDir().'/';
+        $doc = $projinfo->getDocumentDir().'/';
 
         $this->Srcdir     = (self::isAbsolutePath($src)) ? $src : $this->Basedir.$src;
         $this->Releasedir = (self::isAbsolutePath($res)) ? $res : $this->Basedir.$res;
+        $this->Docdir     = (self::isAbsolutePath($res)) ? $res : $this->Basedir.$doc;
         
         //
         return $this->_check($mod);
@@ -170,6 +176,14 @@ class PEAR_PackageProjector_Derictory {
     /**
      *
      */
+    public function getDocumentPath()
+    {
+        return $this->Docdir;
+    }
+
+    /**
+     *
+     */
     public function createBuildConf($package_name)
     {
         $text = PEAR_PackageProjector_ConfigureManeger::getBuildConfigureText($package_name);
@@ -249,6 +263,14 @@ class PEAR_PackageProjector_Derictory {
     /**
      *
      */
+    public function createTutorialText()
+    {
+        return file_put_contents($this->Basedir.'tutorial.txt', '**info');
+    }
+    
+    /**
+     *
+     */
     public function createReadme()
     {
         file_put_contents($this->getSrcPath().'README.TXT', '');
@@ -266,6 +288,20 @@ class PEAR_PackageProjector_Derictory {
         $text2 = PEAR_PackageProjector_ConfigureManeger::getBuildScriptTextUnix();
         file_put_contents($this->Basedir.'build', $text2);
         chmod($this->Basedir.'build', 0744);
+    }
+        
+    /**
+     *
+     */
+    public function createDocScript()
+    {
+        //
+        $text1 = PEAR_PackageProjector_ConfigureManeger::getDocScriptTextWindows();
+        file_put_contents($this->Basedir.'updatedoc.bat', $text1);
+        //
+        $text2 = PEAR_PackageProjector_ConfigureManeger::getDocScriptTextUnix();
+        file_put_contents($this->Basedir.'updatedoc', $text2);
+        chmod($this->Basedir.'updatedoc', 0744);
     }
 
     /**
@@ -285,6 +321,10 @@ class PEAR_PackageProjector_Derictory {
             throw new PEAR_Exception("Not Found Project Release Direcotry( ".$this->Releasedir." )", PEAR_ERROR_EXCEPTION);
             return false;
         }
+        //if (false == $this->_mkdir($this->Docdir, $mod)) {
+        //    throw new PEAR_Exception("Not Found Project Document Direcotry( ".$this->Docdir." )", PEAR_ERROR_EXCEPTION);
+        //    return false;
+        //}
         return true;
     }
 
