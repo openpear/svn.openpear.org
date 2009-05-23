@@ -43,6 +43,7 @@ require_once 'PEAR/PackageProjector/Document.php';
 
 //
 require_once 'PEAR/PackageProjector/MessageHandler/Echo.php';
+require_once 'PEAR/PackageProjector/MessageHandler/Callback.php';
 //
 require_once 'PEAR/PackageProjector/DirectoryEntry.php';
 require_once 'PEAR/PackageProjector/DirectoryEntry/Root.php';
@@ -142,17 +143,17 @@ class PEAR_PackageProjector {
     /**
      *
      */
-    public function load($projectpath, $f_usetmp=false)
+    public function load($projectpath)
     {
-        return new PEAR_PackageProjector_Project($projectpath, $f_usetmp);
+        return new PEAR_PackageProjector_Project($projectpath);
     }
     
     /**
      *
      */
-    public function create($projectpath, $f_usetmp=false)
+    public function create($projectpath)
     {
-        return new PEAR_PackageProjector_Project($projectpath, $f_usetmp, $this->mkdir_mod);
+        return new PEAR_PackageProjector_Project($projectpath, $this->mkdir_mod);
     }
     
     /**
@@ -170,9 +171,9 @@ class PEAR_PackageProjector {
     /**
      *
      */
-    public function configure(PEAR_PackageProjector_ProjectInfo $projinfo, $confpath)
+    public function configure(PEAR_PackageProjector_ProjectInfo $projinfo, $conf, $basedir)
     {
-        $this->confgmgr->setting($projinfo, realpath($confpath));
+        $this->confgmgr->setting($projinfo, $conf, $basedir);
     }
     
     /**

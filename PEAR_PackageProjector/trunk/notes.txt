@@ -1,11 +1,17 @@
 [1.0.0-alpha]
-- add method updatedoc()
-- add method pearinstall()
+- add method PEAR_PackageProjector_Project#updatedoc()
+- add method PEAR_PackageProjector_Project#pearinstall()
 - add command option --updatedoc(-doc)
 - add command option --install(-i)
 - change default of command option --project(-p) is "./"
 - change default of command option --config(-confg) is "build.conf"
 - change enter of create file is "\n" to PHP_EOL;
+- add Class PEAR_PackageProjector_MessageHandler_Callback
+- support array data in PEAR_PackageProjector_Project#configure
+- add method PEAR_PackageProjector_Project#serialize()
+- add method PEAR_PackageProjector_Project#unserialize()
+- remove command option "--clear"
+- remove command option "--tmp"
 
 [0.2.2]
 - add PEAR_PackageFileManager_Plugins to required packages list 

@@ -35,7 +35,6 @@
  * @since      Class available since Release 0.1.0
  */
 class PEAR_PackageProjector_Derictory {
-    const PROJECT_FILE = '.pearproject';
     /**
      *
      */
@@ -64,20 +63,13 @@ class PEAR_PackageProjector_Derictory {
     /**
      *
      */
-    public function __construct($projectpath, $f_usetmp=false)
+    public function __construct($projectpath)
     {
         $path = self::getRealpath($projectpath);
         if (is_file($path)) {
             $path = dirname($path);
         }
         $this->Basedir = $path.DIRECTORY_SEPARATOR;
-        if ($f_usetmp) {
-            $path = tempnam('', urldecode($this->Basedir));
-            unlink($path);
-            $this->ProjectFilePath = dirname($path).DIRECTORY_SEPARATOR.base64_encode($path);
-        } else {
-            $this->ProjectFilePath = $this->Basedir.self::PROJECT_FILE;
-        }
     }
 
     /**
@@ -139,14 +131,6 @@ class PEAR_PackageProjector_Derictory {
             $this->PackageDirectory = new PEAR_PackageProjector_DirectoryEntry_Root($this->getSrcPath());
         }
         return $this->PackageDirectory;
-    }
-    
-    /**
-     *
-     */
-    public function getProjectFilePath()
-    {
-        return $this->ProjectFilePath;
     }
     
     /**

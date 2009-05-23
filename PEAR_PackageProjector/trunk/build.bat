@@ -1,1 +1,1 @@
-pearproj -c -t -i --configure ./build.conf --make -p ./
+pearproj -i --configure ./build.conf --make -p ./

@@ -47,11 +47,12 @@ class PEAR_PackageProjector_ConfigureManeger {
     
     /**
      *
+	 * @param PEAR_PackageProjector_ProjectInfo $projinfo 
+	 * @param array $conf
+	 * @param string $basedir
      */
-    public function setting(PEAR_PackageProjector_ProjectInfo $projinfo, $confpath)
+    public function setting(PEAR_PackageProjector_ProjectInfo $projinfo, $conf, $basedir)
     {
-        $conf = parse_ini_file($confpath, true);
-        //
         foreach ($conf as $groupname=>$items) {
             $matches = array();
             $type   = $groupname;
@@ -63,7 +64,7 @@ class PEAR_PackageProjector_ConfigureManeger {
             if (isset($this->groups[$type])) {
                 //
                 $group = $this->groups[$type];
-                $group->start($target, $confpath);
+                $group->start($target, $basedir);
                 foreach ($items as $key=>$value) {
                     $group->setting($projinfo, $key, $value);
                 }
@@ -85,7 +86,7 @@ class PEAR_PackageProjector_ConfigureManeger {
      */
     static public function getBuildScriptTextWindows()
     {
-        $text = "pearproj -t -i --configure ./build.conf --make -p ./";
+        $text = "pearproj -i --configure ./build.conf --make -p ./";
         return $text;
     }
 
@@ -95,7 +96,7 @@ class PEAR_PackageProjector_ConfigureManeger {
     static public function getBuildScriptTextUnix()
     {
         $text = "#!/bin/sh\n";
-        $text .= "pearproj -t -i --configure ./build.conf --make -p ./";
+        $text .= "pearproj -i --configure ./build.conf --make -p ./";
         return $text;
     }
 

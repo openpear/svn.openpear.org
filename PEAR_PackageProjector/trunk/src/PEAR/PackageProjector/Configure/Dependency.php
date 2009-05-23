@@ -59,7 +59,7 @@ class PEAR_PackageProjector_Configure_Dependency implements PEAR_PackageProjecto
     /**
      *
      */
-    public function start($target, $confpath)
+    public function start($target, $basedir)
     {
         $this->name = $target;
         // set default

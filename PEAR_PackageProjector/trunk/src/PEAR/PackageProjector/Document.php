@@ -32,7 +32,7 @@
  * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    Release: 0.1.0
  * @link       http://pear.php.net/package/PEAR_PackageProjector
- * @since      Class available since Release 0.3.0
+ * @since      Class available since Release 1.0.0
  */
 
 class PEAR_PackageProjector_Document {
