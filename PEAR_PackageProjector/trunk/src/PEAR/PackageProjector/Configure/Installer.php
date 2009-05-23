@@ -61,7 +61,7 @@ class PEAR_PackageProjector_Configure_Installer implements PEAR_PackageProjector
     /**
      *
      */
-    public function start($target, $confpath)
+    public function start($target, $basedir)
     {
         $this->group        = $target;
         $this->params       = array();

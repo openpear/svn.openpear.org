@@ -32,13 +32,20 @@
  * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    Release: 0.1.0
  * @link       http://pear.php.net/package/PEAR_PackageProjector
- * @since      Class available since Release 0.1.0
+ * @since      Class available since Release 1.0.0
  */
-interface PEAR_PackageProjector_Configure {
-    public function getName();
-    public function start($target, $basedir);
-    public function setting(PEAR_PackageProjector_ProjectInfo $projinfo, $key, $value);
-    public function finish(PEAR_PackageProjector_ProjectInfo $projinfo);
+class PEAR_PackageProjector_MessageHandler_Callback implements PEAR_PackageProjector_MessageHandler {
+	private $_callback;
+	
+	public function __construct($callback)
+	{
+		$this->_callback = $callback;
+	}
+	
+    public function buildMessage($level, $msg, $append_crlf)
+    {
+        call_user_func($this->_callback, $level, $msg, $append_crlf);
+    }
 }
 
 /*

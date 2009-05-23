@@ -46,7 +46,7 @@ class PEAR_PackageProjector_Configure_Role implements PEAR_PackageProjector_Conf
     /**
      *
      */
-    public function start($target, $confpath)
+    public function start($target, $basedir)
     {
         ;
     }

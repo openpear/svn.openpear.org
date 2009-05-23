@@ -41,22 +41,29 @@ class PEAR_PackageProjector_Project {
     /**
      *
      */
-    public function __construct($projectfile, $f_usetmp, $mod=0000)
+    public function __construct($projectfile, $mod=0000)
     {
         if (0<$mod) {
-            $this->_createProject($projectfile, $mod, $f_usetmp);
+            $this->_createProject($projectfile, $mod);
         } else {
-            $this->_loadProject($projectfile, $f_usetmp);
+            $this->_loadProject($projectfile);
         }
     }
     
     /**
      *
      */
-    public function save()
+    public function serialize()
     {
-        $projectfile = $this->ProjectDirectory->getProjectFilePath();
-        file_put_contents($projectfile, serialize($this->ProjectInfo));
+        return serialize($this->ProjectInfo);
+    }
+    
+    /**
+     *
+     */
+    public function unserialize($buff)
+    {
+        $this->ProjectInfo = unserialize($buff);
     }
     
     /**
@@ -72,35 +79,39 @@ class PEAR_PackageProjector_Project {
      */
     public function make()
     {
-        $this->save();
         $this->_buildProject();
     }
     
     /**
-     *
+	 * Load Configure data
+     * @param mixed $conf_data configure filepath or array data
+	 * @param string $basedir
+	 * @return void
      */
-    public function clear()
+    public function configure($conf_data, $basedir=null)
     {
+		$handler = PEAR_PackageProjector::singleton()->getMessageHandler();
+		$handler->buildMessage(5, "*** Configuring package. ***", true);
+		
         $this->ProjectInfo = new PEAR_PackageProjector_ProjectInfo();
-        $this->save();
-    }
-    
-    /**
-     *
-     */
-    public function configure($conf)
-    {
-        $this->clear();
-        $confpath = PEAR_PackageProjector_Derictory::getRealpath($conf);
-        //
-        $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
-        $handler->buildMessage(5, "*** Configuring package. ***", true);
-        PEAR_PackageProjector::singleton()->configure($this->ProjectInfo, $confpath);
+
+		if (is_array($conf_data)) {
+			if (is_null($basedir)) {
+				$basedir = PEAR_PackageProjector_Derictory::getRealpath('').'/';
+			}
+			PEAR_PackageProjector::singleton()->configure($this->ProjectInfo, $conf_data, $basedir);
+		} else {
+			$confpath = PEAR_PackageProjector_Derictory::getRealpath($conf_data);
+			if (is_null($basedir)) {
+				$basedir = dirname($confpath).'/';
+			}
+			$conf = parse_ini_file($confpath, true);
+			PEAR_PackageProjector::singleton()->configure($this->ProjectInfo, $conf, $basedir);
+		}
         //
         if (!$this->ProjectDirectory->loadSetting($this->ProjectInfo, 0)) {
             return ;
         }
-        $this->save();
         $handler->buildMessage(5, "", true);
     }
     
@@ -198,14 +209,14 @@ class PEAR_PackageProjector_Project {
     /**
      *
      */
-    private function _createProject($projectpath, $mod, $f_usetmp)
+    private function _createProject($projectpath, $mod)
     {
         $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
         //
         $this->ProjectInfo = new PEAR_PackageProjector_ProjectInfo();
         
         //
-        $this->ProjectDirectory = new PEAR_PackageProjector_Derictory($projectpath, $f_usetmp);
+        $this->ProjectDirectory = new PEAR_PackageProjector_Derictory($projectpath);
         if (false === $this->ProjectDirectory->checkCreateProject()) {
             return;
         }
@@ -228,31 +239,20 @@ class PEAR_PackageProjector_Project {
         $this->ProjectDirectory->createDescText();
         $this->ProjectDirectory->createTutorialText();
         
-        //
-        //$this->save();
-        //
         $handler->buildMessage(5, "create project directory ".$this->ProjectDirectory->getBaseDir().".", true);
     }
         
     /**
      *
      */
-    private function _loadProject($projectpath, $f_usetmp)
+    private function _loadProject($projectpath)
     {
         //
-        $this->ProjectDirectory = new PEAR_PackageProjector_Derictory($projectpath, $f_usetmp);
+        $this->ProjectDirectory = new PEAR_PackageProjector_Derictory($projectpath);
         if (false === $this->ProjectDirectory->checkLoadProject()) {
             return;
         }
-
-        //
-        $projectfile = $this->ProjectDirectory->getProjectFilePath();
-        if (file_exists($projectfile)) {
-            $this->ProjectInfo = unserialize(file_get_contents($projectfile));
-        } else {
-            $this->ProjectInfo = new PEAR_PackageProjector_ProjectInfo();
-            $this->save();
-        }
+		$this->ProjectInfo = new PEAR_PackageProjector_ProjectInfo();
                 
         return true;
     }

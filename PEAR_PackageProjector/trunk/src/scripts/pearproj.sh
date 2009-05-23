@@ -33,11 +33,11 @@ $config['create'] = array(
 $config['clear'] = array(
             'short' => 'c',
             'max'   => 0,
-            'desc'  => 'clear .pearproject');
+            'desc'  => 'clear .pearproject.Now not use from ver1.0.0.');
 $config['tmp'] = array(
             'short' => 't',
             'max'   => 0,
-            'desc'  => 'use temporary directory');
+            'desc'  => 'use temporary directory.Now not use from ver1.0.0.');
 $config['checkcode'] = array(
             'short' => 'check',
             'max'   => 0,
@@ -74,17 +74,17 @@ try {
 	if ($args->isDefined('create')) {
 		$create_proj = $args->getValue('create');
 		$create_proj = '' === $create_proj ? $projectpath : $create_proj;
-	    $project = PEAR_PackageProjector::singleton()->create($create_proj, $args->isDefined('tmp'));
+	    $project = PEAR_PackageProjector::singleton()->create($create_proj);
 	} else {
-	    $project = PEAR_PackageProjector::singleton()->load($projectpath, $args->isDefined('tmp'));
+	    $project = PEAR_PackageProjector::singleton()->load($projectpath);
 	}
 
 	/**
 	 * clear
-	 */
 	if ($args->isDefined('clear')) {
 	    $project->clear();
 	}
+	 */
 
 	/**
 

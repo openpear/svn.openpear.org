@@ -62,7 +62,7 @@ class PEAR_PackageProjector_Configure_Maintainer implements PEAR_PackageProjecto
     /**
      *
      */
-    public function start($target, $confpath)
+    public function start($target, $basedir)
     {
         $this->handle = $target;
         $this->name   = $target;

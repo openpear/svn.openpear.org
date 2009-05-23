@@ -19,7 +19,7 @@
  * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR_PackageProjector
- * @since      File available since Release 0.3.0
+ * @since      File available since Release 1.0.0
  */
 
 /**
@@ -47,9 +47,9 @@ class PEAR_PackageProjector_Configure_Document implements PEAR_PackageProjector_
     /**
      *
      */
-    public function start($target, $confpath)
+    public function start($target, $basedir)
     {
-        $this->basedir = dirname($confpath).'/';
+        $this->basedir = $basedir;
     }
     
     /**

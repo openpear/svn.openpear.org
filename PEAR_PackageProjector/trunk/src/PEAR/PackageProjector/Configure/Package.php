@@ -48,9 +48,9 @@ class PEAR_PackageProjector_Configure_Package implements PEAR_PackageProjector_C
     /**
      *
      */
-    public function start($target, $confpath)
+    public function start($target, $basedir)
     {
-        $this->basedir = dirname($confpath).'/';
+        $this->basedir = $basedir;
     }
     
     /**
