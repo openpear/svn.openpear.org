@@ -1,5 +1,15 @@
 <?php
 
+  /**
+   * LoggerIterator - 既存のイテレータにログ取得機能を追加するイテレータ
+   *
+   * @package  LoggerIterator
+   * @author  Yoshio HANAWA <y@hnw.jp>
+   * @copyright  2009 Yoshio HANAWA
+   * @license  http://creativecommons.org/licenses/BSD/    New BSD Licence
+   * @link  http://openpear.org/package/LoggerIterator
+   */
+
 class LoggerIterator Implements OuterIterator
 {
   private $it;
@@ -28,9 +38,4 @@ class LoggerIterator Implements OuterIterator
     var_dump($ret);
     return $ret;
   }
-}
-
-$it = new LoggerIterator(new ArrayIterator(array(1,2)));
-foreach ($it as $value) {
-  var_dump($value);
 }
