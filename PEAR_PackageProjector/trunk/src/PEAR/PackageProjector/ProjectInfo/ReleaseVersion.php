@@ -72,7 +72,7 @@ class PEAR_PackageProjector_ProjectInfo_ReleaseVersion implements PEAR_PackagePr
      */
     public function visitDocument(PEAR_PackageProjector_Document $doc)
     {
-        $doc->setReleaseVersion($this->version.'-'.$this->stability);
+        $doc->setReleaseVersion($this->version);
     }
 }
 

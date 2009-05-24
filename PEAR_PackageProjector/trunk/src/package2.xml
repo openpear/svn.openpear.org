@@ -27,18 +27,18 @@ ls TestSample/release
   <active>yes</active>
  </contributor>
  <date>2009-05-24</date>
- <time>14:18:31</time>
+ <time>15:02:15</time>
  <version>
   <release>1.0.0</release>
   <api>1.0.0</api>
  </version>
  <stability>
-  <release>alpha</release>
-  <api>alpha</api>
+  <release>stable</release>
+  <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
  <notes>
-[1.0.0-alpha]
+[1.0.0]
 - add method PEAR_PackageProjector_Project#updatedoc()
 - add method PEAR_PackageProjector_Project#pearinstall()
 - add command option --updatedoc(-doc)
@@ -459,13 +459,13 @@ ls TestSample/release
     <api>1.0.0</api>
    </version>
    <stability>
-    <release>alpha</release>
-    <api>alpha</api>
+    <release>stable</release>
+    <api>stable</api>
    </stability>
    <date>2009-05-24</date>
    <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
    <notes>
-[1.0.0-alpha]
+[1.0.0]
 - add method PEAR_PackageProjector_Project#updatedoc()
 - add method PEAR_PackageProjector_Project#pearinstall()
 - add command option --updatedoc(-doc)
