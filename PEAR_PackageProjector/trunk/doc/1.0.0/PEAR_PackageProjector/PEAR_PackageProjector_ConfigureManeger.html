@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class PEAR_PackageProjector_ConfigureManeger</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class PEAR_PackageProjector_ConfigureManeger</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">author:</span> Kouichi Sakamoto &lt;<a href="mailto:sakamoto@servlet.sakura.ne.jp">sakamoto@servlet.sakura.ne.jp</a>&gt;</li>
+				<li><span class="field">version:</span> Release: 0.1.0</li>
+				<li><span class="field">copyright:</span> 2007 The PHP Group</li>
+				<li><span class="field">link:</span> <a href="http://pear.php.net/package/PEAR_PackageProjector">http://pear.php.net/package/PEAR_PackageProjector</a></li>
+				<li><span class="field">since:</span> Class available since Release 0.1.0</li>
+				<li><span class="field">license:</span> <a href="http://www.php.net/license/3_01.txt">PHP License 3.01</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_PEAR---PackageProjector---ConfigureManeger.php.html">/PEAR/PackageProjector/ConfigureManeger.php</a> (line <span class="field">37</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																												<div class="method-definition">
+					static 						<span class="method-result">void</span>
+										<a href="#getBuildConfigureText" title="details" class="method-name">getBuildConfigureText</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$package_name</span>)
+									</div>
+																<div class="method-definition">
+					static 						<span class="method-result">void</span>
+										<a href="#getBuildScriptTextUnix" title="details" class="method-name">getBuildScriptTextUnix</a>
+										()
+									</div>
+																<div class="method-definition">
+					static 						<span class="method-result">void</span>
+										<a href="#getBuildScriptTextWindows" title="details" class="method-name">getBuildScriptTextWindows</a>
+										()
+									</div>
+																<div class="method-definition">
+					static 						<span class="method-result">void</span>
+										<a href="#getDocScriptTextUnix" title="details" class="method-name">getDocScriptTextUnix</a>
+										()
+									</div>
+																<div class="method-definition">
+					static 						<span class="method-result">void</span>
+										<a href="#getDocScriptTextWindows" title="details" class="method-name">getDocScriptTextWindows</a>
+										()
+									</div>
+																<div class="method-definition">
+					static 						<span class="method-result">void</span>
+										<a href="#getPostInstallerMethodText" title="details" class="method-name">getPostInstallerMethodText</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$groupname</span>)
+									</div>
+																<div class="method-definition">
+					static 						<span class="method-result">void</span>
+										<a href="#getPostInstallerText" title="details" class="method-name">getPostInstallerText</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$name</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$groups</span>)
+									</div>
+																
+												<div class="method-definition">
+											<span class="method-result">PEAR_PackageProjector_ConfigureManeger</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#addConfigure" title="details" class="method-name">addConfigure</a>
+											(<span class="var-type"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_Configure.html">PEAR_PackageProjector_Configure</a></span>&nbsp;<span class="var-name">$confg</span>)
+									</div>
+																																																																								<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#setting" title="details" class="method-name">setting</a>
+											(<span class="var-type"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_ProjectInfo.html">PEAR_PackageProjector_ProjectInfo</a></span>&nbsp;<span class="var-name">$projinfo</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$conf</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$basedir</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodgetBuildConfigureText" id="getBuildConfigureText"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">static method getBuildConfigureText</span> (line <span class="line-number">125</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getBuildConfigureText
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$package_name</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$package_name</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetBuildScriptTextUnix" id="getBuildScriptTextUnix"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">static method getBuildScriptTextUnix</span> (line <span class="line-number">96</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getBuildScriptTextUnix
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetBuildScriptTextWindows" id="getBuildScriptTextWindows"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">static method getBuildScriptTextWindows</span> (line <span class="line-number">87</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getBuildScriptTextWindows
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetDocScriptTextUnix" id="getDocScriptTextUnix"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">static method getDocScriptTextUnix</span> (line <span class="line-number">115</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getDocScriptTextUnix
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetDocScriptTextWindows" id="getDocScriptTextWindows"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">static method getDocScriptTextWindows</span> (line <span class="line-number">106</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getDocScriptTextWindows
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetPostInstallerMethodText" id="getPostInstallerMethodText"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">static method getPostInstallerMethodText</span> (line <span class="line-number">294</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getPostInstallerMethodText
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$groupname</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$groupname</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetPostInstallerText" id="getPostInstallerText"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">static method getPostInstallerText</span> (line <span class="line-number">204</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getPostInstallerText
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$name</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$groups</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$name</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$groups</span>			</li>
+				</ul>
+		
+			
+	</div>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">43</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">PEAR_PackageProjector_ConfigureManeger</span>
+		<span class="method-name">
+			__construct
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodaddConfigure" id="addConfigure"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">addConfigure</span> (line <span class="line-number">79</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			addConfigure
+		</span>
+					(<span class="var-type"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_Configure.html">PEAR_PackageProjector_Configure</a></span>&nbsp;<span class="var-name">$confg</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_Configure.html">PEAR_PackageProjector_Configure</a></span>
+				<span class="var-name">$confg</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetting" id="setting"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">setting</span> (line <span class="line-number">54</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setting
+		</span>
+					(<span class="var-type"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_ProjectInfo.html">PEAR_PackageProjector_ProjectInfo</a></span>&nbsp;<span class="var-name">$projinfo</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$conf</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$basedir</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_ProjectInfo.html">PEAR_PackageProjector_ProjectInfo</a></span>
+				<span class="var-name">$projinfo</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$conf</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$basedir</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Sun, 24 May 2009 15:09:57 +0900 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+	</p>
+	</div></body>
+</html>

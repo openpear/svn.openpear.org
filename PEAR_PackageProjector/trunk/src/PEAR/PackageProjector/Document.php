@@ -111,7 +111,10 @@ class PEAR_PackageProjector_Document {
             $name = basename($info['path']);
             if ($name) {
                 file_put_contents($this->_dir.'/'.basename($info['path']), $buff);
-                $filepath = basename($info['path']);     
+				if (!is_dir($this->_dir)) {
+					mkdir($this->_dir, 0755);
+				}
+                $filepath = basename($info['path']);
             } else {
                 $filepath = substr($filepath,1);
             }
