@@ -26,8 +26,8 @@ ls TestSample/release
   <email>mumumu@mumumu.org</email>
   <active>yes</active>
  </contributor>
- <date>2009-05-23</date>
- <time>16:47:43</time>
+ <date>2009-05-24</date>
+ <time>12:55:05</time>
  <version>
   <release>1.0.0</release>
   <api>1.0.0</api>
@@ -52,6 +52,7 @@ ls TestSample/release
 - add method PEAR_PackageProjector_Project#unserialize()
 - remove command option &quot;--clear&quot;
 - remove command option &quot;--tmp&quot;
+- add document files
 
 [0.2.2]
 - add PEAR_PackageFileManager_Plugins to required packages list 
@@ -461,7 +462,7 @@ ls TestSample/release
     <release>alpha</release>
     <api>alpha</api>
    </stability>
-   <date>2009-05-23</date>
+   <date>2009-05-24</date>
    <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
    <notes>
 [1.0.0-alpha]
@@ -478,6 +479,7 @@ ls TestSample/release
 - add method PEAR_PackageProjector_Project#unserialize()
 - remove command option &quot;--clear&quot;
 - remove command option &quot;--tmp&quot;
+- add document files
 
 [0.2.2]
 - add PEAR_PackageFileManager_Plugins to required packages list 

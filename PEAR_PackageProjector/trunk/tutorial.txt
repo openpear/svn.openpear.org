@@ -1,29 +1,29 @@
-**概要
+*概要
 PEARパッケージを手軽に作成、管理する為のライブラリです。このライブラリは、プロジェクト内のbuild.confファイルの設定を行うだけで、コマンドラインから自動的にpackage.xmlやパッケージ本体の自動生成を行ってくれます。 Unix/Windowsの双方で使用可能です。
-**インストール
+*インストール
 >||
-pear install pear/PHP_CodeSniffer-beta
-pear install --alldeps http://servlet.sakura.ne.jp/download/PEAR_PackageProjector-0.1.3.tgz
+pear install openpear/PEAR_PackageProjector
 ||<
-**アップグレード
+*アップグレード
 >||
-pear upgrade http://servlet.sakura.ne.jp/download/PEAR_PackageProjector-0.1.3.tgz
+pear upgrade openpear/PEAR_PackageProjector
 ||<
-**簡単な使用方法
+*PEARのパッケージのビルドする簡単な使用方法
 >||
 cd <workspace>
-pearproj --create -p Test_Sample
+pearproj --create Test_Sample
 pearproj --configure Test_Sample/build.conf --make -p Test_Sample
 ||<
 or
 >||
 cd <workspace>
-pearproj --create -p Test_Sample
+pearproj --create Test_Sample
 cd Test_Sample
 ./build
 ||<
 ※作成されたパッケージは、Test_Sample/release に出来ます。
-**パッケージをカスタマイズする。
+
+*パッケージをカスタマイズする。
 build.confを編集して、
 >||
 ./build
@@ -33,79 +33,162 @@ build.confを編集して、
 pear info パッケージファイル
 ||<
 とすれば、できます。
-**編集できる内容
-***プロジェクト
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|ソース格納先|[project]|src_dir|未指定の場合、src|
-|パッケージ格納先|[project]|release_dir|未指定の場合、release|
 
-***パッケージ
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|パッケージ名|[package]|package_name|.|
-|パッケージタイプ|[package]|package_type|特殊なことがない限り「php」|
-|インストール先|[package]|baseinstalldir|.|
-|チャンネル|[package]|channel|"__uri" or "pear.php.net" or "pecl.php.net" etc...|
-|概要|[package]|summary, summary_file|summary_fileはファイル指定です|
-|詳細説明|[package]|description, description_file|description_fileはファイル指定です|
-|更新履歴|[package]|notes, notes_file|notes_fileはファイル指定です|
+*コマンドオプション
+>||
+Usage: pearproj [-tpic --checkcode --configure --create --make --updatedoc]  
 
-***拡張子
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|拡張子毎のタイプの指定|[role]|拡張子名|"php" or "data" or "doc" or "test" or "script" or "src"|
+-check --checkcode                source of project is checked by CodeSniffer.
+-c     --clear                    clear .pearproject.Now not use from ver1.0.0.
+-confg --configure=<value>        setting configure package (build.conf)
+       --create (optional)value   create project directory. ()
+-i     --install (optional)value  pear install ()
+       --make                     make package
+-p     --project=<value>          project directory (./)
+-t     --tmp                      use temporary directory.Now not use from
+                                  ver1.0.0.
+-doc   --updatedoc                update or create document.
+||<
+|*オプション名|*省略形|*設定値|*省略時の値|*備考|
+|--checkcode|-check|無|無|CodeSnifferを使ってコードが規約に従っているか検証|
+|--configure|-confg|confファイル名|build.conf|パッケージの設定を読み込む|
+|--create|無|プロジェクト作成先|無|プロジェクト新規作成します|
+|--install|-i|インストールするバージョン番号|設定で書かれているバージョン|pear installを実行します|
+|--make|無|無|無|パッケージをビルドします|
+|--project|-p|プロジェクト名|./|プロジェクトを指定します|
+|--updatedoc|-doc|無|無|ドキュメントを作成します|
+|--clear|-c|無|無|.pearprojectをクリアします。1.0.0からは削除されています|
+|--tmp|-t|無|無|テンポラリーを使用します。1.0.0からは削除されています|
 
-***バージョン
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|リリースバージョン|[version]|release_ver|.|
-|リリース状態|[version]|release_stab|"alpha" or "bate" or "stable"|
-|APIバージョン|[version]|api_ver|.|
-|API状態|[version]|api_vapi_stab|"alpha" or "bate" or "stable"|
-|PHPバージョン（最小）|[version]|php_min|.|
-|PEARインストーラ（最小）|[version]|pear_min|.|
+*build.confで設定できる項目
+**プロジェクト[project]
+|*サポートしているバージョン|
+|0.1.0 upper|
 
-***ライセンス
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|ライセンス名|[license]|name|sample) PHP License 3.01|
-|ライセンス参照先|[license]|uri|sample) http://www.php.net/license/3_01.txt|
+|*内容|*パラメータ名|*備考|
+|ソース格納先|src_dir|未指定の場合、src|
+|パッケージ格納|release_dir|未指定の場合、release|
 
-***メンテナー(関係者)
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|フルネーム|[maintainer://ハンドル名]|name, fullname|.|
-|メールアドレス|[maintainer://ハンドル名]|email, mail|.|
-|状態|[maintainer://ハンドル名]|role|"lead" or "developer" or "contributor" or "helper"|
+**ドキュメント[document]
+|*サポートしているバージョン|
+|1.0.0 upper|
 
-***ファイル毎
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|コマンドスクリプト化|[file://ファイルパス]|commandscript|別名を指定する|
-|無視|[file://ファイルパス]|ignore|.|
-|プラットフォーム|[file://ファイルパス]|platform|.|
-|インストール時のファイルパス|[file://ファイルパス]|install|.|
-|ファイルタイプ|[file://ファイルパス]|role|"php" or "data" or "doc" or "test" or "script" or "src"|
+|*内容|*パラメータ名|*備考|
+|ドキュメント格納先|doc_dir|未指定の場合、doc|
+|チュートリアルファイル|tutorial_file|ファイルの内容ははてな記法で書くことができます|
+|メインドキュメントのスタイルシートパス|stylesheet_file|httpの頭に@を付けるとスタイルシートをダウンロードし、ローカルに保存します。|
 
-***パッケージ依存関係
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|必須orオプション|[dep://パッケージ名]|type|"required" or "optional"|
-|チャンネル|[dep://パッケージ名]|channel|"__uri" or "pear.php.net" or "pecl.php.net" etc...|
-|最小バージョン|[dep://パッケージ名]|min|.|
-|最大バージョン|[dep://パッケージ名]|max|.|
+**パッケージ[package]
+|*サポートしているバージョン|
+|0.1.0 upper|
 
-***インストーラ
-|*内容|*カテゴリー|*パラメータ名|*備考|
-|グループについての説明|[installer://グループ名]|instructions|.|
-|パラメータの説明|[installer://グループ名]|パラメータ.prompt|.|
-|パラメータの型|[installer://グループ名]|パラメータ.type|指定できる値は「string」のみ|
-|パラメータの初期値|[installer://グループ名]|パラメータ.default|.|
+|*内容|*パラメータ名|*備考|
+|パッケージ名|package_name|.|
+|パッケージタイプ|package_type|特殊なことがない限り「php」|
+|インストール先|baseinstalldir|.|
+|チャンネル|channel|"__uri" or "pear.php.net" or "pecl.php.net" etc...|
+|概要|summary, summary_file|summary_fileはファイル指定です|
+|詳細説明|description, description_file|description_fileはファイル指定です|
+|更新履歴|notes, notes_file|notes_fileはファイル指定です|
 
-**PEAR_PackageProjectorで使っているbuild.conf
+**拡張子[role]
+|*サポートしているバージョン|
+|0.1.0 upper|
+
+|*内容|*パラメータ名|*備考|
+|拡張子毎のタイプの指定|拡張子名|"php" or "data" or "doc" or "test" or "script" or "src"|
+
+**バージョン[version]
+|*サポートしているバージョン|
+|0.1.0 upper|
+
+|*内容|*パラメータ名|*備考|
+|リリースバージョン|release_ver|.|
+|リリース状態|release_stab|"alpha" or "bate" or "stable"|
+|APIバージョン|api_ver|.|
+|API状態|api_vapi_stab|"alpha" or "bate" or "stable"|
+|PHPバージョン（最小）|php_min|.|
+|PEARインストーラ（最小）|pear_min|.|
+
+**ライセンス[license]
+|*サポートしているバージョン|
+|0.1.0 upper|
+
+|*内容|*パラメータ名|*備考|
+|ライセンス名|name|sample) PHP License 3.01|
+|ライセンス参照先|uri|sample) http://www.php.net/license/3_01.txt|
+
+**メンテナー(関係者)[maintainer://ハンドル名]
+|*サポートしているバージョン|
+|0.1.0 upper|
+
+|*内容|*パラメータ名|*備考|
+|フルネーム|name, fullname|.|
+|メールアドレス|email, mail|.|
+|状態|role|"lead" or "developer" or "contributor" or "helper"|
+
+**ファイル毎[file://ファイルパス]
+|*サポートしているバージョン|
+|0.1.0 upper|
+
+|*内容|*パラメータ名|*備考|
+|コマンドスクリプト化|commandscript|別名を指定する|
+|無視|ignore|.|
+|プラットフォーム|platform|.|
+|インストール時のファイルパス|install|.|
+|ファイルタイプ|role|"php" or "data" or "doc" or "test" or "script" or "src"|
+
+**パッケージ依存関係[dep://パッケージ名]
+|*サポートしているバージョン|
+|0.1.0 upper|
+
+|*内容|*パラメータ名|*備考|
+|必須orオプション|type|"required" or "optional"|
+|チャンネル|channel|"__uri" or "pear.php.net" or "pecl.php.net" etc...|
+|最小バージョン|min|.|
+|最大バージョン|max|.|
+
+**インストーラ[installer://グループ名]
+|*サポートしているバージョン|
+|0.1.0 upper|
+
+|*内容|*パラメータ名|*備考|
+|グループについての説明|instructions|.|
+|パラメータの説明|パラメータ.prompt|.|
+|パラメータの型|パラメータ.type|指定できる値は「string」のみ|
+|パラメータの初期値|パラメータ.default|.|
+
+*バージョン1.0.0の主な変更点
++自動生成されるbuildファイルの内容が変更されました
+ver0.2.0
+>||
+pearproj -t --configure ./build.conf --make -p ./
+||<
+ver1.0.0
+>||
+pearproj -i --configure ./build.conf --make -p ./
+||<
+これにより1.0.0で作成されたプロジェクトはビルド完了後自動でインストールが走ります。
++ドキュメントが作成できるようになりました。
+updatedocを実行すると作成できます。
+
+
+*PEAR_PackageProjectorのbuild.confの内容
 >||
 [project]
 src_dir=src
 release_dir=release
 
+[document]
+doc_dir = doc
+tutorial_file = tutorial.txt
+stylesheet_file = @http://d.hatena.ne.jp/theme/hatena/hatena.css
+
 [package]
 package_name = PEAR_PackageProjector
 package_type = php
 baseinstalldir = /
-channel = __uri
+channel = openpear.org
 summary =  Creates PEAR Package. And Manages PEAR Package.
 ;description = #
 description_file = desc.txt
@@ -116,12 +199,12 @@ notes_file = notes.txt
 sh = script
 
 [version]
-release_ver = 0.1.2
+release_ver = 1.0.0
 release_stab = alpha
-api_ver = 0.1.2
+api_ver = 1.0.0
 api_stab = alpha
 php_min = 5.1.0
-pear_min = 1.4.0
+pear_min = 1.8.0
 
 [license]
 name =PHP License 3.01
@@ -131,6 +214,11 @@ uri = http://www.php.net/license/3_01.txt
 name = Kouichi Sakamoto
 email = sakamoto@servlet.sakura.ne.jp
 role = lead
+
+[maintainer://mumumu]
+name = Yoshinari Takaoka
+email = mumumu@mumumu.org
+role = contributor 
 
 [file://scripts/pearproj.sh]
 commandscript = pearproj
@@ -144,11 +232,21 @@ type = required
 [dep://Console_Getargs]
 type = required
 
-[dep://PEAR_PackageFileManager]
+[dep://PEAR_PackageFileManager2]
 type = required
+
+[dep://PEAR_PackageFileManager_Plugins]
+type = required
+
+[dep://phpdocumentor]
+type = required
+
+[dep://HatenaSyntax]
+type = required
+channel=openpear.org
 ||<
 
-**インストーラを設定するサンプル
+*インストーラを設定するサンプル
 >||
 [installer://database]
 instructions = Database settings
@@ -165,8 +263,8 @@ instructions = Webroot settings
 webroot.prompt = Webroot directory
 ||<
 
-**特定のファイル(ディレクトリー)を無視する設定をするサンプル
-***ディレクトリ構成
+*特定のファイル(ディレクトリー)を無視する設定をするサンプル
+**ディレクトリ構成
 >||
 /Sample_Project
  +/release
@@ -184,7 +282,7 @@ webroot.prompt = Webroot directory
  +notes.txt
  +sample.php
 ||<
-***ファイルを設定する
+**ファイルを設定する
 >||
 [file://Sample/Project/Foo/sample1.php]
 ignore = 1
@@ -198,7 +296,7 @@ Sample_Project-0.1.0.tgz(アーカイブ)
          +sample2.php
        +Project.php
 ||<
-***ディレクトリーを設定する
+**ディレクトリーを設定する
 >||
 [file://Sample/Project/Foo/]
 ignore = 1
@@ -210,3 +308,66 @@ Sample_Project-0.1.0.tgz(アーカイブ)
      +/Project
        +Project.php
 ||<
+*自作コマンドの作り方
+**サンプルの仕様
+++コマンド名はhellopearにします。
+++引数はなし
+++コマンドを実行すると「Hello PEAR!!」と表示する
+++コマンドのスクリプト本体はsrc/scripts直下に作成
+**手順
+++プロジェクト作成
+++コマンド本体を作成
+++windowsでも使えるようにバッチファイルを作成
+++build.confに設定を追加
+++ビルドする
+++pear install する
+**プロジェクト作成
+>||
+pearproj --create -p hellopear
+||<
+
+**コマンド本体を作成
+src/scripts/hellopear.shを作成
+>||
+#!@php_bin@
+<?php
+echo 'Hello PEAR!!';
+?>
+||<
+
+**windowsでも使えるようにバッチファイルを作成
+src/scripts/hellopear.batを作成
+>||
+@echo off
+"@php_bin@" -d include_path="@php_dir@" "@bin_dir@\hellopear" %*
+||<
+
+**build.confに設定を追加
+>||
+[role]
+sh = script
+
+[file://scripts/hellopear.sh]
+commandscript = hellopear
+
+[file://scripts/hellopear.bat]
+commandscript = hellopear.bat
+||<
+「sh = script」を追加するのは、拡張子「.sh」のファイルをパッケージング対象にする為です。
+
+**ビルドする
+コマンドラインで実行
+>||
+build
+||<
+
+**pear install する
+>||
+pear install release/hellopear-0.1.0.tgz
+||<
+
+**自作コマンドを実行する
+>||
+hellopear
+||<
+「Hello PEAR!!」と表示されるはずです。
