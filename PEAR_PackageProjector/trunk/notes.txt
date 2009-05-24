@@ -1,3 +1,6 @@
+[1.0.1]
+- update pearproj.sh. To support old project
+
 [1.0.0]
 - add method PEAR_PackageProjector_Project#updatedoc()
 - add method PEAR_PackageProjector_Project#pearinstall()
