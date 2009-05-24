@@ -326,13 +326,18 @@ class PEAR_PackageProjector_Derictory {
     /**
      *
      */
-    static public function getRealpath($path)
+    static public function getRealpath($path, $pwd=null)
     {
         if (self::isAbsolutePath($path)) {
             return $path;
         }
-        $tmp = (OS_WINDOWS) ? getcwd() : getenv('PWD');
-        return $tmp .DIRECTORY_SEPARATOR.$path;
+		if (is_null($pwd)) {
+			$pwd = (OS_WINDOWS) ? getcwd() : getenv('PWD');
+		}
+		if (DIRECTORY_SEPARATOR === substr($pwd, -1,1) || '/' === substr(-1,1)) {
+			return $pwd.$path;
+		}
+        return $pwd.DIRECTORY_SEPARATOR.$path;
     }
 
     /**

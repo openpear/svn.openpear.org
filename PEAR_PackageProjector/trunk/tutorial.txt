@@ -12,7 +12,7 @@ pear upgrade openpear/PEAR_PackageProjector
 >||
 cd <workspace>
 pearproj --create Test_Sample
-pearproj --configure Test_Sample/build.conf --make -p Test_Sample
+pearproj --make -p Test_Sample
 ||<
 or
 >||
@@ -36,17 +36,14 @@ pear info パッケージファイル
 
 *コマンドオプション
 >||
-Usage: pearproj [-tpic --checkcode --configure --create --make --updatedoc]  
+Usage: pearproj [-pi --checkcode --configure --create --make --updatedoc]  
 
 -check --checkcode                source of project is checked by CodeSniffer.
--c     --clear                    clear .pearproject.Now not use from ver1.0.0.
 -confg --configure=<value>        setting configure package (build.conf)
        --create (optional)value   create project directory. ()
 -i     --install (optional)value  pear install ()
        --make                     make package
 -p     --project=<value>          project directory (./)
--t     --tmp                      use temporary directory.Now not use from
-                                  ver1.0.0.
 -doc   --updatedoc                update or create document.
 ||<
 |*オプション名|*省略形|*設定値|*省略時の値|*備考|

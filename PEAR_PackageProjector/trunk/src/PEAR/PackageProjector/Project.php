@@ -51,7 +51,8 @@ class PEAR_PackageProjector_Project {
     }
     
     /**
-     *
+	 * Serialize PEAR_PackageProjector_ProjectInfo data
+     * @return string serialize data
      */
     public function serialize()
     {
@@ -59,7 +60,8 @@ class PEAR_PackageProjector_Project {
     }
     
     /**
-     *
+	 * Unserialize string of PEAR_PackageProjector_ProjectInfo serialize data
+     * @return void
      */
     public function unserialize($buff)
     {
@@ -67,7 +69,7 @@ class PEAR_PackageProjector_Project {
     }
     
     /**
-     *
+     * @return PEAR_PackageProjector_ProjectInfo
      */
     public function info()
     {
@@ -75,7 +77,8 @@ class PEAR_PackageProjector_Project {
     }
 
     /**
-     *
+     * Build
+	 * @return void
      */
     public function make()
     {
@@ -85,8 +88,8 @@ class PEAR_PackageProjector_Project {
     /**
 	 * Load Configure data
      * @param mixed $conf_data configure filepath or array data
-	 * @param string $basedir
-	 * @return void
+	 * @param string $basedir base directory that load files(desc.txt,notes.txt,etc..).
+	 * @return boolean
      */
     public function configure($conf_data, $basedir=null)
     {
@@ -95,28 +98,31 @@ class PEAR_PackageProjector_Project {
 		
         $this->ProjectInfo = new PEAR_PackageProjector_ProjectInfo();
 
+		if (is_null($basedir)) {
+			$basedir = $this->ProjectDirectory->getBaseDir();
+		}
 		if (is_array($conf_data)) {
-			if (is_null($basedir)) {
-				$basedir = PEAR_PackageProjector_Derictory::getRealpath('').'/';
-			}
 			PEAR_PackageProjector::singleton()->configure($this->ProjectInfo, $conf_data, $basedir);
 		} else {
-			$confpath = PEAR_PackageProjector_Derictory::getRealpath($conf_data);
-			if (is_null($basedir)) {
-				$basedir = dirname($confpath).'/';
+			$confpath = PEAR_PackageProjector_Derictory::getRealpath($conf_data, $basedir);
+			if (!file_exists($confpath)) {
+				throw new PEAR_Exception("Not Found build configure file( ".$conf_data." )", PEAR_ERROR_EXCEPTION);
+				return false;
 			}
 			$conf = parse_ini_file($confpath, true);
 			PEAR_PackageProjector::singleton()->configure($this->ProjectInfo, $conf, $basedir);
 		}
         //
         if (!$this->ProjectDirectory->loadSetting($this->ProjectInfo, 0)) {
-            return ;
+            return false;
         }
         $handler->buildMessage(5, "", true);
+		return true;
     }
     
     /**
-     *
+     * Check code by CodeSniffer.
+	 * @return boolean
      */
     public function checkcode()
     {
@@ -155,13 +161,14 @@ class PEAR_PackageProjector_Project {
     }
     
     /**
-     *
+     * Update Document
+	 * @return boolean
      */
     public function updatedoc()
     {
         //
         if (!$this->ProjectDirectory->loadSetting($this->ProjectInfo, 0)) {
-            return ;
+            return false;
         }
         $srcpath = $this->ProjectDirectory->getSrcPath();
         $docpath = $this->ProjectDirectory->getDocumentPath();
@@ -182,13 +189,15 @@ class PEAR_PackageProjector_Project {
     }
     
     /**
-     *
+     * Execute PEAR Install
+	 * @param string $version Install Version
+	 * @return boolean
      */
     public function pearinstall($version=null)
     {
         //
         if (!$this->ProjectDirectory->loadSetting($this->ProjectInfo, 0)) {
-            return ;
+            return false;
         }
         $handler = PEAR_PackageProjector::singleton()->getMessageHandler();
         $pkgfile = $this->ProjectInfo->getPackageFileName($version);
