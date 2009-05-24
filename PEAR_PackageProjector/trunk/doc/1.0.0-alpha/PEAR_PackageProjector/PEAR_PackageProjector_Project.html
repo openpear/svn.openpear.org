@@ -58,17 +58,17 @@
 											(<span class="var-type"></span>&nbsp;<span class="var-name">$projectfile</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$mod</span> = <span class="var-default">0000</span>])
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
 										<a href="#checkcode" title="details" class="method-name">checkcode</a>
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
 										<a href="#configure" title="details" class="method-name">configure</a>
 											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$conf_data</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$basedir</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_ProjectInfo.html">PEAR_PackageProjector_ProjectInfo</a></span>
 										<a href="#info" title="details" class="method-name">info</a>
 										()
 									</div>
@@ -78,12 +78,12 @@
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
 										<a href="#pearinstall" title="details" class="method-name">pearinstall</a>
-											([<span class="var-type"></span>&nbsp;<span class="var-name">$version</span> = <span class="var-default">null</span>])
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$version</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">string</span>
 										<a href="#serialize" title="details" class="method-name">serialize</a>
 										()
 									</div>
@@ -93,7 +93,7 @@
 											(<span class="var-type"></span>&nbsp;<span class="var-name">$buff</span>)
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
 										<a href="#updatedoc" title="details" class="method-name">updatedoc</a>
 										()
 									</div>
@@ -148,16 +148,17 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">checkcode</span> (line <span class="line-number">121</span>)
+		<span class="method-title">checkcode</span> (line <span class="line-number">127</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Check code by CodeSniffer.</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			checkcode
 		</span>
@@ -171,7 +172,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">configure</span> (line <span class="line-number">91</span>)
+		<span class="method-title">configure</span> (line <span class="line-number">94</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -181,7 +182,7 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			configure
 		</span>
@@ -194,7 +195,7 @@
 				<span class="var-name">$conf_data</span><span class="var-description">: configure filepath or array data</span>			</li>
 					<li>
 				<span class="var-type">string</span>
-				<span class="var-name">$basedir</span>			</li>
+				<span class="var-name">$basedir</span><span class="var-description">: base directory that load files(desc.txt,notes.txt,etc..).</span>			</li>
 				</ul>
 		
 			
@@ -203,7 +204,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">info</span> (line <span class="line-number">72</span>)
+		<span class="method-title">info</span> (line <span class="line-number">74</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -212,7 +213,7 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result"><a href="../PEAR_PackageProjector/PEAR_PackageProjector_ProjectInfo.html">PEAR_PackageProjector_ProjectInfo</a></span>
 		<span class="method-name">
 			info
 		</span>
@@ -226,10 +227,11 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">make</span> (line <span class="line-number">80</span>)
+		<span class="method-title">make</span> (line <span class="line-number">83</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Build</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -249,26 +251,27 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">pearinstall</span> (line <span class="line-number">187</span>)
+		<span class="method-title">pearinstall</span> (line <span class="line-number">196</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Execute PEAR Install</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			pearinstall
 		</span>
-					([<span class="var-type"></span>&nbsp;<span class="var-name">$version</span> = <span class="var-default">null</span>])
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$version</span> = <span class="var-default">null</span>])
 			</div>
 	
 			<ul class="parameters">
 					<li>
-				<span class="var-type"></span>
-				<span class="var-name">$version</span>			</li>
+				<span class="var-type">string</span>
+				<span class="var-name">$version</span><span class="var-description">: Install Version</span>			</li>
 				</ul>
 		
 			
@@ -277,16 +280,18 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">serialize</span> (line <span class="line-number">56</span>)
+		<span class="method-title">serialize</span> (line <span class="line-number">57</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Serialize PEAR_PackageProjector_ProjectInfo data</p>
 	<ul class="tags">
+				<li><span class="field">return:</span> serialize data</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">string</span>
 		<span class="method-name">
 			serialize
 		</span>
@@ -300,10 +305,11 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">unserialize</span> (line <span class="line-number">64</span>)
+		<span class="method-title">unserialize</span> (line <span class="line-number">66</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Unserialize string of PEAR_PackageProjector_ProjectInfo serialize data</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -328,16 +334,17 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updatedoc</span> (line <span class="line-number">160</span>)
+		<span class="method-title">updatedoc</span> (line <span class="line-number">167</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Update Document</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			updatedoc
 		</span>
@@ -353,7 +360,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 24 May 2009 12:50:32 +0900 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+		Documentation generated on Sun, 24 May 2009 13:58:47 +0900 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
 	</p>
 	</div></body>
 </html>

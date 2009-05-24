@@ -30,14 +30,6 @@ $config['create'] = array(
             'max'   => 1,
             'default'=>'',
             'desc'  => 'create project directory.');
-$config['clear'] = array(
-            'short' => 'c',
-            'max'   => 0,
-            'desc'  => 'clear .pearproject.Now not use from ver1.0.0.');
-$config['tmp'] = array(
-            'short' => 't',
-            'max'   => 0,
-            'desc'  => 'use temporary directory.Now not use from ver1.0.0.');
 $config['checkcode'] = array(
             'short' => 'check',
             'max'   => 0,
@@ -78,13 +70,6 @@ try {
 	} else {
 	    $project = PEAR_PackageProjector::singleton()->load($projectpath);
 	}
-
-	/**
-	 * clear
-	if ($args->isDefined('clear')) {
-	    $project->clear();
-	}
-	 */
 
 	/**
 
