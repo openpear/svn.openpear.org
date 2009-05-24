@@ -12,6 +12,7 @@
 - add method PEAR_PackageProjector_Project#unserialize()
 - remove command option "--clear"
 - remove command option "--tmp"
+- add document files
 
 [0.2.2]
 - add PEAR_PackageFileManager_Plugins to required packages list 

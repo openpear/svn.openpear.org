@@ -1,0 +1,832 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title>PEAR_PackageProjector</title>
+<link rel="stylesheet" href="hatena.css" type="text/css" media="all">
+</head>
+<body>
+<h1>PEAR_PackageProjector</h1>
+<div class="hatena-body">
+<div class="main">
+<div id="days">
+
+<div class="day">
+<h2><a name="description">Description</a></h2>
+<div class="body">
+<div class="section">
+  <p>Creates PEAR Package in the way like the Command &quot;make&quot;.</p>
+  <p>ex)</p>
+  <p>cd &lt;workspace&gt;</p>
+  <p>pearproj --create -p TestSample</p>
+  <p>pearproj -c --configure TestSample/build.conf -p TestSample</p>
+  <p>pearproj --make -p TestSample </p>
+  <p>ls TestSample/release</p>
+</div>
+
+</div>
+</div>
+
+<div class="day">
+<h2><a name="tutorial">Tutorial</a></h2>
+<div class="body">
+<div class="section">
+  <h3>概要</h3>
+  <p>PEARパッケージを手軽に作成、管理する為のライブラリです。このライブラリは、プロジェクト内のbuild.confファイルの設定を行うだけで、コマンドラインから自動的にpackage.xmlやパッケージ本体の自動生成を行ってくれます。 Unix/Windowsの双方で使用可能です。</p>
+  <h3>インストール</h3>
+  <pre class="superpre ">
+pear install openpear/PEAR_PackageProjector</pre>
+  <h3>アップグレード</h3>
+  <pre class="superpre ">
+pear upgrade openpear/PEAR_PackageProjector</pre>
+  <h3>PEARのパッケージのビルドする簡単な使用方法</h3>
+  <pre class="superpre ">
+cd &lt;workspace&gt;
+pearproj --create Test_Sample
+pearproj --configure Test_Sample/build.conf --make -p Test_Sample</pre>
+  <p>or</p>
+  <pre class="superpre ">
+cd &lt;workspace&gt;
+pearproj --create Test_Sample
+cd Test_Sample
+./build</pre>
+  <p>※作成されたパッケージは、Test_Sample/release に出来ます。</p>
+
+  <h3>パッケージをカスタマイズする。</h3>
+  <p>build.confを編集して、</p>
+  <pre class="superpre ">
+./build</pre>
+  <p>すれば、編集内容がパッケージに反映されます。確認は、</p>
+  <pre class="superpre ">
+pear info パッケージファイル</pre>
+  <p>とすれば、できます。</p>
+
+  <h3>コマンドオプション</h3>
+  <pre class="superpre ">
+Usage: pearproj [-tpic --checkcode --configure --create --make --updatedoc]  
+
+-check --checkcode                source of project is checked by CodeSniffer.
+-c     --clear                    clear .pearproject.Now not use from ver1.0.0.
+-confg --configure=&lt;value&gt;        setting configure package (build.conf)
+       --create (optional)value   create project directory. ()
+-i     --install (optional)value  pear install ()
+       --make                     make package
+-p     --project=&lt;value&gt;          project directory (./)
+-t     --tmp                      use temporary directory.Now not use from
+                                  ver1.0.0.
+-doc   --updatedoc                update or create document.</pre>
+  <table>
+    <tr>
+      <th>オプション名</th>
+      <th>省略形</th>
+      <th>設定値</th>
+      <th>省略時の値</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>--checkcode</td>
+      <td>-check</td>
+      <td>無</td>
+      <td>無</td>
+      <td>CodeSnifferを使ってコードが規約に従っているか検証</td>
+    </tr>
+    <tr>
+      <td>--configure</td>
+      <td>-confg</td>
+      <td>confファイル名</td>
+      <td>build.conf</td>
+      <td>パッケージの設定を読み込む</td>
+    </tr>
+    <tr>
+      <td>--create</td>
+      <td>無</td>
+      <td>プロジェクト作成先</td>
+      <td>無</td>
+      <td>プロジェクト新規作成します</td>
+    </tr>
+    <tr>
+      <td>--install</td>
+      <td>-i</td>
+      <td>インストールするバージョン番号</td>
+      <td>設定で書かれているバージョン</td>
+      <td>pear installを実行します</td>
+    </tr>
+    <tr>
+      <td>--make</td>
+      <td>無</td>
+      <td>無</td>
+      <td>無</td>
+      <td>パッケージをビルドします</td>
+    </tr>
+    <tr>
+      <td>--project</td>
+      <td>-p</td>
+      <td>プロジェクト名</td>
+      <td>./</td>
+      <td>プロジェクトを指定します</td>
+    </tr>
+    <tr>
+      <td>--updatedoc</td>
+      <td>-doc</td>
+      <td>無</td>
+      <td>無</td>
+      <td>ドキュメントを作成します</td>
+    </tr>
+    <tr>
+      <td>--clear</td>
+      <td>-c</td>
+      <td>無</td>
+      <td>無</td>
+      <td>.pearprojectをクリアします。1.0.0からは削除されています</td>
+    </tr>
+    <tr>
+      <td>--tmp</td>
+      <td>-t</td>
+      <td>無</td>
+      <td>無</td>
+      <td>テンポラリーを使用します。1.0.0からは削除されています</td>
+    </tr>
+  </table>
+
+  <h3>build.confで設定できる項目</h3>
+  <h4>プロジェクト[project]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>ソース格納先</td>
+      <td>src_dir</td>
+      <td>未指定の場合、src</td>
+    </tr>
+    <tr>
+      <td>パッケージ格納</td>
+      <td>release_dir</td>
+      <td>未指定の場合、release</td>
+    </tr>
+  </table>
+
+  <h4>ドキュメント[document]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>1.0.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>ドキュメント格納先</td>
+      <td>doc_dir</td>
+      <td>未指定の場合、doc</td>
+    </tr>
+    <tr>
+      <td>チュートリアルファイル</td>
+      <td>tutorial_file</td>
+      <td>ファイルの内容ははてな記法で書くことができます</td>
+    </tr>
+    <tr>
+      <td>メインドキュメントのスタイルシートパス</td>
+      <td>stylesheet_file</td>
+      <td>httpの頭に@を付けるとスタイルシートをダウンロードし、ローカルに保存します。</td>
+    </tr>
+  </table>
+
+  <h4>パッケージ[package]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>パッケージ名</td>
+      <td>package_name</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>パッケージタイプ</td>
+      <td>package_type</td>
+      <td>特殊なことがない限り「php」</td>
+    </tr>
+    <tr>
+      <td>インストール先</td>
+      <td>baseinstalldir</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>チャンネル</td>
+      <td>channel</td>
+      <td>&quot;__uri&quot; or &quot;pear.php.net&quot; or &quot;pecl.php.net&quot; etc...</td>
+    </tr>
+    <tr>
+      <td>概要</td>
+      <td>summary, summary_file</td>
+      <td>summary_fileはファイル指定です</td>
+    </tr>
+    <tr>
+      <td>詳細説明</td>
+      <td>description, description_file</td>
+      <td>description_fileはファイル指定です</td>
+    </tr>
+    <tr>
+      <td>更新履歴</td>
+      <td>notes, notes_file</td>
+      <td>notes_fileはファイル指定です</td>
+    </tr>
+  </table>
+
+  <h4>拡張子[role]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>拡張子毎のタイプの指定</td>
+      <td>拡張子名</td>
+      <td>&quot;php&quot; or &quot;data&quot; or &quot;doc&quot; or &quot;test&quot; or &quot;script&quot; or &quot;src&quot;</td>
+    </tr>
+  </table>
+
+  <h4>バージョン[version]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>リリースバージョン</td>
+      <td>release_ver</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>リリース状態</td>
+      <td>release_stab</td>
+      <td>&quot;alpha&quot; or &quot;bate&quot; or &quot;stable&quot;</td>
+    </tr>
+    <tr>
+      <td>APIバージョン</td>
+      <td>api_ver</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>API状態</td>
+      <td>api_vapi_stab</td>
+      <td>&quot;alpha&quot; or &quot;bate&quot; or &quot;stable&quot;</td>
+    </tr>
+    <tr>
+      <td>PHPバージョン（最小）</td>
+      <td>php_min</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>PEARインストーラ（最小）</td>
+      <td>pear_min</td>
+      <td>.</td>
+    </tr>
+  </table>
+
+  <h4>ライセンス[license]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>ライセンス名</td>
+      <td>name</td>
+      <td>sample) PHP License 3.01</td>
+    </tr>
+    <tr>
+      <td>ライセンス参照先</td>
+      <td>uri</td>
+      <td>sample) http://www.php.net/license/3_01.txt</td>
+    </tr>
+  </table>
+
+  <h4>メンテナー(関係者)[maintainer://ハンドル名]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>フルネーム</td>
+      <td>name, fullname</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>メールアドレス</td>
+      <td>email, mail</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>状態</td>
+      <td>role</td>
+      <td>&quot;lead&quot; or &quot;developer&quot; or &quot;contributor&quot; or &quot;helper&quot;</td>
+    </tr>
+  </table>
+
+  <h4>ファイル毎[file://ファイルパス]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>コマンドスクリプト化</td>
+      <td>commandscript</td>
+      <td>別名を指定する</td>
+    </tr>
+    <tr>
+      <td>無視</td>
+      <td>ignore</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>プラットフォーム</td>
+      <td>platform</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>インストール時のファイルパス</td>
+      <td>install</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>ファイルタイプ</td>
+      <td>role</td>
+      <td>&quot;php&quot; or &quot;data&quot; or &quot;doc&quot; or &quot;test&quot; or &quot;script&quot; or &quot;src&quot;</td>
+    </tr>
+  </table>
+
+  <h4>パッケージ依存関係[dep://パッケージ名]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>必須orオプション</td>
+      <td>type</td>
+      <td>&quot;required&quot; or &quot;optional&quot;</td>
+    </tr>
+    <tr>
+      <td>チャンネル</td>
+      <td>channel</td>
+      <td>&quot;__uri&quot; or &quot;pear.php.net&quot; or &quot;pecl.php.net&quot; etc...</td>
+    </tr>
+    <tr>
+      <td>最小バージョン</td>
+      <td>min</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>最大バージョン</td>
+      <td>max</td>
+      <td>.</td>
+    </tr>
+  </table>
+
+  <h4>インストーラ[installer://グループ名]</h4>
+  <table>
+    <tr>
+      <th>サポートしているバージョン</th>
+    </tr>
+    <tr>
+      <td>0.1.0 upper</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>内容</th>
+      <th>パラメータ名</th>
+      <th>備考</th>
+    </tr>
+    <tr>
+      <td>グループについての説明</td>
+      <td>instructions</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>パラメータの説明</td>
+      <td>パラメータ.prompt</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <td>パラメータの型</td>
+      <td>パラメータ.type</td>
+      <td>指定できる値は「string」のみ</td>
+    </tr>
+    <tr>
+      <td>パラメータの初期値</td>
+      <td>パラメータ.default</td>
+      <td>.</td>
+    </tr>
+  </table>
+
+  <h3>バージョン1.0.0の主な変更点</h3>
+  <ol>
+    <li>自動生成されるbuildファイルの内容が変更されました</li>
+  </ol>
+  <p>ver0.2.0</p>
+  <pre class="superpre ">
+pearproj -t --configure ./build.conf --make -p ./</pre>
+  <p>ver1.0.0</p>
+  <pre class="superpre ">
+pearproj -i --configure ./build.conf --make -p ./</pre>
+  <p>これにより1.0.0で作成されたプロジェクトはビルド完了後自動でインストールが走ります。</p>
+  <ol>
+    <li>ドキュメントが作成できるようになりました。</li>
+  </ol>
+  <p>updatedocを実行すると作成できます。</p>
+  <br>
+  <h3>PEAR_PackageProjectorのbuild.confの内容</h3>
+  <pre class="superpre ">
+[project]
+src_dir=src
+release_dir=release
+
+[document]
+doc_dir = doc
+tutorial_file = tutorial.txt
+stylesheet_file = @http://d.hatena.ne.jp/theme/hatena/hatena.css
+
+[package]
+package_name = PEAR_PackageProjector
+package_type = php
+baseinstalldir = /
+channel = openpear.org
+summary =  Creates PEAR Package. And Manages PEAR Package.
+;description = #
+description_file = desc.txt
+;notes = #
+notes_file = notes.txt
+
+[role]
+sh = script
+
+[version]
+release_ver = 1.0.0
+release_stab = alpha
+api_ver = 1.0.0
+api_stab = alpha
+php_min = 5.1.0
+pear_min = 1.8.0
+
+[license]
+name =PHP License 3.01
+uri = http://www.php.net/license/3_01.txt
+
+[maintainer://kouichi66]
+name = Kouichi Sakamoto
+email = sakamoto@servlet.sakura.ne.jp
+role = lead
+
+[maintainer://mumumu]
+name = Yoshinari Takaoka
+email = mumumu@mumumu.org
+role = contributor 
+
+[file://scripts/pearproj.sh]
+commandscript = pearproj
+
+[file://scripts/pearproj.bat]
+commandscript = pearproj.bat
+
+[dep://PHP_CodeSniffer]
+type = required
+
+[dep://Console_Getargs]
+type = required
+
+[dep://PEAR_PackageFileManager2]
+type = required
+
+[dep://PEAR_PackageFileManager_Plugins]
+type = required
+
+[dep://phpdocumentor]
+type = required
+
+[dep://HatenaSyntax]
+type = required
+channel=openpear.org</pre>
+
+  <h3>インストーラを設定するサンプル</h3>
+  <pre class="superpre ">
+[installer://database]
+instructions = Database settings
+dbHost.prompt = Database host
+dbHost.type = string
+dbHost.default = localhost
+dbName.prompt = Database name
+dbUser.prompt = Database user
+dbPass.prompt = Database password
+dbPass.default = &lt;none&gt;
+
+[installer://webroot]
+instructions = Webroot settings
+webroot.prompt = Webroot directory</pre>
+
+  <h3>特定のファイル(ディレクトリー)を無視する設定をするサンプル</h3>
+  <h4>ディレクトリ構成</h4>
+  <pre class="superpre ">
+/Sample_Project
+ +/release
+ +/src
+   +/Sample
+     +/Project
+       +/Foo
+         +sample1.php
+         +sample2.php
+       +Project.php
+ +build
+ +build.bat
+ +build.conf
+ +desc.txt
+ +notes.txt
+ +sample.php</pre>
+  <h4>ファイルを設定する</h4>
+  <pre class="superpre ">
+[file://Sample/Project/Foo/sample1.php]
+ignore = 1</pre>
+  <p>結果</p>
+  <pre class="superpre ">
+Sample_Project-0.1.0.tgz(アーカイブ)
+   +/Sample
+     +/Project
+       +/Foo
+         +sample2.php
+       +Project.php</pre>
+  <h4>ディレクトリーを設定する</h4>
+  <pre class="superpre ">
+[file://Sample/Project/Foo/]
+ignore = 1</pre>
+  <p>結果</p>
+  <pre class="superpre ">
+Sample_Project-0.1.0.tgz(アーカイブ)
+   +/Sample
+     +/Project
+       +Project.php</pre>
+  <h3>自作コマンドの作り方</h3>
+  <h4>サンプルの仕様</h4>
+  <ol>
+    <li>コマンド名はhellopearにします。</li>
+    <li>引数はなし</li>
+    <li>コマンドを実行すると「Hello PEAR!!」と表示する</li>
+    <li>コマンドのスクリプト本体はsrc/scripts直下に作成</li>
+  </ol>
+  <h4>手順</h4>
+  <ol>
+    <li>プロジェクト作成</li>
+    <li>コマンド本体を作成</li>
+    <li>windowsでも使えるようにバッチファイルを作成</li>
+    <li>build.confに設定を追加</li>
+    <li>ビルドする</li>
+    <li>pear install する</li>
+  </ol>
+  <h4>プロジェクト作成</h4>
+  <pre class="superpre ">
+pearproj --create -p hellopear</pre>
+
+  <h4>コマンド本体を作成</h4>
+  <p>src/scripts/hellopear.shを作成</p>
+  <pre class="superpre ">
+#!@php_bin@
+&lt;?php
+echo &#039;Hello PEAR!!&#039;;
+?&gt;</pre>
+
+  <h4>windowsでも使えるようにバッチファイルを作成</h4>
+  <p>src/scripts/hellopear.batを作成</p>
+  <pre class="superpre ">
+@echo off
+&quot;@php_bin@&quot; -d include_path=&quot;@php_dir@&quot; &quot;@bin_dir@\hellopear&quot; %*</pre>
+
+  <h4>build.confに設定を追加</h4>
+  <pre class="superpre ">
+[role]
+sh = script
+
+[file://scripts/hellopear.sh]
+commandscript = hellopear
+
+[file://scripts/hellopear.bat]
+commandscript = hellopear.bat</pre>
+  <p>「sh = script」を追加するのは、拡張子「.sh」のファイルをパッケージング対象にする為です。</p>
+
+  <h4>ビルドする</h4>
+  <p>コマンドラインで実行</p>
+  <pre class="superpre ">
+build</pre>
+
+  <h4>pear install する</h4>
+  <pre class="superpre ">
+pear install release/hellopear-0.1.0.tgz</pre>
+
+  <h4>自作コマンドを実行する</h4>
+  <pre class="superpre ">
+hellopear</pre>
+  <p>「Hello PEAR!!」と表示されるはずです。</p>
+</div>
+
+</div>
+</div>
+
+<div class="day">
+<h2><a name="changelog">Change Log</a></h2>
+<div class="body">
+<div class="section">
+  <p>[1.0.0-alpha]</p>
+  <ul>
+    <li> add method PEAR_PackageProjector_Project#updatedoc()</li>
+    <li> add method PEAR_PackageProjector_Project#pearinstall()</li>
+    <li> add command option --updatedoc(-doc)</li>
+    <li> add command option --install(-i)</li>
+    <li> change default of command option --project(-p) is &quot;./&quot;</li>
+    <li> change default of command option --config(-confg) is &quot;build.conf&quot;</li>
+    <li> change enter of create file is &quot;\n&quot; to PHP_EOL;</li>
+    <li> add Class PEAR_PackageProjector_MessageHandler_Callback</li>
+    <li> support array data in PEAR_PackageProjector_Project#configure</li>
+    <li> add method PEAR_PackageProjector_Project#serialize()</li>
+    <li> add method PEAR_PackageProjector_Project#unserialize()</li>
+    <li> remove command option &quot;--clear&quot;</li>
+    <li> remove command option &quot;--tmp&quot;</li>
+  </ul>
+
+  <p>[0.2.2]</p>
+  <ul>
+    <li> add PEAR_PackageFileManager_Plugins to required packages list </li>
+  </ul>
+
+  <p>[0.2.1]</p>
+  <ul>
+    <li> support PEAR_PackageFileManager2#addReplacement. And it can make command line.</li>
+    <li> can use checkcode().</li>
+  </ul>
+
+  <p>[0.2.0]</p>
+  <ul>
+    <li> fixed bug getcwd() routine could not get current directory.</li>
+    <li> followed PEAR 1.8.0 API changes. </li>
+    <ul>
+      <li> PEAR_PackageFileManager2::exportCompatiblePackageFile1 was deleted.</li>
+    </ul>
+    <li> replaced Dependency PEAR_PackageFileManager with PEAR_PackageFileManager2.</li>
+  </ul>
+
+  <p>[0.1.3]</p>
+  <ul>
+    <li> Add command option &quot;--tmp&quot; that use temporary directory for .pearproject file.</li>
+    <li> Change _createProject() because it doesn&#039;t make README.TXT. And Base class is made automatically. </li>
+    <li> When create project directory.  Sample script was generated on the project directory. </li>
+    <li> Fixed bug in INI value A is disregarded.</li>
+  </ul>
+
+  <p>[0.1.2]</p>
+  <ul>
+    <li> Support unix</li>
+    <li> Support absolute path on ini file.</li>
+    <li> The installer can be made.</li>
+    <li> The project source directory can be changed. </li>
+    <li> The project Release directory can be changed. </li>
+    <li> When create project directory.  Build script was generated on the project directory. </li>
+    <li> When configure project. .pearproject is cleared.</li>
+    <li> The project directory name is set to package_name on build.conf. And the directory matched to the project directory name is made right under the source directory. </li>
+  </ul>
+
+  <p>[0.1.1]</p>
+  <ul>
+    <li> Add required dependency package &quot;pear.php.net/Console_Getargs&quot;</li>
+    <li> Add required dependency package &quot;pear.php.net/PEAR_PackageFileManager&quot;</li>
+    <li> Add message to create package2.xml</li>
+    <li> The error that occurs when package2.xml is created is displayed.</li>
+    <li> The description format of Maintener is changed to [maintainer://&lt;handlename&gt;] format.</li>
+    <li> The base directory of summary_file, description_file, and notes_file became a directory with config file.</li>
+  </ul>
+  <p>[0.1.0]</p>
+  <ul>
+    <li> First release.</li>
+  </ul>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+<div class="sidebar">
+    <div class="hatena-module hatena-module-sectioncategory">
+    <div class="hatena-moduletitle">Index</div>
+    <div class="hatena-modulebody">
+    <ul class="hatena-sectioncategory">
+    <li><a href="#description">Description</a></li>
+    <li><a href="#tutorial">Tutorial</a></li>
+    <li><a href="#changelog">Change Log</a></li>
+    </ul>
+    </div>
+    </div>
+    <div class="hatena-module hatena-module-sectioncategory">
+    <div class="hatena-moduletitle">API Document</div>
+    <div class="hatena-modulebody">
+    <ul class="hatena-sectioncategory">
+    <li><a href="1.0.0-alpha/index.html">1.0.0-alpha</a></li>
+
+    </ul>
+    </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
