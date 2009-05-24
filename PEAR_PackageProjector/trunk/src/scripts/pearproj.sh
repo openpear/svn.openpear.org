@@ -30,6 +30,14 @@ $config['create'] = array(
             'max'   => 1,
             'default'=>'',
             'desc'  => 'create project directory.');
+$config['clear'] = array(
+            'short' => 'c',
+            'max'   => 0,
+            'desc'  => 'clear .pearproject.Now not use from ver1.0.0.');
+$config['tmp'] = array(
+            'short' => 't',
+            'max'   => 0,
+            'desc'  => 'use temporary directory.Now not use from ver1.0.0.');
 $config['checkcode'] = array(
             'short' => 'check',
             'max'   => 0,
@@ -63,6 +71,20 @@ $projectpath = $args->getValue('project');
 $project = null;
 
 try {
+	/**
+	 * clear
+	 */
+	if ($args->isDefined('clear')) {
+	    echo 'Warking: --clear is not use from ver1.0.0.'.PHP_EOL;
+	}
+
+	/**
+	 * tmp
+	 */
+	if ($args->isDefined('tmp')) {
+	    echo 'Warking: --tmp is not use from ver1.0.0.'.PHP_EOL;
+	}
+
 	if ($args->isDefined('create')) {
 		$create_proj = $args->getValue('create');
 		$create_proj = '' === $create_proj ? $projectpath : $create_proj;
@@ -70,6 +92,7 @@ try {
 	} else {
 	    $project = PEAR_PackageProjector::singleton()->load($projectpath);
 	}
+
 
 	/**
 
