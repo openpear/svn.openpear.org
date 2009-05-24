@@ -23,6 +23,38 @@ cd Test_Sample
 ||<
 ※作成されたパッケージは、Test_Sample/release に出来ます。
 
+*ドキュメントを生成する
+ver1.0.0からドキュメントを生成できるようになりました。
+※この例ではTest_Sampleのドキュメントを作成します。
+>||
+cd <workspace>
+pearproj --doc -p Test_Sample
+||<
+or
+>||
+cd <workspace>
+cd Test_Sample
+./updatedoc
+||<
+※作成されたドキュメントは、Test_Sample/doc に出来ます。
+**チュートリアルを作成する
+まず、build.confの設定にカテゴリー[document]があるか確認してください。
+もし、なければ以下の項目を追加して下さい。
+>||
+[document]
+doc_dir = doc
+tutorial_file = tutorial.txt
+stylesheet_file = @http://d.hatena.ne.jp/theme/hatena/hatena.css
+||<
+設定したら、tutorial.txtをはてな記法で編集して下さい。
+>||
+*Hello
+**Hello
+***Hello
+||<
+編集が完了したら、updatedoc実行して下さい。
+※Test_Sample/doc/index.htmlに編集した内容が反映されているはずです。
+
 *パッケージをカスタマイズする。
 build.confを編集して、
 >||

@@ -129,7 +129,6 @@ class PEAR_PackageProjector_ConfigureManeger {
               . 'release_dir = release'.PHP_EOL
               . ''.PHP_EOL
               . '[document]'.PHP_EOL
-              . ''.PHP_EOL
               . 'doc_dir = doc'.PHP_EOL
               . 'tutorial_file = tutorial.txt'.PHP_EOL
               . ';; if stylesheet_file is "@http://...". it download file.'.PHP_EOL

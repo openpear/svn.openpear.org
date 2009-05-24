@@ -44,7 +44,7 @@ pear upgrade openpear/PEAR_PackageProjector</pre>
   <pre class="superpre ">
 cd &lt;workspace&gt;
 pearproj --create Test_Sample
-pearproj --configure Test_Sample/build.conf --make -p Test_Sample</pre>
+pearproj --make -p Test_Sample</pre>
   <p>or</p>
   <pre class="superpre ">
 cd &lt;workspace&gt;
@@ -52,6 +52,34 @@ pearproj --create Test_Sample
 cd Test_Sample
 ./build</pre>
   <p>※作成されたパッケージは、Test_Sample/release に出来ます。</p>
+
+  <h3>ドキュメントを生成する</h3>
+  <p>ver1.0.0からドキュメントを生成できるようになりました。</p>
+  <p>※この例ではTest_Sampleのドキュメントを作成します。</p>
+  <pre class="superpre ">
+cd &lt;workspace&gt;
+pearproj --doc -p Test_Sample</pre>
+  <p>or</p>
+  <pre class="superpre ">
+cd &lt;workspace&gt;
+cd Test_Sample
+./updatedoc</pre>
+  <p>※作成されたドキュメントは、Test_Sample/doc に出来ます。</p>
+  <h4>チュートリアルを作成する</h4>
+  <p>まず、build.confの設定にカテゴリー[document]があるか確認してください。</p>
+  <p>もし、なければ以下の項目を追加して下さい。</p>
+  <pre class="superpre ">
+[document]
+doc_dir = doc
+tutorial_file = tutorial.txt
+stylesheet_file = @http://d.hatena.ne.jp/theme/hatena/hatena.css</pre>
+  <p>設定したら、tutorial.txtをはてな記法で編集して下さい。</p>
+  <pre class="superpre ">
+*Hello
+**Hello
+***Hello</pre>
+  <p>編集が完了したら、updatedoc実行して下さい。</p>
+  <p>※Test_Sample/doc/index.htmlに編集した内容が反映されているはずです。</p>
 
   <h3>パッケージをカスタマイズする。</h3>
   <p>build.confを編集して、</p>
