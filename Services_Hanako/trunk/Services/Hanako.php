@@ -81,20 +81,29 @@ class Services_Hanako {
     private $master_code;
 
     /**
+     * HTTP_Request2 object
+     * @var    object
+     * @access private
+     */
+    private $request;
+
+    /**
      * Constructor
      *
+     * @param  object HTTP_Request2 $request HTTP_Request2 object
      * @param  string    $area_code the area code
      * @param  string    $master_code the master code
      * @access public
      * @throws Exception
      */
-    public function __construct($area_code, $master_code) {
+    public function __construct(HTTP_Request2 $request, $area_code, $master_code) {
         if (!preg_match('#^\\d{2}$#', $area_code)) {
             throw new Exception('Invalid area code : [' . $area_code . ']');
         }
         if (!preg_match('#^\\d{8}$#', $master_code)) {
             throw new Exception('Invalid master code : [' . $master_code . ']');
         }
+        $this->request = $request;
         $this->area_code = $area_code;
         $this->master_code = $master_code;
         $this->user_agent = SERVICES_HANAKO_USER_AGENT;
@@ -188,26 +197,29 @@ class Services_Hanako {
      */
     private function fetchDescription() {
         // get cookie
-        $request = new HTTP_Request2($this->getRequestUrlToGetCookie());
-        $request->setHeader('User-Agent', SERVICES_HANAKO_USER_AGENT);
-        $response = $request->send();
+        $this->request->setUrl($this->getRequestUrlToGetCookie());
+        $this->request->setHeader('User-Agent', SERVICES_HANAKO_USER_AGENT);
+        $response = $this->request->send();
         switch ($response->getStatus()) {
         case 200:
             break;
         default:
-            throw new Exception('Hanako: return HTTP ' . $request->getResponseCode());
+            throw new Exception('Hanako: return HTTP ' . $response->getStatus());
         }
 
         // get information
         $cookies = $response->getCookies();
-        $request->addCookie($cookies[0]['name'], $cookies[0]['value']);
-        $request->setUrl($this->getRequestUrlToGetInformation());
-        $response = $request->send();
+        if (!isset($cookies[0])) {
+            throw new Exception('Hanako: failed to get cookie');
+        }
+        $this->request->addCookie($cookies[0]['name'], $cookies[0]['value']);
+        $this->request->setUrl($this->getRequestUrlToGetInformation());
+        $response = $this->request->send();
         switch ($response->getStatus()) {
         case 200:
             break;
         default:
-            throw new Exception('Hanako: return HTTP ' . $request->getResponseCode());
+            throw new Exception('Hanako: return HTTP ' . $response->getStatus());
         }
 
         $this->parseDescription($response->getBody());
