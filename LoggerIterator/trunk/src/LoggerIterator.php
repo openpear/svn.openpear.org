@@ -12,11 +12,14 @@
 
 class LoggerIterator Implements OuterIterator
 {
-  private $it;
+  protected $it;
+  protected $mode = 0x0;
+  const VERBOSE = 0x01;
 
-  public function __construct($it)
+  public function __construct($it, $mode = 0x0)
   {
     $this->it = $it;
+    $this->mode = $mode;
   }
   public function getInnerIterator()
   {
@@ -30,12 +33,27 @@ class LoggerIterator Implements OuterIterator
 
   public function __call($func, $params = array())
   {
-    $ret = call_user_func_array(array($this->it, $func), $params);
-    printf("%s: %s::%s(%s) = ",
-           __CLASS__,
-           get_class($this->it), $func,
-           join(",", $params));
-    var_dump($ret);
+    $msg = "";
+    $rethrow = null;
+    try {
+      $ret = call_user_func_array(array($this->it, $func), $params);
+    } catch (Exception $e) {
+      $msg = "Caught Exception: ".$e->getMessage(). "\n";
+      $rethrow = $e;
+    }
+    if ($this->mode & self::VERBOSE) {
+      $msg .= sprintf("%s: %s::%s(%s) = %s\n",
+                      __CLASS__,
+                      get_class($this->it), $func,
+                      join(",", $params),
+                      print_r($ret, true));
+    }
+    if ($msg !== "") {
+      fputs(STDERR, $msg);
+    }
+    if ($rethrow instanceof Exception) {
+      throw $rethrow;
+    }
     return $ret;
   }
 }
