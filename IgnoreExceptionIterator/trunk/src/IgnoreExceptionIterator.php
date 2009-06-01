@@ -27,23 +27,20 @@ class IgnoreExceptionIterator implements OuterIterator
   public function key()     { return $this->__call("key"); }
   public function next()    { return $this->__call("next"); }
   public function rewind()  { return $this->__call("rewind"); }
-  public function valid()
-  {
-    $ret = $this->__call("valid");
-    if ($ret === null) { $ret = false; }
-    return $ret;
-  }
+  public function valid()   { return $this->__call("valid"); }
+
   public function __call($func, $params = array())
   {
-    if ($this->already_caught_exception) {
-      return null;
+    if (!$this->already_caught_exception) {
+      try {
+        $ret = call_user_func_array(array($this->it, $func), $params);
+      } catch (Exception $e) {
+        // ignore exception
+        $this->already_caught_exception = true;
+      }
     }
-    try {
-      $ret = call_user_func_array(array($this->it, $func), $params);
-    } catch (Exception $e) {
-      // ignore exception
-      $this->already_caught_exception = true;
-      $ret = null;
+    if ($this->already_caught_exception) {
+      $ret = ($method === "valid") ? false :  null;
     }
     return $ret;
   }
