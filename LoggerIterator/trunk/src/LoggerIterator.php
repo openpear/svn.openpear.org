@@ -14,6 +14,7 @@ class LoggerIterator Implements OuterIterator
 {
   protected $it;
   protected $mode = 0x0;
+  const QUIET = 0x0;
   const VERBOSE = 0x01;
 
   public function __construct($it, $mode = 0x0)
