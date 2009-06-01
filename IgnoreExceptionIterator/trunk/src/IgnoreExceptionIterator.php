@@ -13,6 +13,7 @@
 class IgnoreExceptionIterator implements OuterIterator
 {
   protected $it;
+  protected $already_caught_exception = false;
 
   public function __construct($it)
   {
@@ -26,13 +27,22 @@ class IgnoreExceptionIterator implements OuterIterator
   public function key()     { return $this->__call("key"); }
   public function next()    { return $this->__call("next"); }
   public function rewind()  { return $this->__call("rewind"); }
-  public function valid()   { return $this->__call("valid"); }
+  public function valid()
+  {
+    $ret = $this->__call("valid");
+    if ($ret === null) { $ret = false; }
+    return $ret;
+  }
   public function __call($func, $params = array())
   {
+    if ($this->already_caught_exception) {
+      return null;
+    }
     try {
       $ret = call_user_func_array(array($this->it, $func), $params);
     } catch (Exception $e) {
       // ignore exception
+      $this->already_caught_exception = true;
       $ret = null;
     }
     return $ret;
