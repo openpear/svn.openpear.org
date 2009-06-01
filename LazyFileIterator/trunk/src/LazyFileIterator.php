@@ -61,9 +61,6 @@ class LazyFileIterator implements OuterIterator
     return $this->_call_spl_file_obj("rewind");
   }
   public function valid()   {
-    if ($this->is_eof) {
-      return false;
-    }
     $ret = $this->_call_spl_file_obj("valid");
     if ($ret === false) {
       $this->it = null;
@@ -71,13 +68,14 @@ class LazyFileIterator implements OuterIterator
     }
     return $ret;
   }
-  protected function _call_spl_file_obj($func)
+  protected function _call_spl_file_obj($method)
   {
     if ($this->is_eof) {
-      return null;
+      $ret = ($method === "valid") ? false :  null;
+    } else {
+      $it = $this->getInnerIterator();
+      $ret = call_user_func(array($it, $method));
     }
-    $it = $this->getInnerIterator();
-    $ret = call_user_func(array($it, $func));
     return $ret;
   }
 }
