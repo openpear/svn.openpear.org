@@ -29,8 +29,7 @@ class NullFilehandleIterator implements IteratorAggregate
   public function getIterator() {
     $it = new AppendIterator();
     foreach($this->files as $filename) {
-      $it->append(new IgnoreExceptionIterator(new LoggerIterator(new LazyFileIterator($filename, 'r'), LoggerIterator::QUIET)));
-      //$it = new LazyFileIterator($filename, 'r');
+      $it->append(new IgnoreExceptionIterator(new LoggerIterator(new LazyFileIterator($filename, 'r'))));
     }
     $this->files = array();
     return $it;
