@@ -31,28 +31,29 @@ class LoggerIterator Implements OuterIterator
   public function rewind()  { return $this->__call("rewind"); }
   public function valid()   { return $this->__call("valid"); }
 
-  public function __call($func, $params = array())
+  public function __call($method, $params = array())
   {
     $msg = "";
-    $rethrow = null;
+    $caught_exception = null;
     try {
-      $ret = call_user_func_array(array($this->it, $func), $params);
+      $ret = call_user_func_array(array($this->it, $method), $params);
     } catch (Exception $e) {
+      $ret = ($method === "valid") ? false :  null;
       $msg = "Caught Exception: ".$e->getMessage(). "\n";
-      $rethrow = $e;
+      $caught_exception = $e;
     }
-    if ($this->mode & self::VERBOSE) {
+    if ($this->mode && self::VERBOSE) {
       $msg .= sprintf("%s: %s::%s(%s) = %s\n",
                       __CLASS__,
-                      get_class($this->it), $func,
+                      get_class($this->it), $method,
                       join(",", $params),
                       print_r($ret, true));
     }
     if ($msg !== "") {
       fputs(STDERR, $msg);
     }
-    if ($rethrow instanceof Exception) {
-      throw $rethrow;
+    if ($caught_exception instanceof Exception) {
+      throw $caught_exception;
     }
     return $ret;
   }
