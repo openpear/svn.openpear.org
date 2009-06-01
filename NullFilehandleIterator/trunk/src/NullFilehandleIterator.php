@@ -4,7 +4,7 @@ require_once('LoggerIterator.php');
 require_once('IgnoreExceptionIterator.php');
 
   /**
-   * Nullfilehandleiterator - 
+   * Nullfilehandleiterator - Perlのnull filehandleを真似たイテレータ
    *
    * @package  NullFilehandleIterator
    * @author  Yoshio HANAWA <y@hnw.jp>
