@@ -17,10 +17,17 @@ class LoggerIterator Implements OuterIterator
   const QUIET = 0x0;
   const VERBOSE = 0x01;
 
-  public function __construct($it, $mode = 0x0)
+  public function __construct(Traversable $it, $mode = 0x0)
   {
-    $this->it = $it;
-    $this->mode = $mode;
+    if ($it instanceof IteratorAggregate) {
+      $it = $iterator->getIterator();
+    }
+    if ($it instanceof Iterator) {
+      $this->it = $it;
+      $this->mode = $mode;
+    } else {
+      throw new Exception("Only Traversable class can be wrapped by LoggerIterator.");
+    }
   }
   public function getInnerIterator()
   {
