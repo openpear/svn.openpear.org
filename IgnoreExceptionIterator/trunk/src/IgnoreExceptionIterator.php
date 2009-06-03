@@ -15,9 +15,16 @@ class IgnoreExceptionIterator implements OuterIterator
   protected $it;
   protected $already_caught_exception = false;
 
-  public function __construct($it)
+  public function __construct(Traversable $it)
   {
-    $this->it = $it;
+    if ($it instanceof IteratorAggregate) {
+      $it = $iterator->getIterator();
+    }
+    if ($it instanceof Iterator) {
+      $this->it = $it;
+    } else {
+      throw new Exception("Only Traversable class can be wrapped by IgnoreExceptionIterator.");
+    }
   }
   public function getInnerIterator()
   {
