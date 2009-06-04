@@ -10,6 +10,8 @@ require_once '../exception/AspectException.php';
  * @version Release:  0.10.0
  */
 class Annotation {
+    const INTERCEPTER = 'intercepter';
+    const ANNOTATION  = 'annotation';
     /**
      * アノテーションを取得します
      *   アノテーションサンプル
@@ -21,21 +23,26 @@ class Annotation {
      */
     public static function getAnnotation($ref, $key) {
         $comment = self::formatComment(self::getComment($ref));
+        $ret = array();
         foreach ($comment as $c) {
             if (!preg_match("/@$key\s*/", $c, $matches)) {
                 continue;
             }
-            $annotation = self::newInstance($key);
+            $annotation = self::newInstance($key, self::ANNOTATION);
             if (preg_match('/\((.*?\))/', $c, $matches)) {
                 $expression = self::formatExpression(trim($matches[0]));
-            }
-            if (isset($expression)) {
-                return array($annotation, $expression);
+                if (array_key_exists(self::INTERCEPTER, $expression)) {
+                    $interCepter = self::newInstance($expression[self::INTERCEPTER], self::INTERCEPTER);
+                    $annotation->setInterCepters($interCepter, $ref->getName());
+                } else {
+                    throw new AspectException('intercepter is required.');
+                }
             } else {
-                return $annotation;
+                throw new AspectException('intercepter is required.');
             }
+            $ret[] = $annotation;
         }
-        return null;
+        return $ret;
     }
 
     /**
@@ -71,13 +78,14 @@ class Annotation {
      * アノテーションで指定されたオブジェクトのインスタンスを作成します
      *
      * @param  string $name
+     * @param  string $path
      * @return object
      */
-    public static function newInstance($name) {
+    public static function newInstance($name, $path) {
         if (class_exists($name, false)) {
             return new $name;
         }
-        $fileName = '../intercepter/' . ucfirst($name) . '.php';
+        $fileName = '../' . $path . '/' . ucfirst($name) . '.php';
         if (file_exists($fileName) && is_readable($fileName)) {
             include_once $fileName;
             if (class_exists($name, false)) {
@@ -98,4 +106,3 @@ class Annotation {
         return eval($src);
     }
 }
-?>

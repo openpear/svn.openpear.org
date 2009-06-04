@@ -10,4 +10,3 @@
  */
 class AspectException extends Exception {
 }
-?>
