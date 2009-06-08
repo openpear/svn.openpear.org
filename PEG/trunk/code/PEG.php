@@ -27,7 +27,6 @@ include_once dirname(__FILE__) . '/PEG/Many.php';
 include_once dirname(__FILE__) . '/PEG/Memoize.php';
 include_once dirname(__FILE__) . '/PEG/Not.php';
 include_once dirname(__FILE__) . '/PEG/Optional.php';
-include_once dirname(__FILE__) . '/PEG/Preg.php';
 include_once dirname(__FILE__) . '/PEG/Ref.php';
 include_once dirname(__FILE__) . '/PEG/Sequence.php';
 include_once dirname(__FILE__) . '/PEG/StringContext.php';
@@ -45,11 +44,6 @@ class PEG
     {
         foreach ($arr as &$val) $val = self::parser($val);
         return $arr;
-    }
-    
-    static function preg($pattern, $i = 0)
-    {
-        return new PEG_Preg($pattern, $i);
     }
     
     /**
