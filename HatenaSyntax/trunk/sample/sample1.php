@@ -107,6 +107,7 @@ fuga</pre>
   </blockquote>
 
 <pre class="superpre php">
+&lt;?php
 echo &quot;hogehoge&quot</pre>
 
   <p><a href="http://google.com">http://google.com</a></p>
