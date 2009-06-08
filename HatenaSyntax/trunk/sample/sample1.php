@@ -33,17 +33,33 @@ fuga
 <<
 
 >|php|
+<?php
 echo "hogehoge";||<
 
 [http://google.com]
 ';
 
-echo HatenaSyntax::render($str);
+function sprehandler($type, Array $lines)
+{
+    foreach ($lines as &$line) $line = htmlspecialchars($line, ENT_QUOTES, 'utf-8');
+    $body = join(PHP_EOL, $lines);
+    if (!empty($body)) $body = substr($body, 0, -strlen(PHP_EOL));
+    return '<pre class="superpre ' . htmlspecialchars($type, ENT_QUOTES, 'utf-8') 
+           . '">' . PHP_EOL . $body . '</pre>';
+}
+
+// オプションは全て省略可。第二引数自体も省略可。
+echo HatenaSyntax::render($str, array('headerlevel' => 3,                   // ヘッダの基準値。デフォルトは1
+                                      'id' => 'hoge',                       // 記事の識別子。指定しない場合はランダムなIDが生成される
+                                      'htmlescape' => false,                // デフォルトはtrue。
+                                      'sectionclass' => 'section',          // 記事本体を囲むdiv要素のクラス。デフォルトは'section'
+                                      'footnoteclass' => 'footnote',        // 脚注を囲むdiv要素のクラス。デフォルトは'footnote'
+                                      'superprehandler' => 'sprehandler')); // superpre記法の中身を処理するコールバック。
 /*
 <div class="section">
-  <h1>header1</h1>
+  <h3>header1</h3>
 
-  <h2>header2</h2>
+  <h4>header2</h4>
 
   <dl>
     <dt>definition term</dt>
@@ -64,7 +80,7 @@ echo HatenaSyntax::render($str);
     <li>list6</li>
   </ul>
 
-  <p>paragraph(<a href="#sec49ae6bd29d6ab_footnote_1" name="sec49ae6bd29d6ab_1" title="footnote">*1</a>)</p>
+  <p>paragraph(<a href="#hoge_footnote_1" name="hoge_1" title="footnote">*1</a>)</p>
 
   <table>
     <tr>
@@ -86,18 +102,18 @@ hoge
 fuga</pre>
   <br>
   <blockquote>
-    <h3>blockquote header</h3>
+    <h5>blockquote header</h5>
     <p>fuga</p>
   </blockquote>
 
-  <pre class="superpre php">
-echo &quot;hogehoge&quot;;</pre>
+<pre class="superpre php">
+echo &quot;hogehoge&quot</pre>
 
   <p><a href="http://google.com">http://google.com</a></p>
 </div>
 
 
 <div class="footnote">
-  <p><a href="#sec49ae6bd29d6ab_1" name="sec49ae6bd29d6ab_footnote_1">*1</a>: footnote</p>
+  <p><a href="#hoge_1" name="hoge_footnote_1">*1</a>: footnote</p>
 </div>
 */
