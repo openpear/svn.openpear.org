@@ -1,7 +1,7 @@
 <?php
 include_once(dirname(__FILE__) . '/t/t.php');
 
-$lime = new lime_test;
+$lime = new lime_test(24, new lime_output_color());
 $strings01 = new Text_VariationProducer('[a]');
 $strings02 = new Text_VariationProducer('[abc]');
 $strings03 = new Text_VariationProducer('[a-c]');
@@ -28,7 +28,7 @@ $strings23 = new Text_VariationProducer('[A-Z][0-9][0-9]');
 $strings24 = new Text_VariationProducer('[\x5c\x5d]');
 
 //--
-
+$lime->diag('character classes');
 $lime->ok(iterator_to_array($strings01) === array('a'));
 $lime->ok(iterator_to_array($strings02) === array('a', 'b', 'c'));
 $lime->ok(iterator_to_array($strings03) === array('a', 'b', 'c'));
