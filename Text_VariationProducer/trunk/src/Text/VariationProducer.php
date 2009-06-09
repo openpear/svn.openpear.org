@@ -128,7 +128,10 @@ class Text_VariationProducer implements Iterator {
     $this->current_index = 0;
     $this->position = 0;
     if ($this->needs_multiple_producer) {
-      $pattern = $this->patterns[0];
+      $pattern = null;
+      if (isset($this->patterns[0])) {
+        $pattern = $this->patterns[0];
+      }
       $this->current_producer = new Text_VariationProducer($pattern);
     }
   }
