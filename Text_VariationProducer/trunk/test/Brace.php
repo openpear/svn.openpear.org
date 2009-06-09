@@ -1,7 +1,7 @@
 <?php
 include_once(dirname(__FILE__) . '/t/t.php');
 
-$lime = new lime_test;
+$lime = new lime_test(15, new lime_output_color());
 $strings1 = new Text_VariationProducer('{a}');
 $strings2 = new Text_VariationProducer('{ab}');
 $strings3 = new Text_VariationProducer('{ab,cd}');
@@ -19,7 +19,7 @@ $strings14 = new Text_VariationProducer('{,[kstnhmyrwgzdbp]}[aiueo]{,[kstnhmyrwg
 $strings15 = new Text_VariationProducer('{a,a,a,[a],\x61}{,,}');
 
 //--
-
+$lime->diag('braces');
 $lime->ok(iterator_to_array($strings1) === array('a'));
 $lime->ok(iterator_to_array($strings2) === array('ab'));
 $lime->ok(iterator_to_array($strings3) === array('ab', 'cd'));

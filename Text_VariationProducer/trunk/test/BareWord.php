@@ -1,7 +1,7 @@
 <?php
 include_once(dirname(__FILE__) . '/t/t.php');
 
-$lime = new lime_test;
+$lime = new lime_test(18, new lime_output_color());
 $strings1 = new Text_VariationProducer('\\');
 $strings2 = new Text_VariationProducer('\0');
 $strings3 = new Text_VariationProducer('\00');
@@ -22,7 +22,7 @@ $strings17 = new Text_VariationProducer('{}');
 $strings18 = new Text_VariationProducer('{\}');
 
 //--
-
+$lime->diag('bare words');
 $lime->is(iterator_to_array($strings1), array('\\'));
 $lime->is(iterator_to_array($strings2), array("\0"));
 $lime->is(iterator_to_array($strings3), array("\0"));
