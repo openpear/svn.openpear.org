@@ -43,7 +43,6 @@ function sprehandler($type, Array $lines)
 {
     foreach ($lines as &$line) $line = htmlspecialchars($line, ENT_QUOTES, 'utf-8');
     $body = join(PHP_EOL, $lines);
-    if (!empty($body)) $body = substr($body, 0, -strlen(PHP_EOL));
     return '<pre class="superpre ' . htmlspecialchars($type, ENT_QUOTES, 'utf-8') 
            . '">' . PHP_EOL . $body . '</pre>';
 }
@@ -108,7 +107,7 @@ fuga</pre>
 
 <pre class="superpre php">
 &lt;?php
-echo &quot;hogehoge&quot</pre>
+echo &quot;hogehoge&quot;;</pre>
 
   <p><a href="http://google.com">http://google.com</a></p>
 </div>
