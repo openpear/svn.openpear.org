@@ -13,20 +13,16 @@ include_once dirname(__FILE__) . '/../code/PEG.php';
  */
 
 
-$paren = PEG::ref($paren_ref);
-$item = PEG::choice($paren, PEG::anything());
-$paren_item = PEG::andalso(PEG::not(PEG::token(')')), $item);
-$paren_ref = PEG::pack(
-    PEG::token('('), 
-    PEG::many($paren_item), 
-    PEG::token(')')
-);
-$parser = PEG::many($item);
+$paren =      PEG::ref($paren_ref);
+$item =       PEG::choice($paren, PEG::anything());
+$paren_item = PEG::andalso(PEG::not(')'), $item);
+$paren_ref =  PEG::pack('(', PEG::many($paren_item), ')');
+$parser =     PEG::many($item);
 
-$str = 'abc(def(ghi)(jkl(mno)))';
+$str = 'abc(def(ghi)(jkl(mno)))pq';
 var_dump($parser->parse(PEG::context($str)));
 /* 結果
-array(4) {
+array(6) {
   [0]=>
   string(1) "a"
   [1]=>
@@ -69,6 +65,9 @@ array(4) {
       }
     }
   }
+  [4]=>
+  string(1) "p"
+  [5]=>
+  string(1) "q"
 }
-
  */
