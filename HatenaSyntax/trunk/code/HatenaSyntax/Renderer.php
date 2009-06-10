@@ -41,8 +41,7 @@ class HatenaSyntax_Renderer
     static function superPreHandler($type, $lines)
     {
         $body = join(PHP_EOL, array_map(array('HatenaSyntax_Renderer', 'escape'), $lines));
-        if (!empty($body)) $body = substr($body, 0, -strlen(PHP_EOL));
-        return '<pre class="superpre">' . $body . '</pre>';
+        return '<pre class="superpre">' . PHP_EOL . $body . '</pre>';
     }
     
     protected function renderNode(HatenaSyntax_Node $node)
