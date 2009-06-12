@@ -3,9 +3,9 @@
 //内部処理用のエンコードは保留
 //mb_internal_encoding('UTF-8');
 
-/*
+/**
  * Panasocli Mailer v 2.0.0
- * 2009/01/04
+ * 2009/06/12
  */
 
 class Mail_Mailer
@@ -24,6 +24,7 @@ class Mail_Mailer
 	 *ファイルの存在をチェックする Include_pathも含める
 	 * 
 	 * @param $file_path ファイルのパス
+	 * @access private
 	 * @return true 成功 false 失敗
 	 */	
 	private function is_file_ex($file_path){
@@ -44,25 +45,24 @@ class Mail_Mailer
 	 *メールサーバに接続する
 	 * 
 	 * @param $pop3 object PEAR POP3オブジェクト
-	 * @param $login array ログイン情報配列
-	 * @access public
+	 * @access private
 	 * @return object
 	 */	
-	private function connectMail($pop3, $config){
-		if(!$config->get('login')){
-			$config->set('login', 'USER');
+	private function connectMail($pop3){
+		if(!$this->get('login')){
+			$this->set('login', 'USER');
 		}
 		$err = $pop3->connect(
-				$config->get('host'), 
-				$config->get('port')
+				$this->get('host'), 
+				$this->get('port')
 			); 
 		if(PEAR::isError($err)){
 			return $err;
 		}
 		$err = $pop3->login(
-				$config->get('user'), 
-				$config->get('password'), 
-				$config->get('login')
+				$this->get('user'), 
+				$this->get('password'), 
+				$this->get('login')
 			); 
 		if(PEAR::isError($err)){
 			return $err;
@@ -74,7 +74,7 @@ class Mail_Mailer
 	 *メールをパースする
 	 * 
 	 * @param $mail メール本体
-	 * @access public
+	 * @access private
 	 * @return array
 	 */	
 	private function mailParser($mail){
@@ -152,18 +152,12 @@ class Mail_Mailer
 	/**
 	 *メールを受信する
 	 * 
-	 * @param $user string ユーザ名
-	 * @param $password string パスワード
-	 * @param $host string ホストアドレス
-	 * @param $port int ポート番号
-	 * @param $login string ログインモード
-	 * @param $delete boolean 受信後に削除するかしないか True=削除 デフォルトはFalse
 	 * @access public
 	 * @return array
 	 */
-	public function getMail($config){
-		if($config->get('encode')){
-			$this->target_encode = $config->get('encode'); 
+	public function getMail(){
+		if($this->get('encode')){
+			$this->target_encode = $this->get('encode'); 
 		}
 		if($this->is_file_ex('Net/POP3.php')){
 			require_once('Net/POP3.php');
@@ -178,27 +172,27 @@ class Mail_Mailer
 			return false;
 		}
 		
-		if(!$config->get('user')) {
+		if(!$this->get('user')) {
 			echo 'ユーザ名が設定されていません';
 			return false;
 		}
 
-		if(!$config->get('password')) {
+		if(!$this->get('password')) {
 			echo 'パスワードが設定されていません';
 			return false;
 		}
 		
-		if(!$config->get('host')) {
+		if(!$this->get('host')) {
 			echo 'メールサーバが設定されていません';
 			return false;
 		}
 		
-		if(!$config->get('port')) {
-			$config->set('port', 110);
+		if(!$this->get('port')) {
+			$this->set('port', 110);
 		}
 		
 		$pop3 =new Net_POP3();
-		$pop3 =$this->connectMail($pop3, $config);
+		$pop3 =$this->connectMail($pop3);
 		if(PEAR::isError($pop3)){
 			return $pop3->getMessage();
 		}
@@ -212,10 +206,10 @@ class Mail_Mailer
 			if(empty($mail[$i]['file'])){
 				unset($mail[$i]['file']);
 			}
-			if($config->get('search') && !preg_match($config->get('search'), $mail[$i]['subject'])){
+			if($this->get('search') && !preg_match($this->get('search'), $mail[$i]['subject'])){
 				unset($mail[$i]);
 			}
-			if($config->get('delete') === true){
+			if($this->get('delete') === true){
 				$pop3->deleteMsg($i + 1);
 			}
 		}
@@ -399,19 +393,6 @@ class Mail_Mailer
 		}
 	}
 	
-	/*
-	 * Mailerの設定オブジェクトを返す
-	 * return Object
-	 */
-	public function getMailerConfig(){
-		$config = new MailerConfig;
-		$config->set('delete', false);
-		return $config;
-	}
-}
-
-class MailerConfig
-{
 	//設定で使うキー配列
 	private $keys = array(
 		'mailto',
@@ -433,10 +414,12 @@ class MailerConfig
 		'vars',
 	);
 	
-	/*
+	/**
 	 * キーを設定する
 	 * @param $key キー名
 	 * @param $val 値
+	 * @access public
+	 * @return プロパティに挿入
 	 */
 	public function set($key, $val=null){
 		$r = $this->keyCheck($key);
@@ -453,19 +436,41 @@ class MailerConfig
 		}
 	}
 	
-	/*
+	/**
+	 * CCを追加する
+	 * @param $val 値
+	 * @access public
+	 * @return プロパティに挿入
+	 */
+	public function addCc($val){
+		$this->keys['cc'][] = $val;
+	}
+	
+	/**
+	 * BCCを追加する
+	 * @param $val 値
+	 * @access public
+	 * @return プロパティに挿入 
+	 */
+	public function addBcc($val){
+		$this->keys['bcc'][] = $val;
+	}
+	
+	/**
 	 * 指定されたキーの値を取得する
 	 * @param $key 取得するキー
-	 * return string
+	 * @access public
+	 * @return string
 	 */
 	public function get($key){
 		return $this->keys[$key];
 	}
 	
-	/*
+	/**
 	 * 正しいキーかチェックする
 	 * @param $key 取得するキー
-	 * return TRUE:成功 FALSE:失敗
+	 * @access  private
+	 * @return TRUE:成功 FALSE:失敗
 	 */
 	private function keyCheck($key){
 		if(!in_array($key, $this->keys)){
@@ -474,9 +479,10 @@ class MailerConfig
 		return true;
 	}
 	
-	/*
+	/**
 	 * 設定情報を配列で返す
-	 * return Array
+	 * @access public
+	 * @return Array
 	 */
 	public function getArray(){
 		foreach($this->keys as $key => $val){
