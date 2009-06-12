@@ -474,6 +474,17 @@ class PEG
         return self::third(new PEG_Sequence(self::parserArray(func_get_args())));
     }
     
+    static function subtract($p)
+    {
+        $args = func_get_args();
+        array_shift($args);
+        foreach ($args as &$elt) {
+            $elt = self::not(self::parser($elt));
+        }
+        $args[] = self::parser($p);
+        return new PEG_And($args);
+    }
+    
     /**
      * PEG_Failureインスタンスを返す
      *
