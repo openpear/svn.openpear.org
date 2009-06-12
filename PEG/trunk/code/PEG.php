@@ -51,7 +51,7 @@ class PEG
      * 
      * @param string|Array $str
      * @return PEG_IContext
-     * @see PEG_IContext, PEG_Context, PEG_ArrayContext
+     * @see PEG_IContext, PEG_StringContext, PEG_ArrayContext
      */
     static function context($val)
     {
@@ -127,6 +127,9 @@ class PEG
     }
     
     /**
+     * 与えられたパーサが失敗した場合でもfalseを返すパーサを返す
+     * 正規表現でいう"?"
+     * 
      * @param $p
      * @return PEG_Optional
      */
@@ -135,15 +138,10 @@ class PEG
         return new PEG_Optional(self::parser($p));
     }
     
-    /**
-     * @return PEG_Sequence
-     */
-    static function sequence()
-    {
-        return new PEG_Sequence(self::parserArray(func_get_args()));
-    }
     
     /**
+     * 複数のパーサを一つにまとめる
+     * 
      * @return PEG_Sequence
      */
     static function seq()
@@ -152,6 +150,8 @@ class PEG
     }
     
     /**
+     * 与えられたパーサを失敗するまで繰り返し、配列を返すパーサを得る
+     * 
      * @param $p
      * @return PEG_Many
      */
@@ -161,6 +161,9 @@ class PEG
     }
     
     /**
+     * 与えられたパーサを失敗するまで繰り返し、配列を返すパーサを得る
+     * パーサが一度も成功しない場合は失敗する
+     * 
      * @param $p
      * @return PEG_Many1
      */
@@ -170,6 +173,8 @@ class PEG
     }
     
     /**
+     * 与えられた文字列をそのまま返すパーサを得る
+     * 
      * @param string $s
      * @return PEG_Token
      */
@@ -179,6 +184,8 @@ class PEG
     }
     
     /**
+     * 与えられたパーサを実行した後、PEG_IContextの読み込み位置を元に戻すパーサを得る
+     * 
      * @param $p
      * @return PEG_Lookahead
      */
@@ -188,6 +195,8 @@ class PEG
     }
     
     /**
+     * PEG::lookahead(PEG::not($parser))と同等
+     * 
      * @param $p
      * @return PEG_LookaheadNot
      */
@@ -197,6 +206,7 @@ class PEG
     }
 
     /**
+     * 
      * @return PEG_And
      */
     static function andalso()
@@ -205,6 +215,8 @@ class PEG
     }
 
     /**
+     * 与えたリファレンスをパース時にパーサとして実行するパーサを得る
+     * 
      * @return PEG_Ref
      */
     static function ref(&$parser)
@@ -213,6 +225,8 @@ class PEG
     }
 
     /**
+     * 与えた文字列に含まれる文字にヒットするパーサを得る
+     * 
      * @param string $str
      * @return PEG_Char
      */
@@ -222,6 +236,8 @@ class PEG
     }
 
     /**
+     * 数字にヒットするパーサを得る
+     * 
      * @return PEG_Char
      */
     static function digit()
@@ -231,6 +247,8 @@ class PEG
     }
     
     /**
+     * 改行にヒットするパーサを得る
+     * 
      * @return PEG_Choice
      */
     static function newLine()
@@ -240,6 +258,8 @@ class PEG
     }
     
     /**
+     * 行の終わりにヒットするパーサを返す
+     * 
      * @return PEG_Choice
      */
     static function lineEnd()
@@ -249,6 +269,8 @@ class PEG
     }
     
     /**
+     * アルファベットの大文字にヒットするパーサを得る
+     * 
      * @return PEG_Char
      */
     static function upper()
@@ -258,6 +280,8 @@ class PEG
     }
     
     /**
+     * アルファベットの小文字にヒットするパーサを得る
+     * 
      * @return PEG_Char
      */
     static function lower()
@@ -267,6 +291,8 @@ class PEG
     }
     
     /**
+     * アルファベットにヒットするパーサを得る
+     * 
      * @return PEG_Choice
      */
     static function alphabet()
@@ -276,6 +302,8 @@ class PEG
     }
 
     /**
+     * 
+     * 
      * @param $key
      * @param $p
      * @return PEG_At
@@ -287,6 +315,8 @@ class PEG
     }
 
     /**
+     * 与えられたパーサが何か値を返したとき、その値の最初の要素を返すパーサを得る
+     * 
      * @param $p
      * @return PEG_At
      */
@@ -296,6 +326,8 @@ class PEG
     }
 
     /**
+     * 与えられたパーサが何か値を返したとき、その値の二番目の要素を返すパーサを得る
+     * 
      * @param $p
      * @return PEG_At
      */
@@ -305,6 +337,8 @@ class PEG
     }
 
     /**
+     * 与えられたパーサが何か値を返したとき、その値の三番目の要素を返すパーサを得る
+     * 
      * @param $p
      * @return PEG_At
      */
@@ -314,6 +348,8 @@ class PEG
     }
 
     /**
+     * $start, $body, $endの三つのパーサを一つにまとめて、$bodyの返す値のみを返すパーサを得る
+     * 
      * @param $start
      * @param $body
      * @param $end
@@ -321,10 +357,12 @@ class PEG
      */
     static function pack($start, $body, $end)
     {
-        return self::second(self::sequence(self::parser($start), self::parser($body), self::parser($end)));
+        return self::second(self::seq(self::parser($start), self::parser($body), self::parser($end)));
     }
 
     /**
+     * 与えられたパーサが返す配列を平らにするパーサを得る
+     * 
      * @param $p
      */
     static function flatten($p)
@@ -334,6 +372,9 @@ class PEG
 
 
     /**
+     * 与えられたパーサがパース時に何を返そうともnullを返すパーサを得る
+     * PEG::seqの引数に使うと、自動的に抜かされる
+     * 
      * @param $p
      * @return PEG_Drop 
      */
@@ -357,6 +398,8 @@ class PEG
     }
     
     /**
+     * 与えれたパーサがパース時に配列を返すとして、その配列をjoinして返すパーサを得る
+     * 
      * @param $p
      * @param string $glue
      */
@@ -366,48 +409,99 @@ class PEG
         return self::callbackAction($curry, $p);
     }
 
+    /**
+     * 与えられたパーサがパース時に何か返す時、その値をcount()した値を返すパーサを得る
+     * 
+     * @param $p
+     * @return PEG_CallbackAction
+     */
     static function count($p)
     {
         return self::callbackAction(array('PEG_Util', 'count'), $p);
     }
     
+    /**
+     * 
+     *
+     * @param $item
+     * @param $glue
+     * @return PEG_CallbackAction
+     */
     static function listof($item, $glue)
     {
         $parser = PEG::seq($item, PEG::many(PEG::secondSeq($glue, $item)));
         return self::callbackAction(array('PEG_Util', 'cons'), $parser);
     }
 
+    /**
+     * 半角空白かタブにヒットするパーサを得る
+     *
+     * @return PEG_Char
+     */
     static function blank()
     {
         static $obj = null;
         return $obj ? $obj : $obj = PEG::char(" \t");
     }
     
+    /**
+     * PEG::first(PEG::seq($a, $b, ...)) と同等
+     *
+     * @return PEG_At
+     */
     static function firstSeq()
     {
         return self::first(new PEG_Sequence(self::parserArray(func_get_args())));
     }
     
+    /**
+     * PEG::second(PEG::seq($a, $b, ...)) と同等
+     *
+     * @return PEG_At
+     */
     static function secondSeq()
     {
         return self::second(new PEG_Sequence(self::parserArray(func_get_args())));
     }
     
+    /**
+     * PEG::third(PEG::seq($a, $b, ...)) と同等
+     *
+     * @return PEG_At
+     */
     static function thirdSeq()
     {
         return self::third(new PEG_Sequence(self::parserArray(func_get_args())));
     }
     
+    /**
+     * PEG_Failureインスタンスを返す
+     *
+     * @return PEG_Failure
+     */
     static function failure()
     {
         return PEG_Failure::it();
     }
     
+    /**
+     * パーサをメモ化する
+     *
+     * @param $p
+     * @return PEG_Memoize
+     */
     static function memo($p)
     {
         return new PEG_Memoize(self::parser($p));
     }
 
+    /**
+     * パーサが最初にヒットした時に返した値を返す
+     *
+     * @param PEG_IParser $parser
+     * @param $subject
+     * @return unknown
+     */
     static function match(PEG_IParser $parser, $subject)
     {
         return self::_match($parser, self::context($subject));
@@ -430,6 +524,8 @@ class PEG
     }
     
     /**
+     * パーサがヒットした時の値を全て返す
+     * 
      * @param PEG_IParser
      * @param string
      * @return array
