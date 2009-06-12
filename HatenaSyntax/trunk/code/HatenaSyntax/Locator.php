@@ -8,6 +8,7 @@
 
 class HatenaSyntax_Locator
 {
+    protected $elt_ref = null;
     protected $objects = array();
     
     private function __construct()
@@ -212,7 +213,8 @@ class HatenaSyntax_Locator
     
     protected function createElement()
     {
-        $parser = PEG::ref();
+        $parser = PEG::ref($ref);
+        $this->elt_ref = &$ref;
         return $parser;
     }
 
@@ -223,16 +225,15 @@ class HatenaSyntax_Locator
     
     protected function setup()
     {
-        $this->element->is(PEG::choice($this->header,
-                                       $this->blockQuote,
-                                       $this->definitionList,
-                                       $this->table,
-                                       $this->list,
-                                       $this->pre,
-                                       $this->superpre,
-                                       $this->emptyParagraph,
-                                       $this->paragraph));
+        $this->element;
+        $this->elt_ref = PEG::choice($this->header,
+                                     $this->blockQuote,
+                                     $this->definitionList,
+                                     $this->table,
+                                     $this->list,
+                                     $this->pre,
+                                     $this->superpre,
+                                     $this->emptyParagraph,
+                                     $this->paragraph);
     }
-
-
 }
