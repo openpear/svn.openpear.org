@@ -429,39 +429,21 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
         return $seq;
     }
 
-    /**
-     * リストの要素をすべてvar_dumpする
-     *
-     * @return Sequence
-     */
-    function dump()
-    {
-        echo 'seq(' . PHP_EOL;
-        foreach ($this->arr as $i => $elt) {
-            $elt instanceof self ? $elt->dump() : var_dump($elt);
-            if ($i !== $this->count() - 1) echo ',' . PHP_EOL;
-        }
-        echo ')' . PHP_EOL;
-        return $this;
-    }
 
     /**
      * リストの要素をひとつずつ与えられた関数に適用し、
      * その結果を格納したリストを生成する
      *
      * @param callback $func
-     * @param unknown_type ... 
      * @return Sequence
      */
     function map($func)
     {
         $this->assertCallable($func);
-        $args_proto = $this->buildArgsProto(func_get_args());
                 
         $ret = seq();
         foreach ($this as $elt) {
-            $args = array_merge($args_proto, array($elt));
-            $ret->push(call_user_func_array($func, $args));
+            $ret->push(call_user_func($func, $elt));
         }
         return $ret;
     }
@@ -471,18 +453,15 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      * その結果がtrueである要素を格納した新たなリストを生成する
      *
      * @param callback $func
-     * @param unknown_type ... 
      * @return Sequence
      */
     function filter($func)
     {
         $this->assertCallable($func);
-        $args_proto = $this->buildArgsProto(func_get_args());
 
         $ret = seq();
         foreach ($this as $elt) {
-            $args = array_merge($args_proto, array($elt));
-            if (call_user_func_array($func, $args)) $ret->push($elt); 
+            if (call_user_func($func, $elt)) $ret->push($elt); 
         }
         return $ret;
     }
@@ -513,11 +492,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function all($func)
     {
         $this->assertCallable($func);
-        $args_proto = $this->buildArgsProto(func_get_args());
 
         foreach ($this as $elt) {
-            $args = array_merge($args_proto, array($elt));
-            if (!call_user_func_array($func, $args)) return false;
+            if (!call_user_func($func, $elt)) return false;
         }
         return true;
     }
@@ -530,11 +507,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function any($func)
     {
         $this->assertCallable($func);
-        $args_proto = $this->buildArgsProto(func_get_args());
 
         foreach ($this as $elt) {
-            $args = array_merge($args_proto, array($elt));
-            if (call_user_func_array($func, $args)) return true;
+            if (call_user_func($func, $elt)) return true;
         }
         return false;
     }
@@ -548,11 +523,9 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     function each($func)
     {
         $this->assertCallable($func);
-        $args_proto = $this->buildArgsProto(func_get_args());
 
         foreach ($this as $elt) {
-            $args = array_merge($args_proto, array($elt));
-            call_user_func_array($func, $args);
+            call_user_func($func, $elt);
         }
         return $this;
     }
@@ -561,15 +534,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     {
         if (!is_callable($func)) throw new InvalidArgumentException;
     }
-
-    protected function buildArgsProto(Array $arr)
-    {
-        if (count($arr) > 1) {
-            array_shift($arr);
-            return $arr;
-        }
-        return array();
-    }
+    
 
     /**
      * リストをarrayにして返す
@@ -625,7 +590,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
      */
     function repeat($i)
     {
-        if (!is_int($i) || $i < 1) throw new InvalidArgumentException(); 
+        if (!is_int($i) || $i < 1) throw new InvalidArgumentException('first argument must be integer'); 
         
         $arr = array();
         for (; $i > 0; $i--) $arr[] = $this->arr;
@@ -633,7 +598,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
     }
     
     /**
-     * リストがある要素を持っているかどうかを返す
+     * リストがある要素を持っているかどうかを返す。比較は===で為される
      *
      * @param unknown_type $elt
      * @return bool
@@ -702,7 +667,7 @@ class Sequence implements ArrayAccess, Countable, IteratorAggregate
             $ret->append($elt);
         }
         else {
-            throw new RuntimeException;
+            throw new InvalidArgumentException('argument must be Sequence');
         }
         return $ret;
     }

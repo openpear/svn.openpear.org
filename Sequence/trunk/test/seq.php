@@ -1,6 +1,6 @@
 <?php
 include_once dirname(__FILE__) . '/tool/lime.php';
-include_once dirname(__FILE__) . '/../src/seq.php';
+include_once dirname(__FILE__) . '/../code/Sequence.php';
 $lime = new lime_test;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,6 @@ $seq->lengthen(2);
 $lime->is(count($seq), 2);
 $seq->lengthen(4);
 $lime->is(count($seq), 4);
-d($seq->toArray());
 $lime->is($seq[-1], null);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -361,12 +360,6 @@ $lime->is($seq->min(), 1);
 $lime->comment('maxmin');
 $seq = seq(1, 2, 3);
 $lime->is($seq->maxmin()->toArray(), array(3, 1));
-
-////////////////////////////////////////////////////////////////////////////////
-
-$lime->comment('product');
-$seq = seq(1, 2, 3);
-$lime->is($seq->product(), 6);
 
 ////////////////////////////////////////////////////////////////////////////////
 
