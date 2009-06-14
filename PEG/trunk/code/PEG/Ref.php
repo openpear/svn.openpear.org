@@ -20,4 +20,14 @@ class PEG_Ref implements PEG_IParser
     {
         return $this->parser->parse($c);
     }
+    
+    function &getRef()
+    {
+        return $this->parser;
+    }
+
+    function is(PEG_IParser $p)
+    {
+        $this->parser = $p;
+    }
 }
