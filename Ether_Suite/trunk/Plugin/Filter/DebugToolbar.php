@@ -1,20 +1,20 @@
 <?php
 /**
- *  Ethna_Plugin_Filter_EtherSuite.php
+ *  Ethna_Plugin_Filter_DebugToolbar.php
  *
  *  @author     Sotaro KARASAWA <sotaro.k@gmail.com>
  *  @package    Ether
  */
 
 /**
- *  EtherSuite Plugin Filter
+ *  DebugToolbar Plugin Filter
  *
- *  @description    Ethre plugin standard set
+ *  @description    DebugToolbar plugin standard set
  *  @author         Sotaro KARASAWA <sotaro.k@gmail.com>
  *  @access         public
- *  @package        Ether
+ *  @package        Ethna_Plugin_Filter_DebugToolbar
  */
-class Ethna_Plugin_Filter_EtherSuite extends Ethna_Plugin_Filter
+class Ethna_Plugin_Filter_DebugToolbar extends Ethna_Plugin_Filter
 {
     var $type_mapping = array(
         VAR_TYPE_INT      => 'VAR_TYPE_INT',
@@ -68,12 +68,12 @@ class Ethna_Plugin_Filter_EtherSuite extends Ethna_Plugin_Filter
         // めんどくせー常にloadでいい？
 
         echo <<<EOL
-<link rel="stylesheet" href="{$url}ether/css/ether.css" type="text/css" />
+<link rel="stylesheet" href="{$url}DebugToolbar/css/ether.css" type="text/css" />
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
     google.load("jquery", "1.2");
 </script>
-<script type="text/javascript" src="{$url}ether/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{$url}DebugToolbar/js/jquery.cookie.js"></script>
 EOL;
 
         echo <<<EOL
