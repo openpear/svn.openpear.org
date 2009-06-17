@@ -27,6 +27,8 @@
 }
 
 #ethna-debug-switch-outline {
+  margin: 0;
+  padding: 0;
   position: absolute;
   top: 0px;
   right: 0px;
@@ -47,20 +49,39 @@
 
 #ethna-debug-switch-Ethna {
 }
+#ethna-debug-switch-EthnaClose {
+  background: #fff url(../images/ethna-debug-switch-EthnaClose.png) 0px 4px no-repeat;
+  padding-left: 0;
+  width: 15px;
+  text-indent: -9999px;
+}
 #ethna-debug-switch-Ethna {
   padding-left: 22px;
   padding-right:0;
-  background: #fff url(../images/ethna/ethna-debug-switch-Ethna.png) 2px 4px no-repeat;
+  background: #fff url(../images/ethna-debug-switch-Ethna.png) 2px 4px no-repeat;
 }
 #ethna-debug-switch-Timer {
   padding-left: 22px;
-  background: #fff url(../images/ethna/ethna-debug-switch-Timer.png) 2px 4px no-repeat;
+  background: #fff url(../images/ethna-debug-switch-Timer.png) 2px 4px no-repeat;
 }
 #ethna-debug-switch-Log {
   padding-left: 22px;
-  background: #fff url(../images/ethna/ethna-debug-switch-Log.png) 2px 4px no-repeat;
+  background: #fff url(../images/ethna-debug-switch-Log.png) 2px 4px no-repeat;
+}
+#ethna-debug-switch-Info {
+  padding-left: 22px;
+  background: #fff url(../images/ethna-debug-switch-Info.png) 2px 4px no-repeat;
+}
+#ethna-debug-switch-SmartyDebug {
+  padding-left: 22px;
+  background: #fff url(../images/ethna-debug-switch-Smarty.png) 2px 4px no-repeat;
+}
+#ethna-debug-switch-Config {
+  padding-left: 22px;
+  background: #fff url(../images/ethna-debug-switch-Config.png) 2px 4px no-repeat;
 }
 .ethna-debug {
+  font-family: arial;
   position: absolute;
   top: 0px;
   width: 100%;
@@ -68,6 +89,7 @@
   padding-bottom: 20px;
   background: #ccc;
   display:none;
+  font-size: 12px;
 }
 .ethna-debug div {
   padding-left: 20px;
@@ -147,6 +169,7 @@
   padding: 3px 5px;
   border-collapse: collapse;
   border: solid 1px #333;
+  font-size: 12px;
 }
 .ethna-debug-table th {
   background: #9c9;
