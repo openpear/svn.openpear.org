@@ -14,7 +14,7 @@
  *  @access         public
  *  @package        Ethna_Plugin_Filter_DebugToolbar
  */
-class Ethna_Plugin_Filter_DebugToolbar extends Ethna_Plugin_Filter
+class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 {
     var $type_mapping = array(
         VAR_TYPE_INT      => 'VAR_TYPE_INT',
@@ -68,12 +68,12 @@ class Ethna_Plugin_Filter_DebugToolbar extends Ethna_Plugin_Filter
         // めんどくせー常にloadでいい？
 
         echo <<<EOL
-<link rel="stylesheet" href="{$url}DebugToolbar/css/ether.css" type="text/css" />
+<link rel="stylesheet" href="{$url}Debugtoolbar/css/ether.css" type="text/css" />
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
     google.load("jquery", "1.2");
 </script>
-<script type="text/javascript" src="{$url}DebugToolbar/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{$url}Debugtoolbar/js/jquery.cookie.js"></script>
 EOL;
 
         echo <<<EOL

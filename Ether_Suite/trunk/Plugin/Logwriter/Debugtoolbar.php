@@ -6,7 +6,7 @@
  */
 
 
-class Ethna_Plugin_Logwriter_DebugToolbar extends Ethna_Plugin_Logwriter
+class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
 {
     var $log_array = array();
 
