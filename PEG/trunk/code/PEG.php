@@ -195,14 +195,14 @@ class PEG
     }
     
     /**
-     * PEG::lookahead(PEG::not($parser))と同等
+     * PEG::not($parser)と同等。
      * 
      * @param $p
-     * @return PEG_LookaheadNot
+     * @return PEG_Not
      */
     static function lookaheadNot($p)
     {
-        return new PEG_Lookahead(PEG::not(self::parser($p)));
+        return self::not(self::parser($p));
     }
 
     /**
@@ -429,7 +429,7 @@ class PEG
      */
     static function listof($item, $glue)
     {
-        $parser = PEG::seq($item, PEG::many(PEG::secondSeq($glue, $item)));
+        $parser = self::seq($item, self::many(self::secondSeq($glue, $item)));
         return self::callbackAction(array('PEG_Util', 'cons'), $parser);
     }
 
@@ -441,7 +441,7 @@ class PEG
     static function blank()
     {
         static $obj = null;
-        return $obj ? $obj : $obj = PEG::char(" \t");
+        return $obj ? $obj : $obj = self::char(" \t");
     }
     
     /**
@@ -475,6 +475,27 @@ class PEG
     }
     
     /**
+     * 渡されたパーサがパース時に返す値の最後の値を返すパーサを得る
+     *
+     * @param unknown_type $p
+     * @return unknown
+     */
+    static function tail($p)
+    {
+        return self::callbackAction(array('PEG_Util', 'tail'), self::parser($p));
+    }
+    
+    /**
+     * PEG::tail(PEG::seq($a, $b, ...))と同等
+     *
+     * @return PEG_CallbackAction
+     */
+    static function tailSeq()
+    {
+        return self::tail(new PEG_Sequence(self::parserArray(func_get_args())));
+    }
+    
+    /**
      * PEG::lookaheadと同等
      *
      * @param $p
@@ -482,7 +503,7 @@ class PEG
      */
     static function amp($p)
     {
-        return new PEG_Lookahead($p);
+        return new PEG_Lookahead(self::parser($p));
     }
     
     static function subtract($p)
@@ -493,7 +514,7 @@ class PEG
             $elt = self::not(self::parser($elt));
         }
         $args[] = self::parser($p);
-        return new PEG_And($args);
+        return call_user_func_array(array('PEG', 'tailSeq'), $args);
     }
     
     /**
