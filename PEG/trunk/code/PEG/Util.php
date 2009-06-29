@@ -56,4 +56,9 @@ class PEG_Util
         $result = self::flatten($result);
         return join($glue, $result);
     }
+    
+    static function tail(Array $result)
+    {
+        return end($result);
+    }
 }
