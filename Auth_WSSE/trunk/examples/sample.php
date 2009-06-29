@@ -1,4 +1,5 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 ini_set('include_path', '..' . DIRECTORY_SEPARATOR . PATH_SEPARATOR . ini_get('include_path'));
 
 /**
