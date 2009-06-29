@@ -17,7 +17,7 @@
  * @copyright 2009 Hideyuki SHIMOOKA
  * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
  * @version   SVN:$Id$
- * @link      http://pear.php.net/package/Auth_WSSE
+ * @link      http://openpear.org/package/Auth_WSSE
  */
 
 /**
@@ -29,7 +29,7 @@
  * @copyright 2009 Hideyuki SHIMOOKA
  * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
  * @version   Release: @package_version@
- * @link      http://pear.php.net/package/Auth_WSSE
+ * @link      http://openpear.org/package/Auth_WSSE
  */
 class Auth_WSSE
 {
