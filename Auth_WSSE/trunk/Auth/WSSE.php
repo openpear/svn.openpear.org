@@ -1,4 +1,5 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * WSSE authentication class
@@ -39,9 +40,9 @@ class Auth_WSSE
     private $username;
 
     /**
-     * password
+     * password digest
      */
-    private $password;
+    private $digest;
 
     /**
      * nonce
@@ -56,50 +57,50 @@ class Auth_WSSE
     /**
      * constructor
      *
-     * @param string user name
+     * @param string user     name
      * @param string password
-     * @param string nonce without Base64 encode
-     * @param string create time (UTC) in RFC3339 format
+     * @param string nonce    without Base64 encode
+     * @param string create   time (UTC) in RFC3339 format
      */
     public function __construct($username, $password, $nonce = null, $created = null) {
         $this->username = $username;
-        $this->password = $password;
         $this->nonce = is_null($nonce) ? $this->generateNonce() : $nonce;
         $this->created = is_null($created) ? $this->generateCreated() : $created;
+
+        $this->digest = sha1($this->nonce . $this->created . $password, true);
     }
 
     /**
-     * return the user name
+     * return the current user name
      *
-     * @return user name
+     * @return the user name
      */
     public function getUserName() {
         return $this->username;
     }
 
     /**
-     * return the password digest
+     * return the current password digest
      *
      * @param  boolean return in Base64 encoded or not. default is true.
-     * @return the password digest
+     * @return the     password digest
      */
     public function getDigest($encode = true) {
-        $digest = sha1($this->nonce . $this->created . $this->password, true);
-        return $encode ? base64_encode($digest) : $digest;
+        return $encode ? base64_encode($this->digest) : $this->digest;
     }
 
     /**
-     * return the nonce
+     * return the current nonce
      *
      * @param  boolean return in Base64 encoded or not. default is true.
-     * @return the nonce
+     * @return the     nonce
      */
     public function getNonce($encode = true) {
         return $encode ? base64_encode($this->nonce) : $this->nonce;
     }
 
     /**
-     * return created date in UTC
+     * return created time (UTC) in RFC3339 format
      *
      * @return the created time (UTC) in RFC3339 format
      */
@@ -112,7 +113,7 @@ class Auth_WSSE
      *
      * @return the X-WSSE header
      */
-    public function getWsseHeader() {
+    public function getHeader() {
         return sprintf(
             'UsernameToken Username="%s", PasswordDigest="%s", Nonce="%s", Created="%s"',
             $this->username,
@@ -124,7 +125,7 @@ class Auth_WSSE
     /**
      * generate nonce
      *
-     * @return binary return new nonce
+     * @return binary  return new nonce
      * @access private
      */
     private function generateNonce() {
@@ -134,11 +135,31 @@ class Auth_WSSE
     /**
      * return created time (UTC) in RFC3339 format
      *
-     * @return string create time (UTC) in RFC3339 format
+     * @return string  create time (UTC) in RFC3339 format
      * @access private
      */
     private function generateCreated() {
         return gmdate('Y-m-d\TH:i:s\Z');
     }
 
+    /**
+     * parse X-WSSE header and return in assosiative array
+     *
+     * the keys of returing array are as following:
+     *
+     * -username
+     * -digest
+     * -nonce
+     * -created
+     *
+     * @param  string X-WSSE header
+     * @return array  the result in assosiative array
+     * @throw  RuntimeException if parse failed
+     */
+    public static function parseHeader($header) {
+        if (preg_match('#UsernameToken Username="(?<username>[^"]+)", PasswordDigest="(?<digest>[^"]+)", Nonce="(?<nonce>[^"]+)", Created="(?<created>[^"]+)"#', $header, $matches) > 0) {
+            return $matches;
+        }
+        throw new RuntimeException('parsing X-WSSE header failed');
+    }
 }

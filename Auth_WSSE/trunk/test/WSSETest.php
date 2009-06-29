@@ -94,10 +94,40 @@ class Auth_WSSETest extends PHPUnit_Framework_TestCase
     }
 
     public function testGetWSSEHeader() {
-        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse->getDigest() . '", Nonce="' . $this->wsse->getNonce() . '", Created="' . $this->now . '"', $this->wsse->getWsseHeader());
-        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse_nonce->getDigest() . '", Nonce="' . $this->wsse_nonce->getNonce() . '", Created="' . $this->now . '"', $this->wsse_nonce->getWsseHeader());
-        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse_created->getDigest() . '", Nonce="' . $this->wsse_created->getNonce() . '", Created="2009-03-27T12:34:56Z"', $this->wsse_created->getWsseHeader());
-        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse_full->getDigest() . '", Nonce="' . $this->wsse_full->getNonce() . '", Created="2009-03-27T12:34:56Z"', $this->wsse_full->getWsseHeader());
+        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse->getDigest() . '", Nonce="' . $this->wsse->getNonce() . '", Created="' . $this->now . '"', $this->wsse->getHeader());
+        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse_nonce->getDigest() . '", Nonce="' . $this->wsse_nonce->getNonce() . '", Created="' . $this->now . '"', $this->wsse_nonce->getHeader());
+        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse_created->getDigest() . '", Nonce="' . $this->wsse_created->getNonce() . '", Created="2009-03-27T12:34:56Z"', $this->wsse_created->getHeader());
+        $this->assertEquals('UsernameToken Username="shimooka@doyouphp.jp", PasswordDigest="' . $this->wsse_full->getDigest() . '", Nonce="' . $this->wsse_full->getNonce() . '", Created="2009-03-27T12:34:56Z"', $this->wsse_full->getHeader());
     }
 
+    public function testParseHeader() {
+        $this->assertEquals(
+            array(
+                0 => $this->wsse->getHeader(),
+                'username' => $this->wsse->getUserName(),
+                1 => $this->wsse->getUserName(),
+                'digest' => $this->wsse->getDigest(),
+                2 => $this->wsse->getDigest(),
+                'nonce' => $this->wsse->getNonce(),
+                3 => $this->wsse->getNonce(),
+                'created' => $this->wsse->getCreated(),
+                4 => $this->wsse->getCreated()),
+            $this->wsse->parseHeader($this->wsse->getHeader()));
+
+        try {
+            $this->wsse->parseHeader('');
+            $this->fail();
+        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
+
+        try {
+            $this->wsse->parseHeader(null);
+            $this->fail();
+        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
+    }
 }
