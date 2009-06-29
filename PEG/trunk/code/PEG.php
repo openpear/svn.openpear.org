@@ -474,6 +474,17 @@ class PEG
         return self::third(new PEG_Sequence(self::parserArray(func_get_args())));
     }
     
+    /**
+     * PEG::lookaheadと同等
+     *
+     * @param $p
+     * @return PEG_Lookahead
+     */
+    static function amp($p)
+    {
+        return new PEG_Lookahead($p);
+    }
+    
     static function subtract($p)
     {
         $args = func_get_args();
