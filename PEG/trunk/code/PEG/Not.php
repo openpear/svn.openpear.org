@@ -22,7 +22,9 @@ class PEG_Not implements PEG_IParser
         if ($result instanceof PEG_Failure) {
             $i = $context->tell() - $offset;
             $context->seek($offset);
-            return $context->read($i);
+            $ret =  $context->read($i);
+            $context->seek($offset);
+            return $ret;
         }
         return PEG::failure();
     }
