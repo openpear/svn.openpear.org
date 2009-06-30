@@ -36,7 +36,7 @@ class HatenaSyntax_Locator
     
     protected function createLineChar()
     {
-        return PEG::not(PEG::char("\n\r"));
+        return PEG::secondSeq(PEG::lookaheadNot(PEG::char("\n\r")), PEG::anything());
     }
     
     protected function createEndOfLine()
@@ -141,7 +141,7 @@ class HatenaSyntax_Locator
     protected function createSuperPre()
     {
         $open = PEG::pack('>|', 
-                          PEG::join(PEG::many(PEG::not(PEG::char("\r\n|")))),
+                          PEG::join(PEG::many(PEG::secondSeq(PEG::lookaheadNot(PEG::char("\r\n|")), PEG::anything()))),
                           '|');
         $body = PEG::many1($this->superPreElement);
         
