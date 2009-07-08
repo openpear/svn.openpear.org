@@ -1,11 +1,8 @@
 ﻿<?php
 
-//内部処理用のエンコードは保留
-//mb_internal_encoding('UTF-8');
-
 /**
  * Panasocli Mailer v 2.0.0
- * 2009/06/12
+ * 2009/07/09
  */
 
 class Mail_Mailer
@@ -28,10 +25,22 @@ class Mail_Mailer
 	 * @return true 成功 false 失敗
 	 */	
 	private function is_file_ex($file_path){
-		$include = explode(';', ini_get('include_path'));
-		array_shift($include);
+                //こちらでも動くので互換性のために一応残す
+                $include = explode(';', ini_get('include_path'));
+                array_shift($include);
+                foreach($include as $inc){
+                        if(is_file($inc . $file_path)){
+                                return true;
+                        }
+                }
+                if(is_file($file_path)){
+                        return true;
+                }
+                //修復版
+		$include = split(':|;', ini_get('include_path'));
 		foreach($include as $inc){
-			if(is_file($inc . $file_path)){
+                        if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
+			if(is_file($inc . '/' . $file_path)){
 				return true;
 			}
 		}
@@ -252,11 +261,10 @@ class Mail_Mailer
 	/**
 	 *メールを送信する
 	 * 
-	 * @param $config object 設定オブジェクト
 	 * @access public
 	 * @return array
 	 */
-	public function send($config, $smtp=null){
+	public function send($smtp=null){
 		if($this->is_file_ex('Mail.php')){
 			require_once("Mail.php");
 		}else{
@@ -269,17 +277,17 @@ class Mail_Mailer
 			echo 'PEAR::mimeがインストールされていません';
 			return false;
 		}
-		if(!$config->get('body')){
-			if(!$config->get('template')){
+		if(!$this->get('body')){
+			if(!$this->get('template')){
 				echo 'テンプレートが指定されていません';
 				return false;
 			}
-			if(!is_array($config->get('vars'))){
+			if(!is_array($this->get('vars'))){
 				echo '値がありません';
 				return false;
 			}
-			$template = $config->get('template');
-			$vars = $config->get('vars');
+			$template = $this->get('template');
+			$vars = $this->get('vars');
 			$smarty = $this->initSmarty();
 			if($smarty === false){
 				echo 'Smartyがインストールされていません';
@@ -290,7 +298,7 @@ class Mail_Mailer
 			}
 			$body = $smarty->fetch($template);
 		}else{
-			$body = $config->get('body');
+			$body = $this->get('body');
 		}
 		
 		if(!$body && $this->empty_body_warning === true){
@@ -298,22 +306,22 @@ class Mail_Mailer
 			return false;
 		}
 		
-		if(is_null($config->get('from'))){
+		if(is_null($this->get('from'))){
 			$from = 'nobody@localhost';
 		}else{
-			$from = $config->get('from');
+			$from = $this->get('from');
 		}
 		
 		//送信先不明の場合はエラー
-		if(!$config->get('mailto')){
+		if(!$this->get('mailto')){
 			echo '送信先が指定されていません';
 			return false;
 		}
 		
-		$subject = $config->get('subject') ? $config->get('subject') : '件名なし' ; 
+		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
 		
-		if($config->get('encode')){
-			$this->target_encode = $config->get('encode'); 
+		if($this->get('encode')){
+			$this->target_encode = $this->get('encode');
 		}
 		
 		$mime = new Mail_Mime("\n");
@@ -327,7 +335,7 @@ class Mail_Mailer
 
 		$mime->setTxtBody($body);
 		
-		$attach = $config->get('attach');
+		$attach = $this->get('attach');
 		
 		if(!is_null($attach)){
 			if(is_array($attach)){
@@ -362,22 +370,22 @@ class Mail_Mailer
 		);
 
 		$body = $mime->get($body);
-		if($config->get('bcc') && count($config->get('bcc')) > 1){
-			$bcc = implode(',', $config->get('bcc'));	
+		if($this->get('bcc') && count($this->get('bcc')) > 1){
+			$bcc = implode(',', $this->get('bcc'));
 		}else{
-			$bcc = $config->get('bcc');
+			$bcc = $this->get('bcc');
 			$bcc = $bcc[0];
 		}
 
-		if($config->get('cc') && count($config->get('cc')) > 1){
-			$cc = implode(',', $config->get('cc'));	
+		if($this->get('cc') && count($this->get('cc')) > 1){
+			$cc = implode(',', $this->get('cc'));
 		}else{
-			$cc = $config->get('cc');
+			$cc = $this->get('cc');
 			$cc = $cc[0];
 		}
 
 		$header = array(
-			"To" => $config->get('mailto'),
+			"To" => $this->get('mailto'),
 			"From" => $from,
 			"Bcc" => $bcc,
 			"Cc" => $cc,
@@ -386,7 +394,7 @@ class Mail_Mailer
 
 		$header = $mime->headers($header);
 
-		$ret = $mail->send($config->get('mailto'), $header, $body);
+		$ret = $mail->send($this->get('mailto'), $header, $body);
 
 		if(PEAR::isError($ret)){
 			return $ret->getMessage();
@@ -455,6 +463,22 @@ class Mail_Mailer
 	public function addBcc($val){
 		$this->keys['bcc'][] = $val;
 	}
+
+        /**
+         * CCを削除する
+         * @access public
+         */
+        public function clearCc(){
+                $this->keys['cc'] = array();
+        }
+
+        /**
+         * BCCを削除する
+         * @access public
+         */
+        public function clearBcc(){
+                $this->keys['bcc'] = array();
+        }
 	
 	/**
 	 * 指定されたキーの値を取得する
