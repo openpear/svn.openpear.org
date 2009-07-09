@@ -17,6 +17,28 @@ class Mail_Mailer
 	//元のエンコードを指定する 標準はmb_convert_encoding準拠のauto
 	private $source_encode = 'auto';
 
+        /**
+         *エラーメッセージ処理の統一
+         *
+         * @param string $str
+         */
+        private function showError($str){
+            echo mb_detect_encoding($str) !== mb_internal_encoding() ?
+                    mb_convert_encoding($str, mb_internal_encoding(), 'auto') :
+                    $str ;
+        }
+
+        /**
+         *通常メッセージ処理の統一
+         *
+         * @param string $str
+         */
+        private function showNotice($str){
+            echo mb_detect_encoding($str) !== mb_internal_encoding() ?
+                    mb_convert_encoding($str, mb_internal_encoding(), 'auto') :
+                    $str ;
+        }
+
 	/**
 	 *ファイルの存在をチェックする Include_pathも含める
 	 * 
@@ -171,28 +193,28 @@ class Mail_Mailer
 		if($this->is_file_ex('Net/POP3.php')){
 			require_once('Net/POP3.php');
 		}else{
-			echo 'PEAR::POP3がインストールされていません';
+			$this->showError('PEAR::POP3がインストールされていません');
 			return false;
 		}
 		if($this->is_file_ex('Mail/mimeDecode.php')){
 			require_once('Mail/mimeDecode.php');
 		}else{
-			echo 'PEAR::mimeDecodeがインストールされていません';
+			$this->showError('PEAR::mimeDecodeがインストールされていません');
 			return false;
 		}
 		
 		if(!$this->get('user')) {
-			echo 'ユーザ名が設定されていません';
+			$this->showError('ユーザ名が設定されていません');
 			return false;
 		}
 
 		if(!$this->get('password')) {
-			echo 'パスワードが設定されていません';
+			$this->showError('パスワードが設定されていません');
 			return false;
 		}
 		
 		if(!$this->get('host')) {
-			echo 'メールサーバが設定されていません';
+			$this->showError('メールサーバが設定されていません');
 			return false;
 		}
 		
@@ -268,29 +290,29 @@ class Mail_Mailer
 		if($this->is_file_ex('Mail.php')){
 			require_once("Mail.php");
 		}else{
-			echo 'PEAR::Mailがインストールされていません';
+			$this->showError('PEAR::Mailがインストールされていません');
 			return false;
 		}
 		if($this->is_file_ex("Mail/mime.php")){
 			require_once("Mail/mime.php");
 		}else{
-			echo 'PEAR::mimeがインストールされていません';
+			$this->showError('PEAR::mimeがインストールされていません');
 			return false;
 		}
 		if(!$this->get('body')){
 			if(!$this->get('template')){
-				echo 'テンプレートが指定されていません';
+				$this->showError('テンプレートが指定されていません');
 				return false;
 			}
 			if(!is_array($this->get('vars'))){
-				echo '値がありません';
+				$this->showError('値がありません');
 				return false;
 			}
 			$template = $this->get('template');
 			$vars = $this->get('vars');
 			$smarty = $this->initSmarty();
 			if($smarty === false){
-				echo 'Smartyがインストールされていません';
+				$this->showError('Smartyがインストールされていません');
 				return false;
 			}
 			foreach($vars as $name => $value){
@@ -302,7 +324,7 @@ class Mail_Mailer
 		}
 		
 		if(!$body && $this->empty_body_warning === true){
-			echo '本文が空です';
+			$this->showNotice('本文が空です');
 			return false;
 		}
 		
@@ -314,7 +336,7 @@ class Mail_Mailer
 		
 		//送信先不明の場合はエラー
 		if(!$this->get('mailto')){
-			echo '送信先が指定されていません';
+			$this->showError('送信先が指定されていません');
 			return false;
 		}
 		
@@ -342,22 +364,22 @@ class Mail_Mailer
 				foreach($attach as $val){
 					//ファイルが存在するか調べる
 					if(!is_file($val)){
-						echo sprintf("File Not Found[%s]", $val);
+						$this->showError(sprintf("File Not Found[%s]", $val));
 						return false;
 					}
 					//ファイルが読み取り可能か調べる
 					if(!is_readable($val)){
-						echo sprintf("File Not Readable[%s]", $val);
+						$this->showError(sprintf("File Not Readable[%s]", $val));
 						return false;
 					}
 				}
 			}else{
 				if(!is_file($attach)){
-					echo sprintf("File Not Found[%s]", $attach);
+					$this->showError(sprintf("File Not Found[%s]", $attach));
 					return false;
 				}
 				if(!is_readable($attach)){
-					echo sprintf("File Not Readable[%s]", $attach);
+					$this->showError(sprintf("File Not Readable[%s]", $attach));
 					return false;
 				}
 			}
@@ -432,7 +454,7 @@ class Mail_Mailer
 	public function set($key, $val=null){
 		$r = $this->keyCheck($key);
 		if($r === false){
-			echo '無効なキーです';
+			$this->showError('無効なキーです');
 			return false;
 		}
 		if(in_array($key, array('cc', 'bcc'))){

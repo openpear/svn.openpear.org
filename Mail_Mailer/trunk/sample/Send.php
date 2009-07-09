@@ -52,11 +52,11 @@ $mail->addBcc('');
 
 $mail->empty_body_warning = true; //空の本文だとエラーを返すようにする 元からtrue
 
-$r = $mail->send($smtp);
+//$r = $mail->send($smtp);
 
 $mail->set('body', 'テスト');
 
-//$r = $mail->send($smtp);
+//$r = $mail->send();
 
 //入れた値を配列として取得する
 //print_r($mail->getArray());
