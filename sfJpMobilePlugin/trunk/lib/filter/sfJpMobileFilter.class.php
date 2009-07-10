@@ -51,6 +51,7 @@ class sfJpMobileFilter extends sfFilter
               ->getAction($context->getModuleName(), $context->getActionName())
               ->redirect("{$uri}guid=ON");
     }
+    apache_note('uid', sfJpMobile::getDevice()->getUid());
   }
   /**
    * パラメータの変換
