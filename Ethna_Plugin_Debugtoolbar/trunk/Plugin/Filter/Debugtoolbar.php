@@ -59,7 +59,8 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 
     function init()
     {
-        $url = $this->config->get('url');
+        //$url = $this->config->get('url');
+        $url = $this->ctl->getConfig()->get('url');
         if (substr($url, -1) != '/') {
             $url .= '/';
         }
