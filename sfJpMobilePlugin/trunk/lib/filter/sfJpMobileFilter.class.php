@@ -65,11 +65,6 @@ class sfJpMobileFilter extends sfFilter
         $this->getContext()->getRequest()->setParameter($key, $val);
       }
     }
-    $content = $this->getContext()->getResponse()->getContent();
-    // 絵文字変換
-    if (!sfJpMobile::isDocomo()) {
-      $content = sfJpMobile::getEmoji()->encode($content);
-    }
   }
   /**
    * Content-Typeの設定
