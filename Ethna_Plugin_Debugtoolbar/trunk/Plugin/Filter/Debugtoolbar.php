@@ -50,6 +50,7 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
         }
 
         $this->init();
+
         $this->dumpInfo();
         $this->dumpConfig();
         $this->dumpActionForm();
@@ -343,8 +344,18 @@ EOF;
                 if (is_bool($v)) {
                     echo "<td>" . ($v ? '<span style="color: #090;">true</span>' : '<span style="color: #900;">false</span>')  . "</td>";
                 }
-                else if ($k == 'type' or $k == 'form_type') {
-                    echo "<td>{$this->{$k . "_mapping"}[$v]}</td>";
+                else if ($k === 'type' || $k === 'form_type') {
+                    echo "<td>";
+                    if ($v === null) {
+                        echo "Undefined";
+                    }
+                    else {
+                        $key = $k . "_mapping";
+                        $ar = $this->$key;
+                        echo $ar[$v];
+                    }
+
+                    echo "</td>";
                 }
                 else {
                     echo "<td>{$v}</td>";
