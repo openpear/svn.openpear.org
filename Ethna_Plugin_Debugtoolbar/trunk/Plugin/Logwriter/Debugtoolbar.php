@@ -48,11 +48,8 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
 
         $br = $c->getGateway() != GATEWAY_WWW ? "" : "<br />";
 
-        //var_dump($c);
         $log_content = ($pre_prefix . $prefix . $message . $post_prefix . "\n");
         $this->log_array[] = $log_content;
-        //var_dump($this);
-        //echo "hoge";
 
         return $log_content;
     }
@@ -134,7 +131,12 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
 
         $function = sprintf("%s.%s", isset($bt[$i]['class']) ? $bt[$i]['class'] : 'global', $bt[$i]['function']);
 
-        $file = $bt[$i]['file'];
+        if (!isset($bt[$i])) {
+            return null;
+        }
+        else {
+            $file = $bt[$i]['file'];
+        }
         if (strncmp($file, $basedir, strlen($basedir)) == 0) {
             $file = substr($file, strlen($basedir));
         }
