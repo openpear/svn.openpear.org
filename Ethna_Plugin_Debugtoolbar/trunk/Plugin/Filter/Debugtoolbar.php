@@ -16,6 +16,8 @@
  */
 class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 {
+    var $version = '0.9.1 - $Id$';
+
     var $type_mapping = array(
         VAR_TYPE_INT      => 'VAR_TYPE_INT',
         VAR_TYPE_FLOAT    => 'VAR_TYPE_FLOAT',
@@ -184,6 +186,9 @@ EOL;
         echo '<div class="ethna-debug-title">' . ETHNA_VERSION . '</div>';
         echo "<div class=\"ethna-debug-log\">";
         echo ETHNA_VERSION;
+        echo "</div> \n";
+        echo "<div class=\"ethna-debug-log\">";
+        echo "Ethna_Plugin_Debugtoolbar Version" . $this->version;
         echo "</div> \n";
         echo '</div>';
     }
