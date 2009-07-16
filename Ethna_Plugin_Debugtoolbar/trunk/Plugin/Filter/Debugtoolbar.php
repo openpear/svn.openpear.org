@@ -45,12 +45,11 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
      */
     function postFilter()
     {
-        if (!$this->ctl->view->hasDefaultHeader) {
+        if (!$this->ctl->view->has_default_header) {
             return null;
         }
 
         $this->init();
-
         $this->dumpInfo();
         $this->dumpConfig();
         $this->dumpActionForm();
@@ -60,15 +59,14 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 
     function init()
     {
-        //$url = $this->config->get('url');
         $url = $this->ctl->getConfig()->get('url');
         if (substr($url, -1) != '/') {
             $url .= '/';
         }
+
         // jquery がロードされてるかどうか調べる
         // なければ google.load
         // めんどくせー常にloadでいい？
-
         echo <<<EOL
 <link rel="stylesheet" href="{$url}Debugtoolbar/css/ether.css" type="text/css" />
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -299,6 +297,13 @@ EOF;
 
     function smartyDebug()
     {
+        $debug_tpl = $c->getDirectory('template') . "/smarty_debug.tpl"
+
+        if (!file_exists($debug_tpl)) {
+            Ethna::raiseWarning(sprintf("Smarty debug template not found, please set %s.", $debug_tpl), E_USER_WARNING);
+            return null;
+        }
+
         require_once SMARTY_CORE_DIR . 'core.display_debug_console.php';
 
         $c =& Ethna_Controller::getInstance();
@@ -311,7 +316,7 @@ EOF;
         $smarty_original_debugtpl = $smarty->debug_tpl;
 
         $smarty->debugging = true;
-        $smarty->debug_tpl = $c->getDirectory('template') . "/smarty_debug.tpl";
+        $smarty->debug_tpl = $debug_tpl;
         $smarty->assign('_smarty_debug_output', 'html');
 
         //var_dump($smarty);
