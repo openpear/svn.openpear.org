@@ -297,7 +297,8 @@ EOF;
 
     function smartyDebug()
     {
-        $debug_tpl = $c->getDirectory('template') . "/smarty_debug.tpl"
+        $c =& Ethna_Controller::getInstance();
+        $debug_tpl = $c->getDirectory('template') . "/smarty_debug.tpl";
 
         if (!file_exists($debug_tpl)) {
             Ethna::raiseWarning(sprintf("Smarty debug template not found, please set %s.", $debug_tpl), E_USER_WARNING);
@@ -305,8 +306,6 @@ EOF;
         }
 
         require_once SMARTY_CORE_DIR . 'core.display_debug_console.php';
-
-        $c =& Ethna_Controller::getInstance();
 
         // get template directory
         $r =& $c->getRenderer();
