@@ -4,6 +4,7 @@ class Net_TokyoTyrantNetworkException extends Net_TokyoTyrantException {};
 class Net_TokyoTyrantProtocolException extends Net_TokyoTyrantException {};
 
 // License: MIT
+// author: Keita Arai <cocoiti@gmail.com>
 
 class Net_TokyoTyrant
 {
@@ -60,7 +61,7 @@ class Net_TokyoTyrant
             throw new Net_TokyoTyrantNetworkException('socket read eof error');
         }
 
-        $result = fread($this->socket, $length);
+        $result = $this->_fullread($this->socket, $length);
         if ($result === false) {
             throw new Net_TokyoTyrantNetworkException('socket read error');
         }
@@ -70,13 +71,35 @@ class Net_TokyoTyrant
 
     private function _write($data)
     {
-        $result = fwrite($this->socket, $data);
+        $result = $this->_fullwrite($this->socket, $data);
         if ($result === false) {
             throw new Net_TokyoTyrantNetworkException('socket read error');
         }
     }
 
+    private function _fullread ($sd, $len) {
+        $ret = '';
+        $read = 0;
 
+        while ($read < $len && ($buf = fread($sd, $len - $read))) {
+            $read += strlen($buf);
+            $ret .= $buf;
+        }
+
+        return $ret;
+    }
+
+    private function _fullwrite ($sd, $buf) {
+        $total = 0;
+        $len = strlen($buf);
+
+        while ($total < $len && ($written = fwrite($sd, $buf))) {
+            $total += $written;
+            $buf = substr($buf, $written);
+        }
+
+        return $total;
+    } 
 
     private function _doRequest($cmd, $values = array())
     {
