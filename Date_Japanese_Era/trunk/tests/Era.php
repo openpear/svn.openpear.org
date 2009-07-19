@@ -91,7 +91,6 @@ $tests = array(
 foreach ($tests as $key => $val) {
     try {
         $e3 = new Date_Japanese_Era($val[0]);
-var_dump($e3);
     } catch (Date_Japanese_Era_Exception $e) {
         $t->ok($e->getMessage() === $val[1], 'various ways to fail');
     }
