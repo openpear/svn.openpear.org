@@ -15,6 +15,11 @@ $mail->set('encode', 'UTF-8');
 $mail->set('delete', false); //受信後にメールを削除するか デフォではfalseに trueで削除
 
 //受信
-$mails = $mail->getMail();
+//$mails = $mail->getMail();
+echo $mails[0]->get('subject');
+echo $mails[0]->get('body');
+print_r($mails[0]->get('headers'));
+
+$mails = $mail->getMail(true);
 //print_r($mails);
 ?>
