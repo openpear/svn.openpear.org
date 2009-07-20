@@ -1,13 +1,30 @@
 <?php
+/**
+ * Net_TokyoTyrant
+ * @author cocoitiban <cocoiti@gmail.com>
+ * License: MIT License
+ * @package Net_TokyoTyrant
+*/
+
+
+/* base Excetion */
 class Net_TokyoTyrantException extends Exception {};
+/* network error */
 class Net_TokyoTyrantNetworkException extends Net_TokyoTyrantException {};
+/* tokyotyrant error */
 class Net_TokyoTyrantProtocolException extends Net_TokyoTyrantException {};
 
-// License: MIT
-// author: Keita Arai <cocoiti@gmail.com>
-
+/**
+ * TokyoTyrant Base Class
+ * 
+ * @category Net
+ * @package Net_TokyoTyrant
+ * @author Keita Arai <cocoiti@gmail.com>
+ *@license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
 class Net_TokyoTyrant
 {
+    /* @access private */
     private
       $connect = false;
     private
@@ -17,10 +34,17 @@ class Net_TokyoTyrant
     private
       $socket_timeout;
 
+    /* @access public */
     const RDBXOLCKNON = 0;
     const RDBXOLCKREC = 1;
     const RDBXOLCKGLB = 2;
-    
+
+    /**
+     * server connect
+     * @param string $server servername
+     * @param string $server port number
+     * @param string $server timeout (connection only)
+     */
     public function connect($server, $port, $timeout = 10)
     {
         $this->close();
@@ -31,17 +55,28 @@ class Net_TokyoTyrant
         $this->connect = true;
     }
 
+    /**
+     * setting socket timeout
+     * @param integer $timeout timeout
+     */
     public function setTimeout($timeout)
     {
         $this->socket_timeout = $timeout;
         stream_set_timeout($this->socket, $timeout);
     }
 
+    /**
+     * get timeout
+     * @return integer timeout
+     */
     public function getTimeout()
     {
         return $this->socket_timeout;
     }
 
+    /**
+     * close session
+     */
     public function close()
     {
         if ($this->connect) {
@@ -49,7 +84,12 @@ class Net_TokyoTyrant
         }
     }
 
-
+    /**
+     * read buffer
+     * @access private
+     * @param $length readlength
+     * @result string buffer data
+     */
     private function _read($length)
     {
         if ($this->connect === false) {
@@ -68,7 +108,10 @@ class Net_TokyoTyrant
         return $result;
     }
 
-
+    /**
+     * send data
+     * @param $data data
+     */
     private function _write($data)
     {
         $result = $this->_fullwrite($this->socket, $data);
@@ -106,6 +149,11 @@ class Net_TokyoTyrant
         $this->_write($cmd . $this->_makeBin($values));
     }
 
+    /**
+     * make tokyotyrant data
+     * @param array $values send data
+     * @return string tokyotyrant data
+     */
     private function _makeBin($values){
         $int = '';
         $str = '';
@@ -127,11 +175,18 @@ class Net_TokyoTyrant
         return $int . $str;
     }
 
-
+    /**
+     * get data
+     * @return 
+     */
     protected function _getResponse()
     {
         $res = fread($this->socket, 1);
         $res = unpack('c', $res);
+        if ($res[1] === -1) {
+            throw new Net_TokyoTyrantProtocolException('Error send');
+        }
+
         if ($res[1] !== 0) {
             throw new Net_TokyoTyrantProtocolException('Error Response');
         }
@@ -460,5 +515,28 @@ class Net_TokyoTyrant
         $this->_doRequest($cmd);
         $this->_getResponse();
         return $this->_getValue();
+    }
+
+    public function misc($name, $args, $opts = 0)
+    {
+        $cmd = pack('c*', 0xC8, 0x90);
+        $data = $cmd . pack('N*', strlen($name), $opts, count($args)) . $name;
+
+        foreach ($args as $arg) {
+            $data .= pack('N', strlen($arg)) . $arg;
+        }
+        $this->_write($data);
+        try {
+            $this->_getResponse();
+        } catch (Net_TokyoTyrantProtocolException $e) {
+            $result_count = $this->_getInt4();
+            throw $e;
+        }
+        $result_count = $this->_getInt4();
+        $result = array();
+        for ($i = 0 ; $i < $result_count; $i++) {
+            $result[] = $this->_getValue();
+        }
+        return $result;
     }
 }

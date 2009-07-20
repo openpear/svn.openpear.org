@@ -1,6 +1,7 @@
 <?php
 ini_set('memory_limit', -1);
 require_once dirname(dirname(__FILE__)) . '/Net/TokyoTyrant.php';
+require_once dirname(dirname(__FILE__)) . '/Net/TokyoTyrant/Table.php';
 
 $tt = new Net_TokyoTyrant();
 $key = 'keytest';
@@ -104,5 +105,10 @@ assert(strlen($tt->stat()) > 1);
 
 assert($tt->optimize('') === true);
 assert($tt->copy('/tmp/test.net_tokyotyrant.db') === true);
+assert($tt->vanish() === true);
 
 $tt->close();
+$test_data = array();
+$test_data[] = array('name' => 'Alex Low', 'vehicle' => 'silvana', 'age' => 29);
+$test_data[] = array('name' => 'Claus Valca', 'vehicle' => 'vanship', 'age' => 15);
+
