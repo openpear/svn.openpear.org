@@ -2,7 +2,7 @@
 mb_internal_encoding('UTF-8');
 require_once('../Mailer.php');
 //Mailerオブジェクトの生成
-$mail = & new Mail_Mailer();
+$mail = new Mail_Mailer();
 
 //SMTPを指定する場合
 /*
