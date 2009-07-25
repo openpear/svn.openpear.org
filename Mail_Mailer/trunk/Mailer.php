@@ -1,8 +1,10 @@
 ﻿<?php
-
 /**
- * Panasocli Mailer v 2.0.0
- * 2009/07/21
+ *  Mailer.php
+ *
+ *  @author     FreeBSE <freebse@live.jp>
+ *  @package    Mail_Mailer
+ *  @version    Mailer.php,v 2.2.0 2009/07/25 15:14:30 $
  */
 
 interface Mailer {
@@ -29,7 +31,7 @@ class Mail_Mailer implements Mailer
          *
          * @param string $str
          */
-        private function showError($str){
+        final public function showError($str){
             echo mb_detect_encoding($str) !== mb_internal_encoding() ?
                     mb_convert_encoding($str, mb_internal_encoding(), 'auto') :
                     $str ;
@@ -40,7 +42,7 @@ class Mail_Mailer implements Mailer
          *
          * @param string $str
          */
-        private function showNotice($str){
+        final public function showNotice($str){
             echo mb_detect_encoding($str) !== mb_internal_encoding() ?
                     mb_convert_encoding($str, mb_internal_encoding(), 'auto') :
                     $str ;
@@ -50,22 +52,22 @@ class Mail_Mailer implements Mailer
 	 *ファイルの存在をチェックする Include_pathも含める
 	 * 
 	 * @param $file_path ファイルのパス
-	 * @access private
+	 * @access public
 	 * @return true 成功 false 失敗
 	 */	
-	private function is_file_ex($file_path){
-                //こちらでも動くので互換性のために一応残す
-                $include = explode(';', ini_get('include_path'));
-                array_shift($include);
-                foreach($include as $inc){
-                        if(is_file($inc . $file_path)){
-                                return true;
-                        }
-                }
-                if(is_file($file_path)){
-                        return true;
-                }
-                //修復版
+	final public function isFileEx($file_path){
+		//こちらでも動くので互換性のために一応残す
+		$include = explode(';', ini_get('include_path'));
+		array_shift($include);
+		foreach($include as $inc){
+			if(is_file($inc . $file_path)){
+				return true;
+			}
+		}
+		if(is_file($file_path)){
+			return true;
+		}
+		//修復版
 		$include = split(':|;', ini_get('include_path'));
 		foreach($include as $inc){
                         if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
@@ -83,6 +85,7 @@ class Mail_Mailer implements Mailer
 	 * PEARライブラリのクラスファクトリー
 	 *
 	 * @param string $pear
+	 * @param mixed $arg 配列か文字列か数値かは、PEARインスタンス生成時によって適宜対応
 	 */
 	final protected function getPear($pear, $arg=null){
 		require_once($pear);
@@ -128,22 +131,19 @@ class Mail_Mailer implements Mailer
 	 * @return array
 	 */	
 	private function mailParser($mail){
-		//TODO ここら辺を先に重点的に見直す必要あり
-		if($this->is_file_ex('Mail/mimeDecode.php')){
-//			require_once('Mail/mimeDecode.php');
-			$mimeDecode = $this->getPear('Mail/mimeDecode.php');
-		}else{
-			$this->showError('PEAR::mimeDecodeがインストールされていません');
-			return false;
-		}
-		
 		// メールデータ取得 
 		$params['include_bodies'] = true; 
 		$params['decode_bodies']  = true; 
-		$params['decode_headers'] = true; 
-		$params['input'] = $mail; 
+		$params['decode_headers'] = true;  
 		$params['crlf'] = "\r\n"; 
-		$structure = Mail_mimeDecode::decode($params); 
+		//TODO ここら辺を先に重点的に見直す必要あり
+		if($this->isFileEx('Mail/mimeDecode.php')){
+			$mime = $this->getPear('Mail/mimeDecode.php', $mail);
+		}else{
+			$this->showError('PEAR::Mail_mimeDecodeがインストールされていません');
+			return false;
+		}
+		$structure = $mime->decode($params);
 
 		//送信者のメールアドレスを抽出 
 		$from = $structure->headers['from']; 
@@ -207,24 +207,13 @@ class Mail_Mailer implements Mailer
 		}	
 		return array($headers, $subject, $body, $filename, $file);
 	}
-
+	
 	/**
-	 *メールを受信する
-	 * 
-	 * @access public
-	 * @return array
+	 * 設定が有効かをチェックする
+	 *
+	 * @return 成功:TRUE 失敗:FALSE
 	 */
-	public function getMail($smarty=false){
-		if($this->get('encode')){
-			$this->target_encode = $this->get('encode'); 
-		}
-		if($this->is_file_ex('Net/POP3.php')){
-			$pop3 = $this->getPear('Net/POP3.php');
-		}else{
-			$this->showError('PEAR::POP3がインストールされていません');
-			return false;
-		}
-		
+	private function validConfig(){
 		if(!$this->get('user')) {
 			$this->showError('ユーザ名が設定されていません');
 			return false;
@@ -243,14 +232,35 @@ class Mail_Mailer implements Mailer
 		if(!$this->get('port')) {
 			$this->set('port', 110);
 		}
-		
+		return true;
+	}
+
+	/**
+	 *メールを受信する
+	 * 
+	 * @param Boolean $smarty Trueの場合はSmarty準拠の配列で返す
+	 * @access public
+	 * @return array
+	 */
+	public function getMail($smarty=false){
+		if($this->get('encode')){
+			$this->target_encode = $this->get('encode'); 
+		}
+		if($this->isFileEx('Net/POP3.php')){
+			$pop3 = $this->getPear('Net/POP3.php');
+		}else{
+			$this->showError('PEAR::Net_POP3がインストールされていません');
+			return false;
+		}
+		if($this->validConfig() === false) return false;
 		$pop3 =$this->connectMail($pop3);
 		if(PEAR::isError($pop3)){
 			return $pop3->getMessage();
 		}
-		$n_msg = $pop3->numMsg(); 
+		$n_msg = $pop3->numMsg();
 		for($i = 0 ; $i < $n_msg ; $i++){
 			list($mail[$i]['headers'], $mail[$i]['subject'], $mail[$i]['body'], $mail[$i]['filename'], $mail[$i]['file']) = $this->mailParser($pop3->getMsg($i + 1));
+			$mail[$i]['id'] = $i + 1;
 			//ファイルが添付されていない場合は不要なので配列とオブジェクトを消す
 			if(empty($mail[$i]['filename'])){
 				unset($mail[$i]['filename']);
@@ -269,9 +279,41 @@ class Mail_Mailer implements Mailer
 			}
 		}
 		$pop3->disconnect();
+		//不要なオブジェクトは破棄する
+		unset($pop3);
 		return $mail;
 	}
 	
+	/**
+	 * メッセージの削除を行う
+	 *
+	 * @return unknown
+	 */
+	function deleteMsg(){
+		if($this->validConfig() === false) return false;
+		if($this->isFileEx('Net/POP3.php')){
+			$pop3 = $this->getPear('Net/POP3.php');
+		}else{
+			$this->showError('PEAR::Net_POP3がインストールされていません');
+			return false;
+		}
+		$pop3 =$this->connectMail($pop3);
+		if(PEAR::isError($pop3)){
+			return $pop3->getMessage();
+		}
+		foreach($this->get('deleteMsg') as $val){
+			$pop3->deleteMsg($val);
+		}
+		$pop3->disconnect();
+		unset($pop3);
+	}
+	
+	/**
+	 * メール配列を擬似OR/M風に改造する
+	 *
+	 * @param Array $mail
+	 * @return Object
+	 */
 	private function arrayToObject($mail){
 		foreach($mail as $key => $val){
 			foreach($val as $k => $v){
@@ -280,6 +322,8 @@ class Mail_Mailer implements Mailer
 			}
 			$mail_obj[$key] = clone $this;
 		}
+		//不要になった配列は破棄する
+		unset($mail);
 		return $mail_obj;
 	}
 
@@ -290,7 +334,7 @@ class Mail_Mailer implements Mailer
 	 * @return 成功 object 失敗 false
 	 */		
 	private function initSmarty(){
-		if($this->is_file_ex('Smarty/Smarty.class.php')){
+		if($this->isFileEx('Smarty/Smarty.class.php')){
 			require_once('Smarty/Smarty.class.php');
 			$smarty = new Smarty();
 			$dirs = array(
@@ -322,13 +366,13 @@ class Mail_Mailer implements Mailer
 	 * @return array
 	 */
 	public function send($smtp=null){
-		if($this->is_file_ex('Mail.php')){
+		if($this->isFileEx('Mail.php')){
 			require_once("Mail.php");
 		}else{
 			$this->showError('PEAR::Mailがインストールされていません');
 			return false;
 		}
-		if($this->is_file_ex("Mail/mime.php")){
+		if($this->isFileEx("Mail/mime.php")){
 			require_once("Mail/mime.php");
 		}else{
 			$this->showError('PEAR::mimeがインストールされていません');
@@ -460,6 +504,7 @@ class Mail_Mailer implements Mailer
 	
 	//設定と受信で使うキー配列
 	private $keys = array(
+		'id',
 		'mailto',
 		'subject',
 		'body',
@@ -474,6 +519,7 @@ class Mail_Mailer implements Mailer
 		'port',
 		'login',
 		'delete',
+		'deleteMsg',
 		'encode',
 		'template',
 		'vars',
@@ -514,6 +560,16 @@ class Mail_Mailer implements Mailer
 	 */
 	public function addCc($val){
 		$this->keys['cc'][] = $val;
+	}
+	
+	/**
+	 * 削除するメッセージを追加する
+	 * @param $num メッセージ番号
+	 * @access public
+	 * @return プロパティに挿入
+	 */
+	public function addDelete($num){
+		$this->keys['deleteMsg'][] = $num;
 	}
 	
 	/**
