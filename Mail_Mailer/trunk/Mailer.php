@@ -55,7 +55,7 @@ class Mail_Mailer implements Mailer
 	 * @access public
 	 * @return true 成功 false 失敗
 	 */	
-	final public function isFileEx($file_path){
+	final public function is_file_ex($file_path){
 		//こちらでも動くので互換性のために一応残す
 		$include = explode(';', ini_get('include_path'));
 		array_shift($include);
@@ -88,9 +88,7 @@ class Mail_Mailer implements Mailer
 	 * @param mixed $arg 配列か文字列か数値かは、PEARインスタンス生成時によって適宜対応
 	 */
 	final protected function getPear($pear, $arg=null){
-		require_once($pear);
-		$pear = str_replace('/', '_', $pear);
-		$pear = str_replace('.php', '', $pear);
+		require_once(str_replace('_', '/', $pear) . '.php');
 		return new $pear($arg);
 	}
 
@@ -137,8 +135,8 @@ class Mail_Mailer implements Mailer
 		$params['decode_headers'] = true;  
 		$params['crlf'] = "\r\n"; 
 		//TODO ここら辺を先に重点的に見直す必要あり
-		if($this->isFileEx('Mail/mimeDecode.php')){
-			$mime = $this->getPear('Mail/mimeDecode.php', $mail);
+		if($this->is_file_ex('Mail/mimeDecode.php')){
+			$mime = $this->getPear('Mail_mimeDecode', $mail);
 		}else{
 			$this->showError('PEAR::Mail_mimeDecodeがインストールされていません');
 			return false;
@@ -246,13 +244,13 @@ class Mail_Mailer implements Mailer
 		if($this->get('encode')){
 			$this->target_encode = $this->get('encode'); 
 		}
-		if($this->isFileEx('Net/POP3.php')){
-			$pop3 = $this->getPear('Net/POP3.php');
+		if($this->validConfig() === false) return false;
+		if($this->is_file_ex('Net/POP3.php')){
+			$pop3 = $this->getPear('Net_POP3');
 		}else{
 			$this->showError('PEAR::Net_POP3がインストールされていません');
 			return false;
 		}
-		if($this->validConfig() === false) return false;
 		$pop3 =$this->connectMail($pop3);
 		if(PEAR::isError($pop3)){
 			return $pop3->getMessage();
@@ -291,7 +289,7 @@ class Mail_Mailer implements Mailer
 	 */
 	function deleteMsg(){
 		if($this->validConfig() === false) return false;
-		if($this->isFileEx('Net/POP3.php')){
+		if($this->is_file_ex('Net/POP3.php')){
 			$pop3 = $this->getPear('Net/POP3.php');
 		}else{
 			$this->showError('PEAR::Net_POP3がインストールされていません');
@@ -334,7 +332,7 @@ class Mail_Mailer implements Mailer
 	 * @return 成功 object 失敗 false
 	 */		
 	private function initSmarty(){
-		if($this->isFileEx('Smarty/Smarty.class.php')){
+		if($this->is_file_ex('Smarty/Smarty.class.php')){
 			require_once('Smarty/Smarty.class.php');
 			$smarty = new Smarty();
 			$dirs = array(
@@ -366,13 +364,13 @@ class Mail_Mailer implements Mailer
 	 * @return array
 	 */
 	public function send($smtp=null){
-		if($this->isFileEx('Mail.php')){
+		if($this->is_file_ex('Mail.php')){
 			require_once("Mail.php");
 		}else{
 			$this->showError('PEAR::Mailがインストールされていません');
 			return false;
 		}
-		if($this->isFileEx("Mail/mime.php")){
+		if($this->is_file_ex("Mail/mime.php")){
 			require_once("Mail/mime.php");
 		}else{
 			$this->showError('PEAR::mimeがインストールされていません');
