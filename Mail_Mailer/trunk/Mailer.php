@@ -56,6 +56,7 @@ class Mail_Mailer implements Mailer
 	 * @return true 成功 false 失敗
 	 */	
 	final public function is_file_ex($file_path){
+		if(is_file($file_path)) return true;
 		//こちらでも動くので互換性のために一応残す
 		$include = explode(';', ini_get('include_path'));
 		array_shift($include);
