@@ -87,6 +87,7 @@ class Mail_Mailer implements Mailer
 	 *
 	 * @param string $pear
 	 * @param mixed $arg 配列か文字列か数値かは、PEARインスタンス生成時によって適宜対応
+	 * @return object
 	 */
 	final protected function getPear($pear, $arg=null){
 		require_once(str_replace('_', '/', $pear) . '.php');
@@ -148,12 +149,12 @@ class Mail_Mailer implements Mailer
 		$from = $structure->headers['from']; 
 		$from = addslashes($from); 
 		$from = str_replace('"','',$from); 
+		$name = stripslashes($from);
 
 		//署名付きの場合の処理を追加 
 		preg_match("/<.*>/",$from,$str); 
 		if($str[0]!=""){ 
-			$str=substr($str[0],1,strlen($str[0])-2); 
-			$from = $str; 
+			$from=substr($str[0],1,strlen($str[0])-2); 
 		} 
 		$headers = $structure->headers;
 		$subject = $headers['subject'];
@@ -162,6 +163,8 @@ class Mail_Mailer implements Mailer
 		
 		//fromは加工した奴で上書きする
 		$headers['from'] = $from;
+		//差出人上書き
+		$headers['name'] = $name;
 		
 		switch(strtolower($structure->ctype_primary)){
 			case "text": // シングルパート(テキストのみ)  
