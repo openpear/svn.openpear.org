@@ -117,6 +117,7 @@ class PEG
     /**
      * PEG_Notインスタンスを得る。
      * このパーサは、$pパーサが成功したならば失敗し、$pパーサが失敗したならば成功する。
+     * PEG_Notパーサは文字列を消費しない
      * 
      * @param $p
      * @return PEG_Not
@@ -129,12 +130,17 @@ class PEG
     /**
      * 与えられたパーサが失敗した場合でもfalseを返すパーサを返す
      * 正規表現でいう"?"
+     * PEG::optional(PEG::seq($a, $b, $c)), PEG::optional($a, $b, $c) は同等。
      * 
      * @param $p
-     * @return PEG_Optional
+     * @return PEG_Parser
      */
     static function optional($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            return new PEG_Optional(call_user_func_array(array('PEG', 'seq'), $args));
+        }
         return new PEG_Optional(self::parser($p));
     }
     
@@ -151,24 +157,34 @@ class PEG
     
     /**
      * 与えられたパーサを失敗するまで繰り返し、配列を返すパーサを得る
+     * PEG::many(PEG::seq($a, $b, $c)), PEG::many($a, $b, $c) は同等
      * 
      * @param $p
      * @return PEG_Many
      */
     static function many($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            return new PEG_Many(call_user_func_array(array('PEG', 'seq'), $args));
+        }
         return new PEG_Many(self::parser($p));
     }
     
     /**
      * 与えられたパーサを失敗するまで繰り返し、配列を返すパーサを得る
      * パーサが一度も成功しない場合は失敗する
+     * PEG::many1(PEG::seq($a, $b, $c)), PEG::many1($a, $b, $c) は同等
      * 
      * @param $p
      * @return PEG_Many1
      */
     static function many1($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return self::callbackAction(array('PEG_Util', 'cons'), self::seq($p, self::many($p)));
     }
     
@@ -185,23 +201,33 @@ class PEG
     
     /**
      * 与えられたパーサを実行した後、PEG_IContextの読み込み位置を元に戻すパーサを得る
+     * PEG::lookahead(PEG::seq($a, $b, $c)), PEG::lookahead($a, $b, $c) は同等
      * 
      * @param $p
      * @return PEG_Lookahead
      */
     static function lookahead($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return new PEG_Lookahead(self::parser($p));
     }
     
     /**
      * PEG::not($parser)と同等。
+     * PEG::lookaheadNot(PEG::seq($a, $b, $c)), PEG::lookaheadNot($a, $b, $c) は同等
      * 
      * @param $p
      * @return PEG_Not
      */
     static function lookaheadNot($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return self::not(self::parser($p));
     }
 
@@ -316,34 +342,49 @@ class PEG
 
     /**
      * 与えられたパーサが何か値を返したとき、その値の最初の要素を返すパーサを得る
+     * PEG::first(PEG::seq($a, $b, $c)), PEG::first($a, $b, $c) は同等
      * 
      * @param $p
      * @return PEG_At
      */
     static function first($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return self::at(0, self::parser($p));
     }
 
     /**
      * 与えられたパーサが何か値を返したとき、その値の二番目の要素を返すパーサを得る
+     * PEG::second(PEG::seq($a, $b, $c)), PEG::second($a, $b, $c) は同等
      * 
      * @param $p
      * @return PEG_At
      */
     static function second($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return self::at(1, self::parser($p));
     }
 
     /**
      * 与えられたパーサが何か値を返したとき、その値の三番目の要素を返すパーサを得る
+     * PEG::third(PEG::seq($a, $b, $c)), PEG::third($a, $b, $c) は同等
      * 
      * @param $p
      * @return PEG_At
      */
     static function third($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return self::at(2, self::parser($p));
     }
 
@@ -476,12 +517,17 @@ class PEG
     
     /**
      * 渡されたパーサがパース時に返す値の最後の値を返すパーサを得る
+     * PEG::tail(PEG::seq($a, $b, $c)), PEG::tail($a, $b, $c) は同等
      *
      * @param unknown_type $p
      * @return unknown
      */
     static function tail($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return self::callbackAction(array('PEG_Util', 'tail'), self::parser($p));
     }
     
@@ -497,15 +543,26 @@ class PEG
     
     /**
      * PEG::lookaheadと同等
+     * PEG::amp(PEG::seq($a, $b, $c), PEG::amp($a, $b, $c) は同等
      *
      * @param $p
      * @return PEG_Lookahead
      */
     static function amp($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return new PEG_Lookahead(self::parser($p));
     }
     
+    /**
+     * PEG::subtract($a, $b, $c), PEG::tailSeq(PEG::not($a), PEG::not($b), $c) は同等
+     *
+     * @param unknown_type $p
+     * @return unknown
+     */
     static function subtract($p)
     {
         $args = func_get_args();
@@ -529,12 +586,17 @@ class PEG
     
     /**
      * パーサをメモ化する
+     * PEG::memo(PEG::seq($a, $b, $c)), PEG::memo($a, $b, $c) は同等
      *
      * @param $p
      * @return PEG_Memoize
      */
     static function memo($p)
     {
+        if (func_num_args() > 1) {
+            $args = func_get_args();
+            $p = call_user_func_array(array('PEG', 'seq'), $args);
+        }
         return new PEG_Memoize(self::parser($p));
     }
 
