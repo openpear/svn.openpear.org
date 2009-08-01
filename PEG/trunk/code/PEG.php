@@ -311,6 +311,18 @@ class PEG
     }
     
     /**
+     * 行にヒットするパーサを返す
+     * 
+     * @return PEG_IParser
+     */
+    static function line()
+    {
+        static $p = null;
+        return $p ? $p : $p = self::join(self::seq(self::many(self::second(self::not(self::newLine()), self::anything())), 
+                                                   self::optional(self::newLine())));
+    }
+    
+    /**
      * アルファベットの大文字にヒットするパーサを得る
      * 
      * @return PEG_Char
@@ -435,7 +447,7 @@ class PEG
 
     /**
      * 与えられたパーサがパース時に何を返そうともnullを返すパーサを得る
-     * PEG::seqの引数に使うと、自動的に抜かされる
+     * PEG::seq, PEG::many, PEG::many1の引数の一部に使うと、自動的にパースの結果から除外される
      * PEG::drop(PEG::seq($a, $b, $c), PEG::drop($a, $b, $c) は同等
      * 
      * @param $p

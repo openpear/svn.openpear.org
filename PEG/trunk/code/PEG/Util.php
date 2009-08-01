@@ -27,7 +27,7 @@ class PEG_Util
     
     static function cons($result)
     {
-        array_unshift($result[1], $result[0]);
+        if (!is_null($result[0])) array_unshift($result[1], $result[0]);
         return $result[1];
     }
     
