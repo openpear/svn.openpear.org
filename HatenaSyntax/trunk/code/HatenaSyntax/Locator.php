@@ -36,7 +36,7 @@ class HatenaSyntax_Locator
     
     protected function createLineChar()
     {
-        return PEG::secondSeq(PEG::lookaheadNot(PEG::char("\n\r")), PEG::anything());
+        return PEG::second(PEG::not(PEG::char("\n\r")), PEG::anything());
     }
     
     protected function createEndOfLine()
@@ -72,7 +72,7 @@ class HatenaSyntax_Locator
         $title_char = PEG::andalso(PEG::not(']'), 
                                    $this->lineChar);
         
-        $title = PEG::secondSeq(':title=', PEG::join(PEG::many1($title_char)));
+        $title = PEG::second(':title=', PEG::join(PEG::many1($title_char)));
         
         $url_char = PEG::andalso(PEG::not(PEG::choice(']', ':title=')), 
                                  $this->lineChar);
@@ -112,7 +112,7 @@ class HatenaSyntax_Locator
     {
         $nl = PEG::newLine();
         $closing = PEG::seq(PEG::optional($nl), '|<', $this->endOfLine);
-        $line = PEG::secondSeq($nl, $this->factory->createLineSegment($closing));
+        $line = PEG::second($nl, $this->factory->createLineSegment($closing));
         $parser = PEG::pack('>|', PEG::many1($line), $closing);
         
         return $this->factory->createNodeCreater('pre', $parser);
@@ -120,9 +120,9 @@ class HatenaSyntax_Locator
     
     protected function createSuperPreElement()
     {
-        $cond = PEG::lookaheadNot(PEG::seq('||<', $this->endOfLine));
-        $elt = PEG::secondSeq($cond, $this->lineChar);
-        $parser = PEG::thirdSeq(PEG::newLine(), $cond, PEG::join(PEG::many($elt)));
+        $cond = PEG::not(PEG::seq('||<', $this->endOfLine));
+        $elt = PEG::second($cond, $this->lineChar);
+        $parser = PEG::third(PEG::newLine(), $cond, PEG::join(PEG::many($elt)));
         
         return $parser;
         
@@ -176,9 +176,9 @@ class HatenaSyntax_Locator
     
     protected function createTable()
     {
-        $line = PEG::firstSeq(PEG::many1($this->tableCell), 
-                              '|', 
-                              $this->endOfLine);
+        $line = PEG::first(PEG::many1($this->tableCell), 
+                           '|', 
+                           $this->endOfLine);
         $parser = PEG::many1($line);
         
         return $this->factory->createNodeCreater('table', $parser);
@@ -186,21 +186,16 @@ class HatenaSyntax_Locator
 
     protected function createBlockQuote()
     {
-        $elt = PEG::secondSeq(PEG::lookaheadNot(PEG::seq('<<', $this->endOfLine)), 
-                              $this->element);
+        $elt = PEG::second(PEG::not('<<', $this->endOfLine), $this->element);
         
-        $parser = PEG::thirdSeq('>>',
-                                PEG::newLine(),
-                                PEG::many1($elt),
-                                '<<',
-                                $this->endOfLine);
+        $parser = PEG::third('>>', PEG::newLine(), PEG::many1($elt), '<<', $this->endOfLine);
                                       
         return $this->factory->createNodeCreater('blockquote', $parser);
     }
     
     protected function createParagraph()
     {
-        $parser = PEG::firstSeq($this->lineSegment, $this->endOfLine); 
+        $parser = PEG::first($this->lineSegment, $this->endOfLine); 
         
         return $this->factory->createNodeCreater('paragraph', $parser);
     }
@@ -226,14 +221,14 @@ class HatenaSyntax_Locator
     protected function setup()
     {
         $this->element;
-        $this->elt_ref = PEG::choice($this->header,
-                                     $this->blockQuote,
-                                     $this->definitionList,
-                                     $this->table,
-                                     $this->list,
-                                     $this->pre,
-                                     $this->superpre,
-                                     $this->emptyParagraph,
-                                     $this->paragraph);
+        $this->elt_ref = PEG::memo(PEG::choice($this->header,
+                                               $this->blockQuote,
+                                               $this->definitionList,
+                                               $this->table,
+                                               $this->list,
+                                               $this->pre,
+                                               $this->superpre,
+                                               $this->emptyParagraph,
+                                               $this->paragraph));
     }
 }
