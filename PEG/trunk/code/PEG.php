@@ -194,7 +194,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return self::callbackAction(array('PEG_Util', 'cons'), self::seq($p, self::many($p)));
     }
@@ -224,7 +224,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return new PEG_Lookahead(self::parser($p));
     }
@@ -242,7 +242,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return self::not(self::parser($p));
     }
@@ -367,7 +367,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return self::at(0, self::parser($p));
     }
@@ -383,7 +383,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return self::at(1, self::parser($p));
     }
@@ -399,7 +399,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return self::at(2, self::parser($p));
     }
@@ -561,7 +561,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return self::callbackAction(array('PEG_Util', 'tail'), self::parser($p));
     }
@@ -590,7 +590,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return new PEG_Lookahead(self::parser($p));
     }
@@ -633,7 +633,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequense(self::parserArray($args));
+            $p = new PEG_Sequence(self::parserArray($args));
         }
         return new PEG_Memoize(self::parser($p));
     }
