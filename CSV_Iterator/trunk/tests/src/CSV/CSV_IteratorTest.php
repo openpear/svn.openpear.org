@@ -41,13 +41,11 @@ class CSV_IteratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo Implement testCurrent().
+     * @dataProvider constructData
      */
-    public function testCurrent() {
-    // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+    public function testCurrent($file, $encoding, $delimiter, $enclosure, $expected) {
+        $obj = new CSV_Iterator(realpath(dirname(__FILE__) . '/../../fixtures/' . $file), $encoding, $delimiter, $enclosure);
+        $this->assertEquals(current($expected), $obj->current());
     }
 
     /**
@@ -81,21 +79,24 @@ class CSV_IteratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider foreachData
+     * @dataProvider constructData
      */
-    public function testForeach($file, $encoding, $expected)
+    public function testForeach($file, $encoding, $delimiter, $enclosure, $expected)
     {
         reset($expected);
-        foreach (new CSV_Iterator(realpath(dirname(__FILE__) . '/../../fixtures/' . $file), $encoding) AS $key=>$row) {
+        $count = 0;
+        foreach (new CSV_Iterator(realpath(dirname(__FILE__) . '/../../fixtures/' . $file), $encoding, $delimiter, $enclosure) AS $key=>$row) {
             $this->assertEquals(current($expected), $row, 'at ' . $key);
             next($expected);
+            $count++;
         }
+        $this->assertEquals(count($expected), $count, 'does not loop all.');
     }
 
-    public function foreachData()
+    public function constructData()
     {
         return array(
-            array('withHeader.csv', 'utf-8', array(
+            array('withHeader.csv', 'utf-8', ',', '"', array(
                     array('header1'=>'1-1', 'header 2'=>'1-2', 'header3'=>'1-3'),
                     array('header1'=>'2 1', 'header 2'=>'2 2', 'header3'=>'2 3'),
                     array('header1'=>'3
@@ -106,11 +107,56 @@ class CSV_IteratorTest extends PHPUnit_Framework_TestCase
 ', 'header3'=>'
 3 3'),
                 )),
-            array('withHeader.ja.utf-8.csv', 'utf-8', array(
+            array('withHeader.ja.utf-8.csv', 'utf-8', ',', '"', array(
                     array("あいうえお"=>'一の一',"漢字ヘッダ"=>'一の弐',"漢字　ヘッダ"=>'壱の参'),
                     array("あいうえお"=>'弐 壱',"漢字ヘッダ"=>'弐 弐',"漢字　ヘッダ"=>'弐 参'),
-                ))
-        );
+                )),
+             array('withHeader.ja.shift_jis.csv', 'shift_jis', ',', '"', array(
+                    array("あいうえお"=>'一の一',"漢字ヘッダ"=>'一の弐',"漢字　ヘッダ"=>'壱の参'),
+                    array("あいうえお"=>'弐 壱',"漢字ヘッダ"=>'弐 弐',"漢字　ヘッダ"=>'弐 参'),
+                )),
+             array('enclosureWithHeader.ja.shift_jis.csv', 'shift_jis', ',', '@', array(
+                    array("あいうえお"=>'一の一',"漢字ヘッダ"=>'一の弐',"漢字　ヘッダ"=>'ァゼソゾタダチボポマミ'),
+                    array("あいうえお"=>'弐 壱',"漢字ヘッダ"=>'弐 弐',"漢字　ヘッダ"=>'弐 参'),
+                )),
+             array('withHeader.ja.iso-2022-jp.csv', 'iso-2022-jp', ',', '"', array(
+                    array("あいうえお"=>'一の一',"漢字ヘッダ"=>'一の弐',"漢字　ヘッダ"=>'壱の参'),
+                    array("あいうえお"=>'弐 壱',"漢字ヘッダ"=>'弐 弐',"漢字　ヘッダ"=>'弐 参'),
+                )),
+             array('escapeWithHeader.csv', 'utf-8', ',', '"', array(
+                    array('"a'=>'c"c','b"'=>'"'),
+                )),
+             array('withHeader.utf-16.csv', 'utf-16', ',', '"', array(
+                    array('Т'=>'夢','逢'=>'琢'),
+                )),
+             array('withHeader.utf-16le.csv', 'utf-16', ',', '"', array(
+                    array('Т'=>'夢','逢'=>'琢
+あ'),
+                )),
+             array('withHeader.utf-16be.csv', 'utf-16', ',', '"', array(
+                    array('Т'=>'夢','逢'=>'琢
+琢'),
+                )),
+            array('withHeaderWithoutEOLatEOF.csv', 'ascii', ',', '"', array(
+                    array('header1'=>'value1', 'header2'=>'value2'),
+                    array('header1'=>'value3', 'header2'=>'value4'),
+                )),
+       );
+    }
+
+    protected static function convert_array_encoding(array $array, $to_encoding, $from_encoding = null)
+    {
+        $ret = array();
+        foreach($array AS $key=>$var) {
+            $key = mb_convert_encoding($key, $to_encoding, $from_encoding);
+            if(is_string($var)) {
+                $var = mb_convert_encoding($var, $to_encoding, $from_encoding);
+            } elseif(is_array($var)) {
+                $var = self::convert_array_encoding($var, $to_encoding, $from_encoding);
+            }
+            $ret[$key] = $var;
+        }
+        return $ret;
     }
 }
 ?>
