@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php,v 2.2.0 2009/07/25 15:14:30 $
+ *  @version    Mailer.php,v 2.0.0 2009/08/03 19:42 $
  */
 
 interface Mailer {
@@ -294,7 +294,7 @@ class Mail_Mailer implements Mailer
 	function deleteMsg(){
 		if($this->validConfig() === false) return false;
 		if($this->is_file_ex('Net/POP3.php')){
-			$pop3 = $this->getPear('Net/POP3.php');
+			$pop3 = $this->getPear('Net_POP3');
 		}else{
 			$this->showError('PEAR::Net_POP3がインストールされていません');
 			return false;
