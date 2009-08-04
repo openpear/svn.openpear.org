@@ -16,12 +16,12 @@ class CSV_Iterator implements Iterator
     /**
      * construct
      *
-     * @param resource $file
-     * @param string $encoding
-     * @param string $delimiter
-     * @param string $enclosure
-     * @param array $header
-     * @param integer $rowlength
+     * @param string $file CSV file to iterate
+     * @param string $encoding File encoding
+     * @param string $delimiter The field delimiter. default is ','.
+     * @param string $enclosure The field enclosure. default is '"'.
+     * @param array $header An array containing header fileds. The first line will be used as header if empty or not supplied.
+     * @param integer $rowlength The max length of each line. default is NULL which menas inifinity.
      */
     public function __construct($file, $encoding = 'utf-8', $delimiter = ',', $enclosure = '"', array $header = array(), $rowlength = null, $outputEncoding = null)
     {
@@ -87,15 +87,11 @@ class CSV_Iterator implements Iterator
         $d = preg_quote($this->delimiter);
         $e = preg_quote($this->enclosure);
         $line = "";
-        //        $arg = $this->rowLength ? array($this->filePointer, $this->rowLength) : array($this->filePointer);
-        $arg = array($this->filePointer, $this->rowLength, $this->eol);
 
         //*
         // 囲い込み記号内で改行できるようにするための処理
         // また、マルチバイト関係で安全に処理するために、文字エンコーディングを一旦UTF-8にする
         while (!feof($this->filePointer)) {
-        //            $line .= mb_convert_encoding(call_user_func_array('fgets', $arg), 'utf-8', $this->encoding);
-//            $line .= mb_convert_encoding(call_user_func_array('stream_get_line', $arg), 'utf-8', $this->encoding);
             $line .= mb_convert_encoding(self::getLine($this->filePointer, $this->rowLength, $this->eol), 'utf-8', $this->encoding);
             $itemcnt = preg_match_all('/'.$e.'/u', $line, $dummy);
             if ($itemcnt % 2 == 0) break;
