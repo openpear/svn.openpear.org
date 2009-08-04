@@ -30,7 +30,7 @@ class CSV_Iterator implements Iterator
         $this->enclosure = mb_convert_encoding($enclosure, 'utf-8');
 
         $this->setRowLength($rowlength);
-        $this->filePointer = fopen($file, 'r');
+        $this->filePointer = fopen($file, 'rb');
         $this->_setEncoding($encoding);
         $this->setOutputEncoding($outputEncoding);
 
@@ -42,19 +42,18 @@ class CSV_Iterator implements Iterator
     public function rewind()
     {
         fseek($this->filePointer, $this->offset);
+        $this->rowCounter = -1;
         $this->next();
-        $this->rowCounter = 0;
     }
 
     public function next()
     {
-
+        ++$this->rowCounter;
         $data = $this->readRow();
         if($data!==null && count($data)!==count($this->header)) {
-            throw new RuntimeException('CSV parse error. Number of columns is not equal to number of header.');
+            throw new RuntimeException('CSV parse error. Number of columns is not equal to number of header at row #'.  $this->rowCounter .'.' . var_export(array($data, $this->header), true));
         }
         $this->currentRow = $data ? array_combine($this->header, $data) : null;
-        ++$this->rowCounter;
     }
 
     public function current()
@@ -96,10 +95,10 @@ class CSV_Iterator implements Iterator
         // また、マルチバイト関係で安全に処理するために、文字エンコーディングを一旦UTF-8にする
         while (!feof($this->filePointer)) {
         //            $line .= mb_convert_encoding(call_user_func_array('fgets', $arg), 'utf-8', $this->encoding);
-            $line .= mb_convert_encoding(call_user_func_array('stream_get_line', $arg), 'utf-8', $this->encoding);
+//            $line .= mb_convert_encoding(call_user_func_array('stream_get_line', $arg), 'utf-8', $this->encoding);
+            $line .= mb_convert_encoding(self::getLine($this->filePointer, $this->rowLength, $this->eol), 'utf-8', $this->encoding);
             $itemcnt = preg_match_all('/'.$e.'/u', $line, $dummy);
             if ($itemcnt % 2 == 0) break;
-            $line .= "\xd\xa";
         }
 
         $csv_line = preg_replace('/(?:\r\n|[\r\n])?$/u', $d, trim($line));
@@ -158,6 +157,34 @@ class CSV_Iterator implements Iterator
     public function setOutputEncoding($encoding)
     {
         $this->outputEncoding = strtoupper($encoding)==='UTF-8' ? null : $encoding;
+    }
+
+    /**
+     * stream_get_lineにバグがあるため仕方なく作った
+     *
+     * @see http://bugs.php.net/bug.php?id=49148
+     * @param resource $fp ファイルポインタ
+     * @param int $buf_size 最大サイズ
+     * @param string $eol 行区切り
+     * @return string 1行分の文字
+     */
+    static public function getLine($fp, $buf_size, $eol)
+    {
+        $ret = '';
+        $eol_len = strlen($eol);
+        $eol_pos = 0;
+        if(!$buf_size) $buf_size = PHP_INT_MAX;
+        while(($c = fgetc($fp))!==false && strlen($ret) < $buf_size) {
+            $ret .= $c;
+            if($c === $eol[$eol_pos]) {
+                if(++$eol_pos === $eol_len) {
+                    break;
+                }
+                continue;
+            }
+            $eol_pos = 0;
+        }
+        return $ret;
     }
 }
 ?>

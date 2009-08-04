@@ -21,23 +21,12 @@ class CSV_IteratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo Implement testRewind().
+     * @dataProvider constructData
      */
-    public function testRewind() {
-    // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testNext().
-     */
-    public function testNext() {
-    // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+    public function testRewind($file, $encoding, $delimiter, $enclosure, $expected) {
+        $obj = new CSV_Iterator(realpath(dirname(__FILE__) . '/../../fixtures/' . $file), $encoding, $delimiter, $enclosure);
+        $obj->rewind();
+        $this->assertEquals(current($expected), $obj->current());
     }
 
     /**
@@ -46,26 +35,6 @@ class CSV_IteratorTest extends PHPUnit_Framework_TestCase
     public function testCurrent($file, $encoding, $delimiter, $enclosure, $expected) {
         $obj = new CSV_Iterator(realpath(dirname(__FILE__) . '/../../fixtures/' . $file), $encoding, $delimiter, $enclosure);
         $this->assertEquals(current($expected), $obj->current());
-    }
-
-    /**
-     * @todo Implement testKey().
-     */
-    public function testKey() {
-    // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testValid().
-     */
-    public function testValid() {
-    // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
     }
 
     /**
@@ -139,7 +108,6 @@ class CSV_IteratorTest extends PHPUnit_Framework_TestCase
                 )),
             array('withHeaderWithoutEOLatEOF.csv', 'ascii', ',', '"', array(
                     array('header1'=>'value1', 'header2'=>'value2'),
-                    array('header1'=>'value3', 'header2'=>'value4'),
                 )),
        );
     }
