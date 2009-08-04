@@ -51,7 +51,7 @@ class CSV_Iterator implements Iterator
         ++$this->rowCounter;
         $data = $this->readRow();
         if($data!==null && count($data)!==count($this->header)) {
-            throw new RuntimeException('CSV parse error. Number of columns is not equal to number of header at row #'.  $this->rowCounter .'.' . var_export(array($data, $this->header), true));
+            throw new RuntimeException('CSV parse error. Number of columns is not equal to number of header at row #'.  $this->rowCounter .'.');
         }
         $this->currentRow = $data ? array_combine($this->header, $data) : null;
     }
