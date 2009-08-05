@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP_PowerToys 0.1.0
- * 2009/8/4
+ * 2009/8/5
  *
  */
 class PHP_PowerToys {
@@ -68,7 +68,7 @@ class PHP_PowerToys {
 	 * @access public
 	 * @return true 成功 false 失敗
 	 */	
-	final public function is_file_ex($file_path){
+	function is_file_ex($file_path){
 		if(is_file($file_path)) return true;
 
 		$include = explode(';', ini_get('include_path'));
@@ -148,7 +148,7 @@ class PHP_PowerToys {
 	/**
 	 * 画像を自動認識してGDのリソース情報を返す
 	 *
-	 * @param string $img
+	 * @param string $img 画像フルパスにて
 	 * @return 成功:GD Resource 失敗:False
 	 */
 	function iopen($img){
