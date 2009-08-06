@@ -1,6 +1,9 @@
 <?php
 /**
- * gif画像から色違いのgif画像を生成するクラス
+ * @package Image_GifColorConverter
+ * @author anatoo<anatoo@nequal.jp>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @version $Id$
  */
 class GifColorConverter
 {
