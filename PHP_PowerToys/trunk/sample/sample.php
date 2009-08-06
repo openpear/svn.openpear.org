@@ -12,7 +12,7 @@ $a['b'] = 'b';
 $a['c'] = 'c';
 
 $a = $pt->arrayKeyReplace($a, 'b', 'd');
-$pt->saveVarDump($a, 'var_dump.txt');
+$pt->save_var_dump($a, 'var_dump.txt');
 $pt->print_r_ex($a);
 
 //UTF-8系
@@ -29,7 +29,9 @@ if(!$bom){
 }
 
 //画像系
-$img = $pt->iopen("絶対パス推奨過ぎる・・・(汗");
+$img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.jpg');
+$img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.png');
+$img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.gif');
 
 //オブジェクト系
 $pt2 = $pt->objectClone($pt);
