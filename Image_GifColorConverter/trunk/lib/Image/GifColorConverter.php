@@ -5,7 +5,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  * @version $Id$
  */
-class GifColorConverter
+class Image_GifColorConverter
 {
     /**
      * 色違いのgif画像を$outputに出力する
