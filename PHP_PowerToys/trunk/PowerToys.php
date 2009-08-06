@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP_PowerToys 0.1.0
- * 2009/8/5
+ * 2009/8/6
  *
  */
 class PHP_PowerToys {
@@ -96,12 +96,12 @@ class PHP_PowerToys {
 	}
 	
 	/**
-	 * VarDumpの結果を保存する
+	 * var_dumpの結果を保存する
 	 *
 	 * @param Array $var
 	 * @param string $filename
 	 */
-	function saveVarDump($var, $filename){
+	function save_var_dump($var, $filename){
 		ob_start();
 		var_dump($var);
 		$var = ob_get_contents();
@@ -152,6 +152,13 @@ class PHP_PowerToys {
 	 * @return 成功:GD Resource 失敗:False
 	 */
 	function iopen($img){
+		//GDがインストールされているかチェックする
+		$extension = "gd"; 
+		$extension_soname = $extension . "." . PHP_SHLIB_SUFFIX; 
+		$extension_fullname = PHP_EXTENSION_DIR . "/" . $extension_soname;
+		if(!extension_loaded($extension)) { 
+		    return false; 
+		} 
 		$content = file_get_contents($img);
 		if ( preg_match( '/^\x89PNG\x0d\x0a\x1a\x0a/', $content) )  {
 			$gd = imagecreatefrompng($img);
