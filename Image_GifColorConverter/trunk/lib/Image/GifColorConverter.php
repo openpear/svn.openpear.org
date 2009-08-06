@@ -132,13 +132,13 @@ class Image_GifColorConverter
             } elseif ($header === 0x21ff) {
                 $this->processApplicationExtensionBody($input, $output);
             } else {
-                throw new GifColorConverter_Exception(sprintf('unknown block header: %x', $header));
+                throw new Image_GifColorConverter_Exception(sprintf('unknown block header: %x', $header));
             }
         } else {
             $msg = sprintf('invalid block header: %x%s', $header, PHP_EOL) .
                    sprintf('input stream offset: %d%s', ftell($input), PHP_EOL) . 
                    sprintf('output stream offset: %d', ftell($output));
-            throw new GifColorConverter_Exception($msg);
+            throw new Image_GifColorConverter_Exception($msg);
         }
         
         return true;
@@ -208,4 +208,4 @@ class Image_GifColorConverter
     }
 }
 
-class GifColorConverter_Exception extends Exception { }
+class Image_GifColorConverter_Exception extends Exception { }
