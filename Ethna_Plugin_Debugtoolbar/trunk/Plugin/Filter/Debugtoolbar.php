@@ -74,6 +74,7 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
     google.load("jquery", "1.2");
+    // $Id$
 </script>
 <script type="text/javascript" src="{$url}Debugtoolbar/js/jquery.cookie.js"></script>
 EOL;
