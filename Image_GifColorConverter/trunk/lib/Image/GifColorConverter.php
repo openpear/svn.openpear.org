@@ -44,13 +44,20 @@ class Image_GifColorConverter
         flock($input, LOCK_SH);
         $output = fopen($outputPath, 'wb');
         flock($input, LOCK_EX);
-        $this->convert($input, $output, $colorMap);
+        try {
+            $this->convert($input, $output, $colorMap);
+        } catch (Exception $e) {
+            fclose($input);
+            fclose($output);
+            throw $e;
+        }
         fclose($input);
         fclose($output);
     }
     
     /**
-     * 結果を標準出力に書く
+     * 結果を標準出力に書き出す
+     * HTTPヘッダを吐かない
      * @param string ファイルパス
      * @param Array 
      * @return void
@@ -59,7 +66,12 @@ class Image_GifColorConverter
     {
         $input = fopen($inputPath, 'rb');
         flock($input, LOCK_SH);
-        $this->convert($input, STDOUT, $colorMap);
+        try {
+            $this->convert($input, STDOUT, $colorMap);
+        } catch (Exception $e) {
+            fclose($input);
+            throw $e;
+        }
         fclose($input);
     }
     
@@ -74,7 +86,13 @@ class Image_GifColorConverter
         $output = fopen('php://memory', 'w+b');
         $input = fopen($inputPath, 'rb');
         flock($input, LOCK_SH);
-        $this->convert($input, $output, $colorMap);
+        try {
+            $this->convert($input, $output, $colorMap);
+        } catch (Exception $e) {
+            fclose($input);
+            fclose($output);
+            throw $e;
+        }
         fclose($input);
         $buffer = array();
         rewind($output);
