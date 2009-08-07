@@ -4,7 +4,8 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php,v 2.0.0 2009/08/03 19:42 $
+ *  @version    Mailer.php v 2.0.0 2009/08/06
+ * 
  */
 
 interface Mailer {
@@ -565,6 +566,16 @@ class Mail_Mailer implements Mailer
 	}
 	
 	/**
+	 * 添付ファイルを追加する
+	 * @param $val 値
+	 * @access public
+	 * @return プロパティに挿入
+	 */
+	public function addAttach($val){
+		$this->keys['attach'][] = $val;
+	}
+	
+	/**
 	 * 削除するメッセージを追加する
 	 * @param $num メッセージ番号
 	 * @access public
@@ -598,6 +609,14 @@ class Mail_Mailer implements Mailer
          */
         public function clearBcc(){
                 $this->keys['bcc'] = array();
+        }
+        
+        /**
+         * 登録した添付ファイルを削除する
+         * @access public
+         */
+        public function clearAttach(){
+                $this->keys['attach'] = array();
         }
 	
 	/**
