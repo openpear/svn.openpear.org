@@ -8,15 +8,19 @@
 
 class PEG_Token implements PEG_IParser
 {
-    protected $str;
-    protected function __construct($str)
+    protected $str, $caseSensitive;
+    function __construct($str, $caseSensitive = true)
     {
-        $this->str = $str;
+        $this->str = $caseSensitive ? $str : strtolower($str);
+        $this->caseSensitive = $caseSensitive;
     }
     function parse(PEG_IContext $c)
     {
-        if ($c->read(strlen($this->str)) === $this->str)
-            return $this->str;
+        $str = $c->read(strlen($this->str));
+        if ($this->caseSensitive && $str === $this->str)
+            return $str;
+        elseif (!$this->caseSensitive && strtolower($str) === $this->str)
+            return $str;
         else 
             return PEG::failure();
     }
