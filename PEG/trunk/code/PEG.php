@@ -204,14 +204,14 @@ class PEG
     }
     
     /**
-     * 与えられた文字列をそのまま返すパーサを得る
+     * 与えられた文字列とマッチするパーサを得る
      * 
-     * @param string $s
+     * @param string $str
      * @return PEG_Token
      */
-    static function token($s)
+    static function token($str, $caseSensitive = true)
     {
-        return PEG_Token::get($s);
+        return new PEG_Token($str, $caseSensitive);
     }
     
     /**

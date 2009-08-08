@@ -11,3 +11,4 @@ $t->is($token->parse($context), 'hoge');
 
 $t->is($token->parse($context), PEG::failure());
 
+$t->is(PEG::token('hoge', false)->parse(PEG::context('Hoge')), 'Hoge');
