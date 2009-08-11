@@ -32,6 +32,7 @@ if(!$bom){
 $img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.jpg');
 $img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.png');
 $img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.gif');
+$img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.bmp');
 
 //オブジェクト系
 $pt2 = $pt->objectClone($pt);
