@@ -1,7 +1,7 @@
 <?php
 /**
- * PHP_PowerToys 0.1.0
- * 2009/8/11
+ * PHP_PowerToys 0.2.0
+ * 2009/8/12
  *
  */
 class PHP_PowerToys {
@@ -146,6 +146,21 @@ class PHP_PowerToys {
 	}
 	
 	/**
+	 * 拡張(PHPエクステンション)があるかチェックする
+	 *
+	 * @param string $extension
+	 * @return 成功:TRUE 失敗:FALSE
+	 */
+	function extensionExist($extension){
+		$extension_soname = $extension . "." . PHP_SHLIB_SUFFIX; 
+		$extension_fullname = PHP_EXTENSION_DIR . "/" . $extension_soname;
+		if(!extension_loaded($extension) && !is_file($extension_fullname)) { 
+		    return false; 
+		}
+		return true;
+	}
+	
+	/**
 	 * 画像を自動認識してGDのリソース情報を返す
 	 *
 	 * @param string $img 画像フルパスにて
@@ -153,12 +168,7 @@ class PHP_PowerToys {
 	 */
 	function iopen($img){
 		//GDがインストールされているかチェックする
-		$extension = "gd"; 
-		$extension_soname = $extension . "." . PHP_SHLIB_SUFFIX; 
-		$extension_fullname = PHP_EXTENSION_DIR . "/" . $extension_soname;
-		if(!extension_loaded($extension)) { 
-		    return false; 
-		} 
+		 if(!PHP_PowerToys::extensionExist('gd')) return false;
 		$content = file_get_contents($img);
 		if ( preg_match( '/^\x89PNG\x0d\x0a\x1a\x0a/', $content) )  {
 			$gd = imagecreatefrompng($img);
@@ -166,7 +176,7 @@ class PHP_PowerToys {
 			$gd = imagecreatefromgif($img);
 		} elseif ( preg_match( '/^\xff\xd8/', $content) )  {
 			$gd = imagecreatefromjpeg($img);
-		} elseif ( preg_match( '/^BM\x96\x87/', $content) )  {
+		} elseif ( preg_match( '/^BM|^\x42\x4d/', $content) )  {
 			$gd = $this->ImageCreateFromBMP($img);
 		}else{
 			return false;
@@ -268,6 +278,66 @@ class PHP_PowerToys {
 	fclose($f1);
 
 	return $res;
+	}
+	
+	/**
+	 * BMPで表示および保存 > http://php.benscom.com/manual/ja/ref.image.php
+	 *
+	 * @param GDリソース $im
+	 * @param string $fn
+	 */
+	function imagebmp ($im, $fn = false)
+	{
+	    if (!$im) return false;
+	           
+	    if ($fn === false) $fn = 'php://output';
+	    $f = fopen ($fn, "w");
+	    if (!$f) return false;
+	           
+	    //Image dimensions
+	    $biWidth = imagesx ($im);
+	    $biHeight = imagesy ($im);
+	    $biBPLine = $biWidth * 3;
+	    $biStride = ($biBPLine + 3) & ~3;
+	    $biSizeImage = $biStride * $biHeight;
+	    $bfOffBits = 54;
+	    $bfSize = $bfOffBits + $biSizeImage;
+	           
+	    //BITMAPFILEHEADER
+	    fwrite ($f, 'BM', 2);
+	    fwrite ($f, pack ('VvvV', $bfSize, 0, 0, $bfOffBits));
+	           
+	    //BITMAPINFO (BITMAPINFOHEADER)
+	    fwrite ($f, pack ('VVVvvVVVVVV', 40, $biWidth, $biHeight, 1, 24, 0, $biSizeImage, 0, 0, 0, 0));
+	           
+	    $numpad = $biStride - $biBPLine;
+	    for ($y = $biHeight - 1; $y >= 0; --$y)
+	    {
+	        for ($x = 0; $x < $biWidth; ++$x)
+	        {
+	            $col = imagecolorat ($im, $x, $y);
+	            fwrite ($f, pack ('V', $col), 3);
+	        }
+	        for ($i = 0; $i < $numpad; ++$i)
+	            fwrite ($f, pack ('C', 0));
+	    }
+	    fclose ($f);
+	    return true;
+	}
+	
+	/**
+	 * imlib2拡張を使用したリサイズ(高速らしい)
+	 *
+	 * @param string $input
+	 * @param string $output
+	 * @param int $width
+	 * @param int $height
+	 */
+	function imbligResizer($input, $output, $width, $height){
+		if(!PHP_PowerToys::extensionExist('imlib2')) return false;
+		$f = imlib2_load_image($input);
+		imlib2_create_scaled_image($f, $width, $height);
+		imlib2_save_image($f, $output);
 	}
 	
 	/**
