@@ -1,0 +1,14 @@
+0.5系から0.6での主な変更箇所(Diggin_Scraper)
+
+* Diggin_Scraperでの入れ子を可能に
+↓での予告どおり
+http://d.hatena.ne.jp/sasezaki/20090207/p1
+
+* $scraper->resultsでのパブリックプロパティからprotectedプロパティに
+$scraper->getResults()を追加したのでそれで取得してください。
+
+* changeStrategyをstaticメソッドに変更。
+アダプターを第２引数で変更していたとき、staticで保持されていたため、
+changeStrategy(false)で、strategyName、adapterをNULLにするようにしました。
+
+あとScraper以外も変えたけどだれも使ってないだろうから書かない。
