@@ -2,7 +2,7 @@
 /**
  * Conversion between Japanese Era / Gregorian calendar
  *
- * This module is inspired by Date::Japanese::Era (perl module).
+ * This module is inspired by Date::Japanese::Era (Perl module).
  *
  * PHP version 5.2
  *
@@ -20,7 +20,7 @@
  *     the documentation and/or other materials provided with the
  *     distribution.
  *
- *   * Neither the name of Sebastian Bergmann nor the names of his
+ *   * Neither the name of Heavens hell nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -60,7 +60,7 @@ require_once dirname(__FILE__) . '/Era/Exception.php';
  * Conversion between Japanese Era / Gregorian calendar
  *
  * <pre>
- *   This module is inspired by Date::Japanese::Era (perl module).
+ *   This module is inspired by Date::Japanese::Era (Perl module).
  * </pre>
  *
  * @category  Date
