@@ -84,9 +84,21 @@ class HatenaSyntax_Locator
         return $this->factory->createNodeCreater('httplink', $parser, array('href', 'title'));
     }
     
+    protected function createImageLink()
+    {
+        $url_char = PEG::subtract(PEG::anything(), ']', ':image]');
+        
+        $url = PEG::join(PEG::seq(PEG::choice('http://', 'https://'),
+                                  PEG::many1($url_char)));
+                                  
+        $parser = PEG::first($url, ':image');
+        
+        return $this->factory->createNodeCreater('imagelink', $parser);
+    }
+    
     protected function createLink()
     {
-        return PEG::pack('[', PEG::choice($this->httpLink), ']');
+        return PEG::pack('[', PEG::choice($this->imageLink, $this->httpLink), ']');
     }
     
     protected function createDefinition()
