@@ -18,7 +18,7 @@
  *     the documentation and/or other materials provided with the
  *     distribution.
  *
- *   * Neither the name of Sebastian Bergmann nor the names of his
+ *   * Neither the name of Heavens hell nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -35,7 +35,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  test
+ * @category  Net
  * @package   Net_URL_Dispatcher
  * @version   $id$
  * @copyright 2009 Heavens hell
@@ -51,7 +51,7 @@ require_once dirname(dirname(__FILE__)) . '/prepare.php';
 /**
  * DescribeDispatcher
  *
- * @category  test
+ * @category  Net
  * @package   Net_URL_Dispatcher
  * @version   $id$
  * @copyright 2009 Heavens Hell
