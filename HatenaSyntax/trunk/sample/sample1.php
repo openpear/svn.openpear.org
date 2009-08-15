@@ -26,6 +26,7 @@ paragraph((footnote))
 hoge
 fuga|<
 
+[http://example.com/example.gif:image]
 
 >>
 ***blockquote header

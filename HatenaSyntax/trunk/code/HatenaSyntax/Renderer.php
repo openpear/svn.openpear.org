@@ -98,6 +98,12 @@ class HatenaSyntax_Renderer
         return sprintf('<a href="%s">%s</a>', $href, $title);
     }
     
+    protected function renderImageLink($url)
+    {
+        $url = self::escape($url);
+        return '<a href="' . $url . '"><img src="' . $url . '" /></a>';
+    }
+    
     protected function renderDefinitionList(Array $data)
     {
         foreach ($data as &$elt) $elt = $this->renderDefinition($elt);
