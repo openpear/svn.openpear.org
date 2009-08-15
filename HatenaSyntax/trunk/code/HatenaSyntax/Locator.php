@@ -156,11 +156,9 @@ class HatenaSyntax_Locator
 
     protected function createList()
     {
-        $c = PEG::char('-+');
-        $item = PEG::seq($c,
-                         PEG::count(PEG::many($c)),
-                         $this->lineSegment,
-                         PEG::drop($this->endOfLine));
+        $item = PEG::callbackAction(array('HatenaSyntax_Util', 'processListItem'), PEG::many1(PEG::char('-+')),
+                                                                                   $this->lineSegment,
+                                                                                   PEG::drop($this->endOfLine));
         $list = PEG::callbackAction(array('HatenaSyntax_Util', 'normalizeList'), PEG::many1($item));
         
         return $this->factory->createNodeCreater('list', $list);
