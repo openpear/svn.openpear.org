@@ -35,6 +35,17 @@ class HatenaSyntax_Util
         return $ret;
     }
     
+    static function processListItem(Array $li)
+    {
+        $ret = array();
+        $ret[] = end($li[0]);
+        $ret[] = count($li[0]) - 1;
+        $ret[] = $li[1];
+        
+        
+        return $ret;
+    }
+    
     static protected function filterLevel($struct)
     {
         foreach ($struct as &$node) 
