@@ -184,11 +184,18 @@ class HatenaSyntax_Locator
 
     protected function createBlockQuote()
     {
+        $url = PEG::join(PEG::seq(PEG::choice('http://', 'https://'), 
+                                  PEG::many1(PEG::subtract(PEG::anything(), 
+                                                           PEG::seq('>', PEG::newLine()), 
+                                                           PEG::newLine()))));
+        
+        $header = PEG::pack('>', PEG::optional($url), PEG::seq('>', PEG::newLine()));
+        
         $elt = PEG::second(PEG::not('<<', $this->endOfLine), $this->element);
         
-        $parser = PEG::third('>>', PEG::newLine(), PEG::many1($elt), '<<', $this->endOfLine);
+        $parser = PEG::seq($header, PEG::many1($elt), PEG::drop('<<', $this->endOfLine));
                                       
-        return $this->factory->createNodeCreater('blockquote', $parser);
+        return $this->factory->createNodeCreater('blockquote', $parser, array('url', 'body'));
     }
     
     protected function createParagraph()

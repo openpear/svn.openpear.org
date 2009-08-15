@@ -156,7 +156,8 @@ class HatenaSyntax_Renderer
     {
         $ret = array();
         $ret[] = $this->line('<blockquote>');
-        foreach ($arr as $elt) $ret[] = $this->renderNode($elt);
+        foreach ($arr['body'] as $elt) $ret[] = $this->renderNode($elt);
+        if ($arr['url']) $ret[] = $this->line('<cite><a href="' . self::escape($arr['url']) . '">' . escape($arr['url']) . '</a></cite>');
         $ret[] = $this->line('</blockquote>');
         return join(PHP_EOL, $ret);
     }
