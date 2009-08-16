@@ -70,7 +70,7 @@ class HatenaSyntax_Renderer
     {
         foreach ($data as &$elt) 
             $elt = !$elt instanceof HatenaSyntax_Node ? ($this->config['htmlescape'] ? $this->escape($elt) : $elt) 
-                                   : $this->renderNode($elt);
+                                                      : $this->renderNode($elt);
         return join('', $data);
     }
     
@@ -102,6 +102,12 @@ class HatenaSyntax_Renderer
     {
         $url = self::escape($url);
         return '<a href="' . $url . '"><img src="' . $url . '" /></a>';
+    }
+    
+    protected function renderRelativeLink($path)
+    {
+        $path = self::escape($path);
+        return '<a href="' . $path . '">' . $path . '</a>';
     }
     
     protected function renderDefinitionList(Array $data)
