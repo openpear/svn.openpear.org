@@ -17,6 +17,7 @@ $str = '*header1
 -list6
 
 paragraph((footnote))
+[[relativelink]]
 
 |*table header |*table header2 |
 |apple         |1              |
@@ -81,6 +82,7 @@ echo HatenaSyntax::render($str, array('headerlevel' => 3,                   // ã
   </ul>
 
   <p>paragraph(<a href="#hoge_footnote_1" name="hoge_1" title="footnote">*1</a>)</p>
+  <p><a href="relativelink">relativelink</a>"</p>
 
   <table>
     <tr>
@@ -100,7 +102,9 @@ echo HatenaSyntax::render($str, array('headerlevel' => 3,                   // ã
   <pre>
 hoge
 fuga</pre>
-  <br>
+
+  <p><a href="http://example.com/example.gif"><img src="http://example.com/example.gif" /></a></p>
+
   <blockquote>
     <h5>blockquote header</h5>
     <p>fuga</p>
