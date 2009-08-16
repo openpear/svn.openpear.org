@@ -17,7 +17,7 @@ $str = '*header1
 -list6
 
 paragraph((footnote))
-[[relativelink]]
+[[keywordlink]]
 [][[nulllink]][]
 
 |*table header |*table header2 |
@@ -50,14 +50,20 @@ function sprehandler($type, Array $lines)
            . '">' . PHP_EOL . $body . '</pre>';
 }
 
+function keywordlinkhandler($path)
+{
+    return './' . $path;
+}
+
 // オプションは全て省略可。第二引数自体も省略可。
-echo HatenaSyntax::render($str, array('headerlevel' => 3,                   // ヘッダの基準値。デフォルトは1
-                                      'id' => 'hoge',                       // 記事の識別子。指定しない場合はランダムなIDが生成される
-                                      'htmlescape' => false,                // デフォルトはtrue。
-                                      'sectionclass' => 'section',          // 記事本体を囲むdiv要素のクラス。デフォルトは'section'
-                                      'footnoteclass' => 'footnote',        // 脚注を囲むdiv要素のクラス。デフォルトは'footnote'
-                                      'superprehandler' => 'sprehandler')); // superpre記法の中身を処理するコールバック。
-/*
+echo HatenaSyntax::render($str, array('headerlevel' => 3,                           // ヘッダの基準値。デフォルトは1
+                                      'id' => 'hoge',                               // 記事の識別子。指定しない場合はランダムなIDが生成される
+                                      'htmlescape' => false,                        // デフォルトはtrue。
+                                      'sectionclass' => 'section',                  // 記事本体を囲むdiv要素のクラス。デフォルトは'section'
+                                      'footnoteclass' => 'footnote',                // 脚注を囲むdiv要素のクラス。デフォルトは'footnote'
+                                      'keywordlinkhanlder' => 'keywordlinkhandler', // キーワード記法のキーワードをアドレスに処理するコールバック
+                                      'superprehandler' => 'sprehandler'));         // superpre記法の中身を処理するコールバック
+/* 結果
 <div class="section">
   <h3>header1</h3>
 
@@ -83,7 +89,7 @@ echo HatenaSyntax::render($str, array('headerlevel' => 3,                   // �
   </ul>
 
   <p>paragraph(<a href="#hoge_footnote_1" name="hoge_1" title="footnote">*1</a>)</p>
-  <p><a href="relativelink">relativelink</a></p>
+  <p><a href="./keywordlink">keywordlink</a></p>
   <p>[[nulllink]]</p>
 
   <table>

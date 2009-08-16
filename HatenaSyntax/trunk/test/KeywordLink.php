@@ -8,7 +8,7 @@ $parser = HatenaSyntax_Locator::it()->link;
 
 $context = PEG::context('[[keyword]]');
 $result = $parser->parse($context);
-$lime->is($result->getType(), 'relativelink');
+$lime->is($result->getType(), 'keywordlink');
 $lime->is($result->getData(), 'keyword');
 
 //--
