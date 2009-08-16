@@ -10,3 +10,15 @@ $context = PEG::context('[[keyword]]');
 $result = $parser->parse($context);
 $lime->is($result->getType(), 'relativelink');
 $lime->is($result->getData(), 'keyword');
+
+//--
+
+$context = PEG::context('[[javascript:alert(\'hahaha\')]]');
+$result = $parser->parse($context);
+$lime->is($result, PEG::failure());
+
+//--
+
+$context = PEG::context('[[   javascript:alert(\'hahaha\')]]');
+$result = $parser->parse($context);
+$lime->is($result, PEG::failure());

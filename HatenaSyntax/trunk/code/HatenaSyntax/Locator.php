@@ -98,7 +98,8 @@ class HatenaSyntax_Locator
     
     protected function createRelativeLink()
     {
-        $body = PEG::join(PEG::many1(PEG::subtract(PEG::anything(), PEG::newLine(), ']]')));
+        $body = PEG::join(PEG::many1(PEG::subtract(PEG::anything(), PEG::newLine(), ']]', ' ', "\t")));
+        $body = PEG::subtract($body, 'javascript:');
         $parser = PEG::pack('[', $body, ']');
         
         return $this->factory->createNodeCreater('relativelink', $parser);
