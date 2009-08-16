@@ -28,6 +28,13 @@ if(!$bom){
 	echo 'BOMなしです';
 }
 
+$str = file_get_contents('nobom.txt');
+$str = $pt->addBom($str);
+$bom = $pt->checkBom($str);
+if(!$bom){
+	echo 'BOMありです';
+}
+
 //画像系
 $img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.jpg');
 $img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.png');

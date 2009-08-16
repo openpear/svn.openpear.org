@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP_PowerToys 0.2.0
- * 2009/8/12
+ * 2009/8/16
  *
  */
 class PHP_PowerToys {
@@ -131,8 +131,8 @@ class PHP_PowerToys {
 	/**
 	 * 指定されたファイル名もしくは文字列にBOMがあれば除去する
 	 *
-	 * @param unknown_type $str
-	 * @return unknown
+	 * @param string $str
+	 * @return string
 	 */
 	function removeBom($str){
 		if(PHP_Powertoys::is_file_ex($str)){
@@ -141,6 +141,23 @@ class PHP_PowerToys {
 		if(mb_detect_encoding($str) != 'UTF-8') return false;
 		if (ord($str{0}) == 0xef && ord($str{1}) == 0xbb && ord($str{2}) == 0xbf) {
         		$str = substr($str, 3);
+    	}
+    	return $str;
+	}
+	
+	/**
+	 * 指定されたファイル名もしくは文字列にBOMがなければ付加する(うわぁぁぁ死ねばいいのに・・・)
+	 *
+	 * @param string $str
+	 * @return string
+	 */
+	function addBom($str){
+		if(PHP_Powertoys::is_file_ex($str)){
+			$str = file_get_contents($str);
+		}
+		if(mb_detect_encoding($str) != 'UTF-8') return false;
+		if (ord($str{0}) != 0xef && ord($str{1}) != 0xbb && ord($str{2}) != 0xbf) {
+        		$str = 0xef . 0xbb . 0xbf . $str;
     	}
     	return $str;
 	}
@@ -177,7 +194,7 @@ class PHP_PowerToys {
 		} elseif ( preg_match( '/^\xff\xd8/', $content) )  {
 			$gd = imagecreatefromjpeg($img);
 		} elseif ( preg_match( '/^BM|^\x42\x4d/', $content) )  {
-			$gd = $this->ImageCreateFromBMP($img);
+			$gd = PHP_PowerToys::ImageCreateFromBMP($img);
 		}else{
 			return false;
 		}
