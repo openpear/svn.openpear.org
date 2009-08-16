@@ -18,6 +18,7 @@ class HatenaSyntax_Renderer
             'id' => uniqid('sec'),
             'sectionclass' => 'section',
             'footnoteclass' => 'footnote',
+            'keywordlinkhandler' => array($this, 'keywordLinkHandler'),
             'superprehandler' => array($this, 'superPreHandler')
         );
     }
@@ -42,6 +43,11 @@ class HatenaSyntax_Renderer
     {
         $body = join(PHP_EOL, array_map(array('HatenaSyntax_Renderer', 'escape'), $lines));
         return '<pre class="superpre">' . PHP_EOL . $body . '</pre>';
+    }
+    
+    static function keywordLinkHandler($path)
+    {
+        return './' . $path;
     }
     
     protected function renderNode(HatenaSyntax_Node $node)
@@ -104,10 +110,11 @@ class HatenaSyntax_Renderer
         return '<a href="' . $url . '"><img src="' . $url . '" /></a>';
     }
     
-    protected function renderRelativeLink($path)
+    protected function renderKeywordLink($path)
     {
         $path = self::escape($path);
-        return '<a href="' . $path . '">' . $path . '</a>';
+        $href = call_user_func($this->config['keywordlinkhandler'], $path);
+        return '<a href="' . $href . '">' . $path . '</a>';
     }
     
     protected function renderDefinitionList(Array $data)

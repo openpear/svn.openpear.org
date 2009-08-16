@@ -96,13 +96,13 @@ class HatenaSyntax_Locator
         return $this->factory->createNodeCreater('imagelink', $parser);
     }
     
-    protected function createRelativeLink()
+    protected function createKeywordLink()
     {
-        $body = PEG::join(PEG::many1(PEG::subtract(PEG::anything(), PEG::newLine(), ']]', ' ', "\t")));
-        $body = PEG::subtract($body, 'javascript:');
+        $body = PEG::join(PEG::many1(PEG::subtract(PEG::anything(), PEG::newLine(), ']]')));
+        $body = PEG::subtract($body, 'javascript:', ' ', "\t");
         $parser = PEG::pack('[', $body, ']');
         
-        return $this->factory->createNodeCreater('relativelink', $parser);
+        return $this->factory->createNodeCreater('keywordlink', $parser);
     }
     
     protected function createNullLink()
@@ -115,7 +115,7 @@ class HatenaSyntax_Locator
     
     protected function createLink()
     {
-        return PEG::pack('[', PEG::choice($this->nullLink, $this->relativeLink, $this->imageLink, $this->httpLink), ']');
+        return PEG::pack('[', PEG::choice($this->nullLink, $this->keywordLink, $this->imageLink, $this->httpLink), ']');
     }
     
     protected function createDefinition()
