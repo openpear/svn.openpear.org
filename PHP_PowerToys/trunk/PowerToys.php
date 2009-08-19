@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP_PowerToys 0.2.0
- * 2009/8/16
+ * 2009/8/20
  *
  */
 class PHP_PowerToys {
@@ -157,7 +157,7 @@ class PHP_PowerToys {
 		}
 		if(mb_detect_encoding($str) != 'UTF-8') return false;
 		if (ord($str{0}) != 0xef && ord($str{1}) != 0xbb && ord($str{2}) != 0xbf) {
-        		$str = 0xef . 0xbb . 0xbf . $str;
+        		$str = chr(0xef) . chr(0xbb) . chr(0xbf) . $str;
     	}
     	return $str;
 	}
@@ -350,7 +350,7 @@ class PHP_PowerToys {
 	 * @param int $width
 	 * @param int $height
 	 */
-	function imbligResizer($input, $output, $width, $height){
+	function imlibResizer($input, $output, $width, $height){
 		if(!PHP_PowerToys::extensionExist('imlib2')) return false;
 		$f = imlib2_load_image($input);
 		imlib2_create_scaled_image($f, $width, $height);
@@ -395,6 +395,42 @@ class PHP_PowerToys {
 			return $response['body'];
 		}
 		return false;
+	}
+	
+	/**
+	 * in_arrayを拡張して、正規表現も使えるようにします
+	 *
+	 * @param string $target
+	 * @param array $array
+	 * @return 検出カウントint  なし:FALSE
+	 */
+	function in_array_ex($target, $array){
+		$j = intval(0);
+		for($i = 0, $n = count($array) ; $i < $n ; $i++){
+			if(preg_match('/'.$target.'/', $array[$i])){
+				$j++;
+			}
+		}
+		return $j === 0 ? false : $j ; 
+	}
+	
+	/**
+	 * iniファイルを処理できます
+	 * 
+	 * @param  string $str
+	 * @return array
+	 */
+	function iniParser($str){
+		if(PHP_Powertoys::is_file_ex($str)){
+			$str = file_get_contents($str);
+		}
+		$str = preg_split('/\r|\n|\r\n/', $str);
+		foreach($str as $val){
+			if(!$val) continue;
+			list($name, $value) = preg_split('/( |	)*=( |	)*/', $val);
+			$ini[preg_replace('/( |	)*=( |	)*/', '', $name)] = preg_replace('/( |	)*=( |	)*/', '', $value); 
+		}
+		return $ini;
 	}
 }
 ?>
