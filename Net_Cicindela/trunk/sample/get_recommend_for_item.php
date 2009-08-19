@@ -6,7 +6,7 @@ $config = include('./config.php');
 $cicindela = new Net_Cicindela($config['base_url']);
 
 $clipRecommender = $cicindela->getDataset('clip_simple');
-foreach($clipRecommender->getRecommendForItem(39102) AS $item) {
+foreach($clipRecommender->getRecommendForItem(65487) AS $item) {
     echo $item, PHP_EOL;
 }
 ?>
