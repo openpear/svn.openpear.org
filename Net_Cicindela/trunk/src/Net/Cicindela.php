@@ -36,7 +36,7 @@ class Net_Cicindela
     public function __construct($baseurl = 'http://localhost/cicindela/', $request = null)
     {
         $this->baseUrl = $baseurl;
-        $this->request = $request instanceof HTTP_Request2 ? $request : new HTTP_Request2('');
+        $this->request = $request instanceof HTTP_Request2 ? $request : new HTTP_Request2();
     }
 
     /**
