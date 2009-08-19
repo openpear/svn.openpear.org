@@ -12,7 +12,8 @@ $a['b'] = 'b';
 $a['c'] = 'c';
 
 $a = $pt->arrayKeyReplace($a, 'b', 'd');
-$pt->save_var_dump($a, 'var_dump.txt');
+//実際に保存されちゃうのでコメントアウト
+//$pt->save_var_dump($a, 'var_dump.txt');
 $pt->print_r_ex($a);
 
 //UTF-8系
@@ -31,7 +32,7 @@ if(!$bom){
 $str = file_get_contents('nobom.txt');
 $str = $pt->addBom($str);
 $bom = $pt->checkBom($str);
-if(!$bom){
+if($bom){
 	echo 'BOMありです';
 }
 
@@ -45,5 +46,11 @@ $img = $pt->iopen(dirname(dirname(__FILE__)) . '/sample/sample.bmp');
 $pt2 = $pt->objectClone($pt);
 
 //ファイル取得
-echo $pt2->file_get_contents_ex('http://openpear.org/');
+//echo $pt2->file_get_contents_ex('http://openpear.org/');
+
+$array = array('abcdefg', 'abcd' , 'def', 'hij', 'klm');
+$result = $pt2->in_array_ex('.*d.*', $array);
+echo $result; //結果は恐らく3
+$ini = $pt2->iniParser('sample.ini');
+print_r($ini);
 ?>
