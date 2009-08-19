@@ -25,6 +25,7 @@ require_once 'Cicindela/Dataset.php';
 
 class Net_Cicindela
 {
+    const VERSION = '@package_version@';
     private $baseUrl;
 
     /**
@@ -37,6 +38,7 @@ class Net_Cicindela
     {
         $this->baseUrl = $baseurl;
         $this->request = $request instanceof HTTP_Request2 ? $request : new HTTP_Request2();
+        $this->request->setHeader('User-Agent', 'Net_Cicindela/' . self::VERSION);
     }
 
     /**
