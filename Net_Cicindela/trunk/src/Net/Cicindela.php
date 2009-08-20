@@ -25,7 +25,7 @@ require_once 'Cicindela/Dataset.php';
 
 class Net_Cicindela
 {
-    const VERSION = '@package_version@';
+    const VERSION = '0.2.1';
     private $baseUrl;
 
     /**
@@ -38,7 +38,9 @@ class Net_Cicindela
     {
         $this->baseUrl = $baseurl;
         $this->request = $request instanceof HTTP_Request2 ? $request : new HTTP_Request2();
-        $this->request->setHeader('User-Agent', 'Net_Cicindela/' . self::VERSION);
+        $this->request->setHeader('User-Agent', 'Net_Cicindela/' . self::VERSION .
+            ' (http://openpear.org/package/Net_Cicindela) ' .
+            'PHP/' . phpversion());
     }
 
     /**
@@ -73,6 +75,7 @@ class Net_Cicindela
     public function record(array $param)
     {
         $url = new Net_URL2($this->getBaseUrl() . 'record');
+        $url->setOption(Net_URL2::OPTION_SEPARATOR_OUTPUT, '&'); // arg_separator.outputに左右されては困る。
         $url->setQueryVariables($param);
         $request = $this->request;
         $request->setURL($url);
@@ -96,6 +99,7 @@ class Net_Cicindela
     public function getRecommend(array $param)
     {
         $url = new Net_URL2($this->getBaseUrl() . 'recommend');
+        $url->setOption(Net_URL2::OPTION_SEPARATOR_OUTPUT, '&'); // arg_separator.outputに左右されては困る。
         $url->setQueryVariables($param);
         $request = $this->request;
         $request->setURL($url);
