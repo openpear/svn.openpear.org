@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/08/06
+ *  @version    Mailer.php v 2.0.0 2009/08/23
  * 
  */
 
@@ -26,7 +26,7 @@ class Mail_Mailer implements Mailer
 	
 	//元のエンコードを指定する 標準はmb_convert_encoding準拠のauto
 	private $source_encode = 'auto';
-
+	
         /**
          *エラーメッセージ処理の統一
          *
@@ -212,11 +212,11 @@ class Mail_Mailer implements Mailer
 	}
 	
 	/**
-	 * 設定が有効かをチェックする
+	 * 受信設定が有効かをチェックする
 	 *
 	 * @return 成功:TRUE 失敗:FALSE
 	 */
-	private function validConfig(){
+	private function validateGetConfig(){
 		if(!$this->get('user')) {
 			$this->showError('ユーザ名が設定されていません');
 			return false;
@@ -249,7 +249,7 @@ class Mail_Mailer implements Mailer
 		if($this->get('encode')){
 			$this->target_encode = $this->get('encode'); 
 		}
-		if($this->validConfig() === false) return false;
+		if($this->validdateGetConfig() === false) return false;
 		if($this->is_file_ex('Net/POP3.php')){
 			$pop3 = $this->getPear('Net_POP3');
 		}else{
@@ -329,58 +329,13 @@ class Mail_Mailer implements Mailer
 		unset($mail);
 		return $mail_obj;
 	}
-
-	/**
-	 * Smartyを初期化してSmartyオブジェクトを返す
-	 * 
-	 * @access public
-	 * @return 成功 object 失敗 false
-	 */		
-	private function initSmarty(){
-		if($this->is_file_ex('Smarty/Smarty.class.php')){
-			require_once('Smarty/Smarty.class.php');
-			$smarty = new Smarty();
-			$dirs = array(
-				'templates',
-				'templates_c',
-				'configs',
-				'cache',
-			);
-			foreach($dirs as $dir){
-				if(!is_dir($dir)){
-					mkdir($dir);
-					chmod($dir, 0777);
-				}
-			}
-			$smarty->template_dir = 'templates/';
-			$smarty->compile_dir  = 'templates_c/';
-			$smarty->config_dir   = 'configs/';
-			$smarty->cache_dir    = 'cache/';
-			return $smarty;
-		}else{
-			return false;
-		}
-	}
 	
 	/**
-	 *メールを送信する
-	 * 
-	 * @access public
-	 * @return array
+	 * 送信設定が有効かをチェックする
+	 *
+	 * @return 成功:TRUE 失敗:FALSE
 	 */
-	public function send($smtp=null){
-		if($this->is_file_ex('Mail.php')){
-			require_once("Mail.php");
-		}else{
-			$this->showError('PEAR::Mailがインストールされていません');
-			return false;
-		}
-		if($this->is_file_ex("Mail/mime.php")){
-			require_once("Mail/mime.php");
-		}else{
-			$this->showError('PEAR::mimeがインストールされていません');
-			return false;
-		}
+	private function validateSendConfig(){
 		if(!$this->get('body')){
 			if(!$this->get('template')){
 				$this->showError('テンプレートが指定されていません');
@@ -404,40 +359,15 @@ class Mail_Mailer implements Mailer
 		}else{
 			$body = $this->get('body');
 		}
-		
 		if(!$body && $this->empty_body_warning === true){
 			$this->showNotice('本文が空です');
 			return false;
 		}
-		
-		if(is_null($this->get('from'))){
-			$from = 'nobody@localhost';
-		}else{
-			$from = $this->get('from');
-		}
-		
 		//送信先不明の場合はエラー
 		if(!$this->get('mailto')){
 			$this->showError('送信先が指定されていません');
 			return false;
 		}
-		
-		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
-		
-		if($this->get('encode')){
-			$this->target_encode = $this->get('encode');
-		}
-		
-		$mime = new Mail_Mime("\n");
-		if(!is_null($smtp)){
-			$mail = Mail::factory("smtp", $smtp);
-		}else{
-			$mail = Mail::factory("mail");
-		}
-
-		$body = mb_convert_encoding($body, $this->target_encode, $this->source_encode);
-
-		$mime->setTxtBody($body);
 		
 		$attach = $this->get('attach');
 		
@@ -445,6 +375,7 @@ class Mail_Mailer implements Mailer
 			if(is_array($attach)){
 				foreach($attach as $val){
 					//ファイルが存在するか調べる
+					$val = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
 					if(!is_file($val)){
 						$this->showError(sprintf("File Not Found[%s]", $val));
 						return false;
@@ -456,6 +387,7 @@ class Mail_Mailer implements Mailer
 					}
 				}
 			}else{
+				$attach = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($attach, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($attach, 'EUC', mb_internal_encoding()) ;
 				if(!is_file($attach)){
 					$this->showError(sprintf("File Not Found[%s]", $attach));
 					return false;
@@ -465,7 +397,141 @@ class Mail_Mailer implements Mailer
 					return false;
 				}
 			}
-			$mime->addAttachment($attach);
+		}
+		
+		$this->set('body', $body);
+		return true;
+	}
+
+	/**
+	 * Smartyを初期化してSmartyオブジェクトを返す
+	 * 
+	 * @access public
+	 * @return 成功 object 失敗 false
+	 */		
+	private function initSmarty(){
+		if($this->is_file_ex('Smarty/Smarty.class.php')){
+			require_once('Smarty/Smarty.class.php');
+			$smarty = new Smarty();
+			$dirs = array(
+				dirname(__FILE__) . '/templates',
+				'templates_c',
+				'configs',
+				'cache',
+			);
+			foreach($dirs as $dir){
+				if(!is_dir($dir)){
+					mkdir($dir);
+					chmod($dir, 0777);
+				}
+			}
+			$smarty->template_dir = dirname(__FILE__) . '/templates/';
+			$smarty->compile_dir  = 'templates_c/';
+			$smarty->config_dir   = 'configs/';
+			$smarty->cache_dir    = 'cache/';
+			return $smarty;
+		}else{
+			return false;
+		}
+	}
+	
+	public function mailerinfo(){
+		
+		if($this->is_file_ex('Net/POP3.php') && $this->is_file_ex('Mail/mimeDecode.php')){
+			$contents['メール受信'] = 'Enabled';
+			$contents['Net/POP3'] = 'メールの受信が可能です';
+			$contents['Mail/mimeDecode'] = '日本語メールのパースが可能です';
+		}else{
+			$contents['メール受信'] = 'Disabled';
+		}
+		
+		if($this->is_file_ex('Mail.php') && $this->is_file_ex("Mail/mime.php")){
+			$contents['メール送信'] = 'Enabled';
+			$contents['Mail'] = 'メールの送信が可能です';
+			$contents['Mail/mime'] = 'メールの送信の際に多機能化が可能です';
+		}else{
+			$contents['メール送信'] = 'Disabled';
+		}
+		
+		if($this->is_file_ex('Smarty/Smarty.class.php')){
+			$contents['定型文の作成'] = 'Enabled';
+			$contents['Smarty'] = 'そもそもこの画面が見られるので大丈夫です';
+		}
+		
+		$this->makeInfo("Mail_Mailer", "Mail_Mailer Function Enables List", $contents);
+	}
+	
+	/**
+	 * phpinfo()ライクなページを生成する
+	 * 
+	 * @param $name string ページ名
+	 * @param $title string 情報タイトル(テーブルのキャプション)
+	 * @param $contents array 表示する情報
+	 * @access public
+	 */
+	function makeInfo($name, $title, $contents){
+		$smarty = $this->initSmarty();
+		$smarty->assign('name', $name);
+		$smarty->assign('title', $title);
+		$smarty->assign('contents', $contents);
+		$smarty->display('info.tpl');
+		//ここではinfoを表示するだけなので余計な処理をさせないように処理の強制終了
+		exit;
+	}
+	
+	/**
+	 *メールを送信する
+	 * 
+	 * @param  Boolean $fetch
+	 * @access public
+	 * @return array
+	 */
+	public function send($fetch=false){
+		if(!$this->validateSendConfig()) return false;
+		if($this->is_file_ex('Mail.php')){
+			$mail = $this->getPear('Mail');
+		}else{
+			$this->showError('PEAR::Mailがインストールされていません');
+			return false;
+		}
+		if($this->is_file_ex("Mail/mime.php")){
+			$mime = $this->getPear('Mail_mime', "\n");
+		}else{
+			$this->showError('PEAR::mimeがインストールされていません');
+			return false;
+		}
+
+		if(!$this->get('from')){
+			$from = 'nobody@localhost';
+		}else{
+			$from = $this->get('from');
+		}
+		
+		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
+		
+		if($this->get('encode')){
+			$this->target_encode = $this->get('encode');
+		}
+		
+		if($this->get('smtp')){
+			$mail = Mail::factory("smtp", $this->get('smtp'));
+		}else{
+			$mail = Mail::factory("mail");
+		}
+
+		$body = mb_convert_encoding($this->get('body'), $this->target_encode, mb_internal_encoding());
+
+		$mime->setTxtBody($body);
+		
+		if(is_array($this->get('attach'))){
+			foreach($this->get('attach') as $val){
+				$val = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+				$mime->addAttachment($val);	
+			}
+		}else{
+			$val - $this->get('attach');
+			$val = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+			$mime->addAttachment($val);
 		}
 
 		$body = array(
@@ -474,16 +540,17 @@ class Mail_Mailer implements Mailer
 		);
 
 		$body = $mime->get($body);
+		
 		if($this->get('bcc') && count($this->get('bcc')) > 1){
 			$bcc = implode(',', $this->get('bcc'));
-		}else{
+			}elseif($this->get('bcc')){
 			$bcc = $this->get('bcc');
 			$bcc = $bcc[0];
 		}
 
 		if($this->get('cc') && count($this->get('cc')) > 1){
 			$cc = implode(',', $this->get('cc'));
-		}else{
+		}elseif($this->get('cc')){
 			$cc = $this->get('cc');
 			$cc = $cc[0];
 		}
@@ -493,10 +560,15 @@ class Mail_Mailer implements Mailer
 			"From" => $from,
 			"Bcc" => $bcc,
 			"Cc" => $cc,
-		  "Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode, $this->source_encode))
+		  "Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode), $this->target_encode, 'B')
 		);
 
 		$header = $mime->headers($header);
+		
+		if($fetch === true){
+			$confirm = "差出人 : {$from}<br>送信先 : {$this->get('mailto')}<br>BCC : {$bcc}<br> CC : {$cc}<br><br>件名 : {$subject}<br />{$this->get('body')}";
+			return $confirm;
+		}
 
 		$ret = $mail->send($this->get('mailto'), $header, $body);
 
@@ -531,6 +603,7 @@ class Mail_Mailer implements Mailer
 		'body',
 		'filename',
 		'file',
+		'smtp',
 	);
 	
 	/**
