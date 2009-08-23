@@ -13,10 +13,8 @@ $smtp = array(
 	'username' => "",
 	'password' => "",
 );
+$mail->set('smtp', $smtp);
 */
-$smtp = null;
-
-$file = null;
 
 //Smartyにセットする情報を設定
 //BODYキー : $config->set('body', 'テスト')に値を空にすると自動的にSmarty経由で処理させるようになります
@@ -33,7 +31,7 @@ $vars = array(
 	);
 $mail->set('vars', $vars);
 $mail->set('mailto', '');
-$mail->set('subject', '件名');
+$mail->set('subject', 'お試し');
 
 //CCを送る場合
 //$mail->set('cc', 'cc_example@example.com');
@@ -45,17 +43,27 @@ $mail->set('subject', '件名');
 //$mail->set('bcc', 'bcc_example2@example.com');
 
 //CCを送る場合 Part2
-$mail->addCc('');
+$mail->addCc('cc1@cc1.example.com');
+$mail->addCc('cc2@cc1.example.com');
 
 //BCCを送る場合 Part2
-$mail->addBcc('');
+$mail->addBcc('bcc1@bcc1.example.com');
+$mail->addBcc('bcc1@bcc1.example.com');
+
+$mail->addAttach(dirname(__FILE__) . '/sunrise.jpg');
+$mail->addAttach(dirname(__FILE__) . '/日本語.zip');
 
 $mail->empty_body_warning = true; //空の本文だとエラーを返すようにする 元からtrue
 
-//$r = $mail->send($smtp);
+//そのまま送信(Smartyテンプレート経由)
+//$r = $mail->send();
+//送信内容の確認
+//echo nl2br($mail->send(true));
+//使える機能の確認(phpinfoに該当)
+//$mail->mailerinfo();
 
-$mail->set('body', 'テスト');
-
+//通常送信
+//$mail->set('body', 'テスト');
 //$r = $mail->send();
 
 //入れた値を配列として取得する
