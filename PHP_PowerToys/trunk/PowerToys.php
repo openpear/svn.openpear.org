@@ -1,7 +1,7 @@
 <?php
 /**
- * PHP_PowerToys 0.2.0
- * 2009/8/20
+ * PHP_PowerToys 0.2.5
+ * 2009/8/25
  *
  */
 class PHP_PowerToys {
@@ -431,6 +431,36 @@ class PHP_PowerToys {
 			$ini[preg_replace('/( |	)*=( |	)*/', '', $name)] = preg_replace('/( |	)*=( |	)*/', '', $value); 
 		}
 		return $ini;
+	}
+	
+	/**
+	 * ファイルを16進数で表示します(嗚呼、コンピュータって感じです)
+	 *
+	 * @param string $str
+	 */
+	function hexFromFile($str, $format=false){
+		if(!PHP_Powertoys::is_file_ex($str)) return false;
+		$str = file_get_contents($str);		
+		for($i = 0, $n = strlen($str) ; $i <= $n ; $i++){
+			$hex[] = strtoupper(dechex(ord($str[$i])));
+		}
+		$hex = implode(' ', $hex);
+		return $hex;
+	}
+	
+	/**
+	 * ファイルを2進数で表示します(嗚呼、よりコンピュータって感じです)
+	 *
+	 * @param string $str
+	 */
+	function binFromFile($str, $format=false){
+		if(!PHP_Powertoys::is_file_ex($str)) return false;
+		$str = file_get_contents($str);		
+		for($i = 0, $n = strlen($str) ; $i <= $n ; $i++){
+			$bin[] = decbin(ord($str[$i]));
+		}
+		$bin = implode(' ', $bin);
+		return $bin;
 	}
 }
 ?>
