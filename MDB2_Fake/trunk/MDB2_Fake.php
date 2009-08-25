@@ -25,14 +25,14 @@ class MDB2_Fake{
  * @author    Ike Tohru <ike.tohru@gmail.com>
  */
 interface IMDB{
-	public function __init__($dsn);    //
-	public function open();            //データーベース接続を開く
-	public function close();           //データーベース接続を閉じる
-	public function free_connection(); //データーベース接続の破棄
-	public function query($query);     //sqlの実行
-	public function begin();           //トランザクション開始
-	public function rollback();        //ロールバック
-	public function commit();          //コミット
+	public function __init__($dsn);     //
+	public function open();             //データーベース接続を開く
+	public function close();            //データーベース接続を閉じる
+	public function free_connection();  //データーベース接続の破棄
+	public function query($query);      //sqlの実行
+	public function beginTransaction(); //トランザクション開始
+	public function rollback();         //ロールバック
+	public function commit();           //コミット
 }
 
 /**
@@ -338,7 +338,7 @@ class DataBaseManager extends AbstractMDB implements IMDB{
 	 *                 False トランザクション開始失敗
 	 * @access public
 	 */
-	final public function begin(){
+	final public function beginTransaction(){
 		
 		$db_connection = $this->get_db_connection();
 		if(!$db_connection){
