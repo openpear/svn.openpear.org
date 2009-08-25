@@ -72,7 +72,7 @@ class Mail_Mailer implements Mailer
 		//修復版
 		$include = split(':|;', ini_get('include_path'));
 		foreach($include as $inc){
-                        if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
+			if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
 			if(is_file($inc . '/' . $file_path)){
 				return true;
 			}
@@ -241,15 +241,14 @@ class Mail_Mailer implements Mailer
 	/**
 	 *メールを受信する
 	 * 
-	 * @param Boolean $smarty Trueの場合はSmarty準拠の配列で返す
 	 * @access public
 	 * @return array
 	 */
-	public function getMail($smarty=false){
+	public function getMail(){
+		if($this->validdateGetConfig() === false) return false;
 		if($this->get('encode')){
 			$this->target_encode = $this->get('encode'); 
 		}
-		if($this->validdateGetConfig() === false) return false;
 		if($this->is_file_ex('Net/POP3.php')){
 			$pop3 = $this->getPear('Net_POP3');
 		}else{
@@ -274,7 +273,7 @@ class Mail_Mailer implements Mailer
 			if($this->get('search') && !preg_match($this->get('search'), $mail[$i]['subject'])){
 				unset($mail[$i]);
 			}
-			if($smarty === false){
+			if($this->get('smarty') === false){
 				$mail = $this->arrayToObject($mail);
 			}
 			if($this->get('delete') === true){
@@ -285,6 +284,25 @@ class Mail_Mailer implements Mailer
 		//不要なオブジェクトは破棄する
 		unset($pop3);
 		return $mail;
+	}
+	
+	/**
+	 * メール配列を擬似OR/M風に改造する
+	 *
+	 * @param Array $mail
+	 * @return Object
+	 */
+	private function arrayToObject($mail){
+		foreach($mail as $key => $val){
+			foreach($val as $k => $v){
+				if(in_array($k, $this->keys))
+				$this->set($k, $v);
+			}
+			$mail_obj[$key] = clone $this;
+		}
+		//不要になった配列は破棄する
+		unset($mail);
+		return $mail_obj;
 	}
 	
 	/**
@@ -309,25 +327,38 @@ class Mail_Mailer implements Mailer
 		}
 		$pop3->disconnect();
 		unset($pop3);
-	}
+	}	
 	
 	/**
-	 * メール配列を擬似OR/M風に改造する
-	 *
-	 * @param Array $mail
-	 * @return Object
-	 */
-	private function arrayToObject($mail){
-		foreach($mail as $key => $val){
-			foreach($val as $k => $v){
-				if(in_array($k, $this->keys))
-				$this->set($k, $v);
+	 * Smartyを初期化してSmartyオブジェクトを返す
+	 * 
+	 * @access public
+	 * @return 成功 object 失敗 false
+	 */		
+	private function initSmarty(){
+		if($this->is_file_ex('Smarty/Smarty.class.php')){
+			require_once('Smarty/Smarty.class.php');
+			$smarty = new Smarty();
+			$dirs = array(
+				dirname(__FILE__) . '/templates',
+				'templates_c',
+				'configs',
+				'cache',
+			);
+			foreach($dirs as $dir){
+				if(!is_dir($dir)){
+					mkdir($dir);
+					chmod($dir, 0777);
+				}
 			}
-			$mail_obj[$key] = clone $this;
+			$smarty->template_dir = dirname(__FILE__) . '/templates/';
+			$smarty->compile_dir  = 'templates_c/';
+			$smarty->config_dir   = 'configs/';
+			$smarty->cache_dir    = 'cache/';
+			return $smarty;
+		}else{
+			return false;
 		}
-		//不要になった配列は破棄する
-		unset($mail);
-		return $mail_obj;
 	}
 	
 	/**
@@ -397,6 +428,19 @@ class Mail_Mailer implements Mailer
 					return false;
 				}
 			}
+			
+			if($this->is_file_ex('Mail.php')){
+				$mail = $this->getPear('Mail');
+			}else{
+				$this->showError('PEAR::Mailがインストールされていません');
+				return false;
+			}
+			if($this->is_file_ex("Mail/mime.php")){
+				$mime = $this->getPear('Mail_mime', "\n");
+			}else{
+				$this->showError('PEAR::mimeがインストールされていません');
+				return false;
+			}
 		}
 		
 		$this->set('body', $body);
@@ -404,34 +448,86 @@ class Mail_Mailer implements Mailer
 	}
 
 	/**
-	 * Smartyを初期化してSmartyオブジェクトを返す
+	 *メールを送信する
 	 * 
 	 * @access public
-	 * @return 成功 object 失敗 false
-	 */		
-	private function initSmarty(){
-		if($this->is_file_ex('Smarty/Smarty.class.php')){
-			require_once('Smarty/Smarty.class.php');
-			$smarty = new Smarty();
-			$dirs = array(
-				dirname(__FILE__) . '/templates',
-				'templates_c',
-				'configs',
-				'cache',
-			);
-			foreach($dirs as $dir){
-				if(!is_dir($dir)){
-					mkdir($dir);
-					chmod($dir, 0777);
-				}
-			}
-			$smarty->template_dir = dirname(__FILE__) . '/templates/';
-			$smarty->compile_dir  = 'templates_c/';
-			$smarty->config_dir   = 'configs/';
-			$smarty->cache_dir    = 'cache/';
-			return $smarty;
+	 * @return array
+	 */
+	public function send(){
+		if(!$this->validateSendConfig()) return false;
+		if(!$this->get('from')){
+			$from = 'nobody@localhost';
 		}else{
-			return false;
+			$from = $this->get('from');
+		}
+		
+		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
+		
+		if($this->get('encode')){
+			$this->target_encode = $this->get('encode');
+		}
+		
+		if($this->get('smtp')){
+			$mail = Mail::factory("smtp", $this->get('smtp'));
+		}else{
+			$mail = Mail::factory("mail");
+		}
+
+		$body = mb_convert_encoding($this->get('body'), $this->target_encode, mb_internal_encoding());
+
+		$mime->setTxtBody($body);
+		
+		if(is_array($this->get('attach'))){
+			foreach($this->get('attach') as $val){
+				$val = strpos(PHP_OS, 'WIN') ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+				$mime->addAttachment($val);	
+			}
+		}else{
+			$val - $this->get('attach');
+			$val = strpos(PHP_OS, 'WIN') ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+			$mime->addAttachment($val);
+		}
+
+		$body = array(
+		  "head_charset" => $this->target_encode,
+		  "text_charset" => $this->target_encode
+		);
+
+		$body = $mime->get($body);
+		
+		if($this->get('bcc') && count($this->get('bcc')) > 1){
+			$bcc = implode(',', $this->get('bcc'));
+			}elseif($this->get('bcc')){
+			$bcc = $this->get('bcc');
+			$bcc = $bcc[0];
+		}
+
+		if($this->get('cc') && count($this->get('cc')) > 1){
+			$cc = implode(',', $this->get('cc'));
+		}elseif($this->get('cc')){
+			$cc = $this->get('cc');
+			$cc = $cc[0];
+		}
+
+		$header = array(
+			"To" => $this->get('mailto'),
+			"From" => $from,
+			"Bcc" => $bcc,
+			"Cc" => $cc,
+		  	"Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode), $this->target_encode, 'B')
+		);
+
+		$header = $mime->headers($header);
+		
+		if($this->get('fetch') === true){
+			$confirm = "差出人 : {$from}<br>送信先 : {$this->get('mailto')}<br>BCC : {$bcc}<br> CC : {$cc}<br><br>件名 : {$subject}<br />{$this->get('body')}";
+			return $confirm;
+		}
+
+		$ret = $mail->send($this->get('mailto'), $header, $body);
+
+		if(PEAR::isError($ret)){
+			return $ret->getMessage();
 		}
 	}
 	
@@ -479,104 +575,6 @@ class Mail_Mailer implements Mailer
 		exit;
 	}
 	
-	/**
-	 *メールを送信する
-	 * 
-	 * @param  Boolean $fetch
-	 * @access public
-	 * @return array
-	 */
-	public function send($fetch=false){
-		if(!$this->validateSendConfig()) return false;
-		if($this->is_file_ex('Mail.php')){
-			$mail = $this->getPear('Mail');
-		}else{
-			$this->showError('PEAR::Mailがインストールされていません');
-			return false;
-		}
-		if($this->is_file_ex("Mail/mime.php")){
-			$mime = $this->getPear('Mail_mime', "\n");
-		}else{
-			$this->showError('PEAR::mimeがインストールされていません');
-			return false;
-		}
-
-		if(!$this->get('from')){
-			$from = 'nobody@localhost';
-		}else{
-			$from = $this->get('from');
-		}
-		
-		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
-		
-		if($this->get('encode')){
-			$this->target_encode = $this->get('encode');
-		}
-		
-		if($this->get('smtp')){
-			$mail = Mail::factory("smtp", $this->get('smtp'));
-		}else{
-			$mail = Mail::factory("mail");
-		}
-
-		$body = mb_convert_encoding($this->get('body'), $this->target_encode, mb_internal_encoding());
-
-		$mime->setTxtBody($body);
-		
-		if(is_array($this->get('attach'))){
-			foreach($this->get('attach') as $val){
-				$val = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
-				$mime->addAttachment($val);	
-			}
-		}else{
-			$val - $this->get('attach');
-			$val = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
-			$mime->addAttachment($val);
-		}
-
-		$body = array(
-		  "head_charset" => $this->target_encode,
-		  "text_charset" => $this->target_encode
-		);
-
-		$body = $mime->get($body);
-		
-		if($this->get('bcc') && count($this->get('bcc')) > 1){
-			$bcc = implode(',', $this->get('bcc'));
-			}elseif($this->get('bcc')){
-			$bcc = $this->get('bcc');
-			$bcc = $bcc[0];
-		}
-
-		if($this->get('cc') && count($this->get('cc')) > 1){
-			$cc = implode(',', $this->get('cc'));
-		}elseif($this->get('cc')){
-			$cc = $this->get('cc');
-			$cc = $cc[0];
-		}
-
-		$header = array(
-			"To" => $this->get('mailto'),
-			"From" => $from,
-			"Bcc" => $bcc,
-			"Cc" => $cc,
-		  "Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode), $this->target_encode, 'B')
-		);
-
-		$header = $mime->headers($header);
-		
-		if($fetch === true){
-			$confirm = "差出人 : {$from}<br>送信先 : {$this->get('mailto')}<br>BCC : {$bcc}<br> CC : {$cc}<br><br>件名 : {$subject}<br />{$this->get('body')}";
-			return $confirm;
-		}
-
-		$ret = $mail->send($this->get('mailto'), $header, $body);
-
-		if(PEAR::isError($ret)){
-			return $ret->getMessage();
-		}
-	}
-	
 	//設定と受信で使うキー配列
 	private $keys = array(
 		'id',
@@ -604,6 +602,8 @@ class Mail_Mailer implements Mailer
 		'filename',
 		'file',
 		'smtp',
+		'fetch',
+		'smarty',
 	);
 	
 	/**
