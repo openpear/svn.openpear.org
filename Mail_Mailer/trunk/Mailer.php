@@ -4,13 +4,13 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/08/23
+ *  @version    Mailer.php v 2.0.0 2009/08/26
  * 
  */
 
 interface Mailer {
 	public function getMail();
-	public function send($smtp=null);
+	public function send();
 	public function set($key, $val=null);
 	public function get($key);
 }
@@ -376,21 +376,17 @@ class Mail_Mailer implements Mailer
 				$this->showError('値がありません');
 				return false;
 			}
-			$template = $this->get('template');
-			$vars = $this->get('vars');
 			$smarty = $this->initSmarty();
 			if($smarty === false){
 				$this->showError('Smartyがインストールされていません');
 				return false;
 			}
-			foreach($vars as $name => $value){
+			foreach($this->get('vars') as $name => $value){
 				$smarty->assign($name, $value);
 			}
-			$body = $smarty->fetch($template);
-		}else{
-			$body = $this->get('body');
+			$this->set('body', $smarty->fetch($this->get('template')));
 		}
-		if(!$body && $this->empty_body_warning === true){
+		if(!$this->get('body') && $this->empty_body_warning === true){
 			$this->showNotice('本文が空です');
 			return false;
 		}
@@ -400,13 +396,11 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		
-		$attach = $this->get('attach');
-		
-		if(!is_null($attach)){
-			if(is_array($attach)){
-				foreach($attach as $val){
+		if(!is_null($this->get('attach'))){
+			if(is_array($this->get('attach'))){
+				foreach($this->get('attach') as $val){
 					//ファイルが存在するか調べる
-					$val = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+					$val = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
 					if(!is_file($val)){
 						$this->showError(sprintf("File Not Found[%s]", $val));
 						return false;
@@ -418,7 +412,7 @@ class Mail_Mailer implements Mailer
 					}
 				}
 			}else{
-				$attach = preg_match('/WIN32|WINNT/', PHP_OS) ? mb_convert_encoding($attach, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($attach, 'EUC', mb_internal_encoding()) ;
+				$attach = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($this->get('attach'), 'SJIS', mb_internal_encoding()) : mb_convert_encoding($this->get('attach'), 'EUC', mb_internal_encoding()) ;
 				if(!is_file($attach)){
 					$this->showError(sprintf("File Not Found[%s]", $attach));
 					return false;
@@ -428,22 +422,7 @@ class Mail_Mailer implements Mailer
 					return false;
 				}
 			}
-			
-			if($this->is_file_ex('Mail.php')){
-				$mail = $this->getPear('Mail');
-			}else{
-				$this->showError('PEAR::Mailがインストールされていません');
-				return false;
-			}
-			if($this->is_file_ex("Mail/mime.php")){
-				$mime = $this->getPear('Mail_mime', "\n");
-			}else{
-				$this->showError('PEAR::mimeがインストールされていません');
-				return false;
-			}
 		}
-		
-		$this->set('body', $body);
 		return true;
 	}
 
@@ -455,6 +434,20 @@ class Mail_Mailer implements Mailer
 	 */
 	public function send(){
 		if(!$this->validateSendConfig()) return false;
+		
+		if($this->is_file_ex('Mail.php')){
+			$mail = $this->getPear('Mail');
+		}else{
+			$this->showError('PEAR::Mailがインストールされていません');
+			return false;
+		}
+		if($this->is_file_ex("Mail/mime.php")){
+			$mime = $this->getPear('Mail_mime', "\n");
+		}else{
+			$this->showError('PEAR::mimeがインストールされていません');
+			return false;
+		}
+		
 		if(!$this->get('from')){
 			$from = 'nobody@localhost';
 		}else{
@@ -473,18 +466,18 @@ class Mail_Mailer implements Mailer
 			$mail = Mail::factory("mail");
 		}
 
-		$body = mb_convert_encoding($this->get('body'), $this->target_encode, mb_internal_encoding());
+		$this->set('body', mb_convert_encoding($this->get('body'), $this->target_encode, mb_internal_encoding()));
 
-		$mime->setTxtBody($body);
+		$mime->setTxtBody($this->get('body'));
 		
 		if(is_array($this->get('attach'))){
 			foreach($this->get('attach') as $val){
-				$val = strpos(PHP_OS, 'WIN') ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
-				$mime->addAttachment($val);	
+				$val = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+				$mime->addAttachment($val);
 			}
 		}else{
 			$val - $this->get('attach');
-			$val = strpos(PHP_OS, 'WIN') ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+			$val = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
 			$mime->addAttachment($val);
 		}
 
@@ -493,7 +486,7 @@ class Mail_Mailer implements Mailer
 		  "text_charset" => $this->target_encode
 		);
 
-		$body = $mime->get($body);
+		$this->set('body', mb_convert_encoding($mime->get($body), $this->target_encode, $this->source_encode));
 		
 		if($this->get('bcc') && count($this->get('bcc')) > 1){
 			$bcc = implode(',', $this->get('bcc'));
@@ -517,20 +510,24 @@ class Mail_Mailer implements Mailer
 		  	"Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode), $this->target_encode, 'B')
 		);
 
-		$header = $mime->headers($header);
+		$this->set('headers', $mime->headers($header));
 		
 		if($this->get('fetch') === true){
-			$confirm = "差出人 : {$from}<br>送信先 : {$this->get('mailto')}<br>BCC : {$bcc}<br> CC : {$cc}<br><br>件名 : {$subject}<br />{$this->get('body')}";
+			$confirm = "差出人 : {$from}<br>送信先 : {$this->get('mailto')}<br>BCC : {$bcc}<br> CC : {$cc}<br><br>件名 : {$this->get('subject')}<br />{$this->get('body')}";
 			return $confirm;
 		}
 
-		$ret = $mail->send($this->get('mailto'), $header, $body);
+		$ret = $mail->send($this->get('mailto'), $header, $this->get('body'));
 
 		if(PEAR::isError($ret)){
 			return $ret->getMessage();
 		}
 	}
 	
+	/**
+	 * phpinfoのMailerクラス版です
+	 *
+	 */
 	public function mailerinfo(){
 		
 		if($this->is_file_ex('Net/POP3.php') && $this->is_file_ex('Mail/mimeDecode.php')){
@@ -701,7 +698,7 @@ class Mail_Mailer implements Mailer
 	public function get($key){
 		$r = $this->keyCheck($key);
 		if($r === false){
-			$this->showError('無効なキーです');
+			$this->showError("「{$key}」は無効なキーです");
 			return false;
 		}
 		return $this->keys[$key];
