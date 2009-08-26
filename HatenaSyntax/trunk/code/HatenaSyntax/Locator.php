@@ -22,7 +22,7 @@ class HatenaSyntax_Locator
         return $obj ? $obj : $obj = new self;
     }
     
-    function __get($name)
+    public function __get($name)
     {
         return isset($this->objects[$name]) ? 
             $this->objects[$name] : 

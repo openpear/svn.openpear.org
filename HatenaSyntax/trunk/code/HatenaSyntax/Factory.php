@@ -15,7 +15,7 @@ class HatenaSyntax_Factory
         $this->locator = $locator;
     }
     
-    protected function __get($name)
+    public function __get($name)
     {
         return strtolower($name) === 'locator' ? $this->locator : $this->locator->$name;
     }
