@@ -19,6 +19,7 @@ $mail->set('smtp', $smtp);
 //Smartyにセットする情報を設定
 //BODYキー : $config->set('body', 'テスト')に値を空にすると自動的にSmarty経由で処理させるようになります
 $mail->set('template', 'mail_template.tpl');
+
 //Smarty変数の設定
 $vars = array(
 		'name' => 'テスト',
@@ -30,7 +31,7 @@ $vars = array(
 		)
 	);
 $mail->set('vars', $vars);
-$mail->set('mailto', '');
+$mail->set('mailto', 'example@example.com');
 $mail->set('subject', 'お試し');
 
 //CCを送る場合
@@ -55,10 +56,14 @@ $mail->addAttach(dirname(__FILE__) . '/日本語.zip');
 
 $mail->empty_body_warning = true; //空の本文だとエラーを返すようにする 元からtrue
 
+//エンコード変える場合
+$mail->set('encode', mb_internal_encoding());
+
 //そのまま送信(Smartyテンプレート経由)
 //$r = $mail->send();
 //送信内容の確認
-//echo nl2br($mail->send(true));
+$mail->set('fetch', true);
+echo nl2br($mail->send());
 //使える機能の確認(phpinfoに該当)
 //$mail->mailerinfo();
 
