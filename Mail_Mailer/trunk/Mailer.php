@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/08/26
+ *  @version    Mailer.php v 2.0.0 2009/08/27
  * 
  */
 
@@ -400,7 +400,7 @@ class Mail_Mailer implements Mailer
 			if(is_array($this->get('attach'))){
 				foreach($this->get('attach') as $val){
 					//ファイルが存在するか調べる
-					$val = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+					$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
 					if(!is_file($val)){
 						$this->showError(sprintf("File Not Found[%s]", $val));
 						return false;
@@ -412,7 +412,7 @@ class Mail_Mailer implements Mailer
 					}
 				}
 			}else{
-				$attach = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($this->get('attach'), 'SJIS', mb_internal_encoding()) : mb_convert_encoding($this->get('attach'), 'EUC', mb_internal_encoding()) ;
+				$attach = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($this->get('attach'), 'SJIS', mb_internal_encoding()) : mb_convert_encoding($this->get('attach'), 'EUC', mb_internal_encoding()) ;
 				if(!is_file($attach)){
 					$this->showError(sprintf("File Not Found[%s]", $attach));
 					return false;
@@ -472,12 +472,12 @@ class Mail_Mailer implements Mailer
 		
 		if(is_array($this->get('attach'))){
 			foreach($this->get('attach') as $val){
-				$val = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+				$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
 				$mime->addAttachment($val);
 			}
 		}else{
 			$val - $this->get('attach');
-			$val = strpos(PHP_OS, 'WIN') === 0 ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+			$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
 			$mime->addAttachment($val);
 		}
 
