@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/08/27
+ *  @version    Mailer.php v 2.0.0 2009/08/31
  * 
  */
 
@@ -26,6 +26,11 @@ class Mail_Mailer implements Mailer
 	
 	//元のエンコードを指定する 標準はmb_convert_encoding準拠のauto
 	private $source_encode = 'auto';
+	
+		public function __construct(){
+			$this->set('delete', false);
+			$this->set('smarty', false);
+		}
 	
         /**
          *エラーメッセージ処理の統一
@@ -145,10 +150,11 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		$structure = $mime->decode($params);
-
 		//送信者のメールアドレスを抽出 
-		$from = $structure->headers['from']; 
-		$from = addslashes($from); 
+		$from = $structure->headers['from'];
+		$headers = $structure->headers;
+		/*
+		$from = addslashes($from);
 		$from = str_replace('"','',$from); 
 		$name = stripslashes($from);
 
@@ -166,9 +172,20 @@ class Mail_Mailer implements Mailer
 		$headers['from'] = $from;
 		//差出人上書き
 		$headers['name'] = $name;
+		*/
+		
+		//ヘッダー処理部分の見直し
+		if(strpos($from, ' ') !== false && strpos($from, '" ') !== false){
+			list($name, $from) = explode(' ', $from);
+			$headers['name'] = str_replace('"', '', $name);
+			$headers['from'] = preg_replace('/<|>/', '', $from); 
+		}else{
+			$headers['from'] = preg_replace('/<|>/', '', $from);
+		}
+		$subject = $structure->headers['subject'];
 		
 		switch(strtolower($structure->ctype_primary)){
-			case "text": // シングルパート(テキストのみ)  
+			case 'text': // シングルパート(テキストのみ)  
 			//文字コードを変換する
 			//charsetから文字コードの検出を試みる
 			if(preg_match('/text\/plain/', $headers['content-type'])){
@@ -181,10 +198,10 @@ class Mail_Mailer implements Mailer
 			$body = mb_convert_encoding($body, $this->target_encode, $this->source_encode);
 			$subject = mb_convert_encoding($subject, $this->target_encode, $this->source_encode);
 			break; 
-			case "multipart":  // マルチパート 
+			case 'multipart':  // マルチパート 
 			foreach($structure->parts as $part){ 
 				switch(strtolower($part->ctype_primary)){ 
-			  		case "text": // テキスト / HTMLメール
+			  		case 'text': // テキスト / HTMLメール
 					//内部文字コードに変換する
 					//仮にHTMLメールだったらcharsetを確かめる
 					if(preg_match('/multipart\/alternative/', $headers['content-type'])){
@@ -206,7 +223,8 @@ class Mail_Mailer implements Mailer
 			} 
 			break; 
 			default: 
-			$body = ""; 
+			$body = '';
+			break;
 		}	
 		return array($headers, $subject, $body, $filename, $file);
 	}
@@ -245,7 +263,7 @@ class Mail_Mailer implements Mailer
 	 * @return array
 	 */
 	public function getMail(){
-		if($this->validdateGetConfig() === false) return false;
+		if($this->validateGetConfig() === false) return false;
 		if($this->get('encode')){
 			$this->target_encode = $this->get('encode'); 
 		}
@@ -613,7 +631,7 @@ class Mail_Mailer implements Mailer
 	public function set($key, $val=null){
 		$r = $this->keyCheck($key);
 		if($r === false){
-			$this->showError('無効なキーです');
+			$this->showError("「{$key}」は無効なキーです");
 			return false;
 		}
 		if(in_array($key, array('cc', 'bcc'))){
