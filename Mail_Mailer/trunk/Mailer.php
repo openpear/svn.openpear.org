@@ -67,9 +67,8 @@ class Mail_Mailer implements Mailer
 		$include = explode(';', ini_get('include_path'));
 		array_shift($include);
 		foreach($include as $inc){
-			if(is_file($inc . $file_path)){
-				return true;
-			}
+			if(is_file($inc . '/' . $file_path)) return true;
+			if(is_file($inc . $file_path)) return true;
 		}
 		if(is_file($file_path)){
 			return true;
