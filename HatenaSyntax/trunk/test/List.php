@@ -7,13 +7,15 @@ $p = HatenaSyntax_Locator::it()->list;
 //--
 
 $context = PEG::context('-h');
-list(list($type, $body)) = $result = $p->parse($context)->getData();
-$lime->is($type, '-');
-$lime->is($body, array('h'));
+list($item) = $p->parse($context)->getData()->getChildren();
+$data = $item->getValue();
+$lime->is($data[0], '-');
+$lime->is($data[1], array('h'));
 
 //--
 
-$context = PEG::context("-a\n+-b");
-list(, list(list($type, $body))) = $p->parse($context)->getData();
-$lime->is($type, '-');
-$lime->is($body, array('b'));
+$context = PEG::context("-a\n-+b");
+list($a) = $p->parse($context)->getData()->getChildren();
+$lime->is($a->getValue(), array('-', array('a')));
+list($b) = $a->getChildren();
+$lime->is($b->getValue(), array('+', array('b')));

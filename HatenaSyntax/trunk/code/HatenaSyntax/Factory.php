@@ -24,7 +24,7 @@ class HatenaSyntax_Factory
     {
         $locator = $this->locator;
         
-        $item = PEG::choice($locator->link, $locator->footnote, $locator->lineChar); 
+        $item = PEG::choice($locator->bracket, $locator->footnote, $locator->lineChar); 
         $parser = is_null($cond_parser) ? $item : PEG::secondSeq(PEG::lookaheadNot($cond_parser), $item);
                                        
         return $parser;

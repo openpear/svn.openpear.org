@@ -2,7 +2,7 @@
 include_once dirname(__FILE__) . '/t/t.php';
 
 $lime = new lime_test;
-$link = HatenaSyntax_Locator::it()->link;
+$link = HatenaSyntax_Locator::it()->bracket;
 
 //--
 

@@ -48,7 +48,7 @@ class HatenaSyntax_Locator
     {
         $close = '))';
         $elt = PEG::andalso(PEG::not($close), 
-                            PEG::choice($this->link, $this->lineChar));
+                            PEG::choice($this->bracket, $this->lineChar));
                             
         $parser = PEG::pack('((', 
                             HatenaSyntax_Util::segment(PEG::many1($elt)), 
@@ -113,9 +113,22 @@ class HatenaSyntax_Locator
         return $parser;
     }
     
-    protected function createLink()
+    protected function createTableOfContents()
     {
-        return PEG::pack('[', PEG::choice($this->nullLink, $this->keywordLink, $this->imageLink, $this->httpLink), ']');
+        $parser = PEG::seq(PEG::token('[:contents]'), $this->endOfLine);
+        
+        return $this->factory->createNodeCreater('tableofcontents', $parser);
+    }
+    
+    protected function createInlineTableOfContents()
+    {
+        $parser = PEG::token(':contents');
+        return $this->factory->createNodeCreater('tableofcontents', $parser);
+    }
+    
+    protected function createBracket()
+    {
+        return PEG::pack('[', PEG::choice($this->inlineTableOfContents, $this->nullLink, $this->keywordLink, $this->imageLink, $this->httpLink), ']');
     }
     
     protected function createDefinition()
@@ -262,6 +275,7 @@ class HatenaSyntax_Locator
                                                $this->list,
                                                $this->pre,
                                                $this->superpre,
+                                               $this->tableOfContents,
                                                $this->emptyParagraph,
                                                $this->paragraph));
     }

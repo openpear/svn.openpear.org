@@ -8,7 +8,7 @@
 
 class HatenaSyntax_Renderer
 {
-    protected $config, $footnote, $fncount, $padding, $encoding;
+    protected $config, $footnote, $fncount, $root, $treeRenderer, $headerCount;
     
     function __construct(Array $config = array())
     {
@@ -21,15 +21,36 @@ class HatenaSyntax_Renderer
             'keywordlinkhandler' => array($this, 'keywordLinkHandler'),
             'superprehandler' => array($this, 'superPreHandler')
         );
+        
+        $this->treeRenderer = new HatenaSyntax_TreeRenderer(array($this, 'listItemCallback'), array($this, 'isOrderedCallback'));
     }
     
-    function render(HatenaSyntax_Node $node)
+    function listItemCallback(Array $data)
+    {
+        list(, $lineSegment) = $data;
+        return $this->renderLineSegment($lineSegment);
+    }
+    
+    function isOrderedCallback(HatenaSyntax_Tree_INode $node)
+    {
+        $children = $node->getChildren();
+        foreach ($children as $child) {
+            if ($child->hasValue()) {
+                $buf = $child->getValue();
+                return $buf[0] === '+';
+            }
+        }
+        return false;
+    }
+    
+    function render(HatenaSyntax_Node $rootnode)
     {
         $this->footnote = '';
         $this->fncount = 0;
-        $this->padding = 0;
+        $this->root = $rootnode;
+        $this->headerCount = 0;
 
-        $ret = $this->renderNode($node);
+        $ret = $this->renderNode($rootnode);
         $ret = '<div class="' . $this->config['sectionclass'] . '">' . PHP_EOL . $ret . PHP_EOL . '</div>' . PHP_EOL;
         if ($this->fncount > 0) {
             $ret .= PHP_EOL . PHP_EOL . '<div class="' . $this->config['footnoteclass'] . '">' . 
@@ -50,26 +71,30 @@ class HatenaSyntax_Renderer
         return './' . $path;
     }
     
+    protected function renderTableOfContents()
+    {
+        $tocRenderer = new HatenaSyntax_TOCRenderer();
+        return $tocRenderer->render($this->root, $this->config['id']);
+    }
+    
     protected function renderNode(HatenaSyntax_Node $node)
     {
-        $this->padding++;
         $ret = $this->{'render' . $node->getType()}($node->getData());
-        $this->padding--;
         return $ret;
     }
     
     protected function renderRoot(Array $arr)
     {
-        $this->padding--;
         foreach ($arr as &$elt) $elt = $this->renderNode($elt);
-        $this->padding++;
         return join(PHP_EOL, $arr);
     }
     
     protected function renderHeader(Array $data)
     {
-        $level = $data['level'] + $this->config['headerlevel'];        
-        return $this->line("<h{$level}>" . $this->renderLineSegment($data['body']) . "</h{$level}>");
+        $level = $data['level'] + $this->config['headerlevel'];   
+        $name = $this->config['id'] . '_header_' . $this->headerCount++;
+        $anchor = '<a name="' . $name . '" id="' . $name . '"></a>';
+        return "<h{$level}>" . $anchor . $this->renderLineSegment($data['body']) . "</h{$level}>";
     }
     
     protected function renderLineSegment(Array $data)
@@ -91,8 +116,10 @@ class HatenaSyntax_Renderer
             $title = $this->escape($title);
         }
         
-        $this->footnote .= sprintf('  <p><a href="#%s_%d" name="%s_footnote_%d">*%d</a>: %s</p>' . PHP_EOL, $id, $n, $id , $n, $n, $body);
-        return sprintf('(<a href="#%s_footnote_%d" name="%s_%d" title="%s">*%d</a>)', $id, $n, $id, $n, $title, $n);
+        $fnname = sprintf('%s_footnote_%d', $id, $n);
+        $fnlinkname = sprintf('%s_footnotelink_%d', $id, $n);
+        $this->footnote .= sprintf('<p><a href="#%s" name="%s" id="%s">*%d</a>: %s</p>' . PHP_EOL, $fnlinkname, $fnname, $fnname, $n, $body);
+        return sprintf('(<a href="#%s" name="%s" id="%s" title="%s">*%d</a>)', $fnname, $fnlinkname, $fnlinkname, $title, $n);
     }
     
     protected function renderHttpLink(Array $data)
@@ -120,22 +147,22 @@ class HatenaSyntax_Renderer
     protected function renderDefinitionList(Array $data)
     {
         foreach ($data as &$elt) $elt = $this->renderDefinition($elt);
-        return join(PHP_EOL, array($this->line('<dl>'), join(PHP_EOL, $data), $this->line('</dl>')));
+        return join(PHP_EOL, array('<dl>', join(PHP_EOL, $data), '</dl>'));
     }
     
     protected function renderDefinition(Array $data)
     {
         list($dt, $dd) = $data;
         $ret = array();
-        if ($dt) $ret[] = $this->line('<dt>' . $this->renderLineSegment($dt) . '</dt>', 1);
-        $ret[] = $this->line('<dd>' . $this->renderLineSegment($dd) . '</dd>', 1);
+        if ($dt) $ret[] = '<dt>' . $this->renderLineSegment($dt) . '</dt>';
+        $ret[] = '<dd>' . $this->renderLineSegment($dd) . '</dd>';
         return join(PHP_EOL, $ret);
     }
     
     protected function renderPre(Array $data)
     {
         $ret = array();
-        $ret[] = $this->line('<pre>');
+        $ret[] = '<pre>';
         foreach ($data as &$elt) $elt = $this->renderLineSegment($elt);
         $ret[] = join(PHP_EOL, $data) . '</pre>';
         return join(PHP_EOL, $ret);
@@ -152,77 +179,48 @@ class HatenaSyntax_Renderer
     protected function renderTable(Array $data)
     {
         $ret = array();
-        $ret[] = $this->line('<table>');
-        $this->padding++;
+        $ret[] = '<table>';
         foreach ($data as $tr) {
-            $ret[] = $this->line('<tr>');
+            $ret[] = '<tr>';
             foreach ($tr as $td) $ret[] = $this->renderTableCell($td[0], $td[1]);
-            $ret[] = $this->line('</tr>');
+            $ret[] = '</tr>';
         }
-        $this->padding--;
-        $ret[] = $this->line('</table>');
+        $ret[] = '</table>';
         return join(PHP_EOL, $ret);
     }
     
     protected function renderTableCell($header, $segment)
     {
         $tag = $header ? 'th' : 'td'; 
-        $ret = $this->line("<{$tag}>" . $this->renderLineSegment($segment) . "</{$tag}>", 1);
+        $ret = "<{$tag}>" . $this->renderLineSegment($segment) . "</{$tag}>";
         return $ret;
     }
     
     protected function renderBlockQuote(Array $arr)
     {
         $ret = array();
-        $ret[] = $this->line('<blockquote>');
+        $ret[] = '<blockquote>';
         foreach ($arr['body'] as $elt) $ret[] = $this->renderNode($elt);
         if ($arr['url']) $ret[] = $this->line('<cite><a href="' . self::escape($arr['url']) . '">' . self::escape($arr['url']) . '</a></cite>');
-        $ret[] = $this->line('</blockquote>');
+        $ret[] = '</blockquote>';
         return join(PHP_EOL, $ret);
     }
     
     protected function renderParagraph(Array $data)
     {
-        return $this->line('<p>' . $this->renderLineSegment($data) . '</p>');
+        return '<p>' . $this->renderLineSegment($data) . '</p>';
     }
     
     protected function renderEmptyParagraph($data)
     {
-        $ret = array();
-        for ($data--; $data > 0; $data--) $ret[] = $this->line('<br>');
-        return join(PHP_EOL, $ret);
+        return str_repeat('<br/ >' . PHP_EOL, max($data - 1, 0));
     }
     
-    protected function renderList(Array $data)
+    protected function renderList(HatenaSyntax_Tree_Root $root)
     {
-        $this->padding--;
-        $ret = $this->renderListItem($data);
-        $this->padding++;
-        return $ret;
+        return $this->treeRenderer->render($root);
     }
     
-    protected function renderListItem(Array $data)
-    {
-        $this->padding++;
-        if (is_string($data[0])) { // leaf case
-            $result = $this->line('<li>' . $this->renderLineSegment($data[1]) . '</li>');
-        }
-        else {
-            $buf = array();
-            $name = $data[0][0] === '+' ? 'ol' : 'ul';
-            $buf[] = $this->line("<{$name}>");
-            foreach ($data as $elt) $buf[] = $this->renderListItem($elt);
-            $buf[] = $this->line("</{$name}>");
-            $result = join(PHP_EOL, $buf);
-        }
-        $this->padding--;
-        return $result;
-    }
-    
-    protected function line($str = '', $padding = 0)
-    {
-        return str_repeat('  ', max($this->padding + $padding, 0)) . $str;
-    }
     
     protected static function escape($str)
     {
