@@ -12,7 +12,14 @@ include_once dirname(__FILE__) . '/HatenaSyntax/Locator.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Factory.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/NodeCreater.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Renderer.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/TOCRenderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Util.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/TreeRenderer.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Tree.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Tree/INode.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Tree/Node.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Tree/Root.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Tree/Leaf.php';
 
 class HatenaSyntax
 {

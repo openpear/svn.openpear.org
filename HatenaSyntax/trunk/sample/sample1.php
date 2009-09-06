@@ -3,6 +3,7 @@ include_once dirname(__FILE__) . '/../code/HatenaSyntax.php';
 
 
 $str = '*header1
+[:contents]
 
 **header2
 
@@ -65,68 +66,78 @@ echo HatenaSyntax::render($str, array('headerlevel' => 3,                       
                                       'superprehandler' => 'sprehandler'));         // superpre記法の中身を処理するコールバック
 /* 結果
 <div class="section">
-  <h3>header1</h3>
+<h3><a name="hoge_header_0" id="hoge_header_0"></a>header1</h3>
+<div class="toc"><ol>
+<li>
+<a href="#hoge_header_0">header1</a><ol>
+<li>
+<a href="#hoge_header_1">header2</a><ol>
+<li><a href="#hoge_header_2">blockquote header</a></li></ol>
+</li>
+</ol>
+</li>
+</ol>
+</div>
 
-  <h4>header2</h4>
+<h4><a name="hoge_header_1" id="hoge_header_1"></a>header2</h4>
 
-  <dl>
-    <dt>definition term</dt>
-    <dd>definition description</dd>
-    <dd>description2</dd>
-  </dl>
+<dl>
+<dt>definition term</dt>
+<dd>definition description</dd>
+<dd>description2</dd>
+</dl>
 
-  <ul>
-    <li>list1</li>
-    <ol>
-      <li>fuga2</li>
-      <li>hoge3</li>
-      <ul>
-        <li>list4</li>
-        <li>list5</li>
-      </ul>
-    </ol>
-    <li>list6</li>
-  </ul>
+<ul>
+<li>
+list1<ol>
+<li>fuga2</li><li>
+hoge3<ul>
+<li>list4</li><li>list5</li></ul>
+</li>
+</ol>
+</li>
+<li>list6</li></ul>
 
-  <p>paragraph(<a href="#hoge_footnote_1" name="hoge_1" title="footnote">*1</a>)</p>
-  <p><a href="./keywordlink">keywordlink</a></p>
-  <p>[[nulllink]]</p>
 
-  <table>
-    <tr>
-      <th>table header </th>
-      <th>table header2 </th>
-    </tr>
-    <tr>
-      <td>apple         </td>
-      <td>1              </td>
-    </tr>
-    <tr>
-      <td>orange        </td>
-      <td>2              </td>
-    </tr>
-  </table>
+<p>paragraph(<a href="#hoge_footnote_1" name="hoge_footnotelink_1" id="hoge_footnotelink_1" title="footnote">*1</a>)</p>
+<p><a href="./keywordlink">keywordlink</a></p>
+<p>[[nulllink]]</p>
 
-  <pre>
+<table>
+<tr>
+<th>table header </th>
+<th>table header2 </th>
+</tr>
+<tr>
+<td>apple         </td>
+<td>1              </td>
+</tr>
+<tr>
+<td>orange        </td>
+<td>2              </td>
+</tr>
+</table>
+
+<pre>
 hoge
 fuga</pre>
 
-  <p><a href="http://example.com/example.gif"><img src="http://example.com/example.gif" /></a></p>
+<p><a href="http://example.com/example.gif"><img src="http://example.com/example.gif" /></a></p>
 
-  <blockquote>
-    <h5>blockquote header</h5>
-    <p>fuga</p>
-  </blockquote>
+<blockquote>
+<h5><a name="hoge_header_2" id="hoge_header_2"></a>blockquote header</h5>
+<p>fuga</p>
+</blockquote>
 
 <pre class="superpre php">
 &lt;?php
 echo &quot;hogehoge&quot;;</pre>
 
-  <p><a href="http://google.com">http://google.com</a></p>
+<p><a href="http://google.com">http://google.com</a></p>
 </div>
 
 
 <div class="footnote">
-  <p><a href="#hoge_1" name="hoge_footnote_1">*1</a>: footnote</p>
+<p><a href="#hoge_footnotelink_1" name="hoge_footnote_1" id="hoge_footnote_1">*1</a>: footnote</p>
 </div>
 */

@@ -10,7 +10,7 @@ class HatenaSyntax_Util
 {
     static function normalizeList(Array $data)
     {
-        return self::filterLevel(self::lower(self::levels($data), $data));
+        return HatenaSyntax_Tree::make($data);
     }
 
     static function segment(PEG_IParser $p)
@@ -38,47 +38,9 @@ class HatenaSyntax_Util
     static function processListItem(Array $li)
     {
         $ret = array();
-        $ret[] = end($li[0]);
-        $ret[] = count($li[0]) - 1;
-        $ret[] = $li[1];
-        
+        $ret['level'] = count($li[0]) - 1;
+        $ret['value'] = array(end($li[0]), $li[1]);
         
         return $ret;
-    }
-    
-    static protected function filterLevel($struct)
-    {
-        foreach ($struct as &$node) 
-            $node = is_string($node[0]) ? array($node[0], $node[2]) : self::filterLevel($node);
-        return $struct;
-    }
-    
-    static protected function lower(Array $levels, Array $data)
-    {
-        $level = array_pop($levels);
-        
-        for ($i = 0, $ret = array(), $len = count($data); $i < $len; $i++) {
-            if ($data[$i][1] <= $level) {
-                $ret[] = $data[$i];
-            }
-            else {
-                for ($arr = array($data[$i++]); $i < $len && $data[$i][1] > $level; $i++) {
-                    $arr[] = $data[$i];
-                }
-                $ret[] = self::lower($levels, $arr);
-                if ($i < $len) $ret[] = $data[$i];
-            }
-        }
-        
-        return $ret;
-    }
-    
-    static protected function levels(Array $data)
-    {
-        $levels = array();
-        foreach ($data as $li) $levels[$li[1]] = true;
-        $levels = array_keys($levels);
-        rsort($levels, SORT_NUMERIC);
-        return $levels;
     }
 }
