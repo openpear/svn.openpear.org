@@ -1,10 +1,10 @@
-﻿<?php
+<?php
 /**
  *  Mailer.php
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/08/31
+ *  @version    Mailer.php v 2.0.0 2009/09/08
  * 
  */
 
@@ -415,9 +415,10 @@ class Mail_Mailer implements Mailer
 		
 		if(!is_null($this->get('attach'))){
 			if(is_array($this->get('attach'))){
+				if(strpos(PHP_OS, 'WIN') !== false) $win = true;
 				foreach($this->get('attach') as $val){
 					//ファイルが存在するか調べる
-					$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+					$val = $win === true ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
 					if(!is_file($val)){
 						$this->showError(sprintf("File Not Found[%s]", $val));
 						return false;
@@ -442,7 +443,7 @@ class Mail_Mailer implements Mailer
 		}
 		return true;
 	}
-
+	
 	/**
 	 *メールを送信する
 	 * 
@@ -450,8 +451,10 @@ class Mail_Mailer implements Mailer
 	 * @return array
 	 */
 	public function send(){
+		mb_language('ja');
+		//構成情報の検証
 		if(!$this->validateSendConfig()) return false;
-		
+		//必要なライブラリの取り込み
 		if($this->is_file_ex('Mail.php')){
 			$mail = $this->getPear('Mail');
 		}else{
@@ -459,87 +462,102 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		if($this->is_file_ex("Mail/mime.php")){
-			$mime = $this->getPear('Mail_mime', "\n");
+			$mime = $this->getPear('Mail_Mime', "\n");
 		}else{
-			$this->showError('PEAR::mimeがインストールされていません');
+			$this->showError('PEAR::Mail_Mimeがインストールされていません');
 			return false;
 		}
 		
-		if(!$this->get('from')){
-			$from = 'nobody@localhost';
-		}else{
-			$from = $this->get('from');
-		}
-		
-		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
-		
+		//エンコード指定
 		if($this->get('encode')){
 			$this->target_encode = $this->get('encode');
 		}
 		
-		if($this->get('smtp')){
-			$mail = Mail::factory("smtp", $this->get('smtp'));
+		//メール本体の作成//
+		//差出人の設定
+		if(!$this->get('from')){
+			$from = mb_encode_mimeheader(mb_convert_encoding('nobody@example.com', $this->target_encode), $this->target_encode, 'B');
 		}else{
-			$mail = Mail::factory("mail");
+			$from = mb_encode_mimeheader(mb_convert_encoding($this->get('from'), $this->target_encode), $this->target_encode, 'B');
 		}
-
-		$this->set('body', mb_convert_encoding($this->get('body'), $this->target_encode, mb_internal_encoding()));
-
-		$mime->setTxtBody($this->get('body'));
-		
-		if(is_array($this->get('attach'))){
-			foreach($this->get('attach') as $val){
-				$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
-				$mime->addAttachment($val);
-			}
-		}else{
-			$val - $this->get('attach');
-			$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
-			$mime->addAttachment($val);
-		}
-
-		$body = array(
-		  "head_charset" => $this->target_encode,
-		  "text_charset" => $this->target_encode
-		);
-
-		$this->set('body', mb_convert_encoding($mime->get($body), $this->target_encode, $this->source_encode));
-		
+		//件名の設定
+		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
+		//CC/BCCの設定
 		if($this->get('bcc') && count($this->get('bcc')) > 1){
 			$bcc = implode(',', $this->get('bcc'));
-			}elseif($this->get('bcc')){
+		}elseif($this->get('bcc')){
 			$bcc = $this->get('bcc');
 			$bcc = $bcc[0];
 		}
-
 		if($this->get('cc') && count($this->get('cc')) > 1){
 			$cc = implode(',', $this->get('cc'));
 		}elseif($this->get('cc')){
 			$cc = $this->get('cc');
 			$cc = $cc[0];
 		}
+		
+		//ファイルの添付
+		if(count($this->get('attach')) > 1){
+			if(strpos(PHP_OS, 'WIN') !== false) $win = true;
+			foreach($this->get('attach') as $val){
+				$val = $win === true ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+				$v = split('/\/|\\/', $val);
+				if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $v[count($v) -1 ])){
+					$mime->addAttachment($val, 'application/octet-stream', mb_convert_encoding($v[count($v) -1 ], $this->target_encode, 'auto'));	
+				}else{
+					$mime->addAttachment($val);
+				}
+			}
+		}else{
+			$val = $this->get('attach');
+			$val = $val[0];
+			$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+			$v = split('/\/|\\/', $val);
+			if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $v[count($v) -1 ])){
+				$mime->addAttachment($val, 'application/octet-stream', mb_convert_encoding($v[count($v) -1 ], $this->target_encode, 'auto'));
+			}else{
+				$mime->addAttachment($val);
+			}
+		}
+		
+		$mime->setTxtBody($this->get('body'));
+		
+		$body = array(
+		  "head_charset" => $this->target_encode,
+		  "text_charset" => $this->target_encode
+		);
 
+		$this->set('body', $mime->get($body));
+		//メール本体はここまで//
+		
+		//ヘッダーの構築
 		$header = array(
 			"To" => $this->get('mailto'),
 			"From" => $from,
 			"Bcc" => $bcc,
 			"Cc" => $cc,
-		  	"Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode), $this->target_encode, 'B')
+		  	"Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode), $this->target_encode, 'B'),
 		);
 
 		$this->set('headers', $mime->headers($header));
+		
+		$header = $mime->headers( $headers);
+		
+			//メールの送信設定
+		if($this->get('smtp')){
+			$mail = $mail->factory("smtp", $this->get('smtp'));
+		}else{
+			$mail = $mail->factory("mail");
+		}
 		
 		if($this->get('fetch') === true){
 			$confirm = "差出人 : {$from}<br>送信先 : {$this->get('mailto')}<br>BCC : {$bcc}<br> CC : {$cc}<br><br>件名 : {$this->get('subject')}<br />{$this->get('body')}";
 			return $confirm;
 		}
-
-		$ret = $mail->send($this->get('mailto'), $header, $this->get('body'));
-
-		if(PEAR::isError($ret)){
-			return $ret->getMessage();
-		}
+		
+		$mail->send( $this->get('mailto'), $header, $this->get('body'));
 	}
+
 	
 	/**
 	 * phpinfoのMailerクラス版です
