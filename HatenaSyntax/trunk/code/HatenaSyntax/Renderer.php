@@ -45,6 +45,8 @@ class HatenaSyntax_Renderer
     
     function render(HatenaSyntax_Node $rootnode)
     {
+        if ($rootnode->getType() !== 'root') throw new InvalidArgumentException();
+        
         $this->footnote = '';
         $this->fncount = 0;
         $this->root = $rootnode;
