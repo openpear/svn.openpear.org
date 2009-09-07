@@ -87,7 +87,7 @@ class HatenaSyntax_TOCRenderer
         return $this->concat($buf);
     }
     
-    protected function __call($name, $args)
+    public function __call($name, $args)
     {
         if (preg_match('#^fetchHeaderIn\w+$#i', $name)) return array();
         throw new Exception(sprintf('method(%s) not found', $name));
