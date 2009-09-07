@@ -215,7 +215,7 @@ class HatenaSyntax_Renderer
     
     protected function renderEmptyParagraph($data)
     {
-        return str_repeat('<br/ >' . PHP_EOL, max($data - 1, 0));
+        return str_repeat('<br />' . PHP_EOL, max($data - 1, 0));
     }
     
     protected function renderList(HatenaSyntax_Tree_Root $root)
