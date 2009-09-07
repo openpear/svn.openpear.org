@@ -31,7 +31,7 @@ $vars = array(
 		)
 	);
 $mail->set('vars', $vars);
-$mail->set('mailto', 'example@example.com');
+//$mail->set('mailto', 'example@example.com');
 $mail->set('subject', 'お試し');
 
 //CCを送る場合
@@ -44,12 +44,11 @@ $mail->set('subject', 'お試し');
 //$mail->set('bcc', 'bcc_example2@example.com');
 
 //CCを送る場合 Part2
-$mail->addCc('cc1@cc1.example.com');
-$mail->addCc('cc2@cc1.example.com');
-
+//$mail->addCc('cc1@cc1.example.com');
+//$mail->addCc('cc2@cc1.example.com');
 //BCCを送る場合 Part2
-$mail->addBcc('bcc1@bcc1.example.com');
-$mail->addBcc('bcc1@bcc1.example.com');
+//$mail->addBcc('bcc1@bcc1.example.com');
+//$mail->addBcc('bcc1@bcc1.example.com');
 
 $mail->addAttach(dirname(__FILE__) . '/sunrise.jpg');
 $mail->addAttach(dirname(__FILE__) . '/日本語.zip');
