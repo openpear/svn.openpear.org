@@ -1,0 +1,3 @@
+<?php
+
+interface Acme_MorningMusume_Person_CurrentMemberInterface extends Acme_MorningMusume_Person_MemberInterface{}
