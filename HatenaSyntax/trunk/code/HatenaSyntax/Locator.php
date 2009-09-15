@@ -154,7 +154,7 @@ class HatenaSyntax_Locator
     {
         $nl = PEG::newLine();
         $closing = PEG::seq(PEG::optional($nl), '|<', $this->endOfLine);
-        $line = PEG::second($nl, $this->factory->createLineSegment($closing));
+        $line = PEG::second($nl, $this->factory->createLineSegment($closing, true));
         $parser = PEG::pack('>|', PEG::many1($line), $closing);
         
         return $this->factory->createNodeCreater('pre', $parser);
