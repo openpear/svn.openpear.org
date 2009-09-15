@@ -13,3 +13,6 @@ $lime->is($result, array('h'));
 $context = PEG::context(">|\nha|<");
 list($result) = $pre->parse($context)->getData();
 $lime->is($result, array('ha'));
+
+$context = PEG::context(">|\n\n|<");
+$lime->isnt($pre->parse($context), PEG::failure());
