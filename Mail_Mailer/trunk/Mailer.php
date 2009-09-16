@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/09/08
+ *  @version    Mailer.php v 2.0.0 2009/09/16
  * 
  */
 
@@ -28,8 +28,8 @@ class Mail_Mailer implements Mailer
 	private $source_encode = 'auto';
 	
 		public function __construct(){
-			$this->set('delete', false);
-			$this->set('smarty', false);
+			$this->keys['delete'] = false;
+			$this->keys['smarty'] = false;
 		}
 	
         /**
@@ -70,20 +70,14 @@ class Mail_Mailer implements Mailer
 			if(is_file($inc . '/' . $file_path)) return true;
 			if(is_file($inc . $file_path)) return true;
 		}
-		if(is_file($file_path)){
-			return true;
-		}
+		if(is_file($file_path)) return true;
 		//修復版
 		$include = split(':|;', ini_get('include_path'));
 		foreach($include as $inc){
 			if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
-			if(is_file($inc . '/' . $file_path)){
-				return true;
-			}
+			if(is_file($inc . '/' . $file_path)) return true;
 		}
-		if(is_file($file_path)){
-			return true;
-		}
+		if(is_file($file_path)) return true;
 		return false;
 	}
 	
@@ -95,7 +89,7 @@ class Mail_Mailer implements Mailer
 	 * @return object
 	 */
 	final protected function getPear($pear, $arg=null){
-		require_once(str_replace('_', '/', $pear) . '.php');
+		require_once(strtr($pear, '_', '/') . '.php');
 		return new $pear($arg);
 	}
 
@@ -107,24 +101,11 @@ class Mail_Mailer implements Mailer
 	 * @return object
 	 */	
 	private function connectMail($pop3){
-		if(!$this->get('login')){
-			$this->set('login', 'USER');
-		}
-		$err = $pop3->connect(
-				$this->get('host'), 
-				$this->get('port')
-			); 
-		if(PEAR::isError($err)){
-			return $err;
-		}
-		$err = $pop3->login(
-				$this->get('user'), 
-				$this->get('password'), 
-				$this->get('login')
-			); 
-		if(PEAR::isError($err)){
-			return $err;
-		}
+		if(!$this->get('login')) $this->set('login', 'USER');
+		$err = $pop3->connect($this->get('host'), $this->get('port'));
+		if(PEAR::isError($err)) return $err;
+		$err = $pop3->login($this->get('user'), $this->get('password'), $this->get('login'));
+		if(PEAR::isError($err)) return $err;
 		return $pop3;
 	}
 	
@@ -141,7 +122,6 @@ class Mail_Mailer implements Mailer
 		$params['decode_bodies']  = true; 
 		$params['decode_headers'] = true;  
 		$params['crlf'] = "\r\n"; 
-		//TODO ここら辺を先に重点的に見直す必要あり
 		if($this->is_file_ex('Mail/mimeDecode.php')){
 			$mime = $this->getPear('Mail_mimeDecode', $mail);
 		}else{
@@ -152,26 +132,6 @@ class Mail_Mailer implements Mailer
 		//送信者のメールアドレスを抽出 
 		$from = $structure->headers['from'];
 		$headers = $structure->headers;
-		/*
-		$from = addslashes($from);
-		$from = str_replace('"','',$from); 
-		$name = stripslashes($from);
-
-		//署名付きの場合の処理を追加 
-		preg_match("/<.*>/",$from,$str); 
-		if($str[0]!=""){ 
-			$from=substr($str[0],1,strlen($str[0])-2); 
-		} 
-		$headers = $structure->headers;
-		$subject = $headers['subject'];
-		//件名だけヘッダーから取り除く 件名は既に変数subjectに入っているので
-		unset($headers['subject']);
-		
-		//fromは加工した奴で上書きする
-		$headers['from'] = $from;
-		//差出人上書き
-		$headers['name'] = $name;
-		*/
 		
 		//ヘッダー処理部分の見直し
 		if(strpos($from, ' ') !== false && strpos($from, '" ') !== false){
@@ -233,7 +193,7 @@ class Mail_Mailer implements Mailer
 	 *
 	 * @return 成功:TRUE 失敗:FALSE
 	 */
-	private function validateGetConfig(){
+	private static function validateGetConfig(){
 		if(!$this->get('user')) {
 			$this->showError('ユーザ名が設定されていません');
 			return false;
@@ -249,9 +209,7 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		
-		if(!$this->get('port')) {
-			$this->set('port', 110);
-		}
+		if(!$this->get('port')) $this->set('port', 110);
 		return true;
 	}
 
@@ -263,9 +221,7 @@ class Mail_Mailer implements Mailer
 	 */
 	public function getMail(){
 		if($this->validateGetConfig() === false) return false;
-		if($this->get('encode')){
-			$this->target_encode = $this->get('encode'); 
-		}
+		if($this->get('encode')) $this->target_encode = $this->get('encode'); 
 		if($this->is_file_ex('Net/POP3.php')){
 			$pop3 = $this->getPear('Net_POP3');
 		}else{
@@ -273,29 +229,17 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		$pop3 =$this->connectMail($pop3);
-		if(PEAR::isError($pop3)){
-			return $pop3->getMessage();
-		}
+		if(PEAR::isError($pop3)) return $pop3->getMessage();
 		$n_msg = $pop3->numMsg();
 		for($i = 0 ; $i < $n_msg ; $i++){
 			list($mail[$i]['headers'], $mail[$i]['subject'], $mail[$i]['body'], $mail[$i]['filename'], $mail[$i]['file']) = $this->mailParser($pop3->getMsg($i + 1));
 			$mail[$i]['id'] = $i + 1;
 			//ファイルが添付されていない場合は不要なので配列とオブジェクトを消す
-			if(empty($mail[$i]['filename'])){
-				unset($mail[$i]['filename']);
-			}
-			if(empty($mail[$i]['file'])){
-				unset($mail[$i]['file']);
-			}
-			if($this->get('search') && !preg_match($this->get('search'), $mail[$i]['subject'])){
-				unset($mail[$i]);
-			}
-			if($this->get('smarty') === false){
-				$mail = $this->arrayToObject($mail);
-			}
-			if($this->get('delete') === true){
-				$pop3->deleteMsg($i + 1);
-			}
+			if(empty($mail[$i]['filename'])) unset($mail[$i]['filename']);
+			if(empty($mail[$i]['file'])) unset($mail[$i]['file']);
+			if($this->get('search') && !preg_match($this->get('search'), $mail[$i]['subject'])) unset($mail[$i]);
+			if($this->get('smarty') === false) $mail = $this->arrayToObject($mail);
+			if($this->get('delete') === true) $pop3->deleteMsg($i + 1);
 		}
 		$pop3->disconnect();
 		//不要なオブジェクトは破棄する
@@ -312,8 +256,7 @@ class Mail_Mailer implements Mailer
 	private function arrayToObject($mail){
 		foreach($mail as $key => $val){
 			foreach($val as $k => $v){
-				if(in_array($k, $this->keys))
-				$this->set($k, $v);
+				if(in_array($k, $this->keys)) $this->set($k, $v);
 			}
 			$mail_obj[$key] = clone $this;
 		}
@@ -336,9 +279,7 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		$pop3 =$this->connectMail($pop3);
-		if(PEAR::isError($pop3)){
-			return $pop3->getMessage();
-		}
+		if(PEAR::isError($pop3)) return $pop3->getMessage();
 		foreach($this->get('deleteMsg') as $val){
 			$pop3->deleteMsg($val);
 		}
@@ -384,63 +325,82 @@ class Mail_Mailer implements Mailer
 	 * @return 成功:TRUE 失敗:FALSE
 	 */
 	private function validateSendConfig(){
-		if(!$this->get('body')){
-			if(!$this->get('template')){
+		if(!$this->keys['body']){
+			if(!$this->keys['template']) {
 				$this->showError('テンプレートが指定されていません');
 				return false;
 			}
-			if(!is_array($this->get('vars'))){
+			if(!is_array($this->keys['vars'])){
 				$this->showError('値がありません');
 				return false;
 			}
+			global $smarty;
 			$smarty = $this->initSmarty();
-			if($smarty === false){
-				$this->showError('Smartyがインストールされていません');
+			if($smarty === false) {
+				$this->showError('Smartyがインストールされていません'); 
 				return false;
 			}
-			foreach($this->get('vars') as $name => $value){
-				$smarty->assign($name, $value);
-			}
-			$this->set('body', $smarty->fetch($this->get('template')));
 		}
-		if(!$this->get('body') && $this->empty_body_warning === true){
+		if(!$this->keys['vars'] && !$this->keys['body'] && $this->empty_body_warning === true){
 			$this->showNotice('本文が空です');
 			return false;
 		}
 		//送信先不明の場合はエラー
-		if(!$this->get('mailto')){
+		if(!$this->keys['mailto']){
 			$this->showError('送信先が指定されていません');
 			return false;
 		}
 		
-		if(!is_null($this->get('attach'))){
-			if(is_array($this->get('attach'))){
-				if(strpos(PHP_OS, 'WIN') !== false) $win = true;
-				foreach($this->get('attach') as $val){
-					//ファイルが存在するか調べる
-					$val = $win === true ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
-					if(!is_file($val)){
-						$this->showError(sprintf("File Not Found[%s]", $val));
-						return false;
-					}
-					//ファイルが読み取り可能か調べる
-					if(!is_readable($val)){
-						$this->showError(sprintf("File Not Readable[%s]", $val));
-						return false;
-					}
+		//添付ファイルの検証 WindowsだからUNIXだから、この文字コードとは限らないので
+		global $found;
+		if($this->keys['attach']){
+			foreach($this->keys['attach'] as $key => $val){
+				$val = mb_convert_encoding($val, 'SJIS', 'JIS,EUC,SJIS,UTF-8');
+				if(file_exists($val)){
+					$found[$key] = $val;
+					continue;
 				}
-			}else{
-				$attach = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($this->get('attach'), 'SJIS', mb_internal_encoding()) : mb_convert_encoding($this->get('attach'), 'EUC', mb_internal_encoding()) ;
-				if(!is_file($attach)){
-					$this->showError(sprintf("File Not Found[%s]", $attach));
+				$val = mb_convert_encoding($val, 'EUC', 'JIS,EUC,SJIS,UTF-8');
+				if(file_exists($val)){
+					$found[$key] = $val;
+					continue;
+				}
+				$val = mb_convert_encoding($val, 'UTF-8', 'JIS,EUC,SJIS,UTF-8');
+				if(file_exists($val)){
+					$found[$key] = $val;
+					continue;
+				}
+				$this->showError("File Not Found「{$val}」");
+			}
+		}
+		/*
+		if($this->keys['attach'][1]){
+			if(strpos(PHP_OS, 'WIN') !== false) $win = true;
+			foreach($this->keys['attach'] as $val){
+				//ファイルが存在するか調べる
+				$val = $win === true ? mb_convert_encoding($val, 'SJIS', 'JIS,EUC,SJIS,UTF-8') : mb_convert_encoding($val, 'EUC', 'JIS,EUC,SJIS,UTF-8') ;
+				if(!file_exists($val)){
+					$this->showError("File Not Found「{$val}」");
 					return false;
 				}
-				if(!is_readable($attach)){
-					$this->showError(sprintf("File Not Readable[%s]", $attach));
+				//ファイルが読み取り可能か調べる
+				if(!is_readable($val)){
+					$this->showError("File Not Readable「{$val}」");
 					return false;
 				}
 			}
+		}else{
+			$attach = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($this->keys['attach'][0], 'SJIS', 'JIS,EUC,SJIS,UTF-8') : mb_convert_encoding($this->keys['attach'][0], 'EUC', 'JIS,EUC,SJIS,UTF-8') ;
+			if(!file_exists($attach)){
+				$this->showError("File Not Found「{$attach}」");
+				return false;
+			}
+			if(!is_readable($attach)){
+				$this->showError("File Not Readable「{$attach}」");
+				return false;
+			}
 		}
+		*/
 		return true;
 	}
 	
@@ -451,7 +411,6 @@ class Mail_Mailer implements Mailer
 	 * @return array
 	 */
 	public function send(){
-		mb_language('ja');
 		//構成情報の検証
 		if(!$this->validateSendConfig()) return false;
 		//必要なライブラリの取り込み
@@ -461,101 +420,122 @@ class Mail_Mailer implements Mailer
 			$this->showError('PEAR::Mailがインストールされていません');
 			return false;
 		}
-		if($this->is_file_ex("Mail/mime.php")){
+		if($this->is_file_ex('Mail/mime.php')){
 			$mime = $this->getPear('Mail_Mime', "\n");
 		}else{
 			$this->showError('PEAR::Mail_Mimeがインストールされていません');
 			return false;
 		}
 		
-		//エンコード指定
-		if($this->get('encode')){
-			$this->target_encode = $this->get('encode');
-		}
+		//エンコード指定 基本的にJIS送信なので廃止の方向へ
+//		if($this->get('encode')) $this->target_encode = $this->get('encode');
 		
 		//メール本体の作成//
-		//差出人の設定
-		if(!$this->get('from')){
-			$from = mb_encode_mimeheader(mb_convert_encoding('nobody@example.com', $this->target_encode), $this->target_encode, 'B');
-		}else{
-			$from = mb_encode_mimeheader(mb_convert_encoding($this->get('from'), $this->target_encode), $this->target_encode, 'B');
-		}
+		$eml['from'] = !$this->get('from') ? 
+						mb_encode_mimeheader(mb_convert_encoding('nobody@example.com', $this->target_encode), $this->target_encode, 'B') :
+						mb_encode_mimeheader(mb_convert_encoding($this->get('from'), $this->target_encode), $this->target_encode, 'B');
 		//件名の設定
-		$subject = $this->get('subject') ? $this->get('subject') : '件名なし' ;
+		$eml['subject'] = $this->get('subject') ? $this->get('subject') : '件名なし' ;
+		
 		//CC/BCCの設定
-		if($this->get('bcc') && count($this->get('bcc')) > 1){
-			$bcc = implode(',', $this->get('bcc'));
+		$eml['bcc'] = $this->get('bcc'); 
+		if($eml['bcc'][1]){
+			$eml['bcc'] = implode(',', $this->get('bcc'));
 		}elseif($this->get('bcc')){
 			$bcc = $this->get('bcc');
-			$bcc = $bcc[0];
+			$eml['bcc'] = $bcc[0];
 		}
-		if($this->get('cc') && count($this->get('cc')) > 1){
-			$cc = implode(',', $this->get('cc'));
+		$eml['cc'] = $this->get('cc');
+		if($eml['cc'][1]){
+			$eml['cc'] = implode(',', $this->get('cc'));
 		}elseif($this->get('cc')){
 			$cc = $this->get('cc');
-			$cc = $cc[0];
+			$eml['cc'] = $cc[0];
 		}
-		
-		//ファイルの添付
-		if(count($this->get('attach')) > 1){
-			if(strpos(PHP_OS, 'WIN') !== false) $win = true;
-			foreach($this->get('attach') as $val){
-				$val = $win === true ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
-				$v = split('/\/|\\/', $val);
-				if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $v[count($v) -1 ])){
-					$mime->addAttachment($val, 'application/octet-stream', mb_convert_encoding($v[count($v) -1 ], $this->target_encode, 'auto'));	
-				}else{
-					$mime->addAttachment($val);
-				}
-			}
-		}else{
-			$val = $this->get('attach');
-			$val = $val[0];
-			$val = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val, 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val, 'EUC', mb_internal_encoding()) ;
+
+		global $found;
+		foreach($this->get('attach') as $key => $val){
 			$v = split('/\/|\\/', $val);
-			if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $v[count($v) -1 ])){
-				$mime->addAttachment($val, 'application/octet-stream', mb_convert_encoding($v[count($v) -1 ], $this->target_encode, 'auto'));
+			$file = $v[count($v) - 1];
+			if(!preg_match('/^[a-zA-Z0-9]+\..{2,4}/', $file)){
+				$mime->addAttachment($found[$key], 'application/octet-stream', mb_convert_encoding($file, 'JIS', mb_detect_encoding($file)));
 			}else{
 				$mime->addAttachment($val);
 			}
 		}
+		//ファイルの添付
+		//条件判断構造が冗長っぽいので構造化しようか悩むところ
+		/*
+		$attach = $this->get('attach');
+		if($attach[1]){
+			if(strpos(PHP_OS, 'WIN') !== false) $win = true;
+			foreach($attach as $val){
+				$data = $win === true ? mb_convert_encoding($val, 'SJIS', 'JIS,EUC,SJIS,UTF-8') : mb_convert_encoding($val, 'EUC', 'JIS,EUC,SJIS,UTF-8') ;
+				$v = split('/\/|\\/', $val);
+				$file = $v[count($v) - 1];
+				if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $file)){
+					$mime->addAttachment($data, 'application/octet-stream', mb_convert_encoding($file, 'ISO-2022-JP', mb_detect_encoding($file)));	
+				}else{
+					$mime->addAttachment($data);
+				}
+			}
+		}else{
+			$val = $this->get('attach');
+			$data = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val[0], 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val[0], 'EUC', mb_internal_encoding()) ;
+			$v = split('/\/|\\/', $val);
+			$file = $v[count($v) - 1];
+			//日本語ファイル名の対策
+			if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $file)){
+				$mime->addAttachment($data, 'application/octet-stream', mb_convert_encoding($file, 'ISO-2022-JP', mb_detect_encoding($file)));
+			}else{
+				$mime->addAttachment($data);
+			}
+		}
+		//ここまで
+		*/
 		
-		$mime->setTxtBody($this->get('body'));
+		global $smarty;
+		foreach($this->get('vars') as $name => $value){
+			$smarty->assign($name, $value);
+		}
+		$eml['body'] = $smarty->fetch($this->get('template'));
 		
+		$mime->setTxtBody($eml['body']);
+
 		$body = array(
-		  "head_charset" => $this->target_encode,
-		  "text_charset" => $this->target_encode
+		  'head_charset' => $this->target_encode,
+		  'text_charset' => $this->target_encode
 		);
 
-		$this->set('body', $mime->get($body));
+		$eml['mail_body'] = $mime->get($body);
 		//メール本体はここまで//
 		
 		//ヘッダーの構築
 		$header = array(
-			"To" => $this->get('mailto'),
-			"From" => $from,
-			"Bcc" => $bcc,
-			"Cc" => $cc,
-		  	"Subject" => mb_encode_mimeheader(mb_convert_encoding($subject, $this->target_encode), $this->target_encode, 'B'),
+			'To' => $this->get('mailto'),
+			'From' => $eml['from'],
+			'Bcc' => $eml['bcc'],
+			'Cc' => $eml['cc'],
+		  	'Subject' => $eml['subject'],
 		);
 
 		$this->set('headers', $mime->headers($header));
 		
 		$header = $mime->headers( $headers);
 		
-			//メールの送信設定
-		if($this->get('smtp')){
-			$mail = $mail->factory("smtp", $this->get('smtp'));
-		}else{
-			$mail = $mail->factory("mail");
-		}
+		//メールの送信設定
+		$mail = $this->get('smtp') ? $mail->factory('smtp', $this->get('smtp')) : $mail->factory('mail') ; 
 		
 		if($this->get('fetch') === true){
-			$confirm = "差出人 : {$from}<br>送信先 : {$this->get('mailto')}<br>BCC : {$bcc}<br> CC : {$cc}<br><br>件名 : {$this->get('subject')}<br />{$this->get('body')}";
+			$confirm = "差出人 : {$eml['from']}<br>送信先 : {$this->get('mailto')}<br>BCC : {$eml['bcc']}<br> CC : {$eml['cc']}<br><br>件名 : {$eml['subject']}<br />{$eml['body']}";
 			return $confirm;
 		}
-		
-		$mail->send( $this->get('mailto'), $header, $this->get('body'));
+
+		$mail->send( $this->get('mailto'), $header, $eml['mail_body']);
+		//不要な変数のメモリ開放
+		unset($mail);
+		unset($eml);
+		unset($mime);
 	}
 
 	
@@ -599,6 +579,10 @@ class Mail_Mailer implements Mailer
 	 */
 	function makeInfo($name, $title, $contents){
 		$smarty = $this->initSmarty();
+		if($smarty === false){
+			$this->showError('Smartyが見つかりません');
+			exit;
+		}
 		$smarty->assign('name', $name);
 		$smarty->assign('title', $title);
 		$smarty->assign('contents', $contents);
@@ -699,6 +683,35 @@ class Mail_Mailer implements Mailer
 	public function addBcc($val){
 		$this->keys['bcc'][] = $val;
 	}
+	
+	/**
+	 * 指定されたキーの値を取得する
+	 * @param $key 取得するキー
+	 * @access public
+	 * @return string
+	 */
+	public function get($key){
+		$r = $this->keyCheck($key);
+		if($r === false){
+			$this->showError("「{$key}」は無効なキーです");
+			return false;
+		}
+		return $this->keys[$key];
+	}
+	
+	/**
+	 * 設定情報を配列で返す
+	 * @access public
+	 * @return Array
+	 */
+	public function getArray(){
+		foreach($this->keys as $key => $val){
+			if(!is_numeric($key)){
+				$ary[$key] = $this->get($key);
+			}
+		}
+		return $ary;
+	}
 
         /**
          * CCを削除する
@@ -725,21 +738,6 @@ class Mail_Mailer implements Mailer
         }
 	
 	/**
-	 * 指定されたキーの値を取得する
-	 * @param $key 取得するキー
-	 * @access public
-	 * @return string
-	 */
-	public function get($key){
-		$r = $this->keyCheck($key);
-		if($r === false){
-			$this->showError("「{$key}」は無効なキーです");
-			return false;
-		}
-		return $this->keys[$key];
-	}
-	
-	/**
 	 * 正しいキーかチェックする
 	 * @param $key 取得するキー
 	 * @access  private
@@ -750,20 +748,6 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		return true;
-	}
-	
-	/**
-	 * 設定情報を配列で返す
-	 * @access public
-	 * @return Array
-	 */
-	public function getArray(){
-		foreach($this->keys as $key => $val){
-			if(!is_numeric($key)){
-				$arr[$key] = $this->get($key);
-			}
-		}
-		return $arr;
 	}
 }
 ?>

@@ -50,19 +50,20 @@ $mail->set('subject', 'お試し');
 //$mail->addBcc('bcc1@bcc1.example.com');
 //$mail->addBcc('bcc1@bcc1.example.com');
 
+//エンコード変える場合
+$mail->set('encode', mb_internal_encoding());
+
 $mail->addAttach(dirname(__FILE__) . '/sunrise.jpg');
 $mail->addAttach(dirname(__FILE__) . '/日本語.zip');
 
 $mail->empty_body_warning = true; //空の本文だとエラーを返すようにする 元からtrue
-
-//エンコード変える場合
-$mail->set('encode', mb_internal_encoding());
 
 //そのまま送信(Smartyテンプレート経由)
 //$r = $mail->send();
 //送信内容の確認
 $mail->set('fetch', true);
 echo nl2br($mail->send());
+//$mail->send();
 //使える機能の確認(phpinfoに該当)
 //$mail->mailerinfo();
 
