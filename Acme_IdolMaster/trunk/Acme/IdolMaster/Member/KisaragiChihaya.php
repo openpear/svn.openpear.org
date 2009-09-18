@@ -8,15 +8,15 @@
  */
 require_once 'Acme/IdolMaster/Member/Base.php';
 
-class Acme_IdolMaster_Member_KisaragiChihaya
+class Acme_IdolMaster_Member_KisaragiChihaya extends Acme_IdolMaster_Member_Base
 {
-    private $first_name_ja = '千早';
-    private $family_name_ja = '如月';
-    private $first_name_en = 'Chihaya';
-    private $family_name_en = 'Kisaragi';
-    private $nick = array('ちはや');
-    private $birthday = '02-25';
-    private $blood_type = 'A';
-    private $age = 15;
-    private $character_voice = '今井麻美';
+    protected $first_name_ja = '千早';
+    protected $family_name_ja = '如月';
+    protected $first_name_en = 'Chihaya';
+    protected $family_name_en = 'Kisaragi';
+    protected $nick = array('ちはや');
+    protected $birthday = '02-25';
+    protected $blood_type = 'A';
+    protected $age = 15;
+    protected $character_voice = '今井麻美';
 }
