@@ -32,12 +32,12 @@ class Acme_IdolMaster_Member_Base
         return null;
     }
 
-	//ƒ}ƒWƒbƒNƒƒ\ƒbƒh__get
+	//ãƒã‚¸ãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰__get
 	    public function __get($property) {
 			return $this->get($property);
 		}
 
-	//’lƒQƒbƒg
+	//å€¤ã‚²ãƒƒãƒˆ
 	    public function get($property) {
 			if(isset($this->{$property})){
 				return $this->{$property};
@@ -46,21 +46,21 @@ class Acme_IdolMaster_Member_Base
 			}
 		}
 
-	//ƒ}ƒWƒbƒNƒƒ\ƒbƒh__set
+	//ãƒã‚¸ãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰__set
 	    public function __set($property,$value) {
 			return $this->set($property,$value);
 		}
 
-	//’lƒZƒbƒg
+	//å€¤ã‚»ãƒƒãƒˆ
 	    public function set($property,$value) {
 			/*
-				éŒ¾‚³‚ê‚Ä‚é‚â‚Â‚¾‚¯ƒ`ƒFƒbƒN‚Ì•û–@‚ª‚í‚©‚ñ‚È‚¢
-				isset‚¾‚Ænull‚ğ‘ã“ü‚·‚é‚Æ•ÏX•s”\‚É‚È‚é
+				å®£è¨€ã•ã‚Œã¦ã‚‹ã‚„ã¤ã ã‘ãƒã‚§ãƒƒã‚¯ã®æ–¹æ³•ãŒã‚ã‹ã‚“ãªã„
+				issetã ã¨nullã‚’ä»£å…¥ã™ã‚‹ã¨å¤‰æ›´ä¸èƒ½ã«ãªã‚‹
 			*/
-				//’l‚ğ•ÏX
+				//å€¤ã‚’å¤‰æ›´
 				$this->{$property}=$value;
 				
-				//©A–¼‚Ìê‡‚Í–¼‚à•ÏX
+				//å§“ã€åã®å ´åˆã¯æ°åã‚‚å¤‰æ›´
 				if(    $property==='family_name_ja'
 					|| $property==='first_name_ja'
 					|| $property==='family_name_en'
