@@ -41,9 +41,8 @@ class Acme_IdolMaster_Member_Base
 	    public function get($property) {
 			if(isset($this->{$property})){
 				return $this->{$property};
-			}else{
-				return false;
 			}
+			return false;
 		}
 
 	//マジックメソッド__set
