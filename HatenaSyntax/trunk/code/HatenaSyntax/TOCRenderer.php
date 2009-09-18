@@ -37,7 +37,7 @@ class HatenaSyntax_TOCRenderer
                 $buf [] = $this->{'render' . $leaf->getType()}($lead->getData());
             }
         }
-        return '<a href="#' . $this->id . '_header_' . $count . '">' . $this->escape(join('', $buf)) . '</a>';
+        return '<a href="#' . md5($this->id) . '_header_' . $count . '">' . $this->escape(join('', $buf)) . '</a>';
     }
     
     protected function renderFootnote($data)

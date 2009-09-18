@@ -27,6 +27,7 @@ paragraph((footnote))
 
 >|
 hoge
+
 fuga|<
 
 [http://example.com/example.gif:image]
@@ -66,20 +67,20 @@ echo HatenaSyntax::render($str, array('headerlevel' => 3,                       
                                       'superprehandler' => 'sprehandler'));         // superpre記法の中身を処理するコールバック
 /* 結果
 <div class="section">
-<h3><a name="hoge_header_0" id="hoge_header_0"></a>header1</h3>
+<h3><a name="ea703e7aa1efda0064eaa507d9e8ab7e_header_0" id="ea703e7aa1efda0064eaa507d9e8ab7e_header_0"></a>header1</h3>
 <div class="toc"><ol>
 <li>
-<a href="#hoge_header_0">header1</a><ol>
+<a href="#ea703e7aa1efda0064eaa507d9e8ab7e_header_0">header1</a><ol>
 <li>
-<a href="#hoge_header_1">header2</a><ol>
-<li><a href="#hoge_header_2">blockquote header</a></li></ol>
+<a href="#ea703e7aa1efda0064eaa507d9e8ab7e_header_1">header2</a><ol>
+<li><a href="#ea703e7aa1efda0064eaa507d9e8ab7e_header_2">blockquote header</a></li></ol>
 </li>
 </ol>
 </li>
 </ol>
 </div>
 
-<h4><a name="hoge_header_1" id="hoge_header_1"></a>header2</h4>
+<h4><a name="ea703e7aa1efda0064eaa507d9e8ab7e_header_1" id="ea703e7aa1efda0064eaa507d9e8ab7e_header_1"></a>header2</h4>
 
 <dl>
 <dt>definition term</dt>
@@ -99,7 +100,7 @@ hoge3<ul>
 <li>list6</li></ul>
 
 
-<p>paragraph(<a href="#hoge_footnote_1" name="hoge_footnotelink_1" id="hoge_footnotelink_1" title="footnote">*1</a>)</p>
+<p>paragraph(<a href="#ea703e7aa1efda0064eaa507d9e8ab7e_footnote_1" name="ea703e7aa1efda0064eaa507d9e8ab7e_footnotelink_1" id="ea703e7aa1efda0064eaa507d9e8ab7e_footnotelink_1" title="footnote">*1</a>)</p>
 <p><a href="./keywordlink">keywordlink</a></p>
 <p>[[nulllink]]</p>
 
@@ -120,12 +121,13 @@ hoge3<ul>
 
 <pre>
 hoge
+
 fuga</pre>
 
 <p><a href="http://example.com/example.gif"><img src="http://example.com/example.gif" /></a></p>
 
 <blockquote>
-<h5><a name="hoge_header_2" id="hoge_header_2"></a>blockquote header</h5>
+<h5><a name="ea703e7aa1efda0064eaa507d9e8ab7e_header_2" id="ea703e7aa1efda0064eaa507d9e8ab7e_header_2"></a>blockquote header</h5>
 <p>fuga</p>
 </blockquote>
 
@@ -138,6 +140,6 @@ echo &quot;hogehoge&quot;;</pre>
 
 
 <div class="footnote">
-<p><a href="#hoge_footnotelink_1" name="hoge_footnote_1" id="hoge_footnote_1">*1</a>: footnote</p>
+<p><a href="#ea703e7aa1efda0064eaa507d9e8ab7e_footnotelink_1" name="ea703e7aa1efda0064eaa507d9e8ab7e_footnote_1" id="ea703e7aa1efda0064eaa507d9e8ab7e_footnote_1">*1</a>: footnote</p>
 </div>
 */
