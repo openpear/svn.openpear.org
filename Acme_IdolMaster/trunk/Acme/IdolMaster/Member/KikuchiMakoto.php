@@ -8,15 +8,15 @@
  */
 require_once 'Acme/IdolMaster/Member/Base.php';
 
-class Acme_IdolMaster_Member_KikuchiMakoto
+class Acme_IdolMaster_Member_KikuchiMakoto extends Acme_IdolMaster_Member_Base
 {
-    private $first_name_ja = '真';
-    private $family_name_ja = '菊地';
-    private $first_name_en = 'Makoto';
-    private $family_name_en = 'Kikuchi';
-    private $nick = array('真');
-    private $birthday = '08-29';
-    private $blood_type = 'O';
-    private $age = 16;
-    private $character_voice = '平田宏美';
+    protected $first_name_ja = '真';
+    protected $family_name_ja = '菊地';
+    protected $first_name_en = 'Makoto';
+    protected $family_name_en = 'Kikuchi';
+    protected $nick = array('真');
+    protected $birthday = '08-29';
+    protected $blood_type = 'O';
+    protected $age = 16;
+    protected $character_voice = '平田宏美';
 }

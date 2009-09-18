@@ -8,15 +8,15 @@
  */
 require_once 'Acme/IdolMaster/Member/Base.php';
 
-class Acme_IdolMaster_Member_HoshiiMiki
+class Acme_IdolMaster_Member_HoshiiMiki extends Acme_IdolMaster_Member_Base
 {
-    private $first_name_ja = '美希';
-    private $family_name_ja = '星井';
-    private $first_name_en = 'Miki';
-    private $family_name_en = 'Hoshii';
-    private $nick = array('ゆとり');
-    private $birthday = '11-23';
-    private $blood_type = 'B';
-    private $age = 14;
-    private $character_voice = '長谷川明子';
+    protected $first_name_ja = '美希';
+    protected $family_name_ja = '星井';
+    protected $first_name_en = 'Miki';
+    protected $family_name_en = 'Hoshii';
+    protected $nick = array('ゆとり');
+    protected $birthday = '11-23';
+    protected $blood_type = 'B';
+    protected $age = 14;
+    protected $character_voice = '長谷川明子';
 }
