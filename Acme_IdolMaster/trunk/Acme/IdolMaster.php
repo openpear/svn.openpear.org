@@ -34,7 +34,7 @@ class Acme_IdolMaster implements Iterator{
     }
 	
 	
-//ƒƒ“ƒo[‚ðŽw’è
+//ãƒ¡ãƒ³ãƒãƒ¼ã‚’æŒ‡å®š
     public function select($memberName=false){
 		if(isset($this->members[$memberName])){
 			$this->current_member=$memberName;
@@ -46,14 +46,14 @@ class Acme_IdolMaster implements Iterator{
 		}
 	}
 	
-//ƒ}ƒWƒbƒNƒƒ\ƒbƒh__get
+//ãƒžã‚¸ãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰__get
     public function __get($memberName) {
 		return $this->get($memberName);
 	}
 
-//ƒƒ“ƒo[‚ðŽæ“¾	ƒƒ“ƒo[Žw’èŒã‚Å‚ ‚ê‚Î—v‘f‚ðŽæ“¾
+//ãƒ¡ãƒ³ãƒãƒ¼ã‚’å–å¾—	ãƒ¡ãƒ³ãƒãƒ¼æŒ‡å®šå¾Œã§ã‚ã‚Œã°è¦ç´ ã‚’å–å¾—
     public function get($memberName=false) {
-		//ƒƒ“ƒo[Žw’è‚ª‚ ‚ê‚Î$memberName‚Ì‚©‚í‚è‚É$property‚ª—ˆ‚é
+		//ãƒ¡ãƒ³ãƒãƒ¼æŒ‡å®šãŒã‚ã‚Œã°$memberNameã®ã‹ã‚ã‚Šã«$propertyãŒæ¥ã‚‹
 		if($this->current_member){
 			if($memberName){
 				return $this->members[$this->current_member]->{$memberName};
@@ -61,7 +61,7 @@ class Acme_IdolMaster implements Iterator{
 				return $this->members[$this->current_member];
 			}
 		}
-		//ˆø”‚Ìƒƒ“ƒo[Žæ“¾
+		//å¼•æ•°ã®ãƒ¡ãƒ³ãƒãƒ¼å–å¾—
 		if(isset($this->members[$memberName])){
 			return $this->members[$memberName];
 		}else{
@@ -69,26 +69,26 @@ class Acme_IdolMaster implements Iterator{
 		}
 	}
 
-//ƒ}ƒWƒbƒNƒƒ\ƒbƒh__set
+//ãƒžã‚¸ãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰__set
     public function __set($property,$value) {
 		return $this->set($property,$value);
 	}
-//’lƒQƒbƒg
+//å€¤ã‚²ãƒƒãƒˆ
     public function set($property,$value) {
-		//ƒƒ“ƒo‚»‚Ì‚à‚Ì‚Í’Ç‹L•s‰Â
+		//ãƒ¡ãƒ³ãƒãã®ã‚‚ã®ã¯è¿½è¨˜ä¸å¯
 		if(!$this->current_member){ return false;}
-		//ƒZƒbƒg
+		//ã‚»ãƒƒãƒˆ
 		return $this->members[$this->current_member]->set($property,$value);
 	}
 
-//ƒ}ƒWƒbƒNƒƒ\ƒbƒh__call
+//ãƒžã‚¸ãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰__call
     function __call($method, $args){
         if(empty($args)) { return $this->get($method); }
         elseif(isset($args[0])) { return $this->set($method,$args[0]); }
         return null;
     }
 
-//ƒCƒeƒŒ[ƒ^
+//ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
     public function current(){
 	 return $this->members[$this->memberNames[$this->position]]; }
     public function valid(){
