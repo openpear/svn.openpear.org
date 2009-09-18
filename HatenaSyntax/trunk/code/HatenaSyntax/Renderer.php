@@ -94,7 +94,7 @@ class HatenaSyntax_Renderer
     protected function renderHeader(Array $data)
     {
         $level = $data['level'] + $this->config['headerlevel'];   
-        $name = $this->config['id'] . '_header_' . $this->headerCount++;
+        $name = md5($this->config['id']) . '_header_' . $this->headerCount++;
         $anchor = '<a name="' . $name . '" id="' . $name . '"></a>';
         return "<h{$level}>" . $anchor . $this->renderLineSegment($data['body']) . "</h{$level}>";
     }
@@ -110,7 +110,7 @@ class HatenaSyntax_Renderer
     protected function renderFootnote(Array $data)
     {
         $this->fncount++;
-        $id = $this->config['id'];
+        $id = md5($this->config['id']);
         $n = $this->fncount;
         $title = $body = $this->renderLineSegment($data);
         $title = strip_tags($body);
