@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/09/16
+ *  @version    Mailer.php v 2.0.0 2009/09/20
  * 
  */
 
