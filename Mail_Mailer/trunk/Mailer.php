@@ -62,22 +62,21 @@ class Mail_Mailer implements Mailer
 	 * @return true 成功 false 失敗
 	 */	
 	final public function is_file_ex($file_path){
-		if(is_file($file_path)) return true;
+		//一応先に普通にチェックする
+		if(file_exists($file_path)) return true;
 		//こちらでも動くので互換性のために一応残す
 		$include = explode(';', ini_get('include_path'));
 		array_shift($include);
 		foreach($include as $inc){
-			if(is_file($inc . '/' . $file_path)) return true;
-			if(is_file($inc . $file_path)) return true;
+			if(file_exists($inc . '/' . $file_path)) return true;
+			if(file_exists($inc . $file_path)) return true;
 		}
-		if(is_file($file_path)) return true;
 		//修復版
 		$include = split(':|;', ini_get('include_path'));
 		foreach($include as $inc){
-			if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
-			if(is_file($inc . '/' . $file_path)) return true;
+			if($inc === '.' && file_exists($inc . '/' . $file_path)) return true;
+			if(file_exists($inc . '/' . $file_path)) return true;
 		}
-		if(is_file($file_path)) return true;
 		return false;
 	}
 	
@@ -327,18 +326,15 @@ class Mail_Mailer implements Mailer
 	private function validateSendConfig(){
 		if(!$this->keys['body']){
 			if(!$this->keys['template']) {
-				$this->showError('テンプレートが指定されていません');
-				return false;
+				$this->showError('テンプレートが指定されていません'); return false;
 			}
-			if(!is_array($this->keys['vars'])){
-				$this->showError('値がありません');
-				return false;
+			if(!is_array($this->keys['vars'])) {
+				$this->showError('値がありません'); return false;
 			}
 			global $smarty;
 			$smarty = $this->initSmarty();
 			if($smarty === false) {
-				$this->showError('Smartyがインストールされていません'); 
-				return false;
+				$this->showError('Smartyがインストールされていません'); return false;
 			}
 		}
 		if(!$this->keys['vars'] && !$this->keys['body'] && $this->empty_body_warning === true){
@@ -346,61 +342,34 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		//送信先不明の場合はエラー
-		if(!$this->keys['mailto']){
+		if(!$this->keys['mailto']) {
 			$this->showError('送信先が指定されていません');
 			return false;
 		}
 		
 		//添付ファイルの検証 WindowsだからUNIXだから、この文字コードとは限らないので
 		global $found;
+		reset($this->keys['attach']);
 		if($this->keys['attach']){
-			foreach($this->keys['attach'] as $key => $val){
+			while (list($key, $val) = each($this->keys['attach'])) {
 				$val = mb_convert_encoding($val, 'SJIS', 'JIS,EUC,SJIS,UTF-8');
-				if(file_exists($val)){
+				if(file_exists($val)) {
 					$found[$key] = $val;
 					continue;
 				}
 				$val = mb_convert_encoding($val, 'EUC', 'JIS,EUC,SJIS,UTF-8');
-				if(file_exists($val)){
+				if(file_exists($val)) {
 					$found[$key] = $val;
 					continue;
 				}
 				$val = mb_convert_encoding($val, 'UTF-8', 'JIS,EUC,SJIS,UTF-8');
-				if(file_exists($val)){
+				if(file_exists($val)) {
 					$found[$key] = $val;
 					continue;
 				}
 				$this->showError("File Not Found「{$val}」");
 			}
 		}
-		/*
-		if($this->keys['attach'][1]){
-			if(strpos(PHP_OS, 'WIN') !== false) $win = true;
-			foreach($this->keys['attach'] as $val){
-				//ファイルが存在するか調べる
-				$val = $win === true ? mb_convert_encoding($val, 'SJIS', 'JIS,EUC,SJIS,UTF-8') : mb_convert_encoding($val, 'EUC', 'JIS,EUC,SJIS,UTF-8') ;
-				if(!file_exists($val)){
-					$this->showError("File Not Found「{$val}」");
-					return false;
-				}
-				//ファイルが読み取り可能か調べる
-				if(!is_readable($val)){
-					$this->showError("File Not Readable「{$val}」");
-					return false;
-				}
-			}
-		}else{
-			$attach = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($this->keys['attach'][0], 'SJIS', 'JIS,EUC,SJIS,UTF-8') : mb_convert_encoding($this->keys['attach'][0], 'EUC', 'JIS,EUC,SJIS,UTF-8') ;
-			if(!file_exists($attach)){
-				$this->showError("File Not Found「{$attach}」");
-				return false;
-			}
-			if(!is_readable($attach)){
-				$this->showError("File Not Readable「{$attach}」");
-				return false;
-			}
-		}
-		*/
 		return true;
 	}
 	
@@ -427,9 +396,10 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		
-		//エンコード指定 基本的にJIS送信なので廃止の方向へ
-//		if($this->get('encode')) $this->target_encode = $this->get('encode');
+		//エンコード指定 基本的にJIS送信なのですが、今回はUTF-8で(つまりなんでも)妥協・・・
+		if($this->get('encode')) $this->target_encode = $this->get('encode');
 		
+		$eml = array();
 		//メール本体の作成//
 		$eml['from'] = !$this->get('from') ? 
 						mb_encode_mimeheader(mb_convert_encoding('nobody@example.com', $this->target_encode), $this->target_encode, 'B') :
@@ -454,45 +424,20 @@ class Mail_Mailer implements Mailer
 		}
 
 		global $found;
-		foreach($this->get('attach') as $key => $val){
-			$v = split('/\/|\\/', $val);
-			$file = $v[count($v) - 1];
-			if(!preg_match('/^[a-zA-Z0-9]+\..{2,4}/', $file)){
-				$mime->addAttachment($found[$key], 'application/octet-stream', mb_convert_encoding($file, 'JIS', mb_detect_encoding($file)));
-			}else{
-				$mime->addAttachment($val);
-			}
-		}
-		//ファイルの添付
-		//条件判断構造が冗長っぽいので構造化しようか悩むところ
-		/*
-		$attach = $this->get('attach');
-		if($attach[1]){
-			if(strpos(PHP_OS, 'WIN') !== false) $win = true;
-			foreach($attach as $val){
-				$data = $win === true ? mb_convert_encoding($val, 'SJIS', 'JIS,EUC,SJIS,UTF-8') : mb_convert_encoding($val, 'EUC', 'JIS,EUC,SJIS,UTF-8') ;
+		if($this->get('attach')){
+			reset($this->keys['attach']);
+			while (list($key, $val) = each($this->keys['attach'])) {			
 				$v = split('/\/|\\/', $val);
 				$file = $v[count($v) - 1];
-				if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $file)){
-					$mime->addAttachment($data, 'application/octet-stream', mb_convert_encoding($file, 'ISO-2022-JP', mb_detect_encoding($file)));	
+				$files[] = $file;
+				//strlenはマルチバイトを1文字として計算しないため
+				if(strlen($file) != mb_strlen($file)){
+					$mime->addAttachment($found[$key], 'application/octet-stream', mb_convert_encoding($file, $this->target_encode, mb_detect_encoding($file)));
 				}else{
-					$mime->addAttachment($data);
+					$mime->addAttachment($val);
 				}
 			}
-		}else{
-			$val = $this->get('attach');
-			$data = strpos(PHP_OS, 'WIN') !== false ? mb_convert_encoding($val[0], 'SJIS', mb_internal_encoding()) : mb_convert_encoding($val[0], 'EUC', mb_internal_encoding()) ;
-			$v = split('/\/|\\/', $val);
-			$file = $v[count($v) - 1];
-			//日本語ファイル名の対策
-			if(!preg_match('/^[a-zA-Z0-9]\..{2,4}/', $file)){
-				$mime->addAttachment($data, 'application/octet-stream', mb_convert_encoding($file, 'ISO-2022-JP', mb_detect_encoding($file)));
-			}else{
-				$mime->addAttachment($data);
-			}
 		}
-		//ここまで
-		*/
 		
 		global $smarty;
 		foreach($this->get('vars') as $name => $value){
@@ -527,7 +472,7 @@ class Mail_Mailer implements Mailer
 		$mail = $this->get('smtp') ? $mail->factory('smtp', $this->get('smtp')) : $mail->factory('mail') ; 
 		
 		if($this->get('fetch') === true){
-			$confirm = "差出人 : {$eml['from']}<br>送信先 : {$this->get('mailto')}<br>BCC : {$eml['bcc']}<br> CC : {$eml['cc']}<br><br>件名 : {$eml['subject']}<br />{$eml['body']}";
+			$confirm = "差出人 : {$eml['from']}<br>送信先 : {$this->get('mailto')}<br>BCC : {$eml['bcc']}<br> CC : {$eml['cc']}<br><br>添付ファイル:".implode(',', $files)."<br><br>件名 : {$eml['subject']}<br />{$eml['body']}";
 			return $confirm;
 		}
 

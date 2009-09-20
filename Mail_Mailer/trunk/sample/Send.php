@@ -31,7 +31,7 @@ $vars = array(
 		)
 	);
 $mail->set('vars', $vars);
-//$mail->set('mailto', 'example@example.com');
+$mail->set('mailto', 'example@example.com');
 $mail->set('subject', 'お試し');
 
 //CCを送る場合
