@@ -24,8 +24,8 @@ class Mail_Mailer implements Mailer
 	//目的のエンコードを指定する 標準はJIS
 	private $target_encode = 'ISO-2022-JP';
 	
-	//元のエンコードを指定する 標準はmb_convert_encoding準拠のauto
-	private $source_encode = 'auto';
+	//元のエンコードを指定する
+	private $source_encode = 'SJIS,EUC,UTF-8,JIS,ISO-2022-JP';
 	
 		public function __construct(){
 			$this->keys['delete'] = false;
@@ -131,7 +131,6 @@ class Mail_Mailer implements Mailer
 		//送信者のメールアドレスを抽出 
 		$from = $structure->headers['from'];
 		$headers = $structure->headers;
-		
 		//ヘッダー処理部分の見直し
 		if(strpos($from, ' ') !== false && strpos($from, '" ') !== false){
 			list($name, $from) = explode(' ', $from);
@@ -142,36 +141,33 @@ class Mail_Mailer implements Mailer
 		}
 		$subject = $structure->headers['subject'];
 		
-		switch(strtolower($structure->ctype_primary)){
+		switch($structure->ctype_primary){
 			case 'text': // シングルパート(テキストのみ)  
 			//文字コードを変換する
 			//charsetから文字コードの検出を試みる
 			if(preg_match('/text\/plain/', $headers['content-type'])){
 				preg_match_all('/charset="(.+?)"/', $headers['content-type'], $reg);
-				$this->source_encode = $reg[1][0] ? $reg[1][0] : 'auto' ;
-			}else{
-				$this->source_encode = 'auto';
+				$this->source_encode = $reg[1][0] ? $reg[1][0] : $this->source_encode ;
 			}
 			$body = $this->body ? $this->body : $structure->body ;
 			$body = mb_convert_encoding($body, $this->target_encode, $this->source_encode);
 			$subject = mb_convert_encoding($subject, $this->target_encode, $this->source_encode);
 			break; 
 			case 'multipart':  // マルチパート 
-			foreach($structure->parts as $part){ 
-				switch(strtolower($part->ctype_primary)){ 
+			foreach($structure->parts as $part){
+				switch($part->ctype_primary){ 
 			  		case 'text': // テキスト / HTMLメール
 					//内部文字コードに変換する
 					//仮にHTMLメールだったらcharsetを確かめる
-					if(preg_match('/multipart\/alternative/', $headers['content-type'])){
+//					if(preg_match('/multipart\/alternative/', $headers['content-type'])){
+			  		if(strpos($headers['content-type'], 'multipart') && strpos($headers['content-type'], 'alternative')){
 						$html = explode('<BODY>', $part->body);
 						preg_match_all('/charset=(.+?)"/', $html[0], $reg);
-						//charsetの値を検出出来なかったらautoにする
-						$this->source_encode = $reg[1][0] ? $reg[1][0] : 'auto' ;
-					}else{
-						$this->source_encode = 'auto';
+						//charsetの値を検出出来なかったらsource_encodeプロパティに頼る
+						$source_encode = $reg[1][0] ? $reg[1][0] : $this->source_encode ;
 					}
-					$body = mb_convert_encoding($part->body, $this->target_encode, $this->source_encode);
-					$subject = mb_convert_encoding($subject, $this->target_encode, $this->source_encode);
+					$body = mb_detect_encoding($part->body) === mb_internal_encoding() ? $part->body : mb_convert_encoding($part->body, $this->target_encode, $source_encode) ;
+					$subject = mb_detect_encoding($subject) === mb_internal_encoding() ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;
 				 	break;
 					default:  
 					$filename[] = $part->ctype_parameters['name'];
@@ -192,7 +188,7 @@ class Mail_Mailer implements Mailer
 	 *
 	 * @return 成功:TRUE 失敗:FALSE
 	 */
-	private static function validateGetConfig(){
+	private function validateGetConfig(){
 		if(!$this->get('user')) {
 			$this->showError('ユーザ名が設定されていません');
 			return false;
@@ -229,8 +225,7 @@ class Mail_Mailer implements Mailer
 		}
 		$pop3 =$this->connectMail($pop3);
 		if(PEAR::isError($pop3)) return $pop3->getMessage();
-		$n_msg = $pop3->numMsg();
-		for($i = 0 ; $i < $n_msg ; $i++){
+		for($i = 0,$n_msg = $pop3->numMsg() ; $i < $n_msg ; $i++){
 			list($mail[$i]['headers'], $mail[$i]['subject'], $mail[$i]['body'], $mail[$i]['filename'], $mail[$i]['file']) = $this->mailParser($pop3->getMsg($i + 1));
 			$mail[$i]['id'] = $i + 1;
 			//ファイルが添付されていない場合は不要なので配列とオブジェクトを消す

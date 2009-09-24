@@ -31,7 +31,7 @@ $vars = array(
 		)
 	);
 $mail->set('vars', $vars);
-$mail->set('mailto', 'example@example.com');
+//$mail->set('mailto', 'example@example.com');
 $mail->set('subject', 'お試し');
 
 //CCを送る場合
@@ -45,10 +45,10 @@ $mail->set('subject', 'お試し');
 
 //CCを送る場合 Part2
 //$mail->addCc('cc1@cc1.example.com');
-//$mail->addCc('cc2@cc1.example.com');
+//$mail->addCc('cc2@cc2.example.com');
 //BCCを送る場合 Part2
 //$mail->addBcc('bcc1@bcc1.example.com');
-//$mail->addBcc('bcc1@bcc1.example.com');
+//$mail->addBcc('bcc2@bcc2.example.com');
 
 //エンコード変える場合
 $mail->set('encode', mb_internal_encoding());
