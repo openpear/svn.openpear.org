@@ -10,9 +10,9 @@ $mail->set('password', '');
 $mail->set('host', '');
 $mail->set('port', 110);
 $mail->set('login', 'USER');
-//$mail->set('encode', 'UTF-8');
+$mail->set('encode', 'UTF-8');
 //$config->set('search', 'example'); searchキーをセットするとメールサーバから該当メールだけを受信します(正規表現対応)
-$mail->set('delete', false); //受信後にメールを削除するか デフォではfalseに trueで削除
+//$mail->set('delete', false); //受信後にメールを削除するか デフォではfalseに trueで削除
 
 //受信 //中身の表示は超適当なので気をつけて^^;
 $mails = $mail->getMail();
@@ -24,7 +24,11 @@ $mails = $mail->getMail();
 $mails = !is_array($mails) ? array() : $mails ;
 foreach($mails as $val){
 	$headers = $val->get('headers');
-	echo "{$val->get('subject')}(<a href=\"mailto:{$headers['from']}\">{$headers['name']}</a>)<br />";
+	if($headers['name']){
+		echo "{$val->get('subject')}(<a href=\"mailto:{$headers['from']}\">{$headers['name']}</a>)<br />";
+	}else{
+		echo "{$val->get('subject')}(<a href=\"mailto:{$headers['from']}\">{$headers['from']}</a>)<br />";	
+	}
 	echo nl2br($val->get('body'));
 	echo '<hr>';
 }
