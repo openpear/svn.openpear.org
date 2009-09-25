@@ -2,6 +2,7 @@
 /**
  * Prowl.php
  *
+ * @note http://prowl.weks.net/api.php
  */
 
 /*
