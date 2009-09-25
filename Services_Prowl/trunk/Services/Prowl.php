@@ -22,6 +22,7 @@ class Services_Prowl
 {
     protected $api_key = null;
     protected $api_url = 'https://prowl.weks.net/publicapi/';
+    protected $latest_log = array();
 
     /**
      * __construct
@@ -32,6 +33,15 @@ class Services_Prowl
         if (is_string($api_key)) {
             $this->api_key = $api_key;
         }
+    }
+
+    /**
+     * getLog
+     *
+     */
+    public function getLatestLog()
+    {
+        return $this->latest_log;
     }
 
     /**
@@ -56,7 +66,23 @@ class Services_Prowl
             )
         );
 
-        return file_get_contents($url, false, stream_context_create($context));
+        $result = file_get_contents($url, false, stream_context_create($context));
+
+        $xml = simplexml_load_string($result);
+
+        if ($xml->success) {
+            $log['code'] = (int)$xml->success['code'];
+            $log['remaining'] = (int)$xml->success['remaining'];
+            $log['resetdate'] = (int)$xml->success['resetdate'];
+
+            $this->latest_log = $log;
+        } else if ($xml->error) {
+            throw new Exception($xml->error);
+        } else {
+            throw new Exception($result);
+        }
+
+        return true;
     }
 
     /**
