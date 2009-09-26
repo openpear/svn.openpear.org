@@ -8,9 +8,12 @@
  * @author      tknzk <info@tknzk.com>
  * @copyright   Copyright (c) 2009, tknzk.com All rights reserved.
  * @license     BSD License
+ * @link        http://openpear.org/package/Services_Bitly
  * @link        http://bit.ly
  *
  */
+
+require_once 'Services/Bitly/Exception.php';
 
 class Services_Bitly
 {
@@ -22,7 +25,7 @@ class Services_Bitly
 
     const FORMAT = 'json';
 
-    const VERSION = '0.0.1';
+    const VERSION = '0.1.0';
 
     const API_VERSION = '2.0.1';
 
@@ -105,7 +108,13 @@ class Services_Bitly
         curl_setopt($curl,  CURLOPT_URL,            $apiurl);
         curl_setopt($curl,  CURLOPT_HEADER,         false);
         curl_setopt($curl,  CURLOPT_RETURNTRANSFER, true);
+
         $response = curl_exec($curl);
+
+        if($response === false) {
+            throw new Services_Bitly_Exception(curl_error($curl), curl_errno($curl));
+        }
+
         curl_close($curl);
 
         if($this->format === 'json') {
@@ -113,19 +122,49 @@ class Services_Bitly
             $json = json_decode($response,true);
 
             if($json['errorCode'] === 0 && $json['statusCode'] === 'OK') {
-                return $json['results'][$longurl]['shortUrl'];
+
+                if($json['results'][$longurl]['errorCode'] !== null) {
+
+                    throw new Services_Bitly_Exception($json['results'][$longurl]['errorMessage'], $json['results'][$longurl]['errorCode']);
+
+                }else{
+
+                    return $json['results'][$longurl]['shortUrl'];
+
+                }
+
             }else{
-                return false;
+
+                throw new Services_Bitly_Exception($json['errorMessage'], $json['errorCode']);
+
             }
         }
 
         if($this->format === 'xml') {
-            $xml = simplexml_load_string($response);
 
-            if($xml->errorCode == 0 && $xml->statusCode == 'OK') {
-                return $xml->results->nodeKeyVal->shortUrl;
+            require_once 'XML/Unserializer.php';
+
+            $unserializer = new XML_Unserializer(array(XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE => 'parseAttributes'));
+            $unserializer->unserialize($response);
+            $xml = $unserializer->getUnserializedData();
+
+
+            if($xml['errorCode'] == 0 && $xml['statusCode'] == 'OK') {
+
+                if(is_array($xml['results'][$longurl])) {
+
+                    throw new Services_Bitly_Exception($xml['results'][$longurl]['errorMessage'], (int)($xml['results'][$longurl]['errorCode']));
+
+                }else{
+
+                    return $xml['results']['nodeKeyVal']['shortUrl'];
+
+                }
+
             }else{
-                return false;
+
+                throw new Services_Bitly_Exception($xml['errorMessage'], (int)($xml['errorCode']));
+
             }
         }
     }
@@ -164,6 +203,9 @@ class Services_Bitly
 
         }
 
+        if(!preg_match("/$reg_str/",$shorturl)) {
+            throw new Services_Bitly_Exception("URL domain you tried to expand was invalid.");
+        }
 
         $apiurl = $baseurl  . '/expand?'
                             . 'version='    . $this->apiversion
@@ -177,7 +219,13 @@ class Services_Bitly
         curl_setopt($curl,  CURLOPT_URL,            $apiurl);
         curl_setopt($curl,  CURLOPT_HEADER,         false);
         curl_setopt($curl,  CURLOPT_RETURNTRANSFER, true);
+
         $response = curl_exec($curl);
+
+        if($response === false) {
+            throw new Services_Bitly_Exception(curl_error($curl), curl_errno($curl));
+        }
+
         curl_close($curl);
 
         if($this->format === 'json') {
@@ -187,22 +235,50 @@ class Services_Bitly
             $userhash = preg_replace("/$reg_str/", "", $shorturl);
 
             if($json['errorCode'] === 0 && $json['statusCode'] === 'OK') {
-                return $json['results'][$userhash]['longUrl'];
+
+                if(is_array($json['results'][$userhash]['longUrl'])) {
+
+                    throw new Services_Bitly_Exception($json['results'][$userhash]['longUrl']['errorMessage'], $json['results'][$userhash]['longUrl']['errorCode']);
+
+                }else{
+
+                    return $json['results'][$userhash]['longUrl'];
+
+                }
+
             }else{
-                return false;
+
+                throw new Services_Bitly_Exception($json['errorMessage'], $json['errorCode']);
+
             }
         }
 
         if($this->format === 'xml') {
 
-            $xml = simplexml_load_string($response);
+            require_once 'XML/Unserializer.php';
+
+            $unserializer = new XML_Unserializer(array(XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE => 'parseAttributes'));
+            $unserializer->unserialize($response);
+            $xml = $unserializer->getUnserializedData();
 
             $userhash = preg_replace("/$reg_str/", "", $shorturl);
 
-            if($xml->errorCode == 0 && $xml->statusCode == 'OK') {
-                return $xml->results->$userhash->longUrl;
+            if($xml['errorCode'] == 0 && $xml['statusCode'] == 'OK') {
+
+                if(is_array($xml['results'][$userhash]['longUrl'])) {
+
+                    throw new Services_Bitly_Exception($xml['results'][$userhash]['longUrl']['errorMessage'], (int)($xml['results'][$userhash]['longUrl']['errorCode']));
+
+                }else{
+
+                    return $xml['results'][$userhash]['longUrl'];
+
+                }
+
             }else{
-                return false;
+
+                throw new Services_Bitly_Exception($xml['errorMessage'], (int)($xml['errorCode']));
+
             }
         }
     }
