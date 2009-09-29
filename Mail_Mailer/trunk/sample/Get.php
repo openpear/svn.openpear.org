@@ -24,11 +24,7 @@ $mails = $mail->getMail();
 $mails = !is_array($mails) ? array() : $mails ;
 foreach($mails as $val){
 	$headers = $val->get('headers');
-	if($headers['name']){
-		echo "{$val->get('subject')}(<a href=\"mailto:{$headers['from']}\">{$headers['name']}</a>)<br />";
-	}else{
-		echo "{$val->get('subject')}(<a href=\"mailto:{$headers['from']}\">{$headers['from']}</a>)<br />";	
-	}
+	echo "{$val->get('subject')}(<a href=\"mailto:{$headers['from']}\">{$headers['name']}</a>)<br />";
 	echo nl2br($val->get('body'));
 	echo '<hr>';
 }
