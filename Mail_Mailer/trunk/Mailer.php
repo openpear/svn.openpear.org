@@ -138,6 +138,7 @@ class Mail_Mailer implements Mailer
 			$headers['from'] = preg_replace('/<|>/', '', $from); 
 		}else{
 			$headers['from'] = preg_replace('/<|>/', '', $from);
+			$headers['name'] = $headers['from'];
 		}
 		$subject = $structure->headers['subject'];
 		
@@ -385,7 +386,7 @@ class Mail_Mailer implements Mailer
 			return false;
 		}
 		if($this->is_file_ex('Mail/mime.php')){
-			$mime = $this->getPear('Mail_Mime', "\n");
+			$mime = $this->getPear('Mail_mime', "\n");
 		}else{
 			$this->showError('PEAR::Mail_Mimeがインストールされていません');
 			return false;
@@ -438,7 +439,7 @@ class Mail_Mailer implements Mailer
 		foreach($this->get('vars') as $name => $value){
 			$smarty->assign($name, $value);
 		}
-		$eml['body'] = $smarty->fetch($this->get('template'));
+		$eml['body'] = strpos(PHP_OS, 'WIN') === false ? str_replace("\r\n", "\n", $smarty->fetch($this->get('template'))) : $smarty->fetch($this->get('template')) ;
 		
 		$mime->setTxtBody($eml['body']);
 
