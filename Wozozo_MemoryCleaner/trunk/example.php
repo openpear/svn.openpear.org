@@ -4,7 +4,7 @@
  *
  */
 
-require_once './src/Wozozo/MemoryClean.php';
+require_once './src/Wozozo/MemoryCleaner.php';
 
 // example
 $data = array();
