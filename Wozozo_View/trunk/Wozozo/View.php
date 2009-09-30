@@ -13,9 +13,6 @@ class Wozozo_View {
     public function __construct($options = null) {
         $basedir = array_val($options, 'basedir');
 
-        if (!empty($basedir)) {
-            throw new Exception('basedir required');
-        }
         $this->basedir = $basedir;
     }
 
