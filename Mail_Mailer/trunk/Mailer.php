@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/09/24
+ *  @version    Mailer.php v 2.0.0 2009/10/1
  * 
  */
 
@@ -39,7 +39,7 @@ class Mail_Mailer implements Mailer
          */
         final public function showError($str){
             echo mb_detect_encoding($str) !== mb_internal_encoding() ?
-                    mb_convert_encoding($str, mb_internal_encoding(), 'auto') :
+                    mb_convert_encoding($str, mb_internal_encoding(), $this->source_encode) :
                     $str ;
         }
 
@@ -50,7 +50,7 @@ class Mail_Mailer implements Mailer
          */
         final public function showNotice($str){
             echo mb_detect_encoding($str) !== mb_internal_encoding() ?
-                    mb_convert_encoding($str, mb_internal_encoding(), 'auto') :
+                    mb_convert_encoding($str, mb_internal_encoding(), $this->source_encode) :
                     $str ;
         }
 
@@ -160,12 +160,13 @@ class Mail_Mailer implements Mailer
 			  		case 'text': // テキスト / HTMLメール
 					//内部文字コードに変換する
 					//仮にHTMLメールだったらcharsetを確かめる
-//					if(preg_match('/multipart\/alternative/', $headers['content-type'])){
 			  		if(strpos($headers['content-type'], 'multipart') && strpos($headers['content-type'], 'alternative')){
 						$html = explode('<BODY>', $part->body);
 						preg_match_all('/charset=(.+?)"/', $html[0], $reg);
 						//charsetの値を検出出来なかったらsource_encodeプロパティに頼る
 						$source_encode = $reg[1][0] ? $reg[1][0] : $this->source_encode ;
+					}else{
+						$source_encode = $this->source_encode ;
 					}
 					$body = mb_detect_encoding($part->body) === mb_internal_encoding() ? $part->body : mb_convert_encoding($part->body, $this->target_encode, $source_encode) ;
 					$subject = mb_detect_encoding($subject) === mb_internal_encoding() ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;
@@ -265,8 +266,8 @@ class Mail_Mailer implements Mailer
 	 *
 	 * @return unknown
 	 */
-	function deleteMsg(){
-		if($this->validConfig() === false) return false;
+	public function deleteMsg(){
+		if($this->validateGetConfig() === false) return false;
 		if($this->is_file_ex('Net/POP3.php')){
 			$pop3 = $this->getPear('Net_POP3');
 		}else{
@@ -348,17 +349,17 @@ class Mail_Mailer implements Mailer
 		reset($this->keys['attach']);
 		if($this->keys['attach']){
 			while (list($key, $val) = each($this->keys['attach'])) {
-				$val = mb_convert_encoding($val, 'SJIS', 'JIS,EUC,SJIS,UTF-8');
+				$val = mb_convert_encoding($val, 'SJIS', 'JIS,EUC,UTF-8');
 				if(file_exists($val)) {
 					$found[$key] = $val;
 					continue;
 				}
-				$val = mb_convert_encoding($val, 'EUC', 'JIS,EUC,SJIS,UTF-8');
+				$val = mb_convert_encoding($val, 'EUC', 'JIS,SJIS,UTF-8');
 				if(file_exists($val)) {
 					$found[$key] = $val;
 					continue;
 				}
-				$val = mb_convert_encoding($val, 'UTF-8', 'JIS,EUC,SJIS,UTF-8');
+				$val = mb_convert_encoding($val, 'UTF-8', 'JIS,EUC,SJIS');
 				if(file_exists($val)) {
 					$found[$key] = $val;
 					continue;
@@ -459,10 +460,8 @@ class Mail_Mailer implements Mailer
 			'Cc' => $eml['cc'],
 		  	'Subject' => $eml['subject'],
 		);
-
-		$this->set('headers', $mime->headers($header));
 		
-		$header = $mime->headers( $headers);
+		$headers = $mime->headers( $header);
 		
 		//メールの送信設定
 		$mail = $this->get('smtp') ? $mail->factory('smtp', $this->get('smtp')) : $mail->factory('mail') ; 
@@ -472,7 +471,7 @@ class Mail_Mailer implements Mailer
 			return $confirm;
 		}
 
-		$mail->send( $this->get('mailto'), $header, $eml['mail_body']);
+		$mail->send( $this->get('mailto'), $headers, $eml['mail_body']);
 		//不要な変数のメモリ開放
 		unset($mail);
 		unset($eml);
