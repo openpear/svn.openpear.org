@@ -141,7 +141,6 @@ class Mail_Mailer implements Mailer
 			$headers['name'] = $headers['from'];
 		}
 		$subject = $structure->headers['subject'];
-		
 		switch($structure->ctype_primary){
 			case 'text': // シングルパート(テキストのみ)  
 			//文字コードを変換する
@@ -160,16 +159,19 @@ class Mail_Mailer implements Mailer
 			  		case 'text': // テキスト / HTMLメール
 					//内部文字コードに変換する
 					//仮にHTMLメールだったらcharsetを確かめる
-			  		if(strpos($headers['content-type'], 'multipart') && strpos($headers['content-type'], 'alternative')){
+			  		if(strpos($headers['content-type'], 'multipart') !== false && strpos($headers['content-type'], 'alternative') !== false){			  			
 						$html = explode('<BODY>', $part->body);
 						preg_match_all('/charset=(.+?)"/', $html[0], $reg);
 						//charsetの値を検出出来なかったらsource_encodeプロパティに頼る
-						$source_encode = $reg[1][0] ? $reg[1][0] : $this->source_encode ;
+						$source_encode = $reg[1][0] ? strtoupper($reg[1][0]) : $this->source_encode ;
+						$body = mb_detect_encoding($html[1]) === $source_encode ? $part->body : mb_convert_encoding($html[1], $this->target_encode, $source_encode) ;
+						$subject = mb_detect_encoding($subject) ===  $source_encode ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;						
 					}else{
 						$source_encode = $this->source_encode ;
+						$body = mb_detect_encoding($part->body) === mb_internal_encoding() ? $part->body : mb_convert_encoding($part->body, $this->target_encode, $source_encode) ;
+						$subject = mb_detect_encoding($subject) === mb_internal_encoding() ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;
 					}
-					$body = mb_detect_encoding($part->body) === mb_internal_encoding() ? $part->body : mb_convert_encoding($part->body, $this->target_encode, $source_encode) ;
-					$subject = mb_detect_encoding($subject) === mb_internal_encoding() ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;
+
 				 	break;
 					default:  
 					$filename[] = $part->ctype_parameters['name'];
@@ -240,6 +242,8 @@ class Mail_Mailer implements Mailer
 		$pop3->disconnect();
 		//不要なオブジェクトは破棄する
 		unset($pop3);
+		//自分自身も破棄する
+		unset($this);
 		return $mail;
 	}
 	
@@ -476,6 +480,8 @@ class Mail_Mailer implements Mailer
 		unset($mail);
 		unset($eml);
 		unset($mime);
+		//自分自身もメモリ開放
+		unset($this);
 	}
 
 	
