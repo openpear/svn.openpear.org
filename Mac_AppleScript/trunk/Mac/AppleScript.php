@@ -49,9 +49,19 @@ class Mac_AppleScript
     // {{{ constatns
 
     const OSASCRIPT_PATH = '/usr/bin/osascript';
+
     const RECURSION_LIMIT = 5;
+
+    /**#@+
+     * @deprecated
+     */
     const APPEND_BREAK = 1;
     const PREPEND_BREAK = 2;
+    /**#@-*/
+
+    const OPTION_APPEND_BREAK  = 1;
+    const OPTION_PREPEND_BREAK = 2;
+    const OPTION_EXECUTE = 128;
 
     // }}}
     // {{{ properties
@@ -81,12 +91,12 @@ class Mac_AppleScript
      *
      * @param string $method
      * @param array $args
-     * @return Mac_AppleScript
+     * @return Mac_AppleScript The receiver object itself.
      */
     public function __call($method, array $args)
     {
         $command = '';
-        $option = 0;
+        $options = 0;
         $execute = false;
 
         $words = preg_split('/([A-Z][a-z0-9]*)/', $method, -1,
@@ -102,23 +112,27 @@ class Mac_AppleScript
                 $command .= ' ' . self::_convert($value);
             }
             if ($argc > 1) {
-                $option = $args[1];
+                $options = (int)$args[1];
                 if ($argc > 2) {
-                    $execute = $args[2];
+                    // @deprecated
+                    $execute = (bool)$args[2];
                 }
             }
         }
 
-        switch ($option) {
-            case self::APPEND_BREAK:
-                $this->_command .= $command . "\n";
-                break;
-            case self::PREPEND_BREAK:
-                $this->_command .= "\n" . $command;
-                break;
-            default:
-                $this->_command .= $command;
+        if ($options) {
+            if ($options & self::OPTION_APPEND_BREAK) {
+                $command .= "\n";
+            }
+            if ($options & self::OPTION_PREPEND_BREAK) {
+                $this->_command .= "\n";
+            }
+            if ($options & self::OPTION_EXECUTE) {
+                $execute = true;
+            }
         }
+
+        $this->_command .= $command;
 
         if ($execute) {
             $this->_lastCommand = $this->_command;

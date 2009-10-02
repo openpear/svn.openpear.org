@@ -2,4 +2,4 @@
 require_once 'Mac/AppleScript.php';
 
 $as = new Mac_AppleScript();
-echo $as->say("Hello, AppleScript!", 0, true), "\n";
+echo $as->say('Hello, "AppleScript"!', Mac_AppleScript::OPTION_EXECUTE), "\n";
