@@ -1,7 +1,7 @@
 <?php
 require_once 'Mac/Growl.php';
 
-$growl = new Mac_Growl('Mac_Growl_Example', array('Messages', 'Errors'));
+$growl = new Mac_Growl('Mac_Growl_Example', array('Messages', 'Stickies'));
 $growl->register();
 $growl->notify('Messages',
                'from ' . $growl->getApplicationName(),

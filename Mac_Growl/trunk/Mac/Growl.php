@@ -52,6 +52,12 @@ class Mac_Growl
 
     const GROWL_HELPER_APP = 'GrowlHelperApp';
 
+    const PRIORITY_VERY_LOW = -2;
+    const PRIORITY_MODERATE = -1;
+    const PRIORITY_NORMAL   =  0;
+    const PRIORITY_HIGH     =  1;
+    const PRIORITY_EMERGENCY = 2;
+
     // }}}
     // {{{ properties
 
@@ -95,12 +101,15 @@ class Mac_Growl
             $defaultNotifications = $this->_notifications;
         }
 
+        $tellOptions = Mac_AppleScript::OPTION_APPEND_BREAK;
+        $endOptions = Mac_AppleScript::OPTION_PREPEND_BREAK | Mac_AppleScript::OPTION_EXECUTE;
+
         $script = new Mac_AppleScript();
-        $script->tellApplication(self::GROWL_HELPER_APP, Mac_AppleScript::APPEND_BREAK)
+        $script->tellApplication(self::GROWL_HELPER_APP, $tellOptions)
             ->registerAsApplication($this->_applicationName)
             ->allNotifications($this->_notifications)
             ->defaultNotifications($defaultNotifications)
-            ->endTell(null, Mac_AppleScript::PREPEND_BREAK, true);
+            ->endTell(null, $endOptions);
         $this->_lastScript = (string)$script;
     }
 
@@ -122,8 +131,11 @@ class Mac_Growl
             return; // @todo throw an exception
         }
 
+        $tellOptions = Mac_AppleScript::OPTION_APPEND_BREAK;
+        $endOptions = Mac_AppleScript::OPTION_PREPEND_BREAK | Mac_AppleScript::OPTION_EXECUTE;
+
         $script = new Mac_AppleScript();
-        $script->tellApplication(self::GROWL_HELPER_APP, Mac_AppleScript::APPEND_BREAK)
+        $script->tellApplication(self::GROWL_HELPER_APP, $tellOptions)
             ->notifyWithName($notification)
             ->title($title)
             ->description($description)
@@ -144,14 +156,14 @@ class Mac_Growl
 
             if (array_key_exists('icon', $options)) {
                 $icon = $options['icon'];
-                if (is_file($icon) && is_readable($icon)) {
+                if (is_string($icon) && is_file($icon) && is_readable($icon)) {
                     $script->imageFromLocation('file://' . realpath($icon));
                 } else {
                     // @todo throw an exception
                 }
             }
         }
-        $script->endTell(null, Mac_AppleScript::PREPEND_BREAK, true);
+        $script->endTell(null, $endOptions);
         $this->_lastScript = (string)$script;
     }
 
