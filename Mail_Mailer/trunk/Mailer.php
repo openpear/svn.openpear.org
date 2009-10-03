@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/10/1
+ *  @version    Mailer.php v 2.0.0 2009/10/3
  * 
  */
 
@@ -25,7 +25,7 @@ class Mail_Mailer implements Mailer
 	private $target_encode = 'ISO-2022-JP';
 	
 	//元のエンコードを指定する
-	private $source_encode = 'SJIS,EUC,UTF-8,JIS,ISO-2022-JP';
+	private $source_encode = 'ISO-2022-JP,JIS,UTF-8,SJIS,EUC';
 	
 		public function __construct(){
 			$this->keys['delete'] = false;
@@ -135,7 +135,12 @@ class Mail_Mailer implements Mailer
 		if(strpos($from, ' ') !== false && strpos($from, '" ') !== false){
 			list($name, $from) = explode(' ', $from);
 			$headers['name'] = str_replace('"', '', $name);
-			$headers['from'] = preg_replace('/<|>/', '', $from); 
+			$headers['from'] = preg_replace('/<|>/', '', $from);
+		}elseif(strpos($from, ' ') !== false){
+			$headers['name'] = mb_substr($from, 0, strpos($from, '<'));
+			$headers['name'] = mb_convert_encoding($headers['name'], $this->target_encode, $this->source_encode);
+			$from = explode(' ', $from);
+			$headers['from'] = preg_replace('/<|>/', '', $from[count($from) - 1]); 
 		}else{
 			$headers['from'] = preg_replace('/<|>/', '', $from);
 			$headers['name'] = $headers['from'];
@@ -164,14 +169,13 @@ class Mail_Mailer implements Mailer
 						preg_match_all('/charset=(.+?)"/', $html[0], $reg);
 						//charsetの値を検出出来なかったらsource_encodeプロパティに頼る
 						$source_encode = $reg[1][0] ? strtoupper($reg[1][0]) : $this->source_encode ;
-						$body = mb_detect_encoding($html[1]) === $source_encode ? $part->body : mb_convert_encoding($html[1], $this->target_encode, $source_encode) ;
-						$subject = mb_detect_encoding($subject) ===  $source_encode ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;						
+						$body = mb_detect_encoding($html[count($html) - 1]) === $source_encode ? $part->body : mb_convert_encoding($html[count($html) - 1], $this->target_encode, $source_encode) ;
+						$subject = mb_detect_encoding($subject) ===  $source_encode ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;
 					}else{
 						$source_encode = $this->source_encode ;
 						$body = mb_detect_encoding($part->body) === mb_internal_encoding() ? $part->body : mb_convert_encoding($part->body, $this->target_encode, $source_encode) ;
 						$subject = mb_detect_encoding($subject) === mb_internal_encoding() ? $subject : mb_convert_encoding($subject, $this->target_encode, $source_encode) ;
 					}
-
 				 	break;
 					default:  
 					$filename[] = $part->ctype_parameters['name'];
