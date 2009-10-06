@@ -1,7 +1,7 @@
 <?php
 // $Id$
 
-Wozozo_TinyCrypt {
+class Wozozo_TinyCrypt {
     static public function encode($input) {
         // RFC3548: URL safe Base64 encoding
         static $search = array('+', '/');
