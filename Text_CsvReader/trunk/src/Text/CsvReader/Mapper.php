@@ -1,24 +1,24 @@
 <?php
 abstract class Text_CsvReader_Mapper extends Text_CsvReader_Filter
 {
-  public function __construct(Iterator $iterator, $options = array(), $messages = array()) {
+  public function __construct(Iterator $iterator, $options = array(), $messages = array())
+  {
     parent::__construct($iterator, $options, $messages);
   }
-  public function current() {
+  public function current()
+  {
     return $this->mapAll(parent::current());
   }
-  protected function mapAll($values) {
-    if ($this->hasOption('target') && is_array($this->getOption('target'))) {
-      $indexes = $this->getOption('target');
-    } else {
-      $indexes = array_keys($values);
-    }
-    foreach ($indexes as $index) {
-      $values[$index] = $this->map($values[$index]);
+  protected function mapAll($values)
+  {
+    $column_indexes = $this->getTargetIndexes($values);
+    foreach ($column_indexes as $column_index) {
+      $values[$column_index] = $this->map($values[$column_index], $column_index);
     }
     return $values;
   }
-  protected function map($value) {
+  protected function map($value, $column_index)
+  {
     return $value;
   }
 }

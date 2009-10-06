@@ -1,6 +1,6 @@
 <?php
 include_once('Stream/Filter/Mbstring.php');
-class Text_CsvReader_Reader_CSV extends Text_CsvReader_Reader
+class Text_CsvReader_Reader_Csv extends Text_CsvReader_Reader
 {
   protected
     $fp = null,
@@ -8,7 +8,7 @@ class Text_CsvReader_Reader_CSV extends Text_CsvReader_Reader
     $lineNumber = 0,
     $currentValues = array(),
     $requiredOptions = array('file'),
-    $options = array('encoding' => 'SJIS-win',
+    $options = array('charset' => 'UTF-8',
                      'row_size' => 65536,
                      'delimiter' => ',',
                      'enclosure' => '"');
@@ -28,16 +28,14 @@ class Text_CsvReader_Reader_CSV extends Text_CsvReader_Reader
     $fp = fopen($this->getOption('file'), 'r');
     if ($fp === false) {
       throw new CsvReaderException('failed to open input file.');
-      return null;
     }
     $filter_name = sprintf('convert.mbstring.encoding.%s:UTF-8',
-                           $this->getOption('encoding'));
+                           $this->getOption('charset'));
 
     $s_filter = stream_filter_append($fp, $filter_name, STREAM_FILTER_READ);
     if ($s_filter === false) {
       fclose($fp);
       throw new CsvReaderException('Cannot append stream filter: '. $filter_name);
-      return null;
     }
     $this->is_eof = false;
     return $fp;

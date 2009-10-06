@@ -39,7 +39,8 @@ $lime->ok($output[0] === array("no","line","break"), '0th element');
 $lime->diag("Shift_JIS: sjis.csv");
 
 $it = new Text_CsvReader_Reader_CSV(array('file'
-                                          => dirname(__FILE__)."/csv/sjis.csv"));
+                                          => dirname(__FILE__)."/csv/sjis.csv",
+                                          'charset' => 'SJIS-win'));
 $output = array();
 foreach ($it as $values) {
   $output[] = $values;
@@ -53,8 +54,8 @@ $lime->ok($output[0] === array('えすじす','エスジス','１','表'), '0th 
 $lime->diag("UTF-8: utf8.csv");
 
 $it = new Text_CsvReader_Reader_CSV(array('file'
-                                          => dirname(__FILE__)."/csv/utf8.csv",
-                                          'encoding' => 'UTF8'));
+                                          => dirname(__FILE__)."/csv/utf8.csv"));
+
 $output = array();
 foreach ($it as $values) {
   $output[] = $values;
@@ -69,7 +70,7 @@ $lime->diag("EUC-JP: eucjp.csv");
 
 $it = new Text_CsvReader_Reader_CSV(array('file'
                                           => dirname(__FILE__)."/csv/eucjp.csv",
-                                          'encoding' => 'eucJP-win'));
+                                          'charset' => 'eucJP-win'));
 $output = array();
 foreach ($it as $values) {
   $output[] = $values;

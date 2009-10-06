@@ -3,14 +3,20 @@ class Text_CsvReader_Writer_Variable extends Text_CsvReader_Writer
 {
   protected
     $requiredOptions = array('name'),
-    $options = array(),
+    $options = array('key' => null, 'value' => null),
     $values = array();
   public function initialize()
   {
     $this->values = array();
   }
   public function write($values) {
-    $this->values[] = $values;
+    if ($this->hasOption('key') && $this->hasOption('value')) {
+      $key = $values[$this->getOption('key')];
+      $value = $values[$this->getOption('value')];
+      $this->values[$key] = $value;
+    } else {
+      $this->values[] = $values;
+    }
   }
   public function finalize() {
     Text_CsvReader::setVariable($this->getOption('name'), $this->values);
