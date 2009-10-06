@@ -241,17 +241,20 @@ abstract class Text_CsvReader_Base
     $this->defaultOptions = $options;
   }
 
-  protected function getTargetIndexes() {
+  protected function getTargetIndexes($values) {
     $indexes = array();
     if ($this->hasOption('target') && is_array($this->getOption('target'))) {
       $indexes = $this->getOption('target');
     } elseif (is_array($this->targetOptions) && $this->targetOptions !== array()) {
       foreach ($this->targetOptions as $optionName) {
+        // 配列のキーに
         if ($this->hasOption($optionName) && is_array($this->getOption($optionName))) {
           $indexes = $indexes + $this->getOption($optionName);
         }
       }
       $indexes = array_keys($indexes);
+    } else {
+      $indexes = array_keys($values);
     }
     return $indexes;
   }

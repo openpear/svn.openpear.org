@@ -5,10 +5,7 @@ abstract class Text_CsvReader_Validator extends Text_CsvReader_Base
   protected $currentValue = null;
 
   public function validateAll($values) {
-    $column_indexes = $this->getTargetIndexes();
-    if ($column_indexes === array()) {
-      $column_indexes = array_keys($values);
-    }
+    $column_indexes = $this->getTargetIndexes($values);
     $caughtException = null;
     foreach ($column_indexes as $column_index) {
       try {
