@@ -7,7 +7,8 @@ class Text_CsvReader_Writer_Csv extends Text_CsvReader_Writer
     $options = array('charset' => 'UTF-8',
                      'row_size' => 65536,
                      'delimiter' => ',',
-                     'enclosure' => '"');
+                     'enclosure' => '"',
+                     'basedir' => null);
 
   public function __construct($options = array(), $messages = array())
   {
@@ -22,9 +23,14 @@ class Text_CsvReader_Writer_Csv extends Text_CsvReader_Writer
   }
   public function fopen()
   {
-    $fp = fopen($this->getOption('file'), 'w');
+    $file = $this->getOption('file');
+    if ($this->hasOption('basedir') && !preg_match('|^/|', $file)) {
+      // fileが/以外から始まっている場合、先頭にbasedirを追加する
+      $file = $this->getOption('basedir')."/".$file;
+    }
+    $fp = fopen($file, 'w');
     if ($fp === false) {
-      throw new CsvReaderException('failed to open output file.');
+      throw new CsvReaderException('failed to open output file: '.$file);
     }
     if ($this->hasOption('charset') && $this->getOption('charset') !== 'UTF-8') {
       $filter_name = sprintf('convert.mbstring.encoding.UTF-8:%s',
