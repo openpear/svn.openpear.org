@@ -6,6 +6,7 @@ class Text_CsvReader_Sheet extends  Text_CsvReader_Base
     $writers = array(),
     $requiredOptions = array('reader'),
     $options = array(
+                     'depends' => array(),
                      'prefilter' => array(),
                      'validator' => array(),
                      'postfilter' => array(),
