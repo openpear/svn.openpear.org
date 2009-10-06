@@ -11,21 +11,27 @@ class Text_CsvReader_Reader_Csv extends Text_CsvReader_Reader
     $options = array('charset' => 'UTF-8',
                      'row_size' => 65536,
                      'delimiter' => ',',
-                     'enclosure' => '"');
+                     'enclosure' => '"',
+                     'basedir' => null);
 
   public function __construct($options = array(), $messages = array())
   {
     parent::__construct($options, $messages);
-    if (!file_exists($this->getOption('file'))) {
-      throw new CsvReaderException('input file not exists.');
-    }
     stream_filter_register("convert.mbstring.*",
                            "Stream_Filter_Mbstring");
   }
 
   public function fopen()
   {
-    $fp = fopen($this->getOption('file'), 'r');
+    $file = $this->getOption('file');
+    if ($this->hasOption('basedir') && !preg_match('|^/|', $file)) {
+      // fileが/以外から始まっている場合、先頭にbasedirを追加する
+      $file = $this->getOption('basedir')."/".$file;
+    }
+    if (!file_exists($file)) {
+      throw new CsvReaderException('input file not exists: '.$file);
+    }
+    $fp = fopen($file, 'r');
     if ($fp === false) {
       throw new CsvReaderException('failed to open input file.');
     }
