@@ -35,11 +35,13 @@ class Text_CsvReader_Sheet extends  Text_CsvReader_Base
     } else {
       throw new CsvReaderException('TODO: append filters.');
     }
-    $validators = $this->prepareInstances('validator');
     $iterator = $this->getFilterInstance($iterator, $this->getOption('prefilter'));
-    $iterator = $this->getFilterInstance($iterator,
-                                         array('ValidatorManager' =>
-                                               array('validators' => $validators)));
+    $validators = $this->prepareInstances('validator');
+    if ($validators) {
+      $iterator = $this->getFilterInstance($iterator,
+                                           array('ValidatorManager' =>
+                                                 array('validators' => $validators)));
+    }
     $iterator = $this->getFilterInstance($iterator, $this->getOption('postfilter'));
     return $iterator;
   }
