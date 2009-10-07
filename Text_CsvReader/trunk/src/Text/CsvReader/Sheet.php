@@ -17,17 +17,17 @@ class Text_CsvReader_Sheet extends  Text_CsvReader_Base
   public function __construct($options = array(), $messages = array())
   {
     parent::__construct($options, $messages);
-    $iterator = $this->getReaderIterator();
-    $writers = $this->getInstances('writer');
+    $iterator = $this->prepareReaderIterator();
+    $writers = $this->prepareInstances('writer');
     if (!$iterator || !$writers) {
       throw new CsvReaderException('no iterator or writer.');
     }
     $this->iterator = $iterator;
     $this->writers = $writers;
   }
-  protected function getReaderIterator()
+  protected function prepareReaderIterator()
   {
-    $reader_iterators = $this->getInstances('reader');
+    $reader_iterators = $this->prepareInstances('reader');
     if (sizeof($reader_iterators) == 0) {
       throw new CsvReaderException('no reader specified.');
     } elseif (sizeof($reader_iterators) == 1) {
@@ -35,7 +35,7 @@ class Text_CsvReader_Sheet extends  Text_CsvReader_Base
     } else {
       throw new CsvReaderException('TODO: append filters.');
     }
-    $validators = $this->getInstances('validator');
+    $validators = $this->prepareInstances('validator');
     $iterator = $this->getFilterInstance($iterator, $this->getOption('prefilter'));
     $iterator = $this->getFilterInstance($iterator,
                                          array('ValidatorManager' =>
@@ -64,7 +64,7 @@ class Text_CsvReader_Sheet extends  Text_CsvReader_Base
     }
     return $iterator;
   }
-  protected function getInstances($option_name)
+  protected function prepareInstances($option_name)
   {
     $classes = $this->getOption($option_name);
     $instances = array();
