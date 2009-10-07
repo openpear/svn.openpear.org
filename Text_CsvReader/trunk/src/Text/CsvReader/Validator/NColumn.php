@@ -6,7 +6,10 @@ class Text_CsvReader_Validator_NColumn extends Text_CsvReader_Validator
   public function validateAll($values) {
     $ncolumn = sizeof($values);
     if ($ncolumn !== $this->getOption('ncolumn')) {
-      throw new CsvReaderValidatorException(sprintf('カラム数が%dではありません: %d', $this->getOption('ncolumn'), $ncolumn));
+      $error = sprintf('カラム数が%dではありません: %d',
+                       $this->getOption('ncolumn'), $ncolumn);
+      return $error;
     }
+    return null;
   }
 }

@@ -11,20 +11,23 @@ include(dirname(__FILE__).'/CsvReader/AutoLoader.php');
 class Text_CsvReader
 {
   protected
-    $sheets = array();
+    $sheets = array(),
+    $options = array();
   protected static
     $variable = array();
 
   public function configure($whole_options = array())
   {
+    $this->sheets = array();
+    $this->options = array();
     foreach($whole_options as $sheet_name => $options) {
-      $this->sheets[$sheet_name] = new Text_CsvReader_Sheet($options);
+      $this->options[$sheet_name] = $options;
     }
   }
   protected function normalizeTargetSheets($target_sheets)
   {
     if ($target_sheets === null) {
-      $target_sheets = array_keys($this->sheets);
+      $target_sheets = array_keys($this->options);
     }
     if (!is_array($target_sheets)) {
       $target_sheets = array($target_sheets);
@@ -37,6 +40,12 @@ class Text_CsvReader
     $target_sheets = $this->normalizeTargetSheets($target_sheets);
     $ret = true;
     foreach ($target_sheets as $sheet_name) {
+      if (isset($this->options[$sheet_name]['depends'])) {
+        $this->process($this->options[$sheet_name]['depends']);
+      }
+      if (!isset($this->sheets[$sheet_name])) {
+        $this->sheets[$sheet_name] = new Text_CsvReader_Sheet($this->options[$sheet_name]);
+      }
       $ret = $ret && $this->sheets[$sheet_name]->processSheet($enable_writers);
     }
     return $ret;

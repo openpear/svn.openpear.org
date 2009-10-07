@@ -103,6 +103,7 @@ try
 {
   $it = new Text_CsvReader_Reader_Csv(array('file'
                                             => dirname(__FILE__)."/csv/nosuchfile"));
+  $it->rewind();
   $lime->fail('input file not exists.');
 }
 catch (CsvReaderException $e)

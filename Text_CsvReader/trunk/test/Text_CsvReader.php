@@ -55,8 +55,10 @@ $lime->diag("Exception");
 $noSuchClassConfig = $config;
 $noSuchClassConfig['simple']['reader'] = array('NoSuchReader' => null);
 
+
 try {
   $reader->configure($noSuchClassConfig);
+  $reader->process('simple');
   $lime->fail('reader class not found');
 }
 catch (CsvReaderException $e) {
@@ -70,6 +72,7 @@ $noSuchClassConfig['simple']['prefilter'] = array('NoSuchFilter' => null);
 
 try {
   $reader->configure($noSuchClassConfig);
+  $reader->process('simple');
   $lime->fail('filter class not found');
 }
 catch (CsvReaderException $e) {
@@ -83,6 +86,7 @@ $noSuchClassConfig['simple']['writer'] = array('NoSuchWriter' => null);
 
 try {
   $reader->configure($noSuchClassConfig);
+  $reader->process('simple');
   $lime->fail('writer class not found');
 }
 catch (CsvReaderException $e) {
@@ -96,6 +100,7 @@ $conflictInterfaceConfig['simple']['reader'] = $config['simple']['writer'];
 
 try {
   $reader->configure($conflictInterfaceConfig);
+  $reader->process('simple');
   $lime->fail('reader class exists, but interface conflicts');
 }
 catch (CsvReaderException $e) {
@@ -108,7 +113,7 @@ $conflictInterfaceConfig = $config;
 $conflictInterfaceConfig['simple']['prefilter'] = $config['simple']['reader'];
 try {
   $reader->configure($conflictInterfaceConfig);
-  print "========\n";
+  $reader->process('simple');
   $lime->fail('filter class exists, but interface conflicts');
 }
 catch (CsvReaderException $e) {
@@ -121,6 +126,7 @@ $conflictInterfaceConfig = $config;
 $conflictInterfaceConfig['simple']['writer'] = $config['simple']['reader'];
 try {
   $reader->configure($conflictInterfaceConfig);
+  $reader->process('simple');
   $lime->fail('writer class exists, but interface conflicts');
 }
 catch (CsvReaderException $e) {
