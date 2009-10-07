@@ -66,27 +66,3 @@ catch (CsvReaderException $e) {
   $lime->pass('required parameter not specified.');
 }
 */
-
-//--
-/*
-$lime->ok(sizeof($output1) === 3, 'array size: '. sizeof($output1));
-$lime->ok($output1[0] === array("1","2x"), '0th element');
-$lime->ok($output1[1] === array("3","2x"), '1st element');
-$lime->ok($output1[2] === array("1","5"), '2nd element');
-
-$lime->ok(sizeof($output2) === 3, 'array size: '. sizeof($output2));
-$lime->ok($output2[0] === array("1","2x"), '0th element');
-$lime->ok($output2[1] === array("3","2x"), '1st element');
-$lime->ok($output2[2] === array("1","5"), '2nd element');
-
-$lime->ok(sizeof($output3) === 3, 'array size: '. sizeof($output3));
-$lime->ok($output3[0] === array("1"," 2x "), '0th element');
-$lime->ok($output3[1] === array("3","2x"), '1st element');
-$lime->ok($output3[2] === array("1",5), '2nd element');
-
-$lime->ok(sizeof($output4) === 3, 'array size: '. sizeof($output4));
-$lime->ok($output4[0] === array(" 1","2x"), '0th element');
-$lime->ok($output4[1] === array(3,"2x"), '1st element');
-$lime->ok($output4[2] === array(" 1","5"), '2nd element');
-
-*/
