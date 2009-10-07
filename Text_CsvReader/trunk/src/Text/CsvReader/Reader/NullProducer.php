@@ -1,5 +1,4 @@
 <?php
-include_once('Stream/Filter/Mbstring.php');
 class Text_CsvReader_Reader_NullProducer extends Text_CsvReader_Reader
 {
   protected
