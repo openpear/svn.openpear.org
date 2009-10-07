@@ -1,8 +1,8 @@
 <?php
 class Text_CsvReader_Filter_ColumnChange extends Text_CsvReader_Filter
 {
-  protected $requiredOptions = array('column');
-  protected $options = array('max_column' => 0);
+  protected $options = array('column' => array(),
+                             'max_column' => 0);
   public function current() {
     $values = parent::current();
     if (!is_array($this->getOption('column'))) {
