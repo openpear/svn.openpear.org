@@ -1,26 +1,12 @@
 <?php
 class CsvReaderValidatorException extends CsvReaderException {
-  protected $validatorError = array();
-  public function __construct($msg, $errors = array())
+  protected $validatorErrors = array();
+  public function __construct($validatorErrors)
   {
+    $num_error = sizeof($validatorErrors);
+    $msg = sprintf('%d errors occurred. stopped processing.', $num_error);
     parent::__construct($msg);
-    if (!is_array($errors)) {
-      $column_index = $errors;
-      // todo
-      $this->setErrors(array($msg));
-    } else {
-      if ($errors !== array()) {
-        $this->setErrors($errors);
-      } else {
-        $this->setErrors(array($msg));
-      }
-    }
-  }
-  public function addErrors($errors) {
-    if ($errors instanceof CsvReaderValidatorException) {
-      $errors = $errors->getErrors();
-    }
-    $this->validatorErrors = array_merge($this->validatorErrors, $errors);
+    $this->setErrors($validatorErrors);
   }
   public function setErrors($errors) {
     $this->validatorErrors = $errors;
