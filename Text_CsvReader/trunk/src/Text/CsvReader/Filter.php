@@ -46,6 +46,11 @@ abstract class Text_CsvReader_Filter extends Text_CsvReader_Base implements Oute
 
   public function rewind()
   {
+    $this->initialize();
     return $this->iterator->rewind();
+  }
+
+  protected function initialize()
+  {
   }
 }
