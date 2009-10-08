@@ -12,11 +12,17 @@ class Text_CsvReader_Reader_Csv extends Text_CsvReader_Reader
                      'row_size' => 65536,
                      'delimiter' => ',',
                      'enclosure' => '"',
-                     'basedir' => null);
+                     'basedir' => null,
+                     'internal_locale' => 'ja_JP.UTF-8',
+                     );
 
   public function __construct($options = array(), $messages = array())
   {
     parent::__construct($options, $messages);
+
+    if (setlocale(LC_ALL, $this->getOption('internal_locale')) === false) {
+      throw new CsvReaderException('setting locale failure: '.$this->getOption('internal_locale'));
+    }
     stream_filter_register("convert.mbstring.*",
                            "Stream_Filter_Mbstring");
   }
