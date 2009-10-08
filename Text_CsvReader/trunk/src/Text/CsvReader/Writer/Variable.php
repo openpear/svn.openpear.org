@@ -19,7 +19,7 @@ class Text_CsvReader_Writer_Variable extends Text_CsvReader_Writer
     }
   }
   public function finalize() {
-    Text_CsvReader::setVariable($this->getOption('name'), $this->values);
+    Text_CsvReader::setArray($this->getOption('name'), $this->values);
   }
   public function rollback() {
   }

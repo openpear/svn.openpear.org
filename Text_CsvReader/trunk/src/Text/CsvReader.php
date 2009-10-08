@@ -14,7 +14,7 @@ class Text_CsvReader
     $sheets = array(),
     $options = array();
   protected static
-    $variable = array();
+    $arrayHolder = array();
 
   public function configure($whole_options = array())
   {
@@ -67,12 +67,19 @@ class Text_CsvReader
       }
     }
   }
-  static public function getVariable($name)
+  static public function getArray($name)
   {
-    return isset(self::$variable[$name]) ? self::$variable[$name] : null;
+    return isset(self::$arrayHolder[$name]) ? self::$arrayHolder[$name] : null;
   }
-  static public function setVariable($name, $value)
+  static public function getArrayValue($name, $key)
   {
-    self::$variable[$name] = $value;
+    return isset(self::$arrayHolder[$name][$key]) ? self::$arrayHolder[$name][$key] : null;
+  }
+  static public function setArray($name, $array)
+  {
+    if (!is_array($array)) {
+      throw new CsvReaderException('Text_CsvReader::setArray() expects an array.');
+    }
+    self::$arrayHolder[$name] = $array;
   }
 }
