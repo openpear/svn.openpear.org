@@ -1,7 +1,7 @@
 <?php
 include_once(dirname(__FILE__) . '/t/t.php');
 
-$lime = new lime_test(11, new lime_output_color);
+$lime = new lime_test(10, new lime_output_color);
 
 $reader = new Text_CsvReader();
 $config = array(
@@ -24,7 +24,10 @@ $config = array(
                                                                                        1=>'/^\d+$/',
                                                                                        )),
                                            ),
-                      'writer' => array('Writer_Variable' => array('name' => 'test_Text_CsvReader')),
+                      'writer' => array('Writer_Variable' => array('name' => 'test_Text_CsvReader',
+                                                                   'key'=> 0,
+                                                                   'value'=> 1,
+                                                                   )),
                       ),
                 );
 
@@ -34,19 +37,14 @@ $lime->diag("filter chain");
 
 $reader->configure($config);
 $reader->process('simple');
-$output = $reader->getVariable('test_Text_CsvReader');
 
 $lime->ok($reader->getErrors('simple') === array(), 'process finished without error');
 $reader->showErrors('simple');
 
+$output = $reader->getArray('test_Text_CsvReader');
 $lime->ok(sizeof($output) === 1, 'array size: '. sizeof($output));
-$lime->ok($output[0] === array("abc","123"), '0th element');
-
-$reader->process();
-$output = $reader->getVariable('test_Text_CsvReader');
-
-$lime->ok(sizeof($output) === 1, 'array size: '. sizeof($output));
-$lime->ok($output[0] === array("abc","123"), '0th element');
+$lime->ok($output["abc"] === "123", 'variable');
+$lime->ok($reader->getArrayValue('test_Text_CsvReader',"abc") === "123", 'variable');
 
 /* ============================== */
 

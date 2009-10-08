@@ -7,7 +7,6 @@ class Text_CsvReader_Filter_Variable extends Text_CsvReader_Mapper
   protected function map($value, $column_index)
   {
     $name = $this->getOption('name', $column_index);
-    $variable = Text_CsvReader::getVariable($name);
-    return $variable[$value];
+    return Text_CsvReader::getArrayValue($name, $value);
   }
 }
