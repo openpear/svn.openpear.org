@@ -129,12 +129,10 @@ abstract class Text_CsvReader_Base
   {
     if (!isset($this->options[$name])) {
       return '';
+    } elseif (!isset($second_level_key)) {
+      return $this->options[$name];
     } else {
-      $value = $this->options[$name];
-      if ($second_level_key !== null && is_array($value)) {
-        return isset($value[$second_level_key]) ? $value[$second_level_key] : '';
-      }
-      return $value;
+      return isset($this->options[$name][$second_level_key]) ? $this->options[$name][$second_level_key] : '';
     }
   }
 
@@ -175,12 +173,10 @@ abstract class Text_CsvReader_Base
   {
     if (!isset($this->options[$name])) {
       return false;
-    } else {
-      $value = $this->options[$name];
-      if ($second_level_key !== null && is_array($value)) {
-        return isset($value[$second_level_key]);
-      }
+    } elseif (!isset($second_level_key)) {
       return true;
+    } else {
+      return isset($this->options[$name][$second_level_key]);
     }
   }
 
