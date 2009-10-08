@@ -1,8 +1,10 @@
 <?php
 class Text_CsvReader_Grepper_Unique extends Text_CsvReader_Grepper
 {
+  protected $requiredOptions = array('target');
   protected $already_exists = array();
-  protected function acceptAll($values) {
+  protected function acceptAll($values)
+  {
     $indexes = $this->getTargetColumns($values);
     $key = null;
     foreach ($indexes as $index) {

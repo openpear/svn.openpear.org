@@ -14,7 +14,6 @@ abstract class Text_CsvReader_Filter extends Text_CsvReader_Base implements Oute
    */
   public function __construct(Iterator $iterator, $options = array(), $messages = array())
   {
-    $this->options  = array_merge(array('target' => null), $this->options);
     $this->iterator = $iterator;
     parent::__construct($options, $messages);
   }
