@@ -4,9 +4,13 @@ class Text_CsvReader_Grepper_Unique extends Text_CsvReader_Grepper
   protected $already_exists = array();
   protected function acceptAll($values) {
     $indexes = $this->getTargetColumns($values);
-    $key = "";
+    $key = null;
     foreach ($indexes as $index) {
-      $key .= $values[$index]."\0";
+      if (!isset($key)) {
+        $key = $values[$index];
+      } else {
+        $key = $key."\0".$values[$index];
+      }
     }
     if (isset($this->already_exists[$key])) {
       return false;
