@@ -49,5 +49,3 @@ try {
 catch (CsvReaderException $e) {
   $lime->pass('required parameter not specified.');
 }
-
-
