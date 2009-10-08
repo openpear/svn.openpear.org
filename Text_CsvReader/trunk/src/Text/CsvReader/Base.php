@@ -6,7 +6,9 @@ abstract class Text_CsvReader_Base
     $defaultMessages = array(),
     $defaultOptions  = array(),
     $messages        = array(),
-    $options         = array();
+    $options         = array(),
+    $targetOptions   = array(),
+    $targetColumns   = array();
 
   /**
    * Constructor.
@@ -39,6 +41,7 @@ abstract class Text_CsvReader_Base
 
     $this->options  = array_merge($this->options, $options);
     $this->messages = array_merge($this->messages, $messages);
+    $this->prepareTargetColumns();
   }
 
   /**
@@ -155,10 +158,10 @@ abstract class Text_CsvReader_Base
   public function setOption($name, $value)
   {
     if (!in_array($name, array_merge(array_keys($this->options), $this->requiredOptions))) {
-        throw new CsvReaderException(sprintf('%s does not support the following option: \'%s\'.', get_class($this), $name));
-      }
-
+      throw new CsvReaderException(sprintf('%s does not support the following option: \'%s\'.', get_class($this), $name));
+    }
     $this->options[$name] = $value;
+    $this->prepareTargetColumns();
   }
 
   /**
@@ -240,23 +243,23 @@ abstract class Text_CsvReader_Base
   {
     $this->defaultOptions = $options;
   }
-
-  protected function getTargetIndexes($values) {
-    $indexes = array();
+  protected function getTargetColumns($value) {
+    return $this->targetColumns ? $this->targetColumns : array_keys($value);
+  }
+  protected function prepareTargetColumns() {
+    $columns = array();
     if ($this->hasOption('target') && is_array($this->getOption('target'))) {
-      $indexes = $this->getOption('target');
+      $columns = $this->getOption('target');
     } elseif (is_array($this->targetOptions) && $this->targetOptions !== array()) {
       foreach ($this->targetOptions as $optionName) {
         // 配列のキーに
         if ($this->hasOption($optionName) && is_array($this->getOption($optionName))) {
-          $indexes = $indexes + $this->getOption($optionName);
+          $columns = $columns + $this->getOption($optionName);
         }
       }
-      $indexes = array_keys($indexes);
-    } else {
-      $indexes = array_keys($values);
+      $columns = array_keys($columns);
     }
-    return $indexes;
+    $this->targetColumns = $columns;
   }
 
 }

@@ -24,7 +24,7 @@ abstract class Text_CsvReader_Grepper extends Text_CsvReader_Filter
   }
 
   protected function acceptAll($values) {
-    $column_indexes = $this->getTargetIndexes($values);
+    $column_indexes = $this->getTargetColumns($values);
     foreach ($column_indexes as $column_index) {
       if ($this->accept($values[$column_index], $column_index) !== true) {
         return false;
