@@ -18,7 +18,7 @@ class Text_CsvReader_Filter_Random extends Text_CsvReader_Mapper
   }
   protected function fetchRandomValue()
   {
-    $column_indexes = $this->getTargetColumns($values);
+    $column_indexes = $this->getTargetColumns();
     foreach ($column_indexes as $column_index) {
       if ($this->hasOption('choice', $column_index)) {
         $choice = $this->getOption('choice', $column_index);
