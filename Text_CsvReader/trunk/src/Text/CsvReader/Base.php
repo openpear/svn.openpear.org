@@ -248,8 +248,12 @@ abstract class Text_CsvReader_Base
   }
   protected function prepareTargetColumns() {
     $columns = array();
-    if ($this->hasOption('target') && is_array($this->getOption('target'))) {
-      $columns = $this->getOption('target');
+    if ($this->hasOption('target')) {
+      if (is_array($this->getOption('target'))) {
+        $columns = $this->getOption('target');
+      } else {
+        $columns = array($this->getOption('target'));
+      }
     } elseif (is_array($this->targetOptions) && $this->targetOptions !== array()) {
       foreach ($this->targetOptions as $optionName) {
         if ($this->hasOption($optionName) && is_array($this->getOption($optionName))) {
