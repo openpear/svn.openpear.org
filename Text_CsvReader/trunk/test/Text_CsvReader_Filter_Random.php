@@ -10,7 +10,7 @@ $input = array(
 
 /* ============================== */
 
-$lime->diag("option test: range");
+$lime->diag("checking option: range");
 
 $it = new Text_CsvReader_Filter_Random(new ArrayIterator($input),
                                        array('range'=>
@@ -38,7 +38,7 @@ $lime->ok($output[1] === array(-100,10) || $output[1] === array(-100,11), '1st e
 
 /* ============================== */
 
-$lime->diag("option test: range");
+$lime->diag("checking option: choice");
 
 $it = new Text_CsvReader_Filter_Random(new ArrayIterator($input),
                                        array('choice'=>

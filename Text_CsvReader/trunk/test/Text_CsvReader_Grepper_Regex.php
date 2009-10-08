@@ -10,7 +10,7 @@ $input = array(array("abc","123"),
 
 /* ============================== */
 
-$lime->diag("option test: pattern");
+$lime->diag("checking option: pattern");
 
 $it = new Text_CsvReader_Grepper_Regex(new ArrayIterator($input),
                                        array('pattern'=>array(0 => '/.*/',
@@ -67,7 +67,7 @@ $lime->ok($output[1] === array("2AB","XYZ8"), '1th element');
 
 /* ============================== */
 
-$lime->diag("option test: Exception");
+$lime->diag("Exception");
 
 $it = new Text_CsvReader_Grepper_Regex(new ArrayIterator($input),
                                        array('pattern'=>array(0 => null, 1=>'')));

@@ -9,7 +9,7 @@ $input = array(array("abc","123","AtoZ"),
 
 /* ============================== */
 
-$lime->diag("option test: from/to");
+$lime->diag("checking option: from/to");
 
 $it = new Text_CsvReader_Filter_StrReplace(new ArrayIterator($input),
                                            array('from'=>array(0 => 'to'),

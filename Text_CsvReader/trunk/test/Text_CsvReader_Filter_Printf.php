@@ -9,7 +9,7 @@ $input = array(array("abc","123","AtoZ"),
 
 /* ============================== */
 
-$lime->diag("option test: from/to");
+$lime->diag("checking option: format");
 
 $it = new Text_CsvReader_Filter_Printf(new ArrayIterator($input),
                                        array('format'=>array(0 => '%s')));
@@ -39,7 +39,7 @@ $lime->ok($output[1] === array("0234","xyz","=1to9="), '1st element');
 
 /* ============================== */
 
-$lime->diag("Exception");
+$lime->diag("Exception: no option");
 
 try {
   $it = new Text_CsvReader_Filter_Printf(new ArrayIterator($input));
