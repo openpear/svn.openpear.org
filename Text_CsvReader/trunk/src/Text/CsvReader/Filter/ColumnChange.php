@@ -13,8 +13,8 @@ class Text_CsvReader_Filter_ColumnChange extends Text_CsvReader_Filter
     if ($this->hasOption('max_column')) {
       $max_index = $this->getOption('max_column');
     }
-    $to_column_index = $this->getOption('column');
-    foreach ($to_column_index as $from_index => $to_index) {
+    $to_from_indexes = $this->getOption('column');
+    foreach ($to_from_indexes as $to_index => $from_index) {
       if ($max_index < $to_index) {
         $max_index = $to_index;
       }
@@ -22,7 +22,7 @@ class Text_CsvReader_Filter_ColumnChange extends Text_CsvReader_Filter
     for ($i=0; $i <= $max_index; $i++) {
       $new_values[$i] = null;
     }
-    foreach ($this->getOption('column') as $from_index => $to_index) {
+    foreach ($to_from_indexes as $to_index => $from_index) {
       $new_values[$to_index] = $values[$from_index];
     }
     return $new_values;
