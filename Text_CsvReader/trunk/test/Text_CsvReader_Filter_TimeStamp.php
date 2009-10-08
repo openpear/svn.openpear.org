@@ -7,7 +7,7 @@ $input = array(array(0, 1230735600));
 
 /* ============================== */
 
-$lime->diag("option test: from/to");
+$lime->diag("no option: filter all values");
 
 $it = new Text_CsvReader_Filter_TimeStamp(new ArrayIterator($input));
 
@@ -20,6 +20,8 @@ $lime->ok($output[0] === array("1970-01-01 09:00:00","2009-01-01 00:00:00"), '0t
 
 /* ============================== */
 
+$lime->diag("checking option: target");
+
 $it = new Text_CsvReader_Filter_TimeStamp(new ArrayIterator($input),
                                           array('target'=>array(1)));
 $output = array();
@@ -28,4 +30,3 @@ foreach ($it as $result) {
 }
 $lime->ok(sizeof($output) === 1, 'array size: '. sizeof($output));
 $lime->ok($output[0] === array(0,"2009-01-01 00:00:00"), '0th element');
-
