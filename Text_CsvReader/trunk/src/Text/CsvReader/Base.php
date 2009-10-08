@@ -252,8 +252,8 @@ abstract class Text_CsvReader_Base
       $columns = $this->getOption('target');
     } elseif (is_array($this->targetOptions) && $this->targetOptions !== array()) {
       foreach ($this->targetOptions as $optionName) {
-        // 配列のキーに
         if ($this->hasOption($optionName) && is_array($this->getOption($optionName))) {
+          // 配列の加算をすることで、キーの重複を除去
           $columns = $columns + $this->getOption($optionName);
         }
       }
