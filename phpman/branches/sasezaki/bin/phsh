@@ -203,6 +203,7 @@ function __phshCompletion($line, $position, $cursor)
     return PHSH::completion($line, $position, $cursor);
 }
 
+require_once 'phpman.php';
 class ExtPHSH extends PHSH
 {
     //override 
@@ -225,7 +226,6 @@ class ExtPHSH extends PHSH
         } else {
             throw new Exception('...not set phpman path');
         }
-        require_once 'phpman.php';
 
         return phpman::run($args);
     }
