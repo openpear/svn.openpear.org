@@ -7,7 +7,7 @@ class Text_CsvReader_Filter_PregReplace extends Text_CsvReader_Mapper
   protected function map($value, $column_index)
   {
     return preg_replace($this->getOption('pattern', $column_index),
-                       $this->getOption('replacement', $column_index),
-                       $value);
+                        $this->getOption('replacement', $column_index),
+                        $value);
   }
 }
