@@ -1,8 +1,7 @@
 <?php
 class Text_CsvReader_Filter_AutoIncrement extends Text_CsvReader_Mapper
 {
-  // target に統一したいなー。
-  protected $requiredOptions = array('column');
+  protected $requiredOptions = array('target');
   protected $counter = 0;
 
   public function rewind()
@@ -16,9 +15,8 @@ class Text_CsvReader_Filter_AutoIncrement extends Text_CsvReader_Mapper
     return parent::next();
   }
 
-  protected function mapAll($values)
+  protected function map($value, $column_index)
   {
-    $values[$this->getOption('column')] = $this->counter;
-    return $values;
+    return $this->counter;
   }
 }
