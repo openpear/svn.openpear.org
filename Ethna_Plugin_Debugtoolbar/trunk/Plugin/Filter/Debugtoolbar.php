@@ -16,7 +16,7 @@
  */
 class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 {
-    var $version = '0.9.1 - $Id$';
+    var $version = '0.9.2 - $Id$';
 
     var $type_mapping = array(
         VAR_TYPE_INT      => 'VAR_TYPE_INT',
@@ -73,8 +73,7 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 <link rel="stylesheet" href="{$url}Debugtoolbar/css/ether.css" type="text/css" />
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
-    google.load("jquery", "1.2");
-    // $Id$
+    google.load("jquery", "1.3");
 </script>
 <script type="text/javascript" src="{$url}Debugtoolbar/js/jquery.cookie.js"></script>
 EOL;
@@ -118,7 +117,7 @@ jQuery(function()
             jQuery('.ethna-debug').each(function()
             {
                 jQuery(this).hide();
-                var local_name = jQuery(this).children('div.ethna-debug-title').text();
+                var local_name = jQuery(this).children('div.ethna-debug-title').attr('id');
 
                 if (name != local_name) {
                     state[local_name] = false;
@@ -184,7 +183,7 @@ jQuery(function()
 </script>
 EOL;
         echo '<div class="ethna-debug" id="ethna-debug-evwindow">';
-        echo '<div class="ethna-debug-title">' . ETHNA_VERSION . '</div>';
+        echo '<div class="ethna-debug-title">' . ETHNA_VERSION . ' : Action(' . $this->controller->action_name . ')</div>';
         echo "<div class=\"ethna-debug-log\">";
         echo ETHNA_VERSION;
         echo "</div> \n";
