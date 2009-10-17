@@ -16,6 +16,7 @@ class LoggerIterator Implements OuterIterator
   protected $mode = 0x0;
   const QUIET = 0x0;
   const VERBOSE = 0x01;
+  const STDERR = 0x02;
 
   public function __construct(Traversable $it, $mode = 0x0)
   {
@@ -50,15 +51,19 @@ class LoggerIterator Implements OuterIterator
       $msg = "Caught Exception: ".$e->getMessage(). "\n";
       $caught_exception = $e;
     }
-    if ($this->mode && self::VERBOSE) {
+    if ($this->mode & self::VERBOSE) {
       $msg .= sprintf("%s: %s::%s(%s) = %s\n",
                       __CLASS__,
                       get_class($this->it), $method,
                       join(",", $params),
-                      print_r($ret, true));
+                      var_export($ret, true));
     }
     if ($msg !== "") {
-      fputs(STDERR, $msg);
+      if ($this->mode & self::STDERR) {
+        fputs(STDERR, $msg);
+      } else {
+        echo $msg;
+      }
     }
     if ($caught_exception instanceof Exception) {
       throw $caught_exception;
