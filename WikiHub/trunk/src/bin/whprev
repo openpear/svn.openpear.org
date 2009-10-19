@@ -1,0 +1,30 @@
+#!@php_bin@
+<?php
+/**
+#!/usr/bin/env php
+ *  whprev
+ *
+ *  @package    WikiHub
+ *  @author     sotarok
+ *  @license    The MIT License
+ *  @id         $Id$
+ */
+
+require_once 'WikiHub.php';
+
+try {
+    if (!isset($argv)) {
+        throw new WikiHub_Exception('variable $argv is not setted. please check your setting of "register_argc_argv".');
+    }
+    array_shift($argv);
+
+    if (empty($argv)) {
+        echo WikiHub::getUsage();
+        throw new WikiHub_Exception('--');
+    }
+
+    WikiHub::runCommand(array_shift($argv));
+}
+catch (WikiHub_Exception $e) {
+    echo "Error: ", $e->getMessage(), PHP_EOL;
+}
