@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/10/3
+ *  @version    Mailer.php v 2.0.0 2009/10/25
  * 
  */
 
@@ -479,13 +479,17 @@ class Mail_Mailer implements Mailer
 			return $confirm;
 		}
 
-		$mail->send( $this->get('mailto'), $headers, $eml['mail_body']);
+		$r = $mail->send( $this->get('mailto'), $headers, $eml['mail_body']);
 		//不要な変数のメモリ開放
 		unset($mail);
 		unset($eml);
 		unset($mime);
 		//自分自身もメモリ開放
 		unset($this);
+		if(PEAR::isError($r)){
+			$this->showError('メールの送信に失敗しました');
+			return false;
+		}
 	}
 
 	
@@ -543,33 +547,31 @@ class Mail_Mailer implements Mailer
 	
 	//設定と受信で使うキー配列
 	private $keys = array(
-		'id',
-		'mailto',
-		'subject',
-		'body',
-		'from',
-		'attach',
-		'cc',
-		'bcc',
-		'search',
-		'user',
-		'password',
-		'host',
-		'port',
-		'login',
-		'delete',
-		'deleteMsg',
-		'encode',
-		'template',
-		'vars',
-		'headers',
-		'subject',
-		'body',
-		'filename',
-		'file',
-		'smtp',
-		'fetch',
-		'smarty',
+		'id', //メールID メール選択削除時に使用
+		'mailto', //メール送信先
+		'subject', //件名
+		'body', //本文
+		'from', //差出人
+		'attach', //添付ファイル
+		'cc', //CC先
+		'bcc', //BCC先
+		'search', //特定のメールだけ検索
+		'user', //ユーザー名
+		'password', //パスワード
+		'host', //メールサーバ
+		'port', //メールサーバのポート
+		'login', //ログイン方法 通常USER
+		'delete', //メールの全体削除
+		'deleteMsg', //メールの選択削除
+		'encode', //メールのエンコード方法
+		'template', //メール送信に使うテンプレートファイル名
+		'vars', //メール送信に使うテンプレートに入れるSmarty変数
+		'headers', //ヘッダー
+		'filename', //ファイル名
+		'file', //ファイル本体
+		'smtp', //外部SMTP
+		'fetch', //メール送信確認用
+		'smarty', //Smarty用の配列で返すかどうか
 	);
 	
 	/**
