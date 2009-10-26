@@ -57,7 +57,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
     function end()
     {
         $ctl = Ethna_Controller::getInstance();
-        if (!$ctl->view->has_default_header) {
+        if (is_null($ctl->view) || !$ctl->view->has_default_header) {
             return null;
         }
         echo '<div class="ethna-debug" id="ethna-debug-logwindow">';
