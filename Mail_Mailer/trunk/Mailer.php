@@ -2,9 +2,9 @@
 /**
  *  Mailer.php
  *
- *  @author     FreeBSE <freebse@live.jp>
+ *  @author     FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package    Mail_Mailer
- *  @version    Mailer.php v 2.0.0 2009/10/25
+ *  @version    Mailer.php v 2.0.0 2009/10/27
  * 
  */
 
