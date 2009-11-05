@@ -7,7 +7,7 @@
  */
 
 /**
- * 文字列の終端にヒットするパーサ。
+ * パースされる対象の終端にヒットするパーサ。
  *
  */
 class PEG_EOS implements PEG_IParser
