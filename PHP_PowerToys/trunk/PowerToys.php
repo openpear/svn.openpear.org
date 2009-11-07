@@ -1,10 +1,18 @@
 <?php
 /**
- * PHP_PowerToys 0.2.5
- * 2009/8/25
+ *  PHP_PowerToys 0.2.5
  *
+ *  @author     FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
+ *  @package    PHP_PowerToys
+ *  @version    PHP_PowerToys v 2.0.0 2009/11/7
+ * 
  */
 class PHP_PowerToys {
+	
+	function PHP_PowerToys($htmlComp=true){
+		if($htmlComp) ob_start();
+	}
+	
 	/**
 	 * 通常のクラスファクトリー
 	 *
@@ -461,6 +469,60 @@ class PHP_PowerToys {
 		}
 		$bin = implode(' ', $bin);
 		return $bin;
+	}
+	
+	/**
+	 * メモリ開放を行う
+	 * PHP5.3からはガベージコレクタが追加されたので意味がなくなる
+	 * 実験
+	 *
+	 * @param int $debug メモリ使用量の参照(何故か減らない？(汗 から実験 )
+	 */
+	function gerbageCollection($debug=true){
+		if($debug && preg_match('/^5\./', phpversion())){
+			echo memory_get_usage()."<br />";
+		}
+		unset($GLOBALS);
+		foreach(get_defined_vars() as $key => $val){
+			unset($key);
+			unset($val);
+		}
+		unset($this);
+		if($debug && preg_match('/^5\./', phpversion())){
+			unset($debug);
+			echo memory_get_usage()."<br />";
+		}
+	}
+		
+	/**
+	 * HTMLの不要な部分を取り除いて圧縮する
+	 * 携帯ではdeflateが効かないので主に携帯向け、デザイン構造が見られるわけでもないし
+	 * 最近では携帯も高速化されパケット節約の必要もなくなったが、より表示速度が速くなる事に越した事はない
+	 *
+	 */
+	function compressHtml($option=null){
+		$f = ob_get_contents();
+		ob_clean();
+		$before = strlen($f);
+		if($option == 'debug'){
+			echo "Before:".strlen($f)."Bytes<br>";
+		}
+		$f = preg_replace("/\r|\r\n|\n|\t|	/", "", $f);
+		$f = str_replace("<br />", "<br>", $f);
+		$f = preg_replace("/[a-zA-Z0-9]+=\"{2}?/", "", $f);
+		$f = str_replace("<strong>", "<b>", $f);
+		$f = str_replace("<\/strong>", "</b>", $f);
+		$f = str_replace("<em>", "<i>", $f);
+		$f = str_replace("</em>", "</i>", $f);
+		$f = str_replace("<strike>", "<u>", $f);
+		$f = str_replace("</strike>", "</u>", $f);
+		$f = preg_replace("/<!--.+?-->/", "", $f);
+		$f = mb_convert_kana($f, 'as');
+		$per = (int) (strlen($f) / $before * 100);
+		if($option == 'debug'){
+			echo "After:".strlen($f)."Bytes<br>Compressibility:".$per."%";
+		}
+		echo $f;
 	}
 }
 ?>
