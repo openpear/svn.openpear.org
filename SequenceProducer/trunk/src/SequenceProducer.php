@@ -1,7 +1,7 @@
 <?php
 
   /**
-   * SequenceProducer - 連続値を出力するイテレータ
+   * SequenceProducer - 連続した整数を順に返すイテレータ
    *
    * @package  SequenceProducer
    * @author  Yoshio HANAWA <y@hnw.jp>
@@ -16,6 +16,17 @@ class SequenceProducer implements Iterator
     $min = null,
     $max = null;
 
+  /**
+   * コンストラクタ。
+   *
+   * このイテレータは、第一引数から第二引数までの整数を順に返します。
+   * 第二引数が省略された場合は無限に動作します。
+   *
+   * @param integer $min イテレータが返す1つめの値（最小値）
+   * @param integer $max イテレータの返す最後の値（最大値）
+   * @throws InvalidArgumentException
+   *
+   */
   public function __construct($min, $max=null)
   {
     if (is_array($min) || is_object($min)) {
@@ -40,8 +51,10 @@ class SequenceProducer implements Iterator
                                                  ));
 
     }
-    $this->min = $min;
-    $this->max = $max;
+    $this->min = (int)$min;
+    if (isset($max)) {
+      $this->max = (int)$max;
+    }
   }
   public function valid()
   {
