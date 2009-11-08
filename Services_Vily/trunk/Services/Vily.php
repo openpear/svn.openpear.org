@@ -29,7 +29,7 @@ class Services_Vily
      * @return  void
      *
      */
-    public funtino __construct()
+    public function __construct()
     {
     }
 
@@ -44,7 +44,7 @@ class Services_Vily
      */
     public function shorten($longurl)
     {
-        $baseurl = self::VILY_API_URL
+        $baseurl = self::VILY_API_URL;
 
         $apiurl = $baseurl  . '/api?'
                             . 'url='    . $logurl
