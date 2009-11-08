@@ -47,7 +47,7 @@ class Services_Vily
         $baseurl = self::VILY_API_URL;
 
         $apiurl = $baseurl  . '/api?'
-                            . 'url='    . $logurl
+                            . 'url='    . $longurl
                             . '';
 
         $curl   = curl_init();
