@@ -4,13 +4,13 @@
  *
  *  @author     FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package    PHP_PowerToys
- *  @version    PHP_PowerToys v 0.2.5 2009/11/7
+ *  @version    PHP_PowerToys v 0.2.5 2009/11/11
  * 
  */
 class PHP_PowerToys {
 	
-	function PHP_PowerToys($htmlComp=true){
-		if($htmlComp) ob_start();
+	function PHP_PowerToys($option=null){
+		if($option='compress') ob_start();
 	}
 	
 	/**
@@ -478,7 +478,7 @@ class PHP_PowerToys {
 	 *
 	 * @param int $debug メモリ使用量の参照(何故か減らない？(汗 から実験 )
 	 */
-	function gerbageCollection($debug=true){
+	function garbageCollection($debug=true){
 		if($debug && preg_match('/^5\./', phpversion())){
 			echo memory_get_usage()."<br />";
 		}
@@ -514,8 +514,8 @@ class PHP_PowerToys {
 		$f = str_replace("<\/strong>", "</b>", $f);
 		$f = str_replace("<em>", "<i>", $f);
 		$f = str_replace("</em>", "</i>", $f);
-		$f = str_replace("<strike>", "<u>", $f);
-		$f = str_replace("</strike>", "</u>", $f);
+		$f = str_replace("<strike>", "<s>", $f);
+		$f = str_replace("</strike>", "</s>", $f);
 		$f = preg_replace("/<!--.+?-->/", "", $f);
 		$f = mb_convert_kana($f, 'as');
 		$per = (int) (strlen($f) / $before * 100);
