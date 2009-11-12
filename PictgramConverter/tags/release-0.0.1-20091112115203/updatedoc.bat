@@ -1,0 +1,1 @@
+pearproj -doc --configure ./build.conf -p ./

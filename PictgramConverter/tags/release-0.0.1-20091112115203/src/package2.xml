@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>PictgramConverter</name>
+ <channel>__uri</channel>
+ <summary>#</summary>
+ <description>#PictgramConverter
+
+
+
+携帯絵文字変換ライブラリ
+
+
+サポートする機能
+-絵文字sjisバイナリをutf-8バイナリに変換
+-キャリア間の絵文字変換
+
+
+
+使い方
+&lt;?php
+
+require &apos;Text/PictgramConverter&apos;;
+
+$utf = PictgramConverter::convert($s, PictgramConverter::DOCOMO);
+//絵文字を含むsjis(cp932)文字列をutf-8に変換
+
+
+echo PictgramConverter::restore($s, PictgramConverter::EZWEB);
+//ezwebの絵文字を含むsjis文字列に変換
+ </description>
+ <lead>
+  <name>takada-at</name>
+  <user>takada-at</user>
+  <email>takada-at@klab.jp</email>
+  <active>yes</active>
+ </lead>
+ <date>2009-11-12</date>
+ <time>10:24:13</time>
+ <version>
+  <release>0.0.1</release>
+  <api>0.0.1</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+ <notes>
+[0.0.1]
+- First release
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <dir name="Text">
+    <dir name="PictgramConverter">
+     <dir name="data">
+      <file name="docomo_convert.json" role="php" />
+      <file name="docomo_emoji.json" role="php" />
+      <file name="ezweb_convert.json" role="php" />
+      <file name="ezweb_emoji.json" role="php" />
+      <file name="softbank_convert.json" role="php" />
+      <file name="softbank_emoji.json" role="php" />
+     </dir> <!-- //Text/PictgramConverter/data -->
+    </dir> <!-- //Text/PictgramConverter -->
+    <file name="PictgramConverter.php" role="php" />
+   </dir> <!-- //Text -->
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.11</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-11-11</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.1.0]
+- First release
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.0.1</release>
+    <api>0.0.1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-11-12</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.0.1]
+- First release
+   </notes>
+  </release>
+ </changelog>
+</package>
