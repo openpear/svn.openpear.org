@@ -1,4 +1,9 @@
-HTML::PictgramConverter
+PictgramConverter
+
+
+
+携帯絵文字変換ライブラリ
+
 
 サポートする機能
 -絵文字sjisバイナリをutf-8バイナリに変換
