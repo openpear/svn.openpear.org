@@ -1,9 +1,13 @@
 <?php
-ini_set("include_path", dirname(__FILE__)."/src/" . PATH_SEPARATOR . ini_get("include_path"));
-require_once "HTML/PictgramConverter.php";
+require 'Text/PictgramConverter';
 
-// Test
-$obj = new HTML_PictgramConverter();
+$utf = PictgramConverter::convert($s, PictgramConverter::DOCOMO);
+//絵文字を含むsjis(cp932)文字列をutf-8に変換
+
+
+echo PictgramConverter::restore($s, PictgramConverter::EZWEB);
+//ezwebの絵文字を含むsjis文字列に変換
+
 
 
 
