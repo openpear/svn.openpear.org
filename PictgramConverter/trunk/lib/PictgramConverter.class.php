@@ -170,7 +170,7 @@ class PictgramConverter
 
     private static function loadData(){
 
-        $cache = self::loadCache(self::$datadir . DIRECTORY_SEPARATOR . self::$cacheKey);
+        $cache = self::loadCache(self::$cacheFile);
         if($cache!=null
            && array_key_exists("convertFrom", $cache)
            && array_key_exists("convertMap", $cache)
@@ -181,15 +181,26 @@ class PictgramConverter
             return;
         }
         // 無制限にキャッシュ
-        $cache = self::createMapping($path);
+        $cache = self::createMapping(self::$datadir);
+        self::$convertFrom = $cache["convertFrom"];
+        self::$convertMap = $cache["convertMap"];
+
         self::doCache($cache);
         self::$loaded = true;
     }
 
     private static function loadCache($file){
+        //if (function_exists("apc_fetch"))
+        //{
+        //    return apc_fetch(self::$cacheKey);
+        //}
         try{
-            //return unserialize(file_get_contents($file));
-            require_once(self::$cacheFile);
+            if(file_exists(self::$cacheFile)){
+                return unserialize(file_get_contents($file));
+                //require_once(self::$cacheFile);
+            }else{
+                return null;
+            }
             return $data;
         }catch(Exception $e){
             return null;
@@ -197,13 +208,17 @@ class PictgramConverter
     }
 
     private static function doCache($data){
-        //$cdata = serialize($data);
-        $cdata = "<?php $data=". self::dump_hash($data);
-        $root = realpath(dirname(__FILE__).'/..');
-        $path = $root . DIRECTORY_SEPARATOR."data";
-        $hd = fopen(self::$cacheFile, "w");
-        fwrite($hd, $cdata);
-        fclose($hd);
+        if (function_exists("apc_store"))
+        {
+            var_dump(123);
+            return apc_store(self::$cacheKey, $data, 0);
+        }else{
+            $cdata = serialize($data);
+            $hd = fopen(self::$cacheFile, "w");
+            fwrite($hd, $cdata);
+            fclose($hd);
+            return;
+        }
     }
     private static function hex2bin($s){
         //echo "hex2bin$s\n";
