@@ -14,9 +14,9 @@
   <active>yes</active>
  </lead>
  <date>2009-11-11</date>
- <time>12:13:05</time>
+ <time>13:43:22</time>
  <version>
-  <release>0.1.0</release>
+  <release>0.0.1</release>
   <api>0.1.0</api>
  </version>
  <stability>
@@ -32,20 +32,15 @@
   <dir baseinstalldir="/" name="/">
    <dir name="HTML">
     <dir name="PictgramConverter">
-     <dir name="PictgramConverter">
-      <dir name="data">
-       <file name="docomo_convert.json" role="data" />
-       <file name="docomo_emoji.json" role="data" />
-       <file name="ezweb_convert.json" role="data" />
-       <file name="ezweb_emoji.json" role="data" />
-       <file name="pictgram_converter" role="data" />
-       <file name="softbank_convert.json" role="data" />
-       <file name="softbank_emoji.json" role="data" />
-      </dir> <!-- //HTML/PictgramConverter/PictgramConverter/data -->
-      <dir name="lib">
-       <file name="PictgramConverter.class.php" role="php" />
-      </dir> <!-- //HTML/PictgramConverter/PictgramConverter/lib -->
-     </dir> <!-- //HTML/PictgramConverter/PictgramConverter -->
+     <dir name="data">
+      <file name="docomo_convert.json" role="data" />
+      <file name="docomo_emoji.json" role="data" />
+      <file name="ezweb_convert.json" role="data" />
+      <file name="ezweb_emoji.json" role="data" />
+      <file name="pictgram_converter.cache" role="data" />
+      <file name="softbank_convert.json" role="data" />
+      <file name="softbank_emoji.json" role="data" />
+     </dir> <!-- //HTML/PictgramConverter/data -->
     </dir> <!-- //HTML/PictgramConverter -->
     <file name="PictgramConverter.php" role="php" />
    </dir> <!-- //HTML -->
@@ -63,6 +58,22 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.0.1</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-11-11</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP License 3.01</license>
+   <notes>
+[0.1.0]
+- First release
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.1.0</release>
