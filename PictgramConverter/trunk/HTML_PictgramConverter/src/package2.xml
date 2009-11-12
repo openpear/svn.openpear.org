@@ -8,13 +8,13 @@
  <summary>#</summary>
  <description>#</description>
  <lead>
-  <name>fullname</name>
+  <name>takada-at</name>
   <user>handlename</user>
-  <email>email@local.local</email>
+  <email>takada-at@klab.jp</email>
   <active>yes</active>
  </lead>
  <date>2009-11-11</date>
- <time>12:07:23</time>
+ <time>12:13:05</time>
  <version>
   <release>0.1.0</release>
   <api>0.1.0</api>
@@ -31,6 +31,22 @@
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="HTML">
+    <dir name="PictgramConverter">
+     <dir name="PictgramConverter">
+      <dir name="data">
+       <file name="docomo_convert.json" role="data" />
+       <file name="docomo_emoji.json" role="data" />
+       <file name="ezweb_convert.json" role="data" />
+       <file name="ezweb_emoji.json" role="data" />
+       <file name="pictgram_converter" role="data" />
+       <file name="softbank_convert.json" role="data" />
+       <file name="softbank_emoji.json" role="data" />
+      </dir> <!-- //HTML/PictgramConverter/PictgramConverter/data -->
+      <dir name="lib">
+       <file name="PictgramConverter.class.php" role="php" />
+      </dir> <!-- //HTML/PictgramConverter/PictgramConverter/lib -->
+     </dir> <!-- //HTML/PictgramConverter/PictgramConverter -->
+    </dir> <!-- //HTML/PictgramConverter -->
     <file name="PictgramConverter.php" role="php" />
    </dir> <!-- //HTML -->
   </dir> <!-- / -->
