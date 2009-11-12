@@ -3,7 +3,7 @@
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
- <name>HTML_PictgramConverter</name>
+ <name>PictgramConverter</name>
  <channel>__uri</channel>
  <summary>#</summary>
  <description>#</description>
@@ -14,7 +14,7 @@
   <active>yes</active>
  </lead>
  <date>2009-11-11</date>
- <time>13:47:38</time>
+ <time>14:40:50</time>
  <version>
   <release>0.0.1</release>
   <api>0.1.0</api>
@@ -30,20 +30,19 @@
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
-   <dir name="HTML">
+   <dir name="Text">
     <dir name="PictgramConverter">
      <dir name="data">
-      <file name="docomo_convert.json" role="data" />
-      <file name="docomo_emoji.json" role="data" />
-      <file name="ezweb_convert.json" role="data" />
-      <file name="ezweb_emoji.json" role="data" />
-      <file name="pictgram_converter.cache" role="data" />
-      <file name="softbank_convert.json" role="data" />
-      <file name="softbank_emoji.json" role="data" />
-     </dir> <!-- //HTML/PictgramConverter/data -->
-    </dir> <!-- //HTML/PictgramConverter -->
+      <file name="docomo_convert.json" role="php" />
+      <file name="docomo_emoji.json" role="php" />
+      <file name="ezweb_convert.json" role="php" />
+      <file name="ezweb_emoji.json" role="php" />
+      <file name="softbank_convert.json" role="php" />
+      <file name="softbank_emoji.json" role="php" />
+     </dir> <!-- //Text/PictgramConverter/data -->
+    </dir> <!-- //Text/PictgramConverter -->
     <file name="PictgramConverter.php" role="php" />
-   </dir> <!-- //HTML -->
+   </dir> <!-- //Text -->
   </dir> <!-- / -->
  </contents>
  <dependencies>

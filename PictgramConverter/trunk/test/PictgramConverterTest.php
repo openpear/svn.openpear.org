@@ -1,7 +1,7 @@
 <?php
 
 require_once(dirname(__FILE__).'/lime.php');
-require_once("HTML/PictgramConverter.php");
+require_once("Text/PictgramConverter.php");
 //require_once(dirname(__FILE__).'/../HTML_PictgramConverter/src/HTML/PictgramConverter.php');
 
 

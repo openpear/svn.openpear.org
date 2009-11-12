@@ -117,8 +117,8 @@ class PictgramConverter
      */
     public static function init(){
         if(!self::$loaded){
-            $root = realpath(dirname(__FILE__).'/../');
-            $path = $root . DIRECTORY_SEPARATOR."HTML/PictgramConverter/data";
+            $root = realpath(dirname(__FILE__));
+            $path = $root . DIRECTORY_SEPARATOR."PictgramConverter/data";
             self::$datadir = $path;
             self::$cacheFile = self::$datadir .DIRECTORY_SEPARATOR . self::$cacheKey . ".cache";
             self::loadData();
