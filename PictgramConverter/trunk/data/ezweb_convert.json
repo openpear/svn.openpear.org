@@ -1,0 +1,3234 @@
+{
+  "ezweb": {
+    "496": {
+      "docomo": "38",
+      "ezweb": "496",
+      "softbank": "505"
+    },
+    "449": {
+      "docomo": "(\u00b4_\uff40)",
+      "ezweb": "449",
+      "softbank": "413"
+    },
+    "31": {
+      "docomo": "1045",
+      "ezweb": "31",
+      "softbank": "351"
+    },
+    "259": {
+      "docomo": "1034",
+      "ezweb": "259",
+      "softbank": "417"
+    },
+    "497": {
+      "docomo": "38",
+      "ezweb": "497",
+      "softbank": "506"
+    },
+    "32": {
+      "docomo": "\u25bc",
+      "ezweb": "32",
+      "softbank": "\u25bc"
+    },
+    "500": {
+      "docomo": "\uff3b\uff75\uff70\uff8c\uff9f\uff9d\uff73\uff6a\uff8c\uff9e\uff3d",
+      "ezweb": "500",
+      "softbank": "\uff3b\uff75\uff70\uff8c\uff9f\uff9d\uff73\uff6a\uff8c\uff9e\uff3d"
+    },
+    "498": {
+      "docomo": "\uff3b\u5de5\u5834\uff3d",
+      "ezweb": "498",
+      "softbank": "508"
+    },
+    "310": {
+      "docomo": "63",
+      "ezweb": "310",
+      "softbank": "503"
+    },
+    "120": {
+      "docomo": "116",
+      "ezweb": "120",
+      "softbank": "63"
+    },
+    "80": {
+      "docomo": "140",
+      "ezweb": "80",
+      "softbank": "1"
+    },
+    "501": {
+      "docomo": "\uff3b\uff76\uff77\uff9e\uff3d",
+      "ezweb": "501",
+      "softbank": "168"
+    },
+    "499": {
+      "docomo": "\uff3b\uff8c\uff97\uff9d\uff7d\uff3d",
+      "ezweb": "499",
+      "softbank": "513"
+    },
+    "33": {
+      "docomo": "\u25b2",
+      "ezweb": "33",
+      "softbank": "\u25b2"
+    },
+    "311": {
+      "docomo": "64",
+      "ezweb": "311",
+      "softbank": "316"
+    },
+    "121": {
+      "docomo": "70",
+      "ezweb": "121",
+      "softbank": "172"
+    },
+    "81": {
+      "docomo": "1038",
+      "ezweb": "81",
+      "softbank": "278"
+    },
+    "502": {
+      "docomo": "\uff3bABCD\uff3d",
+      "ezweb": "502",
+      "softbank": "\uff3bABCD\uff3d"
+    },
+    "34": {
+      "docomo": "\u25bc",
+      "ezweb": "34",
+      "softbank": "\u25bc"
+    },
+    "312": {
+      "docomo": "71",
+      "ezweb": "312",
+      "softbank": "320"
+    },
+    "122": {
+      "docomo": "70",
+      "ezweb": "122",
+      "softbank": "172"
+    },
+    "82": {
+      "docomo": "1043",
+      "ezweb": "82",
+      "softbank": "279"
+    },
+    "740": {
+      "docomo": "\uff3b\uff84\uff73\uff93\uff9b\uff7a\uff7c\uff3d",
+      "ezweb": "740",
+      "softbank": "\uff3b\uff84\uff73\uff93\uff9b\uff7a\uff7c\uff3d"
+    },
+    "503": {
+      "docomo": "\uff3babcd\uff3d",
+      "ezweb": "503",
+      "softbank": "\uff3babcd\uff3d"
+    },
+    "35": {
+      "docomo": "\u25b2",
+      "ezweb": "35",
+      "softbank": "\u25b2"
+    },
+    "313": {
+      "docomo": "73",
+      "ezweb": "313",
+      "softbank": "375"
+    },
+    "123": {
+      "docomo": "\uff3b\uff88\uff7c\uff9e\uff3d",
+      "ezweb": "123",
+      "softbank": "\uff3b\uff88\uff7c\uff9e\uff3d"
+    },
+    "83": {
+      "docomo": "69",
+      "ezweb": "83",
+      "softbank": "335"
+    },
+    "360": {
+      "docomo": "\uff3b\u5674\u6c34\uff3d",
+      "ezweb": "360",
+      "softbank": "133"
+    },
+    "170": {
+      "docomo": "\uff3b\uff7b\uff72\uff7a\uff9b\uff3d",
+      "ezweb": "170",
+      "softbank": "\uff3b\uff7b\uff72\uff7a\uff9b\uff3d"
+    },
+    "741": {
+      "docomo": "\uff3b\uff77\uff89\uff7a\uff3d",
+      "ezweb": "741",
+      "softbank": "\uff3b\uff77\uff89\uff7a\uff3d"
+    },
+    "504": {
+      "docomo": "\uff3b1234\uff3d",
+      "ezweb": "504",
+      "softbank": "\uff3b1234\uff3d"
+    },
+    "36": {
+      "docomo": "\u25c6",
+      "ezweb": "36",
+      "softbank": "227"
+    },
+    "314": {
+      "docomo": "81",
+      "ezweb": "314",
+      "softbank": "214"
+    },
+    "124": {
+      "docomo": "55",
+      "ezweb": "124",
+      "softbank": "162"
+    },
+    "84": {
+      "docomo": "76",
+      "ezweb": "84",
+      "softbank": "301"
+    },
+    "361": {
+      "docomo": "64",
+      "ezweb": "361",
+      "softbank": "134"
+    },
+    "171": {
+      "docomo": "70",
+      "ezweb": "171",
+      "softbank": "172"
+    },
+    "742": {
+      "docomo": "\uff3b\u6817\uff3d",
+      "ezweb": "742",
+      "softbank": "\uff3b\u6817\uff3d"
+    },
+    "505": {
+      "docomo": "\uff3b\u8a18\u53f7\uff3d",
+      "ezweb": "505",
+      "softbank": "\uff3b\u8a18\u53f7\uff3d"
+    },
+    "37": {
+      "docomo": "\u25c6",
+      "ezweb": "37",
+      "softbank": "227"
+    },
+    "315": {
+      "docomo": "82",
+      "ezweb": "315",
+      "softbank": "213"
+    },
+    "125": {
+      "docomo": "33",
+      "ezweb": "125",
+      "softbank": "27"
+    },
+    "85": {
+      "docomo": "74",
+      "ezweb": "85",
+      "softbank": "9"
+    },
+    "362": {
+      "docomo": "\uff3b\u9ebb\u96c0\uff3d",
+      "ezweb": "362",
+      "softbank": "145"
+    },
+    "172": {
+      "docomo": "30",
+      "ezweb": "172",
+      "softbank": "30"
+    },
+    "790": {
+      "docomo": "1035",
+      "ezweb": "790",
+      "softbank": "419"
+    },
+    "743": {
+      "docomo": "\uff3b\uff93\uff93\uff3d",
+      "ezweb": "743",
+      "softbank": "\uff3b\uff93\uff93\uff3d"
+    },
+    "506": {
+      "docomo": "135",
+      "ezweb": "506",
+      "softbank": "432"
+    },
+    "38": {
+      "docomo": "\u25a0",
+      "ezweb": "38",
+      "softbank": "227"
+    },
+    "316": {
+      "docomo": "83",
+      "ezweb": "316",
+      "softbank": "215"
+    },
+    "126": {
+      "docomo": "\uff3bMD\uff3d",
+      "ezweb": "126",
+      "softbank": "322"
+    },
+    "86": {
+      "docomo": "76",
+      "ezweb": "86",
+      "softbank": "301"
+    },
+    "363": {
+      "docomo": "\uff3bVS\uff3d",
+      "ezweb": "363",
+      "softbank": "146"
+    },
+    "173": {
+      "docomo": "\u3000",
+      "ezweb": "173",
+      "softbank": "\u3000"
+    },
+    "791": {
+      "docomo": "1035",
+      "ezweb": "791",
+      "softbank": "419"
+    },
+    "744": {
+      "docomo": "\uff3b\u713c\u304d\u828b\uff3d",
+      "ezweb": "744",
+      "softbank": "\uff3b\u713c\u304d\u828b\uff3d"
+    },
+    "507": {
+      "docomo": "v",
+      "ezweb": "507",
+      "softbank": "v"
+    },
+    "39": {
+      "docomo": "\u25a0",
+      "ezweb": "39",
+      "softbank": "226"
+    },
+    "317": {
+      "docomo": "84",
+      "ezweb": "317",
+      "softbank": "425"
+    },
+    "127": {
+      "docomo": "\uff3b\uff78\uff9e\uff97\uff8c\uff3d",
+      "ezweb": "127",
+      "softbank": "174"
+    },
+    "87": {
+      "docomo": "\uff3b\uff76\uff70\uff84\uff9e\uff3d",
+      "ezweb": "87",
+      "softbank": "\uff3b\uff76\uff70\uff84\uff9e\uff3d"
+    },
+    "364": {
+      "docomo": "1015",
+      "ezweb": "364",
+      "softbank": "149"
+    },
+    "174": {
+      "ezweb": "174"
+    },
+    "792": {
+      "docomo": "1072",
+      "ezweb": "792",
+      "softbank": "404"
+    },
+    "745": {
+      "docomo": "\uff3b\uff8b\uff9f\uff7b\uff9e\uff3d",
+      "ezweb": "745",
+      "softbank": "\uff3b\uff8b\uff9f\uff7b\uff9e\uff3d"
+    },
+    "508": {
+      "docomo": "169",
+      "ezweb": "508",
+      "softbank": "_\u3006(\uff3e\uff3e ) "
+    },
+    "318": {
+      "docomo": "85",
+      "ezweb": "318",
+      "softbank": "427"
+    },
+    "128": {
+      "docomo": "\uff3b\uff78\uff9e\uff97\uff8c\uff3d",
+      "ezweb": "128",
+      "softbank": "174"
+    },
+    "365": {
+      "docomo": "\uff3b\uff76\uff92\uff3d",
+      "ezweb": "365",
+      "softbank": "\uff3b\uff76\uff92\uff3d"
+    },
+    "175": {
+      "ezweb": "175"
+    },
+    "793": {
+      "docomo": "21",
+      "ezweb": "793",
+      "softbank": "325"
+    },
+    "746": {
+      "docomo": "\uff3b\uff81\uff77\uff9d\uff3d",
+      "ezweb": "746",
+      "softbank": "\uff3b\uff81\uff77\uff9d\uff3d"
+    },
+    "509": {
+      "docomo": "\u25ce",
+      "ezweb": "509",
+      "softbank": "\u25ce"
+    },
+    "319": {
+      "docomo": "87",
+      "ezweb": "319",
+      "softbank": "17"
+    },
+    "129": {
+      "docomo": "40",
+      "ezweb": "129",
+      "softbank": "101"
+    },
+    "88": {
+      "docomo": "\u25b2",
+      "ezweb": "88",
+      "softbank": "\u25b2"
+    },
+    "366": {
+      "docomo": "\uff3b\uff7d\uff8d\uff9f\uff72\uff9d\uff3d",
+      "ezweb": "366",
+      "softbank": "517"
+    },
+    "176": {
+      "docomo": "66",
+      "ezweb": "176",
+      "softbank": "314"
+    },
+    "794": {
+      "docomo": "\uff3b\uff93\uff71\uff72\uff3d",
+      "ezweb": "794",
+      "softbank": "\uff3b\uff93\uff71\uff72\uff3d"
+    },
+    "747": {
+      "docomo": "\uff3b\u4e03\u5915\uff3d",
+      "ezweb": "747",
+      "softbank": "\uff3b\u4e03\u5915\uff3d"
+    },
+    "89": {
+      "docomo": "\u25bc",
+      "ezweb": "89",
+      "softbank": "\u25bc"
+    },
+    "367": {
+      "docomo": "\uff3b\uff9b\uff7c\uff71\uff3d",
+      "ezweb": "367",
+      "softbank": "518"
+    },
+    "177": {
+      "docomo": "67",
+      "ezweb": "177",
+      "softbank": "208"
+    },
+    "795": {
+      "docomo": "30",
+      "ezweb": "795",
+      "softbank": "57"
+    },
+    "748": {
+      "docomo": "52",
+      "ezweb": "748",
+      "softbank": "68"
+    },
+    "368": {
+      "docomo": "1044",
+      "ezweb": "368",
+      "softbank": "155"
+    },
+    "178": {
+      "docomo": "94",
+      "ezweb": "178",
+      "softbank": "210"
+    },
+    "796": {
+      "docomo": "\uff3b\u82b1\u672d\uff3d",
+      "ezweb": "796",
+      "softbank": "\uff3b\u82b1\u672d\uff3d"
+    },
+    "749": {
+      "docomo": "\uff3b\u8fb0\uff3d",
+      "ezweb": "749",
+      "softbank": "\uff3b\u8fb0\uff3d"
+    },
+    "369": {
+      "docomo": "147",
+      "ezweb": "369",
+      "softbank": "163"
+    },
+    "179": {
+      "docomo": "\uff3b\u82e5\u8449\uff8f\uff70\uff78\uff3d",
+      "ezweb": "179",
+      "softbank": "209"
+    },
+    "797": {
+      "docomo": "81",
+      "ezweb": "797",
+      "softbank": "214"
+    },
+    "800": {
+      "docomo": "1040",
+      "ezweb": "800",
+      "softbank": "201"
+    },
+    "798": {
+      "docomo": "\uff3b\uff74\uff8b\uff9e\uff8c\uff97\uff72\uff3d",
+      "ezweb": "798",
+      "softbank": "\uff3b\uff74\uff8b\uff9e\uff8c\uff97\uff72\uff3d"
+    },
+    "420": {
+      "docomo": "150",
+      "ezweb": "420",
+      "softbank": "346"
+    },
+    "230": {
+      "docomo": "\uff3b\u304f\u3059\u7389\uff3d",
+      "ezweb": "230",
+      "softbank": "\uff3b\u304f\u3059\u7389\uff3d"
+    },
+    "801": {
+      "docomo": "\uff3b\uff8a\uff9f\uff84\uff76\uff70\uff3d",
+      "ezweb": "801",
+      "softbank": "450"
+    },
+    "799": {
+      "docomo": "110",
+      "ezweb": "799",
+      "softbank": "103"
+    },
+    "421": {
+      "docomo": "26",
+      "ezweb": "421",
+      "softbank": "19"
+    },
+    "231": {
+      "docomo": "\u25ce",
+      "ezweb": "231",
+      "softbank": "148"
+    },
+    "802": {
+      "docomo": "\uff3bEZ\uff91\uff70\uff8b\uff9e\uff70\uff3d",
+      "ezweb": "802",
+      "softbank": "\uff3bEZ\uff91\uff70\uff8b\uff9e\uff70\uff3d"
+    },
+    "422": {
+      "docomo": "99",
+      "ezweb": "422",
+      "softbank": "350"
+    },
+    "232": {
+      "docomo": "78",
+      "ezweb": "232",
+      "softbank": "143"
+    },
+    "803": {
+      "docomo": "137",
+      "ezweb": "803",
+      "softbank": "339"
+    },
+    "470": {
+      "docomo": "155",
+      "ezweb": "470",
+      "softbank": "444"
+    },
+    "423": {
+      "docomo": "1019",
+      "ezweb": "423",
+      "softbank": "356"
+    },
+    "233": {
+      "docomo": "1010",
+      "ezweb": "233",
+      "softbank": "147"
+    },
+    "280": {
+      "docomo": "\uff3b100\u70b9\uff3d",
+      "ezweb": "280",
+      "softbank": "\uff3b100\u70b9\uff3d"
+    },
+    "804": {
+      "docomo": "1068",
+      "ezweb": "804",
+      "softbank": "535"
+    },
+    "471": {
+      "docomo": "\uff3b\u6c34\u6cf3\uff3d",
+      "ezweb": "471",
+      "softbank": "445"
+    },
+    "424": {
+      "docomo": "1066",
+      "ezweb": "424",
+      "softbank": "357"
+    },
+    "234": {
+      "docomo": "103",
+      "ezweb": "234",
+      "softbank": "51"
+    },
+    "281": {
+      "docomo": "153",
+      "ezweb": "281",
+      "softbank": "13"
+    },
+    "805": {
+      "docomo": "1006",
+      "ezweb": "805",
+      "softbank": "\uff3b\uff7c\uff9e\uff70\uff9d\uff7d\uff9e\uff3d"
+    },
+    "472": {
+      "docomo": "\uff3b\u6d88\u9632\u8eca\uff3d",
+      "ezweb": "472",
+      "softbank": "448"
+    },
+    "425": {
+      "docomo": "\uff3b\uff7f\uff8c\uff84\uff78\uff98\uff70\uff91\uff3d",
+      "ezweb": "425",
+      "softbank": "358"
+    },
+    "235": {
+      "docomo": "1061",
+      "ezweb": "235",
+      "softbank": "48"
+    },
+    "282": {
+      "docomo": "164",
+      "ezweb": "282",
+      "softbank": "348"
+    },
+    "806": {
+      "docomo": "1012",
+      "ezweb": "806",
+      "softbank": "103;340"
+    },
+    "473": {
+      "docomo": "\uff3b\u6551\u6025\u8eca\uff3d",
+      "ezweb": "473",
+      "softbank": "449"
+    },
+    "426": {
+      "docomo": "54",
+      "ezweb": "426",
+      "softbank": "359"
+    },
+    "236": {
+      "docomo": "1076",
+      "ezweb": "236",
+      "softbank": "127"
+    },
+    "283": {
+      "docomo": "\uff3b\uff73\uff9d\uff81\uff3d",
+      "ezweb": "283",
+      "softbank": "90"
+    },
+    "807": {
+      "docomo": "1042",
+      "ezweb": "807",
+      "softbank": "\u2191\u2193"
+    },
+    "474": {
+      "docomo": "\uff3b\uff8a\uff9f\uff84\uff76\uff70\uff3d",
+      "ezweb": "474",
+      "softbank": "450"
+    },
+    "427": {
+      "docomo": "\uff3b\u304a\u56e3\u5b50\uff3d",
+      "ezweb": "427",
+      "softbank": "360"
+    },
+    "237": {
+      "docomo": "\uff3b\u65e5\u306e\u4e38\uff3d",
+      "ezweb": "237",
+      "softbank": "511"
+    },
+    "284": {
+      "docomo": "1028",
+      "ezweb": "284",
+      "softbank": "15"
+    },
+    "475": {
+      "docomo": "\uff3b\uff7c\uff9e\uff6a\uff6f\uff84\uff7a\uff70\uff7d\uff80\uff70\uff3d",
+      "ezweb": "475",
+      "softbank": "451"
+    },
+    "428": {
+      "docomo": "\uff3b\u304a\u305b\u3093\u3079\u3044\uff3d",
+      "ezweb": "428",
+      "softbank": "361"
+    },
+    "238": {
+      "docomo": "\uff3b\uff7d\uff72\uff76\uff3d",
+      "ezweb": "238",
+      "softbank": "372"
+    },
+    "10": {
+      "docomo": "\u25a0",
+      "ezweb": "10",
+      "softbank": "226"
+    },
+    "285": {
+      "docomo": "\uff3b\u5f97\uff3d",
+      "ezweb": "285",
+      "softbank": "238"
+    },
+    "808": {
+      "docomo": "1049",
+      "ezweb": "808",
+      "softbank": "\u21d4"
+    },
+    "476": {
+      "docomo": "\uff3b\u9580\u677e\uff3d",
+      "ezweb": "476",
+      "softbank": "454"
+    },
+    "429": {
+      "docomo": "1065",
+      "ezweb": "429",
+      "softbank": "362"
+    },
+    "239": {
+      "docomo": "1063",
+      "ezweb": "239",
+      "softbank": "70"
+    },
+    "286": {
+      "docomo": "1076",
+      "ezweb": "286",
+      "softbank": "128"
+    },
+    "809": {
+      "docomo": "1050",
+      "ezweb": "809",
+      "softbank": "\u2191\u2193"
+    },
+    "477": {
+      "docomo": "\uff3b\u3072\u306a\u796d\u308a\uff3d",
+      "ezweb": "477",
+      "softbank": "456"
+    },
+    "11": {
+      "docomo": "\uff3bi\uff3d",
+      "ezweb": "11",
+      "softbank": "\uff3bi\uff3d"
+    },
+    "287": {
+      "docomo": "1028",
+      "ezweb": "287",
+      "softbank": "14"
+    },
+    "478": {
+      "docomo": "\uff3b\u5352\u696d\u5f0f\uff3d",
+      "ezweb": "478",
+      "softbank": "457"
+    },
+    "60": {
+      "docomo": "4",
+      "ezweb": "60",
+      "softbank": "72"
+    },
+    "12": {
+      "docomo": "1075",
+      "ezweb": "12",
+      "softbank": "68"
+    },
+    "100": {
+      "docomo": "70",
+      "ezweb": "100",
+      "softbank": "172"
+    },
+    "288": {
+      "docomo": "77",
+      "ezweb": "288",
+      "softbank": "142"
+    },
+    "479": {
+      "docomo": "\uff3b\uff97\uff9d\uff84\uff9e\uff7e\uff99\uff3d",
+      "ezweb": "479",
+      "softbank": "458"
+    },
+    "61": {
+      "docomo": "\u00d7",
+      "ezweb": "61",
+      "softbank": "351"
+    },
+    "13": {
+      "docomo": "57",
+      "ezweb": "13",
+      "softbank": "165"
+    },
+    "101": {
+      "docomo": "70",
+      "ezweb": "101",
+      "softbank": "172"
+    },
+    "289": {
+      "docomo": "57",
+      "ezweb": "289",
+      "softbank": "60"
+    },
+    "62": {
+      "docomo": "\u00d7",
+      "ezweb": "62",
+      "softbank": "351"
+    },
+    "14": {
+      "docomo": "1010",
+      "ezweb": "14",
+      "softbank": "147"
+    },
+    "102": {
+      "docomo": "70",
+      "ezweb": "102",
+      "softbank": "172"
+    },
+    "720": {
+      "docomo": "\uff3b\uff8d\uff8b\uff9e\uff3d",
+      "ezweb": "720",
+      "softbank": "545"
+    },
+    "63": {
+      "docomo": "\u2192",
+      "ezweb": "63",
+      "softbank": "252"
+    },
+    "340": {
+      "docomo": "\u2020",
+      "ezweb": "340",
+      "softbank": "55"
+    },
+    "150": {
+      "docomo": "\uff3bPDC\uff3d",
+      "ezweb": "150",
+      "softbank": "\uff3bPDC\uff3d"
+    },
+    "15": {
+      "docomo": "98",
+      "ezweb": "15",
+      "softbank": "76"
+    },
+    "103": {
+      "docomo": "76",
+      "ezweb": "103",
+      "softbank": "301"
+    },
+    "721": {
+      "docomo": "\uff3b\uff86\uff9c\uff84\uff98\uff3d",
+      "ezweb": "721",
+      "softbank": "546"
+    },
+    "64": {
+      "docomo": "\u2190",
+      "ezweb": "64",
+      "softbank": "253"
+    },
+    "341": {
+      "docomo": "31",
+      "ezweb": "341",
+      "softbank": "452"
+    },
+    "151": {
+      "docomo": "106",
+      "ezweb": "151",
+      "softbank": "103"
+    },
+    "16": {
+      "docomo": "5",
+      "ezweb": "16",
+      "softbank": "161"
+    },
+    "104": {
+      "docomo": "56",
+      "ezweb": "104",
+      "softbank": "319"
+    },
+    "722": {
+      "docomo": "\uff3b\uff72\uff89\uff7c\uff7c\uff3d",
+      "ezweb": "722",
+      "softbank": "547"
+    },
+    "65": {
+      "docomo": "53",
+      "ezweb": "65",
+      "softbank": "71"
+    },
+    "342": {
+      "docomo": "1053",
+      "ezweb": "342",
+      "softbank": "59"
+    },
+    "152": {
+      "docomo": "1013",
+      "ezweb": "152",
+      "softbank": "122"
+    },
+    "17": {
+      "docomo": "\u25a0",
+      "ezweb": "17",
+      "softbank": "227"
+    },
+    "105": {
+      "docomo": "76",
+      "ezweb": "105",
+      "softbank": "301"
+    },
+    "770": {
+      "docomo": "136",
+      "ezweb": "770",
+      "softbank": "340"
+    },
+    "723": {
+      "docomo": "\uff3b\uff97\uff78\uff80\uff9e\uff3d",
+      "ezweb": "723",
+      "softbank": "548"
+    },
+    "343": {
+      "docomo": "146",
+      "ezweb": "343",
+      "softbank": "62"
+    },
+    "153": {
+      "docomo": "110",
+      "ezweb": "153",
+      "softbank": "103"
+    },
+    "18": {
+      "docomo": "\u25a0",
+      "ezweb": "18",
+      "softbank": "226"
+    },
+    "106": {
+      "docomo": "65",
+      "ezweb": "106",
+      "softbank": "137"
+    },
+    "390": {
+      "docomo": "\u2191",
+      "ezweb": "390",
+      "softbank": "246"
+    },
+    "771": {
+      "docomo": "\uff3bABC\uff3d",
+      "ezweb": "771",
+      "softbank": "\uff3bABC\uff3d"
+    },
+    "724": {
+      "docomo": "\uff3bA\uff3d",
+      "ezweb": "724",
+      "softbank": "550"
+    },
+    "66": {
+      "docomo": "\u00f7",
+      "ezweb": "66",
+      "softbank": "\u00f7"
+    },
+    "344": {
+      "docomo": "\u2020",
+      "ezweb": "344",
+      "softbank": "78"
+    },
+    "154": {
+      "docomo": "110",
+      "ezweb": "154",
+      "softbank": "103"
+    },
+    "19": {
+      "docomo": "\u25c6",
+      "ezweb": "19",
+      "softbank": "227"
+    },
+    "107": {
+      "docomo": "2",
+      "ezweb": "107",
+      "softbank": "73"
+    },
+    "391": {
+      "docomo": "\u2193",
+      "ezweb": "391",
+      "softbank": "247"
+    },
+    "772": {
+      "docomo": "\uff3b\uff8c\uff9f\uff98\uff9d\uff3d",
+      "ezweb": "772",
+      "softbank": "\uff3b\u30d7\u30ea\u30f3\uff3d"
+    },
+    "725": {
+      "docomo": "\uff3bB\uff3d",
+      "ezweb": "725",
+      "softbank": "551"
+    },
+    "67": {
+      "docomo": "76",
+      "ezweb": "67",
+      "softbank": "301"
+    },
+    "345": {
+      "docomo": "\uff3b\uff84\uff97\uff3d",
+      "ezweb": "345",
+      "softbank": "80"
+    },
+    "155": {
+      "docomo": "74",
+      "ezweb": "155",
+      "softbank": "9"
+    },
+    "108": {
+      "docomo": "110",
+      "ezweb": "108",
+      "softbank": "103"
+    },
+    "392": {
+      "docomo": "\uff3b\u5360\uff3d",
+      "ezweb": "392",
+      "softbank": "262"
+    },
+    "773": {
+      "docomo": "\uff3b\uff90\uff82\uff8a\uff9e\uff81\uff3d",
+      "ezweb": "773",
+      "softbank": "\uff3b\uff90\uff82\uff8a\uff9e\uff81\uff3d"
+    },
+    "726": {
+      "docomo": "\uff3bO\uff3d",
+      "ezweb": "726",
+      "softbank": "553"
+    },
+    "68": {
+      "docomo": "140",
+      "ezweb": "68",
+      "softbank": "86"
+    },
+    "346": {
+      "docomo": "(\uff65(\uff74)\uff65)",
+      "ezweb": "346",
+      "softbank": "81"
+    },
+    "156": {
+      "docomo": "39",
+      "ezweb": "156",
+      "softbank": "56"
+    },
+    "109": {
+      "docomo": "113",
+      "ezweb": "109",
+      "softbank": "\uff3b\u5c0f\u5207\u624b\uff3d"
+    },
+    "393": {
+      "docomo": "\uff3b\uff8f\uff85\uff70\uff3d",
+      "ezweb": "393",
+      "softbank": "280"
+    },
+    "774": {
+      "docomo": "\uff3b\uff83\uff9d\uff84\uff73\u866b\uff3d",
+      "ezweb": "774",
+      "softbank": "\uff3b\uff83\uff9d\uff84\uff73\u866b\uff3d"
+    },
+    "727": {
+      "docomo": "\uff3bAB\uff3d",
+      "ezweb": "727",
+      "softbank": "552"
+    },
+    "69": {
+      "docomo": "\u2606",
+      "ezweb": "69",
+      "softbank": "347"
+    },
+    "347": {
+      "docomo": "('\uff65\uff65')~",
+      "ezweb": "347",
+      "softbank": "83"
+    },
+    "157": {
+      "docomo": "\uff3b\u5b9a\u898f\uff3d",
+      "ezweb": "157",
+      "softbank": "\uff3b\u5b9a\u898f\uff3d"
+    },
+    "394": {
+      "docomo": "\uff3bOFF\uff3d",
+      "ezweb": "394",
+      "softbank": "281"
+    },
+    "775": {
+      "docomo": "\uff3b\uff8a\uff81\uff90\uff82\uff3d",
+      "ezweb": "775",
+      "softbank": "\uff3b\uff8a\uff81\uff90\uff82\uff3d"
+    },
+    "728": {
+      "docomo": "91",
+      "ezweb": "728",
+      "softbank": "554"
+    },
+    "348": {
+      "docomo": "1030",
+      "ezweb": "348",
+      "softbank": "405"
+    },
+    "158": {
+      "docomo": "\uff3b\u5b9a\u898f\uff3d",
+      "ezweb": "158",
+      "softbank": "\uff3b\u5b9a\u898f\uff3d"
+    },
+    "395": {
+      "docomo": "76",
+      "ezweb": "395",
+      "softbank": "301"
+    },
+    "776": {
+      "docomo": "1058",
+      "ezweb": "776",
+      "softbank": "369"
+    },
+    "729": {
+      "docomo": "92",
+      "ezweb": "729",
+      "softbank": "7"
+    },
+    "349": {
+      "docomo": "1027",
+      "ezweb": "349",
+      "softbank": "106"
+    },
+    "159": {
+      "docomo": "\uff3b\uff78\uff9e\uff97\uff8c\uff3d",
+      "ezweb": "159",
+      "softbank": "\uff3b\uff78\uff9e\uff97\uff8c\uff3d"
+    },
+    "396": {
+      "docomo": "\uff3b\uff88\uff78\uff80\uff72\uff3d",
+      "ezweb": "396",
+      "softbank": "302"
+    },
+    "777": {
+      "docomo": "1044",
+      "ezweb": "777",
+      "softbank": "173"
+    },
+    "397": {
+      "docomo": "148",
+      "ezweb": "397",
+      "softbank": "303"
+    },
+    "778": {
+      "docomo": "(\u25ce\u25ce;)",
+      "ezweb": "778",
+      "softbank": "407"
+    },
+    "400": {
+      "docomo": "1064",
+      "ezweb": "400",
+      "softbank": "311"
+    },
+    "210": {
+      "docomo": "\uff3b\uff71\uff9d\uff83\uff85\uff3d",
+      "ezweb": "210",
+      "softbank": "175"
+    },
+    "398": {
+      "docomo": "148",
+      "ezweb": "398",
+      "softbank": "306"
+    },
+    "779": {
+      "docomo": "1025",
+      "ezweb": "779",
+      "softbank": "422"
+    },
+    "401": {
+      "docomo": "53",
+      "ezweb": "401",
+      "softbank": "312"
+    },
+    "211": {
+      "docomo": "36",
+      "ezweb": "211",
+      "softbank": "202"
+    },
+    "399": {
+      "docomo": "\uff3b\uff7b\uff8e\uff9e\uff83\uff9d\uff3d",
+      "ezweb": "399",
+      "softbank": "308"
+    },
+    "402": {
+      "docomo": "\uff3b\u795d\uff3d",
+      "ezweb": "402",
+      "softbank": "313"
+    },
+    "212": {
+      "docomo": "42",
+      "ezweb": "212",
+      "softbank": "177"
+    },
+    "450": {
+      "docomo": "1026",
+      "ezweb": "450",
+      "softbank": "414"
+    },
+    "403": {
+      "docomo": "41",
+      "ezweb": "403",
+      "softbank": "315"
+    },
+    "260": {
+      "docomo": "1032",
+      "ezweb": "260",
+      "softbank": "406"
+    },
+    "213": {
+      "docomo": "46",
+      "ezweb": "213",
+      "softbank": "58"
+    },
+    "451": {
+      "docomo": "144",
+      "ezweb": "451",
+      "softbank": "416"
+    },
+    "404": {
+      "docomo": "\uff3b\u98a8\u8239\uff3d",
+      "ezweb": "404",
+      "softbank": "316"
+    },
+    "261": {
+      "docomo": "157",
+      "ezweb": "261",
+      "softbank": "160"
+    },
+    "214": {
+      "docomo": "\uff3b\u5730\u56f3\uff3d",
+      "ezweb": "214",
+      "softbank": "\uff3b\u5730\u56f3\uff3d"
+    },
+    "452": {
+      "docomo": "1024",
+      "ezweb": "452",
+      "softbank": "415"
+    },
+    "405": {
+      "docomo": "\uff3b\uff78\uff97\uff6f\uff76\uff70\uff3d",
+      "ezweb": "405",
+      "softbank": "318"
+    },
+    "262": {
+      "docomo": "152",
+      "ezweb": "262",
+      "softbank": "352"
+    },
+    "215": {
+      "docomo": "1018",
+      "ezweb": "215",
+      "softbank": "154"
+    },
+    "453": {
+      "docomo": "155",
+      "ezweb": "453",
+      "softbank": "338"
+    },
+    "406": {
+      "docomo": "\uff3bEZ\uff85\uff8b\uff9e\uff3d",
+      "ezweb": "406",
+      "softbank": "\uff3bEZ\u30ca\u30d3\uff3d"
+    },
+    "263": {
+      "docomo": "163",
+      "ezweb": "263",
+      "softbank": "349"
+    },
+    "216": {
+      "docomo": "35",
+      "ezweb": "216",
+      "softbank": "189"
+    },
+    "454": {
+      "docomo": "140",
+      "ezweb": "454",
+      "softbank": "86"
+    },
+    "407": {
+      "docomo": "63",
+      "ezweb": "407",
+      "softbank": "324"
+    },
+    "264": {
+      "docomo": "1029",
+      "ezweb": "264",
+      "softbank": "105"
+    },
+    "217": {
+      "docomo": "32",
+      "ezweb": "217",
+      "softbank": "31"
+    },
+    "455": {
+      "docomo": "(\u2267\uff13\u2266)",
+      "ezweb": "455",
+      "softbank": "423"
+    },
+    "408": {
+      "docomo": "55",
+      "ezweb": "408",
+      "softbank": "327"
+    },
+    "265": {
+      "docomo": "138",
+      "ezweb": "265",
+      "softbank": "35"
+    },
+    "218": {
+      "docomo": "1040",
+      "ezweb": "218",
+      "softbank": "121"
+    },
+    "456": {
+      "docomo": "(\u00b4\uff13\uff40)",
+      "ezweb": "456",
+      "softbank": "424"
+    },
+    "409": {
+      "docomo": "\uff3b\uff88\uff72\uff99\uff3d",
+      "ezweb": "409",
+      "softbank": "329"
+    },
+    "266": {
+      "docomo": "139",
+      "ezweb": "266",
+      "softbank": "339"
+    },
+    "1": {
+      "docomo": "1044",
+      "ezweb": "1",
+      "softbank": "282"
+    },
+    "219": {
+      "docomo": "25",
+      "ezweb": "219",
+      "softbank": "24"
+    },
+    "457": {
+      "docomo": "\uff3b\u9f3b\uff3d",
+      "ezweb": "457",
+      "softbank": "426"
+    },
+    "267": {
+      "docomo": "150",
+      "ezweb": "267",
+      "softbank": "346"
+    },
+    "2": {
+      "docomo": "158",
+      "ezweb": "2",
+      "softbank": "33"
+    },
+    "458": {
+      "docomo": "149",
+      "ezweb": "458",
+      "softbank": "428"
+    },
+    "268": {
+      "docomo": "154",
+      "ezweb": "268",
+      "softbank": "317"
+    },
+    "3": {
+      "docomo": "\uff1f",
+      "ezweb": "3",
+      "softbank": "32"
+    },
+    "40": {
+      "docomo": "95",
+      "ezweb": "40",
+      "softbank": "225"
+    },
+    "459": {
+      "docomo": "(\u3002-\u4eba-\u3002)",
+      "ezweb": "459",
+      "softbank": "429"
+    },
+    "269": {
+      "docomo": "\uff3b\u708e\uff3d",
+      "ezweb": "269",
+      "softbank": "129"
+    },
+    "4": {
+      "docomo": "124",
+      "ezweb": "4",
+      "softbank": "Q"
+    },
+    "41": {
+      "docomo": "95",
+      "ezweb": "41",
+      "softbank": "225"
+    },
+    "5": {
+      "docomo": "\u2190",
+      "ezweb": "5",
+      "softbank": "259"
+    },
+    "42": {
+      "docomo": "90",
+      "ezweb": "42",
+      "softbank": "255"
+    },
+    "700": {
+      "docomo": "\uff3b\uff84\uff9e\uff72\uff82\uff3d",
+      "ezweb": "700",
+      "softbank": "514"
+    },
+    "510": {
+      "docomo": "119",
+      "ezweb": "510",
+      "softbank": "120"
+    },
+    "90": {
+      "docomo": "\uff3bUSA\uff3d",
+      "ezweb": "90",
+      "softbank": "512"
+    },
+    "6": {
+      "docomo": "\u2192",
+      "ezweb": "6",
+      "softbank": "258"
+    },
+    "43": {
+      "docomo": "89",
+      "ezweb": "43",
+      "softbank": "256"
+    },
+    "320": {
+      "docomo": "88",
+      "ezweb": "320",
+      "softbank": "18"
+    },
+    "130": {
+      "docomo": "151",
+      "ezweb": "130",
+      "softbank": "115"
+    },
+    "701": {
+      "docomo": "\uff3b\uff72\uff80\uff98\uff71\uff3d",
+      "ezweb": "701",
+      "softbank": "515"
+    },
+    "511": {
+      "docomo": "117",
+      "ezweb": "511",
+      "softbank": "253"
+    },
+    "91": {
+      "docomo": "70",
+      "ezweb": "91",
+      "softbank": "172"
+    },
+    "7": {
+      "docomo": "\u2190",
+      "ezweb": "7",
+      "softbank": "261"
+    },
+    "321": {
+      "docomo": "95",
+      "ezweb": "321",
+      "softbank": "\u25cf"
+    },
+    "131": {
+      "docomo": "70",
+      "ezweb": "131",
+      "softbank": "172"
+    },
+    "702": {
+      "docomo": "\uff3b\uff72\uff77\uff9e\uff98\uff7d\uff3d",
+      "ezweb": "702",
+      "softbank": "516"
+    },
+    "512": {
+      "docomo": "70",
+      "ezweb": "512",
+      "softbank": "172"
+    },
+    "92": {
+      "docomo": "76",
+      "ezweb": "92",
+      "softbank": "301"
+    },
+    "8": {
+      "docomo": "\u2192",
+      "ezweb": "8",
+      "softbank": "260"
+    },
+    "44": {
+      "docomo": "1",
+      "ezweb": "44",
+      "softbank": "74"
+    },
+    "322": {
+      "docomo": "96",
+      "ezweb": "322",
+      "softbank": "76"
+    },
+    "132": {
+      "docomo": "v",
+      "ezweb": "132",
+      "softbank": "v"
+    },
+    "750": {
+      "docomo": "146",
+      "ezweb": "750",
+      "softbank": "62"
+    },
+    "703": {
+      "docomo": "\uff3b\u4e2d\u56fd\uff3d",
+      "ezweb": "703",
+      "softbank": "519"
+    },
+    "513": {
+      "docomo": "105",
+      "ezweb": "513",
+      "softbank": "104"
+    },
+    "93": {
+      "docomo": "51",
+      "ezweb": "93",
+      "softbank": "69"
+    },
+    "9": {
+      "docomo": "\u25a0",
+      "ezweb": "9",
+      "softbank": "227"
+    },
+    "370": {
+      "docomo": "\uff3b\u795d\u65e5\uff3d",
+      "ezweb": "370",
+      "softbank": "167"
+    },
+    "180": {
+      "docomo": "125",
+      "ezweb": "180",
+      "softbank": "228"
+    },
+    "45": {
+      "docomo": "22",
+      "ezweb": "45",
+      "softbank": "22"
+    },
+    "323": {
+      "docomo": "97",
+      "ezweb": "323",
+      "softbank": "76"
+    },
+    "133": {
+      "docomo": "1060",
+      "ezweb": "133",
+      "softbank": "124"
+    },
+    "751": {
+      "docomo": "1007",
+      "ezweb": "751",
+      "softbank": "23"
+    },
+    "704": {
+      "docomo": "\uff3b\u97d3\u56fd\uff3d",
+      "ezweb": "704",
+      "softbank": "520"
+    },
+    "514": {
+      "docomo": "38",
+      "ezweb": "514",
+      "softbank": "54"
+    },
+    "94": {
+      "docomo": "68",
+      "ezweb": "94",
+      "softbank": "8"
+    },
+    "371": {
+      "docomo": "\uff3b\u5915\u713c\u3051\uff3d",
+      "ezweb": "371",
+      "softbank": "170"
+    },
+    "181": {
+      "docomo": "126",
+      "ezweb": "181",
+      "softbank": "229"
+    },
+    "46": {
+      "docomo": "176",
+      "ezweb": "46",
+      "softbank": "45"
+    },
+    "324": {
+      "docomo": "118",
+      "ezweb": "324",
+      "softbank": "\uff3bCL\uff3d"
+    },
+    "134": {
+      "docomo": "100",
+      "ezweb": "134",
+      "softbank": "82"
+    },
+    "752": {
+      "docomo": "1070",
+      "ezweb": "752",
+      "softbank": "25"
+    },
+    "705": {
+      "docomo": "\uff3b\u6b27\u7c73\u4eba\uff3d",
+      "ezweb": "705",
+      "softbank": "521"
+    },
+    "515": {
+      "docomo": "40",
+      "ezweb": "515",
+      "softbank": "101"
+    },
+    "95": {
+      "docomo": "3",
+      "ezweb": "95",
+      "softbank": "75"
+    },
+    "372": {
+      "docomo": "1068",
+      "ezweb": "372",
+      "softbank": "535"
+    },
+    "182": {
+      "docomo": "127",
+      "ezweb": "182",
+      "softbank": "230"
+    },
+    "47": {
+      "docomo": "97",
+      "ezweb": "47",
+      "softbank": "76"
+    },
+    "325": {
+      "docomo": "134",
+      "ezweb": "325",
+      "softbank": "237"
+    },
+    "135": {
+      "docomo": "\uff3b\u96fb\u6c60\uff3d",
+      "ezweb": "135",
+      "softbank": "\uff3b\u96fb\u6c60\uff3d"
+    },
+    "753": {
+      "docomo": "\uff3b\uff8e\uff9e\uff73\uff98\uff9d\uff78\uff9e\uff3d",
+      "ezweb": "753",
+      "softbank": "\uff3b\uff8e\uff9e\uff73\uff98\uff9d\uff78\uff9e\uff3d"
+    },
+    "706": {
+      "docomo": "\uff3b\u4e2d\u56fd\u4eba\uff3d",
+      "ezweb": "706",
+      "softbank": "522"
+    },
+    "516": {
+      "docomo": "76",
+      "ezweb": "516",
+      "softbank": "301"
+    },
+    "96": {
+      "docomo": "\uff3b\uff71\uff92\uff8c\uff84\uff3d",
+      "ezweb": "96",
+      "softbank": "443"
+    },
+    "373": {
+      "docomo": "\uff3b\u682a\u4fa1\uff3d",
+      "ezweb": "373",
+      "softbank": "174"
+    },
+    "183": {
+      "docomo": "128",
+      "ezweb": "183",
+      "softbank": "231"
+    },
+    "48": {
+      "docomo": "1008",
+      "ezweb": "48",
+      "softbank": "337"
+    },
+    "326": {
+      "docomo": "135",
+      "ezweb": "326",
+      "softbank": "277"
+    },
+    "136": {
+      "docomo": "166",
+      "ezweb": "136",
+      "softbank": "\uff3b\uff7d\uff78\uff9b\uff70\uff99\uff3d"
+    },
+    "754": {
+      "docomo": "\uff3b\u306a\u307e\u306f\u3052\uff3d",
+      "ezweb": "754",
+      "softbank": "\uff3b\u306a\u307e\u306f\u3052\uff3d"
+    },
+    "707": {
+      "docomo": "\uff3b\uff72\uff9d\uff84\uff9e\u4eba\uff3d",
+      "ezweb": "707",
+      "softbank": "523"
+    },
+    "517": {
+      "docomo": "116",
+      "ezweb": "517",
+      "softbank": "168"
+    },
+    "97": {
+      "docomo": "70",
+      "ezweb": "97",
+      "softbank": "172"
+    },
+    "374": {
+      "docomo": "\uff3b\u8b66\u5b98\uff3d",
+      "ezweb": "374",
+      "softbank": "182"
+    },
+    "184": {
+      "docomo": "129",
+      "ezweb": "184",
+      "softbank": "232"
+    },
+    "49": {
+      "docomo": "\uff3b\uff8b\uff9f\uff9d\uff3d",
+      "ezweb": "49",
+      "softbank": "\uff3b\uff8b\uff9f\uff9d\uff3d"
+    },
+    "327": {
+      "docomo": "144",
+      "ezweb": "327",
+      "softbank": "406"
+    },
+    "137": {
+      "docomo": "\uff3b\u753b\u92f2\uff3d",
+      "ezweb": "137",
+      "softbank": "\uff3b\u753b\u92f2\uff3d"
+    },
+    "755": {
+      "docomo": "\uff3b\u5929\u72d7\uff3d",
+      "ezweb": "755",
+      "softbank": "\uff3b\u5929\u72d7\uff3d"
+    },
+    "708": {
+      "docomo": "140",
+      "ezweb": "708",
+      "softbank": "524"
+    },
+    "518": {
+      "docomo": "1042",
+      "ezweb": "518",
+      "softbank": "\u2191\u2193"
+    },
+    "98": {
+      "docomo": "1036",
+      "ezweb": "98",
+      "softbank": "155"
+    },
+    "375": {
+      "docomo": "40",
+      "ezweb": "375",
+      "softbank": "183"
+    },
+    "185": {
+      "docomo": "130",
+      "ezweb": "185",
+      "softbank": "233"
+    },
+    "328": {
+      "docomo": "137",
+      "ezweb": "328",
+      "softbank": "339"
+    },
+    "138": {
+      "docomo": "116",
+      "ezweb": "138",
+      "softbank": "168"
+    },
+    "756": {
+      "docomo": "\uff3b\uff8a\uff9f\uff9d\uff80\uff9e\uff3d",
+      "ezweb": "756",
+      "softbank": "\uff3b\uff8a\uff9f\uff9d\uff80\uff9e\uff3d"
+    },
+    "376": {
+      "docomo": "41",
+      "ezweb": "376",
+      "softbank": "185"
+    },
+    "186": {
+      "docomo": "131",
+      "ezweb": "186",
+      "softbank": "234"
+    },
+    "329": {
+      "docomo": "161",
+      "ezweb": "329",
+      "softbank": "!!"
+    },
+    "139": {
+      "docomo": "1010",
+      "ezweb": "139",
+      "softbank": "147"
+    },
+    "757": {
+      "docomo": "1029",
+      "ezweb": "757",
+      "softbank": "409"
+    },
+    "709": {
+      "docomo": "140",
+      "ezweb": "709",
+      "softbank": "525"
+    },
+    "99": {
+      "docomo": "48",
+      "ezweb": "99",
+      "softbank": "178"
+    },
+    "377": {
+      "docomo": "1051",
+      "ezweb": "377",
+      "softbank": "187"
+    },
+    "187": {
+      "docomo": "132",
+      "ezweb": "187",
+      "softbank": "235"
+    },
+    "758": {
+      "docomo": "1074",
+      "ezweb": "758",
+      "softbank": "111"
+    },
+    "378": {
+      "docomo": "44",
+      "ezweb": "378",
+      "softbank": "188"
+    },
+    "188": {
+      "docomo": "133",
+      "ezweb": "188",
+      "softbank": "236"
+    },
+    "759": {
+      "docomo": "148",
+      "ezweb": "759",
+      "softbank": "305"
+    },
+    "379": {
+      "docomo": "36",
+      "ezweb": "379",
+      "softbank": "202"
+    },
+    "189": {
+      "docomo": "\uff3b10\uff3d",
+      "ezweb": "189",
+      "softbank": "\uff3b10\uff3d"
+    },
+    "810": {
+      "docomo": "1052",
+      "ezweb": "810",
+      "softbank": "462"
+    },
+    "430": {
+      "docomo": "\uff3b\uff8a\uff9f\uff7d\uff80\uff3d",
+      "ezweb": "430",
+      "softbank": "363"
+    },
+    "240": {
+      "docomo": "\uff3b\uff8c\uff97\uff72\uff8a\uff9f\uff9d\uff3d",
+      "ezweb": "240",
+      "softbank": "171"
+    },
+    "811": {
+      "docomo": "1059",
+      "ezweb": "811",
+      "softbank": "116"
+    },
+    "431": {
+      "docomo": "\uff3b\uff76\uff9a\uff70\uff3d",
+      "ezweb": "431",
+      "softbank": "365"
+    },
+    "241": {
+      "docomo": "1055",
+      "ezweb": "241",
+      "softbank": "\uff3b\uff81\uff6a\uff98\uff70\uff3d"
+    },
+    "812": {
+      "docomo": "1067",
+      "ezweb": "812",
+      "softbank": "\uff3b\uff76\uff80\uff82\uff91\uff98\uff3d"
+    },
+    "432": {
+      "docomo": "\uff3b\u304a\u3067\u3093\uff3d",
+      "ezweb": "432",
+      "softbank": "367"
+    },
+    "242": {
+      "docomo": "1070",
+      "ezweb": "242",
+      "softbank": "25"
+    },
+    "813": {
+      "docomo": "1072",
+      "ezweb": "813",
+      "softbank": "404"
+    },
+    "480": {
+      "docomo": "\uff3b\u3053\u3044\u306e\u307c\u308a\uff3d",
+      "ezweb": "480",
+      "softbank": "459"
+    },
+    "433": {
+      "docomo": "\uff3b\u304a\u3059\u3057\uff3d",
+      "ezweb": "433",
+      "softbank": "368"
+    },
+    "290": {
+      "docomo": "1004",
+      "ezweb": "290",
+      "softbank": "147"
+    },
+    "243": {
+      "docomo": "\uff3b\uff72\uff81\uff7a\uff9e\uff3d",
+      "ezweb": "243",
+      "softbank": "371"
+    },
+    "814": {
+      "docomo": "1072",
+      "ezweb": "814",
+      "softbank": "404"
+    },
+    "481": {
+      "docomo": "8",
+      "ezweb": "481",
+      "softbank": "460"
+    },
+    "434": {
+      "docomo": "1058",
+      "ezweb": "434",
+      "softbank": "369"
+    },
+    "291": {
+      "docomo": "155",
+      "ezweb": "291",
+      "softbank": "338"
+    },
+    "244": {
+      "docomo": "1062",
+      "ezweb": "244",
+      "softbank": "366"
+    },
+    "815": {
+      "docomo": "110",
+      "ezweb": "815",
+      "softbank": "103"
+    },
+    "482": {
+      "docomo": "\uff3b\u82b1\u5ac1\uff3d",
+      "ezweb": "482",
+      "softbank": "\uff3b\u82b1\u5ac1\uff3d"
+    },
+    "435": {
+      "docomo": "\uff3b\uff90\uff76\uff9d\uff3d",
+      "ezweb": "435",
+      "softbank": "370"
+    },
+    "292": {
+      "docomo": "155",
+      "ezweb": "292",
+      "softbank": "65"
+    },
+    "245": {
+      "docomo": "54",
+      "ezweb": "245",
+      "softbank": "132"
+    },
+    "816": {
+      "docomo": "1054",
+      "ezweb": "816",
+      "softbank": "116"
+    },
+    "483": {
+      "docomo": "\uff3b\uff76\uff77\u6c37\uff3d",
+      "ezweb": "483",
+      "softbank": "463"
+    },
+    "436": {
+      "docomo": "\uff3b\uff84\uff8f\uff84\uff3d",
+      "ezweb": "436",
+      "softbank": "373"
+    },
+    "293": {
+      "docomo": "155",
+      "ezweb": "293",
+      "softbank": "338"
+    },
+    "246": {
+      "docomo": "\uff3b\uff78\uff7c\uff9e\uff97\uff3d",
+      "ezweb": "246",
+      "softbank": "84"
+    },
+    "817": {
+      "docomo": "86",
+      "ezweb": "817",
+      "softbank": "16"
+    },
+    "484": {
+      "docomo": "\uff3b\u82b1\u706b\uff3d",
+      "ezweb": "484",
+      "softbank": "464"
+    },
+    "437": {
+      "docomo": "\uff3b\uff85\uff7d\uff3d",
+      "ezweb": "437",
+      "softbank": "374"
+    },
+    "294": {
+      "docomo": "61",
+      "ezweb": "294",
+      "softbank": "310"
+    },
+    "247": {
+      "docomo": "(\uff65*\u30fb)",
+      "ezweb": "247",
+      "softbank": "544"
+    },
+    "818": {
+      "docomo": "123",
+      "ezweb": "818",
+      "softbank": "216"
+    },
+    "485": {
+      "docomo": "\uff3b\u5dfb\u8c9d\uff3d",
+      "ezweb": "485",
+      "softbank": "465"
+    },
+    "438": {
+      "docomo": "50",
+      "ezweb": "438",
+      "softbank": "376"
+    },
+    "295": {
+      "docomo": "1005",
+      "ezweb": "295",
+      "softbank": "328"
+    },
+    "248": {
+      "docomo": "1073",
+      "ezweb": "248",
+      "softbank": "26"
+    },
+    "20": {
+      "docomo": "\u25c6",
+      "ezweb": "20",
+      "softbank": "227"
+    },
+    "486": {
+      "docomo": "\uff3b\u98a8\u9234\uff3d",
+      "ezweb": "486",
+      "softbank": "466"
+    },
+    "439": {
+      "docomo": "\uff3b\u934b\uff3d",
+      "ezweb": "439",
+      "softbank": "377"
+    },
+    "296": {
+      "docomo": "\uff3b\u9283\uff3d",
+      "ezweb": "296",
+      "softbank": "119"
+    },
+    "249": {
+      "docomo": "\uff3b\uff7b\uff99\uff3d",
+      "ezweb": "249",
+      "softbank": "109"
+    },
+    "21": {
+      "docomo": "\u25a0",
+      "ezweb": "21",
+      "softbank": "227"
+    },
+    "819": {
+      "docomo": "(^-^)\/",
+      "ezweb": "819",
+      "softbank": "18"
+    },
+    "487": {
+      "docomo": "\uff3b\uff8a\uff9b\uff73\uff68\uff9d\uff3d",
+      "ezweb": "487",
+      "softbank": "469"
+    },
+    "297": {
+      "docomo": "\uff3b\uff74\uff7d\uff83\uff3d",
+      "ezweb": "297",
+      "softbank": "330"
+    },
+    "488": {
+      "docomo": "\uff3b\u304a\u6708\u898b\uff3d",
+      "ezweb": "488",
+      "softbank": "470"
+    },
+    "300": {
+      "docomo": "79",
+      "ezweb": "300",
+      "softbank": "138"
+    },
+    "110": {
+      "docomo": "58",
+      "ezweb": "110",
+      "softbank": "61"
+    },
+    "298": {
+      "docomo": "\uff3bEZ\uff3d",
+      "ezweb": "298",
+      "softbank": "\uff3bEZ\uff3d"
+    },
+    "70": {
+      "docomo": "59",
+      "ezweb": "70",
+      "softbank": "254"
+    },
+    "22": {
+      "docomo": "\u25a0",
+      "ezweb": "22",
+      "softbank": "226"
+    },
+    "489": {
+      "docomo": "103",
+      "ezweb": "489",
+      "softbank": "472"
+    },
+    "301": {
+      "docomo": "1003",
+      "ezweb": "301",
+      "softbank": "6"
+    },
+    "111": {
+      "docomo": "58",
+      "ezweb": "111",
+      "softbank": "61"
+    },
+    "299": {
+      "docomo": "114",
+      "ezweb": "299",
+      "softbank": "339"
+    },
+    "71": {
+      "docomo": "104",
+      "ezweb": "71",
+      "softbank": "257"
+    },
+    "23": {
+      "docomo": "95",
+      "ezweb": "23",
+      "softbank": "225"
+    },
+    "302": {
+      "docomo": "\uff3bUFO\uff3d",
+      "ezweb": "302",
+      "softbank": "112"
+    },
+    "112": {
+      "docomo": "38",
+      "ezweb": "112",
+      "softbank": "54"
+    },
+    "72": {
+      "docomo": "1016",
+      "ezweb": "72",
+      "softbank": "52"
+    },
+    "24": {
+      "docomo": "95",
+      "ezweb": "24",
+      "softbank": "225"
+    },
+    "730": {
+      "docomo": "121",
+      "ezweb": "730",
+      "softbank": "\uff3b\u65d7\uff3d"
+    },
+    "113": {
+      "docomo": "1056",
+      "ezweb": "113",
+      "softbank": "304"
+    },
+    "73": {
+      "docomo": "v",
+      "ezweb": "73",
+      "softbank": "v"
+    },
+    "350": {
+      "docomo": "1076",
+      "ezweb": "350",
+      "softbank": "416"
+    },
+    "160": {
+      "docomo": "\uff3b\u8089\uff3d ",
+      "ezweb": "160",
+      "softbank": "\uff3b\u8089\uff3d "
+    },
+    "25": {
+      "docomo": "1020",
+      "ezweb": "25",
+      "softbank": "38"
+    },
+    "303": {
+      "docomo": "145",
+      "ezweb": "303",
+      "softbank": "219"
+    },
+    "731": {
+      "docomo": "145",
+      "ezweb": "731",
+      "softbank": "254"
+    },
+    "114": {
+      "docomo": "\uff3b\u5305\u4e01\uff3d",
+      "ezweb": "114",
+      "softbank": "\uff3b\u5305\u4e01\uff3d"
+    },
+    "74": {
+      "docomo": "100",
+      "ezweb": "74",
+      "softbank": "82"
+    },
+    "351": {
+      "docomo": "1024",
+      "ezweb": "351",
+      "softbank": "108"
+    },
+    "161": {
+      "docomo": "75",
+      "ezweb": "161",
+      "softbank": "10"
+    },
+    "26": {
+      "docomo": "\uff0b",
+      "ezweb": "26",
+      "softbank": "\uff0b"
+    },
+    "304": {
+      "docomo": "41",
+      "ezweb": "304",
+      "softbank": "159"
+    },
+    "732": {
+      "docomo": "156",
+      "ezweb": "732",
+      "softbank": "256"
+    },
+    "75": {
+      "docomo": "\u2606",
+      "ezweb": "75",
+      "softbank": "\u2606"
+    },
+    "352": {
+      "docomo": "\uff3b\uff80\uff7a\uff3d",
+      "ezweb": "352",
+      "softbank": "110"
+    },
+    "162": {
+      "docomo": "\uff3b\uff7a\uff9d\uff7e\uff9d\uff84\uff3d",
+      "ezweb": "162",
+      "softbank": "\uff3b\uff7a\uff9d\uff7e\uff9d\uff84\uff3d"
+    },
+    "27": {
+      "docomo": "\u2212",
+      "ezweb": "27",
+      "softbank": "\u2212"
+    },
+    "305": {
+      "docomo": "7",
+      "ezweb": "305",
+      "softbank": "\uff3b\u9727\uff3d"
+    },
+    "115": {
+      "docomo": "77",
+      "ezweb": "115",
+      "softbank": "141"
+    },
+    "780": {
+      "docomo": "1025",
+      "ezweb": "780",
+      "softbank": "422"
+    },
+    "733": {
+      "docomo": "159",
+      "ezweb": "733",
+      "softbank": "!?"
+    },
+    "76": {
+      "docomo": "150",
+      "ezweb": "76",
+      "softbank": "346"
+    },
+    "353": {
+      "docomo": "\uff3b\uff9b\uff79\uff6f\uff84\uff3d",
+      "ezweb": "353",
+      "softbank": "113"
+    },
+    "163": {
+      "docomo": "38",
+      "ezweb": "163",
+      "softbank": "54"
+    },
+    "28": {
+      "docomo": "\uff0a",
+      "ezweb": "28",
+      "softbank": "\uff0a"
+    },
+    "306": {
+      "docomo": "23",
+      "ezweb": "306",
+      "softbank": "20"
+    },
+    "116": {
+      "docomo": "93",
+      "ezweb": "116",
+      "softbank": "\uff3b\uff92\uff76\uff9e\uff88\uff3d"
+    },
+    "781": {
+      "docomo": "172",
+      "ezweb": "781",
+      "softbank": "475"
+    },
+    "734": {
+      "docomo": "160",
+      "ezweb": "734",
+      "softbank": "!!"
+    },
+    "354": {
+      "docomo": "1015",
+      "ezweb": "354",
+      "softbank": "114"
+    },
+    "164": {
+      "docomo": "\u221e",
+      "ezweb": "164",
+      "softbank": "\u221e"
+    },
+    "29": {
+      "docomo": "\u2191",
+      "ezweb": "29",
+      "softbank": "250"
+    },
+    "307": {
+      "docomo": "27",
+      "ezweb": "307",
+      "softbank": "442"
+    },
+    "117": {
+      "docomo": "\u2192",
+      "ezweb": "117",
+      "softbank": "\u2192"
+    },
+    "782": {
+      "docomo": "(\u00b4\uff13\uff40)",
+      "ezweb": "782",
+      "softbank": "424"
+    },
+    "735": {
+      "docomo": "166",
+      "ezweb": "735",
+      "softbank": "\u301c"
+    },
+    "77": {
+      "docomo": "151",
+      "ezweb": "77",
+      "softbank": "115"
+    },
+    "355": {
+      "docomo": "149",
+      "ezweb": "355",
+      "softbank": "117"
+    },
+    "165": {
+      "docomo": "72",
+      "ezweb": "165",
+      "softbank": "118"
+    },
+    "308": {
+      "docomo": "29",
+      "ezweb": "308",
+      "softbank": "\uff3b\uff8e\uff9f\uff79\uff8d\uff9e\uff99\uff3d"
+    },
+    "118": {
+      "docomo": "117",
+      "ezweb": "118",
+      "softbank": "\u2190"
+    },
+    "783": {
+      "docomo": "140",
+      "ezweb": "783",
+      "softbank": "87"
+    },
+    "736": {
+      "docomo": "\uff3b\uff92\uff9b\uff9d\uff3d",
+      "ezweb": "736",
+      "softbank": "\uff3b\uff92\uff9b\uff9d\uff3d"
+    },
+    "78": {
+      "docomo": "1068",
+      "ezweb": "78",
+      "softbank": "535"
+    },
+    "356": {
+      "docomo": "154",
+      "ezweb": "356",
+      "softbank": "122"
+    },
+    "166": {
+      "docomo": "107",
+      "ezweb": "166",
+      "softbank": "11"
+    },
+    "309": {
+      "docomo": "62",
+      "ezweb": "309",
+      "softbank": "502"
+    },
+    "119": {
+      "docomo": "119",
+      "ezweb": "119",
+      "softbank": "120"
+    },
+    "784": {
+      "docomo": "106",
+      "ezweb": "784",
+      "softbank": "103"
+    },
+    "737": {
+      "docomo": "\uff3b\uff8a\uff9f\uff72\uff85\uff6f\uff8c\uff9f\uff99\uff3d",
+      "ezweb": "737",
+      "softbank": "\uff3b\uff8a\uff9f\uff72\uff85\uff6f\uff8c\uff9f\uff99\uff3d"
+    },
+    "79": {
+      "docomo": "76",
+      "ezweb": "79",
+      "softbank": "301"
+    },
+    "357": {
+      "docomo": "\uff3b\u82b1\u706b\uff3d",
+      "ezweb": "357",
+      "softbank": "123"
+    },
+    "167": {
+      "docomo": "1;2",
+      "ezweb": "167",
+      "softbank": "74;73"
+    },
+    "785": {
+      "docomo": "1031",
+      "ezweb": "785",
+      "softbank": "418"
+    },
+    "738": {
+      "docomo": "\uff3b\uff8c\uff9e\uff84\uff9e\uff73\uff3d",
+      "ezweb": "738",
+      "softbank": "\uff3b\uff8c\uff9e\uff84\uff9e\uff73\uff3d"
+    },
+    "358": {
+      "docomo": "1060",
+      "ezweb": "358",
+      "softbank": "125"
+    },
+    "168": {
+      "docomo": "37",
+      "ezweb": "168",
+      "softbank": "29"
+    },
+    "786": {
+      "docomo": "1031",
+      "ezweb": "786",
+      "softbank": "418"
+    },
+    "739": {
+      "docomo": "1057",
+      "ezweb": "739",
+      "softbank": "\uff3b\uff8a\uff9e\uff85\uff85\uff3d"
+    },
+    "359": {
+      "docomo": "69",
+      "ezweb": "359",
+      "softbank": "130"
+    },
+    "169": {
+      "docomo": "102",
+      "ezweb": "169",
+      "softbank": "28"
+    },
+    "787": {
+      "docomo": "1027",
+      "ezweb": "787",
+      "softbank": "106"
+    },
+    "788": {
+      "docomo": "143",
+      "ezweb": "788",
+      "softbank": "403"
+    },
+    "410": {
+      "docomo": "56",
+      "ezweb": "410",
+      "softbank": "331"
+    },
+    "220": {
+      "docomo": "24",
+      "ezweb": "220",
+      "softbank": "21"
+    },
+    "789": {
+      "docomo": "143",
+      "ezweb": "789",
+      "softbank": "403"
+    },
+    "411": {
+      "docomo": "56",
+      "ezweb": "411",
+      "softbank": "332"
+    },
+    "221": {
+      "docomo": "1007",
+      "ezweb": "221",
+      "softbank": "19"
+    },
+    "412": {
+      "docomo": "\uff3b\u7740\u7269\uff3d",
+      "ezweb": "412",
+      "softbank": "333"
+    },
+    "222": {
+      "docomo": "28",
+      "ezweb": "222",
+      "softbank": "150"
+    },
+    "460": {
+      "docomo": "88",
+      "ezweb": "460",
+      "softbank": "431"
+    },
+    "413": {
+      "docomo": "\uff3b\u6c34\u7740\uff3d",
+      "ezweb": "413",
+      "softbank": "334"
+    },
+    "270": {
+      "docomo": "\uff3bSOS\uff3d",
+      "ezweb": "270",
+      "softbank": "\uff3bSOS\uff3d"
+    },
+    "223": {
+      "docomo": "60",
+      "ezweb": "223",
+      "softbank": "136"
+    },
+    "461": {
+      "docomo": "135",
+      "ezweb": "461",
+      "softbank": "432"
+    },
+    "414": {
+      "docomo": "80",
+      "ezweb": "414",
+      "softbank": "212"
+    },
+    "271": {
+      "docomo": "1028",
+      "ezweb": "271",
+      "softbank": "176"
+    },
+    "224": {
+      "docomo": "147",
+      "ezweb": "224",
+      "softbank": "135"
+    },
+    "462": {
+      "docomo": "156",
+      "ezweb": "462",
+      "softbank": "433"
+    },
+    "415": {
+      "docomo": "136",
+      "ezweb": "415",
+      "softbank": "339"
+    },
+    "272": {
+      "docomo": "136",
+      "ezweb": "272",
+      "softbank": "341"
+    },
+    "225": {
+      "docomo": "1064",
+      "ezweb": "225",
+      "softbank": "311"
+    },
+    "463": {
+      "docomo": "88",
+      "ezweb": "463",
+      "softbank": "430"
+    },
+    "416": {
+      "docomo": "136",
+      "ezweb": "416",
+      "softbank": "342"
+    },
+    "273": {
+      "docomo": "149",
+      "ezweb": "273",
+      "softbank": "3"
+    },
+    "226": {
+      "docomo": "167",
+      "ezweb": "226",
+      "softbank": "336"
+    },
+    "464": {
+      "docomo": "1036",
+      "ezweb": "464",
+      "softbank": "435"
+    },
+    "417": {
+      "docomo": "136",
+      "ezweb": "417",
+      "softbank": "343"
+    },
+    "274": {
+      "docomo": "\uff3b\u5b87\u5b99\u4eba\uff3d",
+      "ezweb": "274",
+      "softbank": "112"
+    },
+    "227": {
+      "docomo": "172",
+      "ezweb": "227",
+      "softbank": "475"
+    },
+    "465": {
+      "docomo": "135",
+      "ezweb": "465",
+      "softbank": "436"
+    },
+    "418": {
+      "docomo": "136",
+      "ezweb": "418",
+      "softbank": "344"
+    },
+    "275": {
+      "docomo": "6",
+      "ezweb": "275",
+      "softbank": "\u25ce"
+    },
+    "228": {
+      "docomo": "\uff3b\u6771\u4eac\uff80\uff9c\uff70\uff3d",
+      "ezweb": "228",
+      "softbank": "509"
+    },
+    "466": {
+      "docomo": "m(_ _)m",
+      "ezweb": "466",
+      "softbank": "438"
+    },
+    "419": {
+      "docomo": "136",
+      "ezweb": "419",
+      "softbank": "345"
+    },
+    "276": {
+      "docomo": "91",
+      "ezweb": "276",
+      "softbank": "554"
+    },
+    "229": {
+      "docomo": "\uff3b777\uff3d",
+      "ezweb": "229",
+      "softbank": "151"
+    },
+    "467": {
+      "docomo": "137",
+      "ezweb": "467",
+      "softbank": "437"
+    },
+    "277": {
+      "docomo": "\u03a8(\uff40\u00b4)",
+      "ezweb": "277",
+      "softbank": "126"
+    },
+    "468": {
+      "docomo": "55",
+      "ezweb": "468",
+      "softbank": "441"
+    },
+    "278": {
+      "docomo": "\u25ce",
+      "ezweb": "278",
+      "softbank": "\u25ce"
+    },
+    "50": {
+      "docomo": "140",
+      "ezweb": "50",
+      "softbank": "2"
+    },
+    "469": {
+      "docomo": "155",
+      "ezweb": "469",
+      "softbank": "66"
+    },
+    "279": {
+      "docomo": "1041",
+      "ezweb": "279",
+      "softbank": "321"
+    },
+    "51": {
+      "docomo": "136",
+      "ezweb": "51",
+      "softbank": "34"
+    },
+    "52": {
+      "docomo": "52",
+      "ezweb": "52",
+      "softbank": "68"
+    },
+    "710": {
+      "docomo": "140",
+      "ezweb": "710",
+      "softbank": "526"
+    },
+    "140": {
+      "docomo": "\u2190",
+      "ezweb": "140",
+      "softbank": "248"
+    },
+    "53": {
+      "docomo": "1054",
+      "ezweb": "53",
+      "softbank": "116"
+    },
+    "330": {
+      "docomo": "162",
+      "ezweb": "330",
+      "softbank": "349"
+    },
+    "711": {
+      "docomo": "1044",
+      "ezweb": "711",
+      "softbank": "527"
+    },
+    "54": {
+      "docomo": "1039",
+      "ezweb": "54",
+      "softbank": "555"
+    },
+    "331": {
+      "docomo": "\uff3bezplus\uff3d",
+      "ezweb": "331",
+      "softbank": "\uff3bezplus\uff3d"
+    },
+    "141": {
+      "docomo": "\u2192",
+      "ezweb": "141",
+      "softbank": "249"
+    },
+    "712": {
+      "docomo": "\uff3b\u304a\u59eb\u69d8\uff3d",
+      "ezweb": "712",
+      "softbank": "528"
+    },
+    "332": {
+      "docomo": "\uff3b\u5730\u7403\uff3d",
+      "ezweb": "332",
+      "softbank": "\uff3b\u5730\u7403\uff3d"
+    },
+    "142": {
+      "docomo": "70",
+      "ezweb": "142",
+      "softbank": "172"
+    },
+    "760": {
+      "docomo": "\uff3b\uff71\uff72\uff7d\uff78\uff98\uff70\uff91\uff3d",
+      "ezweb": "760",
+      "softbank": "\uff3b\uff71\uff72\uff7d\uff78\uff98\uff70\uff91\uff3d"
+    },
+    "713": {
+      "docomo": "\uff3b\uff72\uff99\uff76\uff3d",
+      "ezweb": "713",
+      "softbank": "532"
+    },
+    "380": {
+      "docomo": "\uff3b18\u7981\uff3d",
+      "ezweb": "380",
+      "softbank": "207"
+    },
+    "190": {
+      "docomo": "6",
+      "ezweb": "190",
+      "softbank": "467"
+    },
+    "55": {
+      "docomo": "\u00d7",
+      "ezweb": "55",
+      "softbank": "351"
+    },
+    "333": {
+      "docomo": "1065",
+      "ezweb": "333",
+      "softbank": "364"
+    },
+    "143": {
+      "docomo": "1037",
+      "ezweb": "143",
+      "softbank": "\uff3b\uff78\uff98\uff6f\uff8c\uff9f\uff3d"
+    },
+    "761": {
+      "docomo": "\uff3b\uff84\uff9e\uff70\uff85\uff82\uff3d",
+      "ezweb": "761",
+      "softbank": "\uff3b\uff84\uff9e\uff70\uff85\uff82\uff3d"
+    },
+    "714": {
+      "docomo": "\uff3b\uff80\uff9e\uff9d\uff7d\uff3d",
+      "ezweb": "714",
+      "softbank": "531"
+    },
+    "381": {
+      "docomo": "\uff3b\uff8a\uff9e\uff983\uff3d",
+      "ezweb": "381",
+      "softbank": "211"
+    },
+    "191": {
+      "docomo": "4",
+      "ezweb": "191",
+      "softbank": "72"
+    },
+    "56": {
+      "docomo": "76",
+      "ezweb": "56",
+      "softbank": "301"
+    },
+    "334": {
+      "docomo": "120",
+      "ezweb": "334",
+      "softbank": "218"
+    },
+    "144": {
+      "docomo": "72",
+      "ezweb": "144",
+      "softbank": "118"
+    },
+    "762": {
+      "docomo": "\uff3b\uff78\uff6f\uff77\uff70\uff3d",
+      "ezweb": "762",
+      "softbank": "\uff3b\uff78\uff6f\uff77\uff70\uff3d"
+    },
+    "715": {
+      "docomo": "1070",
+      "ezweb": "715",
+      "softbank": "534"
+    },
+    "382": {
+      "docomo": "\uff3bCOOL\uff3d",
+      "ezweb": "382",
+      "softbank": "220"
+    },
+    "192": {
+      "docomo": "9",
+      "ezweb": "192",
+      "softbank": "263"
+    },
+    "57": {
+      "docomo": "1017",
+      "ezweb": "57",
+      "softbank": "47"
+    },
+    "335": {
+      "docomo": "1003",
+      "ezweb": "335",
+      "softbank": "6"
+    },
+    "145": {
+      "docomo": "\uff3b\u540d\u672d\uff3d",
+      "ezweb": "145",
+      "softbank": "\uff3b\u540d\u672d\uff3d"
+    },
+    "763": {
+      "docomo": "\uff3b\uff81\uff6e\uff7a\uff3d",
+      "ezweb": "763",
+      "softbank": "\uff3b\uff81\uff6e\uff7a\uff3d"
+    },
+    "716": {
+      "docomo": "\uff3b\uff79\uff9e\uff7c\uff9e\uff79\uff9e\uff7c\uff9e\uff3d",
+      "ezweb": "716",
+      "softbank": "537"
+    },
+    "383": {
+      "docomo": "\uff3b\u5272\uff3d",
+      "ezweb": "383",
+      "softbank": "239"
+    },
+    "193": {
+      "docomo": "10",
+      "ezweb": "193",
+      "softbank": "264"
+    },
+    "58": {
+      "docomo": "1017",
+      "ezweb": "58",
+      "softbank": "47"
+    },
+    "336": {
+      "docomo": "92",
+      "ezweb": "336",
+      "softbank": "7"
+    },
+    "146": {
+      "docomo": "50",
+      "ezweb": "146",
+      "softbank": "67"
+    },
+    "764": {
+      "docomo": "\uff3b\uff77\uff6c\uff9d\uff83\uff9e\uff68\uff3d",
+      "ezweb": "764",
+      "softbank": "\uff3b\uff77\uff6c\uff9d\uff83\uff9e\uff68\uff3d"
+    },
+    "717": {
+      "docomo": "\uff3b\uff7f\uff9e\uff73\uff3d",
+      "ezweb": "717",
+      "softbank": "538"
+    },
+    "384": {
+      "docomo": "\uff3b\uff7b\uff70\uff8b\uff9e\uff7d\uff3d",
+      "ezweb": "384",
+      "softbank": "240"
+    },
+    "194": {
+      "docomo": "11",
+      "ezweb": "194",
+      "softbank": "265"
+    },
+    "59": {
+      "docomo": "1011",
+      "ezweb": "59",
+      "softbank": "322"
+    },
+    "337": {
+      "docomo": "1011",
+      "ezweb": "337",
+      "softbank": "12"
+    },
+    "147": {
+      "docomo": "70",
+      "ezweb": "147",
+      "softbank": "172"
+    },
+    "765": {
+      "docomo": "\uff3b\uff77\uff6c\uff9d\uff83\uff9e\uff68\uff3d",
+      "ezweb": "765",
+      "softbank": "\uff3b\uff77\uff6c\uff9d\uff83\uff9e\uff68\uff3d"
+    },
+    "718": {
+      "docomo": "\uff3b\uff7a\uff71\uff97\uff3d",
+      "ezweb": "718",
+      "softbank": "539"
+    },
+    "385": {
+      "docomo": "115",
+      "ezweb": "385",
+      "softbank": "241"
+    },
+    "195": {
+      "docomo": "12",
+      "ezweb": "195",
+      "softbank": "266"
+    },
+    "338": {
+      "docomo": "\uff3b\uff97\uff7c\uff9e\uff75\uff3d",
+      "ezweb": "338",
+      "softbank": "140"
+    },
+    "148": {
+      "docomo": "34",
+      "ezweb": "148",
+      "softbank": "447"
+    },
+    "766": {
+      "docomo": "(\/_\uff3c)",
+      "ezweb": "766",
+      "softbank": "(\/_\uff3c)"
+    },
+    "719": {
+      "docomo": "\uff3b\u725b\uff3d",
+      "ezweb": "719",
+      "softbank": "543"
+    },
+    "386": {
+      "docomo": "1048",
+      "ezweb": "386",
+      "softbank": "242"
+    },
+    "196": {
+      "docomo": "13",
+      "ezweb": "196",
+      "softbank": "267"
+    },
+    "339": {
+      "docomo": "148",
+      "ezweb": "339",
+      "softbank": "50"
+    },
+    "149": {
+      "docomo": "1014",
+      "ezweb": "149",
+      "softbank": "301"
+    },
+    "767": {
+      "docomo": "(\u30fb\u00d7\u30fb)",
+      "ezweb": "767",
+      "softbank": "(\u30fb\u00d7\u30fb)"
+    },
+    "387": {
+      "docomo": "1046",
+      "ezweb": "387",
+      "softbank": "243"
+    },
+    "197": {
+      "docomo": "14",
+      "ezweb": "197",
+      "softbank": "268"
+    },
+    "768": {
+      "docomo": "|(\u30fb\u00d7\u30fb)|",
+      "ezweb": "768",
+      "softbank": "|(\u30fb\u00d7\u30fb)|"
+    },
+    "200": {
+      "docomo": "17",
+      "ezweb": "200",
+      "softbank": "271"
+    },
+    "388": {
+      "docomo": "\uff3b\u6307\uff3d",
+      "ezweb": "388",
+      "softbank": "244"
+    },
+    "198": {
+      "docomo": "15",
+      "ezweb": "198",
+      "softbank": "269"
+    },
+    "769": {
+      "docomo": "\uff3b\u706b\u5c71\uff3d",
+      "ezweb": "769",
+      "softbank": "\uff3b\u706b\u5c71\uff3d"
+    },
+    "201": {
+      "docomo": "18",
+      "ezweb": "201",
+      "softbank": "272"
+    },
+    "389": {
+      "docomo": "\uff3b\u55b6\uff3d",
+      "ezweb": "389",
+      "softbank": "245"
+    },
+    "199": {
+      "docomo": "16",
+      "ezweb": "199",
+      "softbank": "270"
+    },
+    "202": {
+      "docomo": "19",
+      "ezweb": "202",
+      "softbank": "273"
+    },
+    "820": {
+      "docomo": "\uff3c(^o^)\uff0f",
+      "ezweb": "820",
+      "softbank": "439"
+    },
+    "440": {
+      "docomo": "1033",
+      "ezweb": "440",
+      "softbank": "402"
+    },
+    "203": {
+      "docomo": "20",
+      "ezweb": "203",
+      "softbank": "274"
+    },
+    "250": {
+      "docomo": "\uff3b\uff76\uff74\uff99\uff3d",
+      "ezweb": "250",
+      "softbank": "549"
+    },
+    "821": {
+      "docomo": "143",
+      "ezweb": "821",
+      "softbank": "403"
+    },
+    "441": {
+      "docomo": "1021",
+      "ezweb": "441",
+      "softbank": "403"
+    },
+    "204": {
+      "docomo": "\uff3b\u86c7\u4f7f\u5ea7\uff3d",
+      "ezweb": "204"
+    },
+    "251": {
+      "docomo": "101",
+      "ezweb": "251",
+      "softbank": "79"
+    },
+    "822": {
+      "docomo": "1025",
+      "ezweb": "822",
+      "softbank": "422"
+    },
+    "442": {
+      "docomo": "1072",
+      "ezweb": "442",
+      "softbank": "404"
+    },
+    "205": {
+      "docomo": "43",
+      "ezweb": "205",
+      "softbank": "184"
+    },
+    "252": {
+      "docomo": "1069",
+      "ezweb": "252",
+      "softbank": "85"
+    },
+    "823": {
+      "docomo": "\uff3bJava\uff3d",
+      "ezweb": "823",
+      "softbank": "\uff3bJava\uff3d"
+    },
+    "490": {
+      "docomo": "172",
+      "ezweb": "490",
+      "softbank": "475"
+    },
+    "443": {
+      "docomo": "1032",
+      "ezweb": "443",
+      "softbank": "406"
+    },
+    "206": {
+      "docomo": "45",
+      "ezweb": "206",
+      "softbank": "186"
+    },
+    "253": {
+      "docomo": "\uff3b\uff71\uff98\uff3d",
+      "ezweb": "253",
+      "softbank": "\uff3b\uff71\uff98\uff3d"
+    },
+    "824": {
+      "docomo": "\uff3bBREW\uff3d",
+      "ezweb": "824",
+      "softbank": "\uff3bBREW\uff3d"
+    },
+    "491": {
+      "docomo": "\uff3b\u8679\uff3d",
+      "ezweb": "491",
+      "softbank": "476"
+    },
+    "444": {
+      "docomo": "143",
+      "ezweb": "444",
+      "softbank": "407"
+    },
+    "207": {
+      "docomo": "49",
+      "ezweb": "207",
+      "softbank": "181"
+    },
+    "254": {
+      "docomo": "1074",
+      "ezweb": "254",
+      "softbank": "111"
+    },
+    "825": {
+      "docomo": "\uff3bEZ\u7740\u3046\u305f\uff3d",
+      "ezweb": "825",
+      "softbank": "\uff3bEZ\u7740\u3046\u305f\uff3d"
+    },
+    "492": {
+      "docomo": "44;139",
+      "ezweb": "492",
+      "softbank": "501"
+    },
+    "445": {
+      "docomo": "157",
+      "ezweb": "445",
+      "softbank": "408"
+    },
+    "208": {
+      "docomo": "47",
+      "ezweb": "208",
+      "softbank": "179"
+    },
+    "255": {
+      "docomo": "102",
+      "ezweb": "255",
+      "softbank": "307"
+    },
+    "826": {
+      "docomo": "\uff3bEZ\uff85\uff8b\uff9e\uff3d",
+      "ezweb": "826",
+      "softbank": "\uff3bEZ\uff85\uff8b\uff9e\uff3d"
+    },
+    "493": {
+      "docomo": "1",
+      "ezweb": "493",
+      "softbank": "473"
+    },
+    "446": {
+      "docomo": "1022",
+      "ezweb": "446",
+      "softbank": "410"
+    },
+    "209": {
+      "docomo": "35",
+      "ezweb": "209",
+      "softbank": "180"
+    },
+    "256": {
+      "docomo": "148",
+      "ezweb": "256",
+      "softbank": "305"
+    },
+    "827": {
+      "docomo": "\uff3bWIN\uff3d",
+      "ezweb": "827",
+      "softbank": "\uff3bWIN\uff3d"
+    },
+    "494": {
+      "docomo": "63",
+      "ezweb": "494",
+      "softbank": "503"
+    },
+    "447": {
+      "docomo": "1076",
+      "ezweb": "447",
+      "softbank": "411"
+    },
+    "257": {
+      "docomo": "140",
+      "ezweb": "257",
+      "softbank": "87"
+    },
+    "828": {
+      "docomo": "\uff3b\uff8c\uff9f\uff9a\uff90\uff71\uff91\uff3d",
+      "ezweb": "828",
+      "softbank": "\uff3b\uff8c\uff9f\uff9a\uff90\uff71\uff91\uff3d"
+    },
+    "495": {
+      "docomo": "39",
+      "ezweb": "495",
+      "softbank": "504"
+    },
+    "448": {
+      "docomo": "o(\uff9b\u2266)",
+      "ezweb": "448",
+      "softbank": "412"
+    },
+    "30": {
+      "docomo": "\u2193",
+      "ezweb": "30",
+      "softbank": "251"
+    },
+    "258": {
+      "docomo": "141",
+      "ezweb": "258",
+      "softbank": "89"
+    }
+  }
+}
