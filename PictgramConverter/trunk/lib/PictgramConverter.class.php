@@ -6,6 +6,7 @@ class PictgramConverter
     const SOFTBANK = 3;
     private static $loaded = false;
     private static $datadir = "";
+    private static $cacheFile = "";
     private static $convertFrom;
     private static $convertMap;
     private static $cacheKey = "pictgram_converter";
@@ -20,8 +21,13 @@ class PictgramConverter
      * データファイルのロード
      */
     public static function init(){
-        if(!self::$loaded)
+        if(!self::$loaded){
+            $root = realpath(dirname(__FILE__).'/..');
+            $path = $root . DIRECTORY_SEPARATOR."data";
+            self::$datadir = $path;
+            self::$cacheFile = self::$datadir .DIRECTORY_SEPARATOR . self::$cacheKey;
             self::loadData();
+        }
     }
 
     /**
@@ -163,9 +169,6 @@ class PictgramConverter
     }
 
     private static function loadData(){
-        $root = realpath(dirname(__FILE__).'/..');
-        $path = $root . DIRECTORY_SEPARATOR."data";
-        self::$datadir = $path;
 
         $cache = self::loadCache(self::$datadir . DIRECTORY_SEPARATOR . self::$cacheKey);
         if($cache!=null
@@ -185,17 +188,20 @@ class PictgramConverter
 
     private static function loadCache($file){
         try{
-            return unserialize(file_get_contents($file));
+            //return unserialize(file_get_contents($file));
+            require_once(self::$cacheFile);
+            return $data;
         }catch(Exception $e){
             return null;
         }
     }
 
     private static function doCache($data){
-        $cdata = serialize($data);
+        //$cdata = serialize($data);
+        $cdata = "<?php $data=". self::dump_hash($data);
         $root = realpath(dirname(__FILE__).'/..');
         $path = $root . DIRECTORY_SEPARATOR."data";
-        $hd = fopen(self::$datadir .DIRECTORY_SEPARATOR . self::$cacheKey, "w");
+        $hd = fopen(self::$cacheFile, "w");
         fwrite($hd, $cdata);
         fclose($hd);
     }
