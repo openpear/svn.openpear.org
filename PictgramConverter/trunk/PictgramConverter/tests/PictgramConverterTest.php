@@ -89,7 +89,7 @@ foreach(array(array("E63E", "EE98BE"),
 
 function checkAllPict(){
     global $t;
-    $dir = dirname(__FILE__) .'/../data/';
+    $dir = dirname(__FILE__) .'/../src/Text/PictgramConverter/data/';
     $list = array();
     $map = array();
     foreach (array("docomo", "ezweb", "softbank") as $cname) {
@@ -120,7 +120,7 @@ function checkAllPict(){
 }
 function checkAllPictU(){
     global $t;
-    $dir = dirname(__FILE__) .'/../data/';
+    $dir = dirname(__FILE__) .'/../src/Text/PictgramConverter/data/';
     $list = array();
     $map = array();
     foreach (array("docomo", "ezweb", "softbank") as $cname) {
@@ -231,10 +231,3 @@ $str = pack("H*","efbe8aefbdb9efbe9de381aee59381e6a0bce3818ce381a0e38184e38199e3
 $r = PictgramConverter::restore($str, DOCOMO);
 $last = mb_substr($r, mb_strlen($r)-1);
 $t->cmp_ok($last, "==", pack("H*", "F991"), "restore");
-echo $r;
-
-
-echo PictgramConverter::restore("ソソソソ", DOCOMO) . "\n";
-
-
-echo strlen(PictgramConverter::convert((pack("H*", "F45C")), EZWEB)) . "\n";
