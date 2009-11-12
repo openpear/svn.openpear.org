@@ -14,7 +14,7 @@ PictgramConverter
 使い方
 <?php
 
-require 'HTML/PictgramConverter';
+require 'Text/PictgramConverter';
 
 $utf = PictgramConverter::convert($s, PictgramConverter::DOCOMO);
 //絵文字を含むsjis(cp932)文字列をutf-8に変換
