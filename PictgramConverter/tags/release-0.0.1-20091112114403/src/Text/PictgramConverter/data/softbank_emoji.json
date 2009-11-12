@@ -1,0 +1,3399 @@
+{
+  "softbank": {
+    "1": {
+      "sjis": "F941",
+      "number": "1",
+      "webcode": "4721",
+      "utf-8": "EE8081",
+      "unicode": "E001"
+    },
+    "2": {
+      "sjis": "F942",
+      "number": "2",
+      "webcode": "4722",
+      "utf-8": "EE8082",
+      "unicode": "E002"
+    },
+    "3": {
+      "sjis": "F943",
+      "number": "3",
+      "webcode": "4723",
+      "utf-8": "EE8083",
+      "unicode": "E003"
+    },
+    "4": {
+      "sjis": "F944",
+      "number": "4",
+      "webcode": "4724",
+      "utf-8": "EE8084",
+      "unicode": "E004"
+    },
+    "5": {
+      "sjis": "F945",
+      "number": "5",
+      "webcode": "4725",
+      "utf-8": "EE8085",
+      "unicode": "E005"
+    },
+    "6": {
+      "sjis": "F946",
+      "number": "6",
+      "webcode": "4726",
+      "utf-8": "EE8086",
+      "unicode": "E006"
+    },
+    "7": {
+      "sjis": "F947",
+      "number": "7",
+      "webcode": "4727",
+      "utf-8": "EE8087",
+      "unicode": "E007"
+    },
+    "8": {
+      "sjis": "F948",
+      "number": "8",
+      "webcode": "4728",
+      "utf-8": "EE8088",
+      "unicode": "E008"
+    },
+    "9": {
+      "sjis": "F949",
+      "number": "9",
+      "webcode": "4729",
+      "utf-8": "EE8089",
+      "unicode": "E009"
+    },
+    "10": {
+      "sjis": "F94A",
+      "number": "10",
+      "webcode": "472A",
+      "utf-8": "EE808A",
+      "unicode": "E00A"
+    },
+    "11": {
+      "sjis": "F94B",
+      "number": "11",
+      "webcode": "472B",
+      "utf-8": "EE808B",
+      "unicode": "E00B"
+    },
+    "12": {
+      "sjis": "F94C",
+      "number": "12",
+      "webcode": "472C",
+      "utf-8": "EE808C",
+      "unicode": "E00C"
+    },
+    "13": {
+      "sjis": "F94D",
+      "number": "13",
+      "webcode": "472D",
+      "utf-8": "EE808D",
+      "unicode": "E00D"
+    },
+    "14": {
+      "sjis": "F94E",
+      "number": "14",
+      "webcode": "472E",
+      "utf-8": "EE808E",
+      "unicode": "E00E"
+    },
+    "15": {
+      "sjis": "F94F",
+      "number": "15",
+      "webcode": "472F",
+      "utf-8": "EE808F",
+      "unicode": "E00F"
+    },
+    "16": {
+      "sjis": "F950",
+      "number": "16",
+      "webcode": "4730",
+      "utf-8": "EE8090",
+      "unicode": "E010"
+    },
+    "17": {
+      "sjis": "F951",
+      "number": "17",
+      "webcode": "4731",
+      "utf-8": "EE8091",
+      "unicode": "E011"
+    },
+    "18": {
+      "sjis": "F952",
+      "number": "18",
+      "webcode": "4732",
+      "utf-8": "EE8092",
+      "unicode": "E012"
+    },
+    "19": {
+      "sjis": "F953",
+      "number": "19",
+      "webcode": "4733",
+      "utf-8": "EE8093",
+      "unicode": "E013"
+    },
+    "20": {
+      "sjis": "F954",
+      "number": "20",
+      "webcode": "4734",
+      "utf-8": "EE8094",
+      "unicode": "E014"
+    },
+    "21": {
+      "sjis": "F955",
+      "number": "21",
+      "webcode": "4735",
+      "utf-8": "EE8095",
+      "unicode": "E015"
+    },
+    "22": {
+      "sjis": "F956",
+      "number": "22",
+      "webcode": "4736",
+      "utf-8": "EE8096",
+      "unicode": "E016"
+    },
+    "23": {
+      "sjis": "F957",
+      "number": "23",
+      "webcode": "4737",
+      "utf-8": "EE8097",
+      "unicode": "E017"
+    },
+    "24": {
+      "sjis": "F958",
+      "number": "24",
+      "webcode": "4738",
+      "utf-8": "EE8098",
+      "unicode": "E018"
+    },
+    "25": {
+      "sjis": "F959",
+      "number": "25",
+      "webcode": "4739",
+      "utf-8": "EE8099",
+      "unicode": "E019"
+    },
+    "26": {
+      "sjis": "F95A",
+      "number": "26",
+      "webcode": "473A",
+      "utf-8": "EE809A",
+      "unicode": "E01A"
+    },
+    "27": {
+      "sjis": "F95B",
+      "number": "27",
+      "webcode": "473B",
+      "utf-8": "EE809B",
+      "unicode": "E01B"
+    },
+    "28": {
+      "sjis": "F95C",
+      "number": "28",
+      "webcode": "473C",
+      "utf-8": "EE809C",
+      "unicode": "E01C"
+    },
+    "29": {
+      "sjis": "F95D",
+      "number": "29",
+      "webcode": "473D",
+      "utf-8": "EE809D",
+      "unicode": "E01D"
+    },
+    "30": {
+      "sjis": "F95E",
+      "number": "30",
+      "webcode": "473E",
+      "utf-8": "EE809E",
+      "unicode": "E01E"
+    },
+    "31": {
+      "sjis": "F95F",
+      "number": "31",
+      "webcode": "473F",
+      "utf-8": "EE809F",
+      "unicode": "E01F"
+    },
+    "32": {
+      "sjis": "F960",
+      "number": "32",
+      "webcode": "4740",
+      "utf-8": "EE80A0",
+      "unicode": "E020"
+    },
+    "33": {
+      "sjis": "F961",
+      "number": "33",
+      "webcode": "4741",
+      "utf-8": "EE80A1",
+      "unicode": "E021"
+    },
+    "34": {
+      "sjis": "F962",
+      "number": "34",
+      "webcode": "4742",
+      "utf-8": "EE80A2",
+      "unicode": "E022"
+    },
+    "35": {
+      "sjis": "F963",
+      "number": "35",
+      "webcode": "4743",
+      "utf-8": "EE80A3",
+      "unicode": "E023"
+    },
+    "36": {
+      "sjis": "F964",
+      "number": "36",
+      "webcode": "4744",
+      "utf-8": "EE80A4",
+      "unicode": "E024"
+    },
+    "37": {
+      "sjis": "F965",
+      "number": "37",
+      "webcode": "4745",
+      "utf-8": "EE80A5",
+      "unicode": "E025"
+    },
+    "38": {
+      "sjis": "F966",
+      "number": "38",
+      "webcode": "4746",
+      "utf-8": "EE80A6",
+      "unicode": "E026"
+    },
+    "39": {
+      "sjis": "F967",
+      "number": "39",
+      "webcode": "4747",
+      "utf-8": "EE80A7",
+      "unicode": "E027"
+    },
+    "40": {
+      "sjis": "F968",
+      "number": "40",
+      "webcode": "4748",
+      "utf-8": "EE80A8",
+      "unicode": "E028"
+    },
+    "41": {
+      "sjis": "F969",
+      "number": "41",
+      "webcode": "4749",
+      "utf-8": "EE80A9",
+      "unicode": "E029"
+    },
+    "42": {
+      "sjis": "F96A",
+      "number": "42",
+      "webcode": "474A",
+      "utf-8": "EE80AA",
+      "unicode": "E02A"
+    },
+    "43": {
+      "sjis": "F96B",
+      "number": "43",
+      "webcode": "474B",
+      "utf-8": "EE80AB",
+      "unicode": "E02B"
+    },
+    "44": {
+      "sjis": "F96C",
+      "number": "44",
+      "webcode": "474C",
+      "utf-8": "EE80AC",
+      "unicode": "E02C"
+    },
+    "45": {
+      "sjis": "F96D",
+      "number": "45",
+      "webcode": "474D",
+      "utf-8": "EE80AD",
+      "unicode": "E02D"
+    },
+    "46": {
+      "sjis": "F96E",
+      "number": "46",
+      "webcode": "474E",
+      "utf-8": "EE80AE",
+      "unicode": "E02E"
+    },
+    "47": {
+      "sjis": "F96F",
+      "number": "47",
+      "webcode": "474F",
+      "utf-8": "EE80AF",
+      "unicode": "E02F"
+    },
+    "48": {
+      "sjis": "F970",
+      "number": "48",
+      "webcode": "4750",
+      "utf-8": "EE80B0",
+      "unicode": "E030"
+    },
+    "49": {
+      "sjis": "F971",
+      "number": "49",
+      "webcode": "4751",
+      "utf-8": "EE80B1",
+      "unicode": "E031"
+    },
+    "50": {
+      "sjis": "F972",
+      "number": "50",
+      "webcode": "4752",
+      "utf-8": "EE80B2",
+      "unicode": "E032"
+    },
+    "51": {
+      "sjis": "F973",
+      "number": "51",
+      "webcode": "4753",
+      "utf-8": "EE80B3",
+      "unicode": "E033"
+    },
+    "52": {
+      "sjis": "F974",
+      "number": "52",
+      "webcode": "4754",
+      "utf-8": "EE80B4",
+      "unicode": "E034"
+    },
+    "53": {
+      "sjis": "F975",
+      "number": "53",
+      "webcode": "4755",
+      "utf-8": "EE80B5",
+      "unicode": "E035"
+    },
+    "54": {
+      "sjis": "F976",
+      "number": "54",
+      "webcode": "4756",
+      "utf-8": "EE80B6",
+      "unicode": "E036"
+    },
+    "55": {
+      "sjis": "F977",
+      "number": "55",
+      "webcode": "4757",
+      "utf-8": "EE80B7",
+      "unicode": "E037"
+    },
+    "56": {
+      "sjis": "F978",
+      "number": "56",
+      "webcode": "4758",
+      "utf-8": "EE80B8",
+      "unicode": "E038"
+    },
+    "57": {
+      "sjis": "F979",
+      "number": "57",
+      "webcode": "4759",
+      "utf-8": "EE80B9",
+      "unicode": "E039"
+    },
+    "58": {
+      "sjis": "F97A",
+      "number": "58",
+      "webcode": "475A",
+      "utf-8": "EE80BA",
+      "unicode": "E03A"
+    },
+    "59": {
+      "sjis": "F97B",
+      "number": "59",
+      "webcode": "475B",
+      "utf-8": "EE80BB",
+      "unicode": "E03B"
+    },
+    "60": {
+      "sjis": "F97C",
+      "number": "60",
+      "webcode": "475C",
+      "utf-8": "EE80BC",
+      "unicode": "E03C"
+    },
+    "61": {
+      "sjis": "F97D",
+      "number": "61",
+      "webcode": "475D",
+      "utf-8": "EE80BD",
+      "unicode": "E03D"
+    },
+    "62": {
+      "sjis": "F97E",
+      "number": "62",
+      "webcode": "475E",
+      "utf-8": "EE80BE",
+      "unicode": "E03E"
+    },
+    "63": {
+      "sjis": "F980",
+      "number": "63",
+      "webcode": "475F",
+      "utf-8": "EE80BF",
+      "unicode": "E03F"
+    },
+    "64": {
+      "sjis": "F981",
+      "number": "64",
+      "webcode": "4760",
+      "utf-8": "EE8180",
+      "unicode": "E040"
+    },
+    "65": {
+      "sjis": "F982",
+      "number": "65",
+      "webcode": "4761",
+      "utf-8": "EE8181",
+      "unicode": "E041"
+    },
+    "66": {
+      "sjis": "F983",
+      "number": "66",
+      "webcode": "4762",
+      "utf-8": "EE8182",
+      "unicode": "E042"
+    },
+    "67": {
+      "sjis": "F984",
+      "number": "67",
+      "webcode": "4763",
+      "utf-8": "EE8183",
+      "unicode": "E043"
+    },
+    "68": {
+      "sjis": "F985",
+      "number": "68",
+      "webcode": "4764",
+      "utf-8": "EE8184",
+      "unicode": "E044"
+    },
+    "69": {
+      "sjis": "F986",
+      "number": "69",
+      "webcode": "4765",
+      "utf-8": "EE8185",
+      "unicode": "E045"
+    },
+    "70": {
+      "sjis": "F987",
+      "number": "70",
+      "webcode": "4766",
+      "utf-8": "EE8186",
+      "unicode": "E046"
+    },
+    "71": {
+      "sjis": "F988",
+      "number": "71",
+      "webcode": "4767",
+      "utf-8": "EE8187",
+      "unicode": "E047"
+    },
+    "72": {
+      "sjis": "F989",
+      "number": "72",
+      "webcode": "4768",
+      "utf-8": "EE8188",
+      "unicode": "E048"
+    },
+    "73": {
+      "sjis": "F98A",
+      "number": "73",
+      "webcode": "4769",
+      "utf-8": "EE8189",
+      "unicode": "E049"
+    },
+    "74": {
+      "sjis": "F98B",
+      "number": "74",
+      "webcode": "476A",
+      "utf-8": "EE818A",
+      "unicode": "E04A"
+    },
+    "75": {
+      "sjis": "F98C",
+      "number": "75",
+      "webcode": "476B",
+      "utf-8": "EE818B",
+      "unicode": "E04B"
+    },
+    "76": {
+      "sjis": "F98D",
+      "number": "76",
+      "webcode": "476C",
+      "utf-8": "EE818C",
+      "unicode": "E04C"
+    },
+    "77": {
+      "sjis": "F98E",
+      "number": "77",
+      "webcode": "476D",
+      "utf-8": "EE818D",
+      "unicode": "E04D"
+    },
+    "78": {
+      "sjis": "F98F",
+      "number": "78",
+      "webcode": "476E",
+      "utf-8": "EE818E",
+      "unicode": "E04E"
+    },
+    "79": {
+      "sjis": "F990",
+      "number": "79",
+      "webcode": "476F",
+      "utf-8": "EE818F",
+      "unicode": "E04F"
+    },
+    "80": {
+      "sjis": "F991",
+      "number": "80",
+      "webcode": "4770",
+      "utf-8": "EE8190",
+      "unicode": "E050"
+    },
+    "81": {
+      "sjis": "F992",
+      "number": "81",
+      "webcode": "4771",
+      "utf-8": "EE8191",
+      "unicode": "E051"
+    },
+    "82": {
+      "sjis": "F993",
+      "number": "82",
+      "webcode": "4772",
+      "utf-8": "EE8192",
+      "unicode": "E052"
+    },
+    "83": {
+      "sjis": "F994",
+      "number": "83",
+      "webcode": "4773",
+      "utf-8": "EE8193",
+      "unicode": "E053"
+    },
+    "84": {
+      "sjis": "F995",
+      "number": "84",
+      "webcode": "4774",
+      "utf-8": "EE8194",
+      "unicode": "E054"
+    },
+    "85": {
+      "sjis": "F996",
+      "number": "85",
+      "webcode": "4775",
+      "utf-8": "EE8195",
+      "unicode": "E055"
+    },
+    "86": {
+      "sjis": "F997",
+      "number": "86",
+      "webcode": "4776",
+      "utf-8": "EE8196",
+      "unicode": "E056"
+    },
+    "87": {
+      "sjis": "F998",
+      "number": "87",
+      "webcode": "4777",
+      "utf-8": "EE8197",
+      "unicode": "E057"
+    },
+    "88": {
+      "sjis": "F999",
+      "number": "88",
+      "webcode": "4778",
+      "utf-8": "EE8198",
+      "unicode": "E058"
+    },
+    "89": {
+      "sjis": "F99A",
+      "number": "89",
+      "webcode": "4779",
+      "utf-8": "EE8199",
+      "unicode": "E059"
+    },
+    "90": {
+      "sjis": "F99B",
+      "number": "90",
+      "webcode": "477A",
+      "utf-8": "EE819A",
+      "unicode": "E05A"
+    },
+    "101": {
+      "sjis": "F741",
+      "number": "101",
+      "webcode": "4521",
+      "utf-8": "EE8481",
+      "unicode": "E101"
+    },
+    "102": {
+      "sjis": "F742",
+      "number": "102",
+      "webcode": "4522",
+      "utf-8": "EE8482",
+      "unicode": "E102"
+    },
+    "103": {
+      "sjis": "F743",
+      "number": "103",
+      "webcode": "4523",
+      "utf-8": "EE8483",
+      "unicode": "E103"
+    },
+    "104": {
+      "sjis": "F744",
+      "number": "104",
+      "webcode": "4524",
+      "utf-8": "EE8484",
+      "unicode": "E104"
+    },
+    "105": {
+      "sjis": "F745",
+      "number": "105",
+      "webcode": "4525",
+      "utf-8": "EE8485",
+      "unicode": "E105"
+    },
+    "106": {
+      "sjis": "F746",
+      "number": "106",
+      "webcode": "4526",
+      "utf-8": "EE8486",
+      "unicode": "E106"
+    },
+    "107": {
+      "sjis": "F747",
+      "number": "107",
+      "webcode": "4527",
+      "utf-8": "EE8487",
+      "unicode": "E107"
+    },
+    "108": {
+      "sjis": "F748",
+      "number": "108",
+      "webcode": "4528",
+      "utf-8": "EE8488",
+      "unicode": "E108"
+    },
+    "109": {
+      "sjis": "F749",
+      "number": "109",
+      "webcode": "4529",
+      "utf-8": "EE8489",
+      "unicode": "E109"
+    },
+    "110": {
+      "sjis": "F74A",
+      "number": "110",
+      "webcode": "452A",
+      "utf-8": "EE848A",
+      "unicode": "E10A"
+    },
+    "111": {
+      "sjis": "F74B",
+      "number": "111",
+      "webcode": "452B",
+      "utf-8": "EE848B",
+      "unicode": "E10B"
+    },
+    "112": {
+      "sjis": "F74C",
+      "number": "112",
+      "webcode": "452C",
+      "utf-8": "EE848C",
+      "unicode": "E10C"
+    },
+    "113": {
+      "sjis": "F74D",
+      "number": "113",
+      "webcode": "452D",
+      "utf-8": "EE848D",
+      "unicode": "E10D"
+    },
+    "114": {
+      "sjis": "F74E",
+      "number": "114",
+      "webcode": "452E",
+      "utf-8": "EE848E",
+      "unicode": "E10E"
+    },
+    "115": {
+      "sjis": "F74F",
+      "number": "115",
+      "webcode": "452F",
+      "utf-8": "EE848F",
+      "unicode": "E10F"
+    },
+    "116": {
+      "sjis": "F750",
+      "number": "116",
+      "webcode": "4530",
+      "utf-8": "EE8490",
+      "unicode": "E110"
+    },
+    "117": {
+      "sjis": "F751",
+      "number": "117",
+      "webcode": "4531",
+      "utf-8": "EE8491",
+      "unicode": "E111"
+    },
+    "118": {
+      "sjis": "F752",
+      "number": "118",
+      "webcode": "4532",
+      "utf-8": "EE8492",
+      "unicode": "E112"
+    },
+    "119": {
+      "sjis": "F753",
+      "number": "119",
+      "webcode": "4533",
+      "utf-8": "EE8493",
+      "unicode": "E113"
+    },
+    "120": {
+      "sjis": "F754",
+      "number": "120",
+      "webcode": "4534",
+      "utf-8": "EE8494",
+      "unicode": "E114"
+    },
+    "121": {
+      "sjis": "F755",
+      "number": "121",
+      "webcode": "4535",
+      "utf-8": "EE8495",
+      "unicode": "E115"
+    },
+    "122": {
+      "sjis": "F756",
+      "number": "122",
+      "webcode": "4536",
+      "utf-8": "EE8496",
+      "unicode": "E116"
+    },
+    "123": {
+      "sjis": "F757",
+      "number": "123",
+      "webcode": "4537",
+      "utf-8": "EE8497",
+      "unicode": "E117"
+    },
+    "124": {
+      "sjis": "F758",
+      "number": "124",
+      "webcode": "4538",
+      "utf-8": "EE8498",
+      "unicode": "E118"
+    },
+    "125": {
+      "sjis": "F759",
+      "number": "125",
+      "webcode": "4539",
+      "utf-8": "EE8499",
+      "unicode": "E119"
+    },
+    "126": {
+      "sjis": "F75A",
+      "number": "126",
+      "webcode": "453A",
+      "utf-8": "EE849A",
+      "unicode": "E11A"
+    },
+    "127": {
+      "sjis": "F75B",
+      "number": "127",
+      "webcode": "453B",
+      "utf-8": "EE849B",
+      "unicode": "E11B"
+    },
+    "128": {
+      "sjis": "F75C",
+      "number": "128",
+      "webcode": "453C",
+      "utf-8": "EE849C",
+      "unicode": "E11C"
+    },
+    "129": {
+      "sjis": "F75D",
+      "number": "129",
+      "webcode": "453D",
+      "utf-8": "EE849D",
+      "unicode": "E11D"
+    },
+    "130": {
+      "sjis": "F75E",
+      "number": "130",
+      "webcode": "453E",
+      "utf-8": "EE849E",
+      "unicode": "E11E"
+    },
+    "131": {
+      "sjis": "F75F",
+      "number": "131",
+      "webcode": "453F",
+      "utf-8": "EE849F",
+      "unicode": "E11F"
+    },
+    "132": {
+      "sjis": "F760",
+      "number": "132",
+      "webcode": "4540",
+      "utf-8": "EE84A0",
+      "unicode": "E120"
+    },
+    "133": {
+      "sjis": "F761",
+      "number": "133",
+      "webcode": "4541",
+      "utf-8": "EE84A1",
+      "unicode": "E121"
+    },
+    "134": {
+      "sjis": "F762",
+      "number": "134",
+      "webcode": "4542",
+      "utf-8": "EE84A2",
+      "unicode": "E122"
+    },
+    "135": {
+      "sjis": "F763",
+      "number": "135",
+      "webcode": "4543",
+      "utf-8": "EE84A3",
+      "unicode": "E123"
+    },
+    "136": {
+      "sjis": "F764",
+      "number": "136",
+      "webcode": "4544",
+      "utf-8": "EE84A4",
+      "unicode": "E124"
+    },
+    "137": {
+      "sjis": "F765",
+      "number": "137",
+      "webcode": "4545",
+      "utf-8": "EE84A5",
+      "unicode": "E125"
+    },
+    "138": {
+      "sjis": "F766",
+      "number": "138",
+      "webcode": "4546",
+      "utf-8": "EE84A6",
+      "unicode": "E126"
+    },
+    "139": {
+      "sjis": "F767",
+      "number": "139",
+      "webcode": "4547",
+      "utf-8": "EE84A7",
+      "unicode": "E127"
+    },
+    "140": {
+      "sjis": "F768",
+      "number": "140",
+      "webcode": "4548",
+      "utf-8": "EE84A8",
+      "unicode": "E128"
+    },
+    "141": {
+      "sjis": "F769",
+      "number": "141",
+      "webcode": "4549",
+      "utf-8": "EE84A9",
+      "unicode": "E129"
+    },
+    "142": {
+      "sjis": "F76A",
+      "number": "142",
+      "webcode": "454A",
+      "utf-8": "EE84AA",
+      "unicode": "E12A"
+    },
+    "143": {
+      "sjis": "F76B",
+      "number": "143",
+      "webcode": "454B",
+      "utf-8": "EE84AB",
+      "unicode": "E12B"
+    },
+    "144": {
+      "sjis": "F76C",
+      "number": "144",
+      "webcode": "454C",
+      "utf-8": "EE84AC",
+      "unicode": "E12C"
+    },
+    "145": {
+      "sjis": "F76D",
+      "number": "145",
+      "webcode": "454D",
+      "utf-8": "EE84AD",
+      "unicode": "E12D"
+    },
+    "146": {
+      "sjis": "F76E",
+      "number": "146",
+      "webcode": "454E",
+      "utf-8": "EE84AE",
+      "unicode": "E12E"
+    },
+    "147": {
+      "sjis": "F76F",
+      "number": "147",
+      "webcode": "454F",
+      "utf-8": "EE84AF",
+      "unicode": "E12F"
+    },
+    "148": {
+      "sjis": "F770",
+      "number": "148",
+      "webcode": "4550",
+      "utf-8": "EE84B0",
+      "unicode": "E130"
+    },
+    "149": {
+      "sjis": "F771",
+      "number": "149",
+      "webcode": "4551",
+      "utf-8": "EE84B1",
+      "unicode": "E131"
+    },
+    "150": {
+      "sjis": "F772",
+      "number": "150",
+      "webcode": "4552",
+      "utf-8": "EE84B2",
+      "unicode": "E132"
+    },
+    "151": {
+      "sjis": "F773",
+      "number": "151",
+      "webcode": "4553",
+      "utf-8": "EE84B3",
+      "unicode": "E133"
+    },
+    "152": {
+      "sjis": "F774",
+      "number": "152",
+      "webcode": "4554",
+      "utf-8": "EE84B4",
+      "unicode": "E134"
+    },
+    "153": {
+      "sjis": "F775",
+      "number": "153",
+      "webcode": "4555",
+      "utf-8": "EE84B5",
+      "unicode": "E135"
+    },
+    "154": {
+      "sjis": "F776",
+      "number": "154",
+      "webcode": "4556",
+      "utf-8": "EE84B6",
+      "unicode": "E136"
+    },
+    "155": {
+      "sjis": "F777",
+      "number": "155",
+      "webcode": "4557",
+      "utf-8": "EE84B7",
+      "unicode": "E137"
+    },
+    "156": {
+      "sjis": "F778",
+      "number": "156",
+      "webcode": "4558",
+      "utf-8": "EE84B8",
+      "unicode": "E138"
+    },
+    "157": {
+      "sjis": "F779",
+      "number": "157",
+      "webcode": "4559",
+      "utf-8": "EE84B9",
+      "unicode": "E139"
+    },
+    "158": {
+      "sjis": "F77A",
+      "number": "158",
+      "webcode": "455A",
+      "utf-8": "EE84BA",
+      "unicode": "E13A"
+    },
+    "159": {
+      "sjis": "F77B",
+      "number": "159",
+      "webcode": "455B",
+      "utf-8": "EE84BB",
+      "unicode": "E13B"
+    },
+    "160": {
+      "sjis": "F77C",
+      "number": "160",
+      "webcode": "455C",
+      "utf-8": "EE84BC",
+      "unicode": "E13C"
+    },
+    "161": {
+      "sjis": "F77D",
+      "number": "161",
+      "webcode": "455D",
+      "utf-8": "EE84BD",
+      "unicode": "E13D"
+    },
+    "162": {
+      "sjis": "F77E",
+      "number": "162",
+      "webcode": "455E",
+      "utf-8": "EE84BE",
+      "unicode": "E13E"
+    },
+    "163": {
+      "sjis": "F780",
+      "number": "163",
+      "webcode": "455F",
+      "utf-8": "EE84BF",
+      "unicode": "E13F"
+    },
+    "164": {
+      "sjis": "F781",
+      "number": "164",
+      "webcode": "4560",
+      "utf-8": "EE8580",
+      "unicode": "E140"
+    },
+    "165": {
+      "sjis": "F782",
+      "number": "165",
+      "webcode": "4561",
+      "utf-8": "EE8581",
+      "unicode": "E141"
+    },
+    "166": {
+      "sjis": "F783",
+      "number": "166",
+      "webcode": "4562",
+      "utf-8": "EE8582",
+      "unicode": "E142"
+    },
+    "167": {
+      "sjis": "F784",
+      "number": "167",
+      "webcode": "4563",
+      "utf-8": "EE8583",
+      "unicode": "E143"
+    },
+    "168": {
+      "sjis": "F785",
+      "number": "168",
+      "webcode": "4564",
+      "utf-8": "EE8584",
+      "unicode": "E144"
+    },
+    "169": {
+      "sjis": "F786",
+      "number": "169",
+      "webcode": "4565",
+      "utf-8": "EE8585",
+      "unicode": "E145"
+    },
+    "170": {
+      "sjis": "F787",
+      "number": "170",
+      "webcode": "4566",
+      "utf-8": "EE8586",
+      "unicode": "E146"
+    },
+    "171": {
+      "sjis": "F788",
+      "number": "171",
+      "webcode": "4567",
+      "utf-8": "EE8587",
+      "unicode": "E147"
+    },
+    "172": {
+      "sjis": "F789",
+      "number": "172",
+      "webcode": "4568",
+      "utf-8": "EE8588",
+      "unicode": "E148"
+    },
+    "173": {
+      "sjis": "F78A",
+      "number": "173",
+      "webcode": "4569",
+      "utf-8": "EE8589",
+      "unicode": "E149"
+    },
+    "174": {
+      "sjis": "F78B",
+      "number": "174",
+      "webcode": "456A",
+      "utf-8": "EE858A",
+      "unicode": "E14A"
+    },
+    "175": {
+      "sjis": "F78C",
+      "number": "175",
+      "webcode": "456B",
+      "utf-8": "EE858B",
+      "unicode": "E14B"
+    },
+    "176": {
+      "sjis": "F78D",
+      "number": "176",
+      "webcode": "456C",
+      "utf-8": "EE858C",
+      "unicode": "E14C"
+    },
+    "177": {
+      "sjis": "F78E",
+      "number": "177",
+      "webcode": "456D",
+      "utf-8": "EE858D",
+      "unicode": "E14D"
+    },
+    "178": {
+      "sjis": "F78F",
+      "number": "178",
+      "webcode": "456E",
+      "utf-8": "EE858E",
+      "unicode": "E14E"
+    },
+    "179": {
+      "sjis": "F790",
+      "number": "179",
+      "webcode": "456F",
+      "utf-8": "EE858F",
+      "unicode": "E14F"
+    },
+    "180": {
+      "sjis": "F791",
+      "number": "180",
+      "webcode": "4570",
+      "utf-8": "EE8590",
+      "unicode": "E150"
+    },
+    "181": {
+      "sjis": "F792",
+      "number": "181",
+      "webcode": "4571",
+      "utf-8": "EE8591",
+      "unicode": "E151"
+    },
+    "182": {
+      "sjis": "F793",
+      "number": "182",
+      "webcode": "4572",
+      "utf-8": "EE8592",
+      "unicode": "E152"
+    },
+    "183": {
+      "sjis": "F794",
+      "number": "183",
+      "webcode": "4573",
+      "utf-8": "EE8593",
+      "unicode": "E153"
+    },
+    "184": {
+      "sjis": "F795",
+      "number": "184",
+      "webcode": "4574",
+      "utf-8": "EE8594",
+      "unicode": "E154"
+    },
+    "185": {
+      "sjis": "F796",
+      "number": "185",
+      "webcode": "4575",
+      "utf-8": "EE8595",
+      "unicode": "E155"
+    },
+    "186": {
+      "sjis": "F797",
+      "number": "186",
+      "webcode": "4576",
+      "utf-8": "EE8596",
+      "unicode": "E156"
+    },
+    "187": {
+      "sjis": "F798",
+      "number": "187",
+      "webcode": "4577",
+      "utf-8": "EE8597",
+      "unicode": "E157"
+    },
+    "188": {
+      "sjis": "F799",
+      "number": "188",
+      "webcode": "4578",
+      "utf-8": "EE8598",
+      "unicode": "E158"
+    },
+    "189": {
+      "sjis": "F79A",
+      "number": "189",
+      "webcode": "4579",
+      "utf-8": "EE8599",
+      "unicode": "E159"
+    },
+    "190": {
+      "sjis": "F79B",
+      "number": "190",
+      "webcode": "457A",
+      "utf-8": "EE859A",
+      "unicode": "E15A"
+    },
+    "201": {
+      "sjis": "F7A1",
+      "number": "201",
+      "webcode": "4621",
+      "utf-8": "EE8881",
+      "unicode": "E201"
+    },
+    "202": {
+      "sjis": "F7A2",
+      "number": "202",
+      "webcode": "4622",
+      "utf-8": "EE8882",
+      "unicode": "E202"
+    },
+    "203": {
+      "sjis": "F7A3",
+      "number": "203",
+      "webcode": "4623",
+      "utf-8": "EE8883",
+      "unicode": "E203"
+    },
+    "204": {
+      "sjis": "F7A4",
+      "number": "204",
+      "webcode": "4624",
+      "utf-8": "EE8884",
+      "unicode": "E204"
+    },
+    "205": {
+      "sjis": "F7A5",
+      "number": "205",
+      "webcode": "4625",
+      "utf-8": "EE8885",
+      "unicode": "E205"
+    },
+    "206": {
+      "sjis": "F7A6",
+      "number": "206",
+      "webcode": "4626",
+      "utf-8": "EE8886",
+      "unicode": "E206"
+    },
+    "207": {
+      "sjis": "F7A7",
+      "number": "207",
+      "webcode": "4627",
+      "utf-8": "EE8887",
+      "unicode": "E207"
+    },
+    "208": {
+      "sjis": "F7A8",
+      "number": "208",
+      "webcode": "4628",
+      "utf-8": "EE8888",
+      "unicode": "E208"
+    },
+    "209": {
+      "sjis": "F7A9",
+      "number": "209",
+      "webcode": "4629",
+      "utf-8": "EE8889",
+      "unicode": "E209"
+    },
+    "210": {
+      "sjis": "F7AA",
+      "number": "210",
+      "webcode": "462A",
+      "utf-8": "EE888A",
+      "unicode": "E20A"
+    },
+    "211": {
+      "sjis": "F7AB",
+      "number": "211",
+      "webcode": "462B",
+      "utf-8": "EE888B",
+      "unicode": "E20B"
+    },
+    "212": {
+      "sjis": "F7AC",
+      "number": "212",
+      "webcode": "462C",
+      "utf-8": "EE888C",
+      "unicode": "E20C"
+    },
+    "213": {
+      "sjis": "F7AD",
+      "number": "213",
+      "webcode": "462D",
+      "utf-8": "EE888D",
+      "unicode": "E20D"
+    },
+    "214": {
+      "sjis": "F7AE",
+      "number": "214",
+      "webcode": "462E",
+      "utf-8": "EE888E",
+      "unicode": "E20E"
+    },
+    "215": {
+      "sjis": "F7AF",
+      "number": "215",
+      "webcode": "462F",
+      "utf-8": "EE888F",
+      "unicode": "E20F"
+    },
+    "216": {
+      "sjis": "F7B0",
+      "number": "216",
+      "webcode": "4630",
+      "utf-8": "EE8890",
+      "unicode": "E210"
+    },
+    "217": {
+      "sjis": "F7B1",
+      "number": "217",
+      "webcode": "4631",
+      "utf-8": "EE8891",
+      "unicode": "E211"
+    },
+    "218": {
+      "sjis": "F7B2",
+      "number": "218",
+      "webcode": "4632",
+      "utf-8": "EE8892",
+      "unicode": "E212"
+    },
+    "219": {
+      "sjis": "F7B3",
+      "number": "219",
+      "webcode": "4633",
+      "utf-8": "EE8893",
+      "unicode": "E213"
+    },
+    "220": {
+      "sjis": "F7B4",
+      "number": "220",
+      "webcode": "4634",
+      "utf-8": "EE8894",
+      "unicode": "E214"
+    },
+    "221": {
+      "sjis": "F7B5",
+      "number": "221",
+      "webcode": "4635",
+      "utf-8": "EE8895",
+      "unicode": "E215"
+    },
+    "222": {
+      "sjis": "F7B6",
+      "number": "222",
+      "webcode": "4636",
+      "utf-8": "EE8896",
+      "unicode": "E216"
+    },
+    "223": {
+      "sjis": "F7B7",
+      "number": "223",
+      "webcode": "4637",
+      "utf-8": "EE8897",
+      "unicode": "E217"
+    },
+    "224": {
+      "sjis": "F7B8",
+      "number": "224",
+      "webcode": "4638",
+      "utf-8": "EE8898",
+      "unicode": "E218"
+    },
+    "225": {
+      "sjis": "F7B9",
+      "number": "225",
+      "webcode": "4639",
+      "utf-8": "EE8899",
+      "unicode": "E219"
+    },
+    "226": {
+      "sjis": "F7BA",
+      "number": "226",
+      "webcode": "463A",
+      "utf-8": "EE889A",
+      "unicode": "E21A"
+    },
+    "227": {
+      "sjis": "F7BB",
+      "number": "227",
+      "webcode": "463B",
+      "utf-8": "EE889B",
+      "unicode": "E21B"
+    },
+    "228": {
+      "sjis": "F7BC",
+      "number": "228",
+      "webcode": "463C",
+      "utf-8": "EE889C",
+      "unicode": "E21C"
+    },
+    "229": {
+      "sjis": "F7BD",
+      "number": "229",
+      "webcode": "463D",
+      "utf-8": "EE889D",
+      "unicode": "E21D"
+    },
+    "230": {
+      "sjis": "F7BE",
+      "number": "230",
+      "webcode": "463E",
+      "utf-8": "EE889E",
+      "unicode": "E21E"
+    },
+    "231": {
+      "sjis": "F7BF",
+      "number": "231",
+      "webcode": "463F",
+      "utf-8": "EE889F",
+      "unicode": "E21F"
+    },
+    "232": {
+      "sjis": "F7C0",
+      "number": "232",
+      "webcode": "4640",
+      "utf-8": "EE88A0",
+      "unicode": "E220"
+    },
+    "233": {
+      "sjis": "F7C1",
+      "number": "233",
+      "webcode": "4641",
+      "utf-8": "EE88A1",
+      "unicode": "E221"
+    },
+    "234": {
+      "sjis": "F7C2",
+      "number": "234",
+      "webcode": "4642",
+      "utf-8": "EE88A2",
+      "unicode": "E222"
+    },
+    "235": {
+      "sjis": "F7C3",
+      "number": "235",
+      "webcode": "4643",
+      "utf-8": "EE88A3",
+      "unicode": "E223"
+    },
+    "236": {
+      "sjis": "F7C4",
+      "number": "236",
+      "webcode": "4644",
+      "utf-8": "EE88A4",
+      "unicode": "E224"
+    },
+    "237": {
+      "sjis": "F7C5",
+      "number": "237",
+      "webcode": "4645",
+      "utf-8": "EE88A5",
+      "unicode": "E225"
+    },
+    "238": {
+      "sjis": "F7C6",
+      "number": "238",
+      "webcode": "4646",
+      "utf-8": "EE88A6",
+      "unicode": "E226"
+    },
+    "239": {
+      "sjis": "F7C7",
+      "number": "239",
+      "webcode": "4647",
+      "utf-8": "EE88A7",
+      "unicode": "E227"
+    },
+    "240": {
+      "sjis": "F7C8",
+      "number": "240",
+      "webcode": "4648",
+      "utf-8": "EE88A8",
+      "unicode": "E228"
+    },
+    "241": {
+      "sjis": "F7C9",
+      "number": "241",
+      "webcode": "4649",
+      "utf-8": "EE88A9",
+      "unicode": "E229"
+    },
+    "242": {
+      "sjis": "F7CA",
+      "number": "242",
+      "webcode": "464A",
+      "utf-8": "EE88AA",
+      "unicode": "E22A"
+    },
+    "243": {
+      "sjis": "F7CB",
+      "number": "243",
+      "webcode": "464B",
+      "utf-8": "EE88AB",
+      "unicode": "E22B"
+    },
+    "244": {
+      "sjis": "F7CC",
+      "number": "244",
+      "webcode": "464C",
+      "utf-8": "EE88AC",
+      "unicode": "E22C"
+    },
+    "245": {
+      "sjis": "F7CD",
+      "number": "245",
+      "webcode": "464D",
+      "utf-8": "EE88AD",
+      "unicode": "E22D"
+    },
+    "246": {
+      "sjis": "F7CE",
+      "number": "246",
+      "webcode": "464E",
+      "utf-8": "EE88AE",
+      "unicode": "E22E"
+    },
+    "247": {
+      "sjis": "F7CF",
+      "number": "247",
+      "webcode": "464F",
+      "utf-8": "EE88AF",
+      "unicode": "E22F"
+    },
+    "248": {
+      "sjis": "F7D0",
+      "number": "248",
+      "webcode": "4650",
+      "utf-8": "EE88B0",
+      "unicode": "E230"
+    },
+    "249": {
+      "sjis": "F7D1",
+      "number": "249",
+      "webcode": "4651",
+      "utf-8": "EE88B1",
+      "unicode": "E231"
+    },
+    "250": {
+      "sjis": "F7D2",
+      "number": "250",
+      "webcode": "4652",
+      "utf-8": "EE88B2",
+      "unicode": "E232"
+    },
+    "251": {
+      "sjis": "F7D3",
+      "number": "251",
+      "webcode": "4653",
+      "utf-8": "EE88B3",
+      "unicode": "E233"
+    },
+    "252": {
+      "sjis": "F7D4",
+      "number": "252",
+      "webcode": "4654",
+      "utf-8": "EE88B4",
+      "unicode": "E234"
+    },
+    "253": {
+      "sjis": "F7D5",
+      "number": "253",
+      "webcode": "4655",
+      "utf-8": "EE88B5",
+      "unicode": "E235"
+    },
+    "254": {
+      "sjis": "F7D6",
+      "number": "254",
+      "webcode": "4656",
+      "utf-8": "EE88B6",
+      "unicode": "E236"
+    },
+    "255": {
+      "sjis": "F7D7",
+      "number": "255",
+      "webcode": "4657",
+      "utf-8": "EE88B7",
+      "unicode": "E237"
+    },
+    "256": {
+      "sjis": "F7D8",
+      "number": "256",
+      "webcode": "4658",
+      "utf-8": "EE88B8",
+      "unicode": "E238"
+    },
+    "257": {
+      "sjis": "F7D9",
+      "number": "257",
+      "webcode": "4659",
+      "utf-8": "EE88B9",
+      "unicode": "E239"
+    },
+    "258": {
+      "sjis": "F7DA",
+      "number": "258",
+      "webcode": "465A",
+      "utf-8": "EE88BA",
+      "unicode": "E23A"
+    },
+    "259": {
+      "sjis": "F7DB",
+      "number": "259",
+      "webcode": "465B",
+      "utf-8": "EE88BB",
+      "unicode": "E23B"
+    },
+    "260": {
+      "sjis": "F7DC",
+      "number": "260",
+      "webcode": "465C",
+      "utf-8": "EE88BC",
+      "unicode": "E23C"
+    },
+    "261": {
+      "sjis": "F7DD",
+      "number": "261",
+      "webcode": "465D",
+      "utf-8": "EE88BD",
+      "unicode": "E23D"
+    },
+    "262": {
+      "sjis": "F7DE",
+      "number": "262",
+      "webcode": "465E",
+      "utf-8": "EE88BE",
+      "unicode": "E23E"
+    },
+    "263": {
+      "sjis": "F7DF",
+      "number": "263",
+      "webcode": "465F",
+      "utf-8": "EE88BF",
+      "unicode": "E23F"
+    },
+    "264": {
+      "sjis": "F7E0",
+      "number": "264",
+      "webcode": "4660",
+      "utf-8": "EE8980",
+      "unicode": "E240"
+    },
+    "265": {
+      "sjis": "F7E1",
+      "number": "265",
+      "webcode": "4661",
+      "utf-8": "EE8981",
+      "unicode": "E241"
+    },
+    "266": {
+      "sjis": "F7E2",
+      "number": "266",
+      "webcode": "4662",
+      "utf-8": "EE8982",
+      "unicode": "E242"
+    },
+    "267": {
+      "sjis": "F7E3",
+      "number": "267",
+      "webcode": "4663",
+      "utf-8": "EE8983",
+      "unicode": "E243"
+    },
+    "268": {
+      "sjis": "F7E4",
+      "number": "268",
+      "webcode": "4664",
+      "utf-8": "EE8984",
+      "unicode": "E244"
+    },
+    "269": {
+      "sjis": "F7E5",
+      "number": "269",
+      "webcode": "4665",
+      "utf-8": "EE8985",
+      "unicode": "E245"
+    },
+    "270": {
+      "sjis": "F7E6",
+      "number": "270",
+      "webcode": "4666",
+      "utf-8": "EE8986",
+      "unicode": "E246"
+    },
+    "271": {
+      "sjis": "F7E7",
+      "number": "271",
+      "webcode": "4667",
+      "utf-8": "EE8987",
+      "unicode": "E247"
+    },
+    "272": {
+      "sjis": "F7E8",
+      "number": "272",
+      "webcode": "4668",
+      "utf-8": "EE8988",
+      "unicode": "E248"
+    },
+    "273": {
+      "sjis": "F7E9",
+      "number": "273",
+      "webcode": "4669",
+      "utf-8": "EE8989",
+      "unicode": "E249"
+    },
+    "274": {
+      "sjis": "F7EA",
+      "number": "274",
+      "webcode": "466A",
+      "utf-8": "EE898A",
+      "unicode": "E24A"
+    },
+    "275": {
+      "sjis": "F7EB",
+      "number": "275",
+      "webcode": "466B",
+      "utf-8": "EE898B",
+      "unicode": "E24B"
+    },
+    "276": {
+      "sjis": "F7EC",
+      "number": "276",
+      "webcode": "466C",
+      "utf-8": "EE898C",
+      "unicode": "E24C"
+    },
+    "277": {
+      "sjis": "F7ED",
+      "number": "277",
+      "webcode": "466D",
+      "utf-8": "EE898D",
+      "unicode": "E24D"
+    },
+    "278": {
+      "sjis": "F7EE",
+      "number": "278",
+      "webcode": "466E",
+      "utf-8": "EE898E",
+      "unicode": "E24E"
+    },
+    "279": {
+      "sjis": "F7EF",
+      "number": "279",
+      "webcode": "466F",
+      "utf-8": "EE898F",
+      "unicode": "E24F"
+    },
+    "280": {
+      "sjis": "F7F0",
+      "number": "280",
+      "webcode": "4670",
+      "utf-8": "EE8990",
+      "unicode": "E250"
+    },
+    "281": {
+      "sjis": "F7F1",
+      "number": "281",
+      "webcode": "4671",
+      "utf-8": "EE8991",
+      "unicode": "E251"
+    },
+    "282": {
+      "sjis": "F7F2",
+      "number": "282",
+      "webcode": "4672",
+      "utf-8": "EE8992",
+      "unicode": "E252"
+    },
+    "283": {
+      "sjis": "F7F3",
+      "number": "283",
+      "webcode": "4673",
+      "utf-8": "EE8993",
+      "unicode": "E253"
+    },
+    "284": {
+      "sjis": "",
+      "number": "284",
+      "webcode": "4674",
+      "utf-8": "EE8994",
+      "unicode": "E254"
+    },
+    "285": {
+      "sjis": "",
+      "number": "285",
+      "webcode": "4675",
+      "utf-8": "EE8995",
+      "unicode": "E255"
+    },
+    "286": {
+      "sjis": "",
+      "number": "286",
+      "webcode": "4676",
+      "utf-8": "EE8996",
+      "unicode": "E256"
+    },
+    "287": {
+      "sjis": "",
+      "number": "287",
+      "webcode": "4677",
+      "utf-8": "EE8997",
+      "unicode": "E257"
+    },
+    "288": {
+      "sjis": "",
+      "number": "288",
+      "webcode": "4678",
+      "utf-8": "EE8998",
+      "unicode": "E258"
+    },
+    "289": {
+      "sjis": "",
+      "number": "289",
+      "webcode": "4679",
+      "utf-8": "EE8999",
+      "unicode": "E259"
+    },
+    "290": {
+      "sjis": "",
+      "number": "290",
+      "webcode": "467A",
+      "utf-8": "EE899A",
+      "unicode": "E25A"
+    },
+    "301": {
+      "sjis": "F9A1",
+      "number": "301",
+      "webcode": "4F21",
+      "utf-8": "EE8C81",
+      "unicode": "E301"
+    },
+    "302": {
+      "sjis": "F9A2",
+      "number": "302",
+      "webcode": "4F22",
+      "utf-8": "EE8C82",
+      "unicode": "E302"
+    },
+    "303": {
+      "sjis": "F9A3",
+      "number": "303",
+      "webcode": "4F23",
+      "utf-8": "EE8C83",
+      "unicode": "E303"
+    },
+    "304": {
+      "sjis": "F9A4",
+      "number": "304",
+      "webcode": "4F24",
+      "utf-8": "EE8C84",
+      "unicode": "E304"
+    },
+    "305": {
+      "sjis": "F9A5",
+      "number": "305",
+      "webcode": "4F25",
+      "utf-8": "EE8C85",
+      "unicode": "E305"
+    },
+    "306": {
+      "sjis": "F9A6",
+      "number": "306",
+      "webcode": "4F26",
+      "utf-8": "EE8C86",
+      "unicode": "E306"
+    },
+    "307": {
+      "sjis": "F9A7",
+      "number": "307",
+      "webcode": "4F27",
+      "utf-8": "EE8C87",
+      "unicode": "E307"
+    },
+    "308": {
+      "sjis": "F9A8",
+      "number": "308",
+      "webcode": "4F28",
+      "utf-8": "EE8C88",
+      "unicode": "E308"
+    },
+    "309": {
+      "sjis": "F9A9",
+      "number": "309",
+      "webcode": "4F29",
+      "utf-8": "EE8C89",
+      "unicode": "E309"
+    },
+    "310": {
+      "sjis": "F9AA",
+      "number": "310",
+      "webcode": "4F2A",
+      "utf-8": "EE8C8A",
+      "unicode": "E30A"
+    },
+    "311": {
+      "sjis": "F9AB",
+      "number": "311",
+      "webcode": "4F2B",
+      "utf-8": "EE8C8B",
+      "unicode": "E30B"
+    },
+    "312": {
+      "sjis": "F9AC",
+      "number": "312",
+      "webcode": "4F2C",
+      "utf-8": "EE8C8C",
+      "unicode": "E30C"
+    },
+    "313": {
+      "sjis": "F9AD",
+      "number": "313",
+      "webcode": "4F2D",
+      "utf-8": "EE8C8D",
+      "unicode": "E30D"
+    },
+    "314": {
+      "sjis": "F9AE",
+      "number": "314",
+      "webcode": "4F2E",
+      "utf-8": "EE8C8E",
+      "unicode": "E30E"
+    },
+    "315": {
+      "sjis": "F9AF",
+      "number": "315",
+      "webcode": "4F2F",
+      "utf-8": "EE8C8F",
+      "unicode": "E30F"
+    },
+    "316": {
+      "sjis": "F9B0",
+      "number": "316",
+      "webcode": "4F30",
+      "utf-8": "EE8C90",
+      "unicode": "E310"
+    },
+    "317": {
+      "sjis": "F9B1",
+      "number": "317",
+      "webcode": "4F31",
+      "utf-8": "EE8C91",
+      "unicode": "E311"
+    },
+    "318": {
+      "sjis": "F9B2",
+      "number": "318",
+      "webcode": "4F32",
+      "utf-8": "EE8C92",
+      "unicode": "E312"
+    },
+    "319": {
+      "sjis": "F9B3",
+      "number": "319",
+      "webcode": "4F33",
+      "utf-8": "EE8C93",
+      "unicode": "E313"
+    },
+    "320": {
+      "sjis": "F9B4",
+      "number": "320",
+      "webcode": "4F34",
+      "utf-8": "EE8C94",
+      "unicode": "E314"
+    },
+    "321": {
+      "sjis": "F9B5",
+      "number": "321",
+      "webcode": "4F35",
+      "utf-8": "EE8C95",
+      "unicode": "E315"
+    },
+    "322": {
+      "sjis": "F9B6",
+      "number": "322",
+      "webcode": "4F36",
+      "utf-8": "EE8C96",
+      "unicode": "E316"
+    },
+    "323": {
+      "sjis": "F9B7",
+      "number": "323",
+      "webcode": "4F37",
+      "utf-8": "EE8C97",
+      "unicode": "E317"
+    },
+    "324": {
+      "sjis": "F9B8",
+      "number": "324",
+      "webcode": "4F38",
+      "utf-8": "EE8C98",
+      "unicode": "E318"
+    },
+    "325": {
+      "sjis": "F9B9",
+      "number": "325",
+      "webcode": "4F39",
+      "utf-8": "EE8C99",
+      "unicode": "E319"
+    },
+    "326": {
+      "sjis": "F9BA",
+      "number": "326",
+      "webcode": "4F3A",
+      "utf-8": "EE8C9A",
+      "unicode": "E31A"
+    },
+    "327": {
+      "sjis": "F9BB",
+      "number": "327",
+      "webcode": "4F3B",
+      "utf-8": "EE8C9B",
+      "unicode": "E31B"
+    },
+    "328": {
+      "sjis": "F9BC",
+      "number": "328",
+      "webcode": "4F3C",
+      "utf-8": "EE8C9C",
+      "unicode": "E31C"
+    },
+    "329": {
+      "sjis": "F9BD",
+      "number": "329",
+      "webcode": "4F3D",
+      "utf-8": "EE8C9D",
+      "unicode": "E31D"
+    },
+    "330": {
+      "sjis": "F9BE",
+      "number": "330",
+      "webcode": "4F3E",
+      "utf-8": "EE8C9E",
+      "unicode": "E31E"
+    },
+    "331": {
+      "sjis": "F9BF",
+      "number": "331",
+      "webcode": "4F3F",
+      "utf-8": "EE8C9F",
+      "unicode": "E31F"
+    },
+    "332": {
+      "sjis": "F9C0",
+      "number": "332",
+      "webcode": "4F40",
+      "utf-8": "EE8CA0",
+      "unicode": "E320"
+    },
+    "333": {
+      "sjis": "F9C1",
+      "number": "333",
+      "webcode": "4F41",
+      "utf-8": "EE8CA1",
+      "unicode": "E321"
+    },
+    "334": {
+      "sjis": "F9C2",
+      "number": "334",
+      "webcode": "4F42",
+      "utf-8": "EE8CA2",
+      "unicode": "E322"
+    },
+    "335": {
+      "sjis": "F9C3",
+      "number": "335",
+      "webcode": "4F43",
+      "utf-8": "EE8CA3",
+      "unicode": "E323"
+    },
+    "336": {
+      "sjis": "F9C4",
+      "number": "336",
+      "webcode": "4F44",
+      "utf-8": "EE8CA4",
+      "unicode": "E324"
+    },
+    "337": {
+      "sjis": "F9C5",
+      "number": "337",
+      "webcode": "4F45",
+      "utf-8": "EE8CA5",
+      "unicode": "E325"
+    },
+    "338": {
+      "sjis": "F9C6",
+      "number": "338",
+      "webcode": "4F46",
+      "utf-8": "EE8CA6",
+      "unicode": "E326"
+    },
+    "339": {
+      "sjis": "F9C7",
+      "number": "339",
+      "webcode": "4F47",
+      "utf-8": "EE8CA7",
+      "unicode": "E327"
+    },
+    "340": {
+      "sjis": "F9C8",
+      "number": "340",
+      "webcode": "4F48",
+      "utf-8": "EE8CA8",
+      "unicode": "E328"
+    },
+    "341": {
+      "sjis": "F9C9",
+      "number": "341",
+      "webcode": "4F49",
+      "utf-8": "EE8CA9",
+      "unicode": "E329"
+    },
+    "342": {
+      "sjis": "F9CA",
+      "number": "342",
+      "webcode": "4F4A",
+      "utf-8": "EE8CAA",
+      "unicode": "E32A"
+    },
+    "343": {
+      "sjis": "F9CB",
+      "number": "343",
+      "webcode": "4F4B",
+      "utf-8": "EE8CAB",
+      "unicode": "E32B"
+    },
+    "344": {
+      "sjis": "F9CC",
+      "number": "344",
+      "webcode": "4F4C",
+      "utf-8": "EE8CAC",
+      "unicode": "E32C"
+    },
+    "345": {
+      "sjis": "F9CD",
+      "number": "345",
+      "webcode": "4F4D",
+      "utf-8": "EE8CAD",
+      "unicode": "E32D"
+    },
+    "346": {
+      "sjis": "F9CE",
+      "number": "346",
+      "webcode": "4F4E",
+      "utf-8": "EE8CAE",
+      "unicode": "E32E"
+    },
+    "347": {
+      "sjis": "F9CF",
+      "number": "347",
+      "webcode": "4F4F",
+      "utf-8": "EE8CAF",
+      "unicode": "E32F"
+    },
+    "348": {
+      "sjis": "F9D0",
+      "number": "348",
+      "webcode": "4F50",
+      "utf-8": "EE8CB0",
+      "unicode": "E330"
+    },
+    "349": {
+      "sjis": "F9D1",
+      "number": "349",
+      "webcode": "4F51",
+      "utf-8": "EE8CB1",
+      "unicode": "E331"
+    },
+    "350": {
+      "sjis": "F9D2",
+      "number": "350",
+      "webcode": "4F52",
+      "utf-8": "EE8CB2",
+      "unicode": "E332"
+    },
+    "351": {
+      "sjis": "F9D3",
+      "number": "351",
+      "webcode": "4F53",
+      "utf-8": "EE8CB3",
+      "unicode": "E333"
+    },
+    "352": {
+      "sjis": "F9D4",
+      "number": "352",
+      "webcode": "4F54",
+      "utf-8": "EE8CB4",
+      "unicode": "E334"
+    },
+    "353": {
+      "sjis": "F9D5",
+      "number": "353",
+      "webcode": "4F55",
+      "utf-8": "EE8CB5",
+      "unicode": "E335"
+    },
+    "354": {
+      "sjis": "F9D6",
+      "number": "354",
+      "webcode": "4F56",
+      "utf-8": "EE8CB6",
+      "unicode": "E336"
+    },
+    "355": {
+      "sjis": "F9D7",
+      "number": "355",
+      "webcode": "4F57",
+      "utf-8": "EE8CB7",
+      "unicode": "E337"
+    },
+    "356": {
+      "sjis": "F9D8",
+      "number": "356",
+      "webcode": "4F58",
+      "utf-8": "EE8CB8",
+      "unicode": "E338"
+    },
+    "357": {
+      "sjis": "F9D9",
+      "number": "357",
+      "webcode": "4F59",
+      "utf-8": "EE8CB9",
+      "unicode": "E339"
+    },
+    "358": {
+      "sjis": "F9DA",
+      "number": "358",
+      "webcode": "4F5A",
+      "utf-8": "EE8CBA",
+      "unicode": "E33A"
+    },
+    "359": {
+      "sjis": "F9DB",
+      "number": "359",
+      "webcode": "4F5B",
+      "utf-8": "EE8CBB",
+      "unicode": "E33B"
+    },
+    "360": {
+      "sjis": "F9DC",
+      "number": "360",
+      "webcode": "4F5C",
+      "utf-8": "EE8CBC",
+      "unicode": "E33C"
+    },
+    "361": {
+      "sjis": "F9DD",
+      "number": "361",
+      "webcode": "4F5D",
+      "utf-8": "EE8CBD",
+      "unicode": "E33D"
+    },
+    "362": {
+      "sjis": "F9DE",
+      "number": "362",
+      "webcode": "4F5E",
+      "utf-8": "EE8CBE",
+      "unicode": "E33E"
+    },
+    "363": {
+      "sjis": "F9DF",
+      "number": "363",
+      "webcode": "4F5F",
+      "utf-8": "EE8CBF",
+      "unicode": "E33F"
+    },
+    "364": {
+      "sjis": "F9E0",
+      "number": "364",
+      "webcode": "4F60",
+      "utf-8": "EE8D80",
+      "unicode": "E340"
+    },
+    "365": {
+      "sjis": "F9E1",
+      "number": "365",
+      "webcode": "4F61",
+      "utf-8": "EE8D81",
+      "unicode": "E341"
+    },
+    "366": {
+      "sjis": "F9E2",
+      "number": "366",
+      "webcode": "4F62",
+      "utf-8": "EE8D82",
+      "unicode": "E342"
+    },
+    "367": {
+      "sjis": "F9E3",
+      "number": "367",
+      "webcode": "4F63",
+      "utf-8": "EE8D83",
+      "unicode": "E343"
+    },
+    "368": {
+      "sjis": "F9E4",
+      "number": "368",
+      "webcode": "4F64",
+      "utf-8": "EE8D84",
+      "unicode": "E344"
+    },
+    "369": {
+      "sjis": "F9E5",
+      "number": "369",
+      "webcode": "4F65",
+      "utf-8": "EE8D85",
+      "unicode": "E345"
+    },
+    "370": {
+      "sjis": "F9E6",
+      "number": "370",
+      "webcode": "4F66",
+      "utf-8": "EE8D86",
+      "unicode": "E346"
+    },
+    "371": {
+      "sjis": "F9E7",
+      "number": "371",
+      "webcode": "4F67",
+      "utf-8": "EE8D87",
+      "unicode": "E347"
+    },
+    "372": {
+      "sjis": "F9E8",
+      "number": "372",
+      "webcode": "4F68",
+      "utf-8": "EE8D88",
+      "unicode": "E348"
+    },
+    "373": {
+      "sjis": "F9E9",
+      "number": "373",
+      "webcode": "4F69",
+      "utf-8": "EE8D89",
+      "unicode": "E349"
+    },
+    "374": {
+      "sjis": "F9EA",
+      "number": "374",
+      "webcode": "4F6A",
+      "utf-8": "EE8D8A",
+      "unicode": "E34A"
+    },
+    "375": {
+      "sjis": "F9EB",
+      "number": "375",
+      "webcode": "4F6B",
+      "utf-8": "EE8D8B",
+      "unicode": "E34B"
+    },
+    "376": {
+      "sjis": "F9EC",
+      "number": "376",
+      "webcode": "4F6C",
+      "utf-8": "EE8D8C",
+      "unicode": "E34C"
+    },
+    "377": {
+      "sjis": "F9ED",
+      "number": "377",
+      "webcode": "4F6D",
+      "utf-8": "EE8D8D",
+      "unicode": "E34D"
+    },
+    "401": {
+      "sjis": "FB41",
+      "number": "401",
+      "webcode": "5021",
+      "utf-8": "EE9081",
+      "unicode": "E401"
+    },
+    "402": {
+      "sjis": "FB42",
+      "number": "402",
+      "webcode": "5022",
+      "utf-8": "EE9082",
+      "unicode": "E402"
+    },
+    "403": {
+      "sjis": "FB43",
+      "number": "403",
+      "webcode": "5023",
+      "utf-8": "EE9083",
+      "unicode": "E403"
+    },
+    "404": {
+      "sjis": "FB44",
+      "number": "404",
+      "webcode": "5024",
+      "utf-8": "EE9084",
+      "unicode": "E404"
+    },
+    "405": {
+      "sjis": "FB45",
+      "number": "405",
+      "webcode": "5025",
+      "utf-8": "EE9085",
+      "unicode": "E405"
+    },
+    "406": {
+      "sjis": "FB46",
+      "number": "406",
+      "webcode": "5026",
+      "utf-8": "EE9086",
+      "unicode": "E406"
+    },
+    "407": {
+      "sjis": "FB47",
+      "number": "407",
+      "webcode": "5027",
+      "utf-8": "EE9087",
+      "unicode": "E407"
+    },
+    "408": {
+      "sjis": "FB48",
+      "number": "408",
+      "webcode": "5028",
+      "utf-8": "EE9088",
+      "unicode": "E408"
+    },
+    "409": {
+      "sjis": "FB49",
+      "number": "409",
+      "webcode": "5029",
+      "utf-8": "EE9089",
+      "unicode": "E409"
+    },
+    "410": {
+      "sjis": "FB4A",
+      "number": "410",
+      "webcode": "502A",
+      "utf-8": "EE908A",
+      "unicode": "E40A"
+    },
+    "411": {
+      "sjis": "FB4B",
+      "number": "411",
+      "webcode": "502B",
+      "utf-8": "EE908B",
+      "unicode": "E40B"
+    },
+    "412": {
+      "sjis": "FB4C",
+      "number": "412",
+      "webcode": "502C",
+      "utf-8": "EE908C",
+      "unicode": "E40C"
+    },
+    "413": {
+      "sjis": "FB4D",
+      "number": "413",
+      "webcode": "502D",
+      "utf-8": "EE908D",
+      "unicode": "E40D"
+    },
+    "414": {
+      "sjis": "FB4E",
+      "number": "414",
+      "webcode": "502E",
+      "utf-8": "EE908E",
+      "unicode": "E40E"
+    },
+    "415": {
+      "sjis": "FB4F",
+      "number": "415",
+      "webcode": "502F",
+      "utf-8": "EE908F",
+      "unicode": "E40F"
+    },
+    "416": {
+      "sjis": "FB50",
+      "number": "416",
+      "webcode": "5030",
+      "utf-8": "EE9090",
+      "unicode": "E410"
+    },
+    "417": {
+      "sjis": "FB51",
+      "number": "417",
+      "webcode": "5031",
+      "utf-8": "EE9091",
+      "unicode": "E411"
+    },
+    "418": {
+      "sjis": "FB52",
+      "number": "418",
+      "webcode": "5032",
+      "utf-8": "EE9092",
+      "unicode": "E412"
+    },
+    "419": {
+      "sjis": "FB53",
+      "number": "419",
+      "webcode": "5033",
+      "utf-8": "EE9093",
+      "unicode": "E413"
+    },
+    "420": {
+      "sjis": "FB54",
+      "number": "420",
+      "webcode": "5034",
+      "utf-8": "EE9094",
+      "unicode": "E414"
+    },
+    "421": {
+      "sjis": "FB55",
+      "number": "421",
+      "webcode": "5035",
+      "utf-8": "EE9095",
+      "unicode": "E415"
+    },
+    "422": {
+      "sjis": "FB56",
+      "number": "422",
+      "webcode": "5036",
+      "utf-8": "EE9096",
+      "unicode": "E416"
+    },
+    "423": {
+      "sjis": "FB57",
+      "number": "423",
+      "webcode": "5037",
+      "utf-8": "EE9097",
+      "unicode": "E417"
+    },
+    "424": {
+      "sjis": "FB58",
+      "number": "424",
+      "webcode": "5038",
+      "utf-8": "EE9098",
+      "unicode": "E418"
+    },
+    "425": {
+      "sjis": "FB59",
+      "number": "425",
+      "webcode": "5039",
+      "utf-8": "EE9099",
+      "unicode": "E419"
+    },
+    "426": {
+      "sjis": "FB5A",
+      "number": "426",
+      "webcode": "503A",
+      "utf-8": "EE909A",
+      "unicode": "E41A"
+    },
+    "427": {
+      "sjis": "FB5B",
+      "number": "427",
+      "webcode": "503B",
+      "utf-8": "EE909B",
+      "unicode": "E41B"
+    },
+    "428": {
+      "sjis": "FB5C",
+      "number": "428",
+      "webcode": "503C",
+      "utf-8": "EE909C",
+      "unicode": "E41C"
+    },
+    "429": {
+      "sjis": "FB5D",
+      "number": "429",
+      "webcode": "503D",
+      "utf-8": "EE909D",
+      "unicode": "E41D"
+    },
+    "430": {
+      "sjis": "FB5E",
+      "number": "430",
+      "webcode": "503E",
+      "utf-8": "EE909E",
+      "unicode": "E41E"
+    },
+    "431": {
+      "sjis": "FB5F",
+      "number": "431",
+      "webcode": "503F",
+      "utf-8": "EE909F",
+      "unicode": "E41F"
+    },
+    "432": {
+      "sjis": "FB60",
+      "number": "432",
+      "webcode": "5040",
+      "utf-8": "EE90A0",
+      "unicode": "E420"
+    },
+    "433": {
+      "sjis": "FB61",
+      "number": "433",
+      "webcode": "5041",
+      "utf-8": "EE90A1",
+      "unicode": "E421"
+    },
+    "434": {
+      "sjis": "FB62",
+      "number": "434",
+      "webcode": "5042",
+      "utf-8": "EE90A2",
+      "unicode": "E422"
+    },
+    "435": {
+      "sjis": "FB63",
+      "number": "435",
+      "webcode": "5043",
+      "utf-8": "EE90A3",
+      "unicode": "E423"
+    },
+    "436": {
+      "sjis": "FB64",
+      "number": "436",
+      "webcode": "5044",
+      "utf-8": "EE90A4",
+      "unicode": "E424"
+    },
+    "437": {
+      "sjis": "FB65",
+      "number": "437",
+      "webcode": "5045",
+      "utf-8": "EE90A5",
+      "unicode": "E425"
+    },
+    "438": {
+      "sjis": "FB66",
+      "number": "438",
+      "webcode": "5046",
+      "utf-8": "EE90A6",
+      "unicode": "E426"
+    },
+    "439": {
+      "sjis": "FB67",
+      "number": "439",
+      "webcode": "5047",
+      "utf-8": "EE90A7",
+      "unicode": "E427"
+    },
+    "440": {
+      "sjis": "FB68",
+      "number": "440",
+      "webcode": "5048",
+      "utf-8": "EE90A8",
+      "unicode": "E428"
+    },
+    "441": {
+      "sjis": "FB69",
+      "number": "441",
+      "webcode": "5049",
+      "utf-8": "EE90A9",
+      "unicode": "E429"
+    },
+    "442": {
+      "sjis": "FB6A",
+      "number": "442",
+      "webcode": "504A",
+      "utf-8": "EE90AA",
+      "unicode": "E42A"
+    },
+    "443": {
+      "sjis": "FB6B",
+      "number": "443",
+      "webcode": "504B",
+      "utf-8": "EE90AB",
+      "unicode": "E42B"
+    },
+    "444": {
+      "sjis": "FB6C",
+      "number": "444",
+      "webcode": "504C",
+      "utf-8": "EE90AC",
+      "unicode": "E42C"
+    },
+    "445": {
+      "sjis": "FB6D",
+      "number": "445",
+      "webcode": "504D",
+      "utf-8": "EE90AD",
+      "unicode": "E42D"
+    },
+    "446": {
+      "sjis": "FB6E",
+      "number": "446",
+      "webcode": "504E",
+      "utf-8": "EE90AE",
+      "unicode": "E42E"
+    },
+    "447": {
+      "sjis": "FB6F",
+      "number": "447",
+      "webcode": "504F",
+      "utf-8": "EE90AF",
+      "unicode": "E42F"
+    },
+    "448": {
+      "sjis": "FB70",
+      "number": "448",
+      "webcode": "5050",
+      "utf-8": "EE90B0",
+      "unicode": "E430"
+    },
+    "449": {
+      "sjis": "FB71",
+      "number": "449",
+      "webcode": "5051",
+      "utf-8": "EE90B1",
+      "unicode": "E431"
+    },
+    "450": {
+      "sjis": "FB72",
+      "number": "450",
+      "webcode": "5052",
+      "utf-8": "EE90B2",
+      "unicode": "E432"
+    },
+    "451": {
+      "sjis": "FB73",
+      "number": "451",
+      "webcode": "5053",
+      "utf-8": "EE90B3",
+      "unicode": "E433"
+    },
+    "452": {
+      "sjis": "FB74",
+      "number": "452",
+      "webcode": "5054",
+      "utf-8": "EE90B4",
+      "unicode": "E434"
+    },
+    "453": {
+      "sjis": "FB75",
+      "number": "453",
+      "webcode": "5055",
+      "utf-8": "EE90B5",
+      "unicode": "E435"
+    },
+    "454": {
+      "sjis": "FB76",
+      "number": "454",
+      "webcode": "5056",
+      "utf-8": "EE90B6",
+      "unicode": "E436"
+    },
+    "455": {
+      "sjis": "FB77",
+      "number": "455",
+      "webcode": "5057",
+      "utf-8": "EE90B7",
+      "unicode": "E437"
+    },
+    "456": {
+      "sjis": "FB78",
+      "number": "456",
+      "webcode": "5058",
+      "utf-8": "EE90B8",
+      "unicode": "E438"
+    },
+    "457": {
+      "sjis": "FB79",
+      "number": "457",
+      "webcode": "5059",
+      "utf-8": "EE90B9",
+      "unicode": "E439"
+    },
+    "458": {
+      "sjis": "FB7A",
+      "number": "458",
+      "webcode": "505A",
+      "utf-8": "EE90BA",
+      "unicode": "E43A"
+    },
+    "459": {
+      "sjis": "FB7B",
+      "number": "459",
+      "webcode": "505B",
+      "utf-8": "EE90BB",
+      "unicode": "E43B"
+    },
+    "460": {
+      "sjis": "FB7C",
+      "number": "460",
+      "webcode": "505C",
+      "utf-8": "EE90BC",
+      "unicode": "E43C"
+    },
+    "461": {
+      "sjis": "FB7D",
+      "number": "461",
+      "webcode": "505D",
+      "utf-8": "EE90BD",
+      "unicode": "E43D"
+    },
+    "462": {
+      "sjis": "FB7E",
+      "number": "462",
+      "webcode": "505E",
+      "utf-8": "EE90BE",
+      "unicode": "E43E"
+    },
+    "463": {
+      "sjis": "FB80",
+      "number": "463",
+      "webcode": "505F",
+      "utf-8": "EE90BF",
+      "unicode": "E43F"
+    },
+    "464": {
+      "sjis": "FB81",
+      "number": "464",
+      "webcode": "5060",
+      "utf-8": "EE9180",
+      "unicode": "E440"
+    },
+    "465": {
+      "sjis": "FB82",
+      "number": "465",
+      "webcode": "5061",
+      "utf-8": "EE9181",
+      "unicode": "E441"
+    },
+    "466": {
+      "sjis": "FB83",
+      "number": "466",
+      "webcode": "5062",
+      "utf-8": "EE9182",
+      "unicode": "E442"
+    },
+    "467": {
+      "sjis": "FB84",
+      "number": "467",
+      "webcode": "5063",
+      "utf-8": "EE9183",
+      "unicode": "E443"
+    },
+    "468": {
+      "sjis": "FB85",
+      "number": "468",
+      "webcode": "5064",
+      "utf-8": "EE9184",
+      "unicode": "E444"
+    },
+    "469": {
+      "sjis": "FB86",
+      "number": "469",
+      "webcode": "5065",
+      "utf-8": "EE9185",
+      "unicode": "E445"
+    },
+    "470": {
+      "sjis": "FB87",
+      "number": "470",
+      "webcode": "5066",
+      "utf-8": "EE9186",
+      "unicode": "E446"
+    },
+    "471": {
+      "sjis": "FB88",
+      "number": "471",
+      "webcode": "5067",
+      "utf-8": "EE9187",
+      "unicode": "E447"
+    },
+    "472": {
+      "sjis": "FB89",
+      "number": "472",
+      "webcode": "5068",
+      "utf-8": "EE9188",
+      "unicode": "E448"
+    },
+    "473": {
+      "sjis": "FB8A",
+      "number": "473",
+      "webcode": "5069",
+      "utf-8": "EE9189",
+      "unicode": "E449"
+    },
+    "474": {
+      "sjis": "FB8B",
+      "number": "474",
+      "webcode": "506A",
+      "utf-8": "EE918A",
+      "unicode": "E44A"
+    },
+    "475": {
+      "sjis": "FB8C",
+      "number": "475",
+      "webcode": "506B",
+      "utf-8": "EE918B",
+      "unicode": "E44B"
+    },
+    "476": {
+      "sjis": "FB8D",
+      "number": "476",
+      "webcode": "506C",
+      "utf-8": "EE918C",
+      "unicode": "E44C"
+    },
+    "501": {
+      "sjis": "FBA1",
+      "number": "501",
+      "webcode": "5121",
+      "utf-8": "EE9481",
+      "unicode": "E501"
+    },
+    "502": {
+      "sjis": "FBA2",
+      "number": "502",
+      "webcode": "5122",
+      "utf-8": "EE9482",
+      "unicode": "E502"
+    },
+    "503": {
+      "sjis": "FBA3",
+      "number": "503",
+      "webcode": "5123",
+      "utf-8": "EE9483",
+      "unicode": "E503"
+    },
+    "504": {
+      "sjis": "FBA4",
+      "number": "504",
+      "webcode": "5124",
+      "utf-8": "EE9484",
+      "unicode": "E504"
+    },
+    "505": {
+      "sjis": "FBA5",
+      "number": "505",
+      "webcode": "5125",
+      "utf-8": "EE9485",
+      "unicode": "E505"
+    },
+    "506": {
+      "sjis": "FBA6",
+      "number": "506",
+      "webcode": "5126",
+      "utf-8": "EE9486",
+      "unicode": "E506"
+    },
+    "507": {
+      "sjis": "FBA7",
+      "number": "507",
+      "webcode": "5127",
+      "utf-8": "EE9487",
+      "unicode": "E507"
+    },
+    "508": {
+      "sjis": "FBA8",
+      "number": "508",
+      "webcode": "5128",
+      "utf-8": "EE9488",
+      "unicode": "E508"
+    },
+    "509": {
+      "sjis": "FBA9",
+      "number": "509",
+      "webcode": "5129",
+      "utf-8": "EE9489",
+      "unicode": "E509"
+    },
+    "510": {
+      "sjis": "FBAA",
+      "number": "510",
+      "webcode": "512A",
+      "utf-8": "EE948A",
+      "unicode": "E50A"
+    },
+    "511": {
+      "sjis": "FBAB",
+      "number": "511",
+      "webcode": "512B",
+      "utf-8": "EE948B",
+      "unicode": "E50B"
+    },
+    "512": {
+      "sjis": "FBAC",
+      "number": "512",
+      "webcode": "512C",
+      "utf-8": "EE948C",
+      "unicode": "E50C"
+    },
+    "513": {
+      "sjis": "FBAD",
+      "number": "513",
+      "webcode": "512D",
+      "utf-8": "EE948D",
+      "unicode": "E50D"
+    },
+    "514": {
+      "sjis": "FBAE",
+      "number": "514",
+      "webcode": "512E",
+      "utf-8": "EE948E",
+      "unicode": "E50E"
+    },
+    "515": {
+      "sjis": "FBAF",
+      "number": "515",
+      "webcode": "512F",
+      "utf-8": "EE948F",
+      "unicode": "E50F"
+    },
+    "516": {
+      "sjis": "FBB0",
+      "number": "516",
+      "webcode": "5130",
+      "utf-8": "EE9490",
+      "unicode": "E510"
+    },
+    "517": {
+      "sjis": "FBB1",
+      "number": "517",
+      "webcode": "5131",
+      "utf-8": "EE9491",
+      "unicode": "E511"
+    },
+    "518": {
+      "sjis": "FBB2",
+      "number": "518",
+      "webcode": "5132",
+      "utf-8": "EE9492",
+      "unicode": "E512"
+    },
+    "519": {
+      "sjis": "FBB3",
+      "number": "519",
+      "webcode": "5133",
+      "utf-8": "EE9493",
+      "unicode": "E513"
+    },
+    "520": {
+      "sjis": "FBB4",
+      "number": "520",
+      "webcode": "5134",
+      "utf-8": "EE9494",
+      "unicode": "E514"
+    },
+    "521": {
+      "sjis": "FBB5",
+      "number": "521",
+      "webcode": "5135",
+      "utf-8": "EE9495",
+      "unicode": "E515"
+    },
+    "522": {
+      "sjis": "FBB6",
+      "number": "522",
+      "webcode": "5136",
+      "utf-8": "EE9496",
+      "unicode": "E516"
+    },
+    "523": {
+      "sjis": "FBB7",
+      "number": "523",
+      "webcode": "5137",
+      "utf-8": "EE9497",
+      "unicode": "E517"
+    },
+    "524": {
+      "sjis": "FBB8",
+      "number": "524",
+      "webcode": "5138",
+      "utf-8": "EE9498",
+      "unicode": "E518"
+    },
+    "525": {
+      "sjis": "FBB9",
+      "number": "525",
+      "webcode": "5139",
+      "utf-8": "EE9499",
+      "unicode": "E519"
+    },
+    "526": {
+      "sjis": "FBBA",
+      "number": "526",
+      "webcode": "513A",
+      "utf-8": "EE949A",
+      "unicode": "E51A"
+    },
+    "527": {
+      "sjis": "FBBB",
+      "number": "527",
+      "webcode": "513B",
+      "utf-8": "EE949B",
+      "unicode": "E51B"
+    },
+    "528": {
+      "sjis": "FBBC",
+      "number": "528",
+      "webcode": "513C",
+      "utf-8": "EE949C",
+      "unicode": "E51C"
+    },
+    "529": {
+      "sjis": "FBBD",
+      "number": "529",
+      "webcode": "513D",
+      "utf-8": "EE949D",
+      "unicode": "E51D"
+    },
+    "530": {
+      "sjis": "FBBE",
+      "number": "530",
+      "webcode": "513E",
+      "utf-8": "EE949E",
+      "unicode": "E51E"
+    },
+    "531": {
+      "sjis": "FBBF",
+      "number": "531",
+      "webcode": "513F",
+      "utf-8": "EE949F",
+      "unicode": "E51F"
+    },
+    "532": {
+      "sjis": "FBC0",
+      "number": "532",
+      "webcode": "5140",
+      "utf-8": "EE94A0",
+      "unicode": "E520"
+    },
+    "533": {
+      "sjis": "FBC1",
+      "number": "533",
+      "webcode": "5141",
+      "utf-8": "EE94A1",
+      "unicode": "E521"
+    },
+    "534": {
+      "sjis": "FBC2",
+      "number": "534",
+      "webcode": "5142",
+      "utf-8": "EE94A2",
+      "unicode": "E522"
+    },
+    "535": {
+      "sjis": "FBC3",
+      "number": "535",
+      "webcode": "5143",
+      "utf-8": "EE94A3",
+      "unicode": "E523"
+    },
+    "536": {
+      "sjis": "FBC4",
+      "number": "536",
+      "webcode": "5144",
+      "utf-8": "EE94A4",
+      "unicode": "E524"
+    },
+    "537": {
+      "sjis": "FBC5",
+      "number": "537",
+      "webcode": "5145",
+      "utf-8": "EE94A5",
+      "unicode": "E525"
+    },
+    "538": {
+      "sjis": "FBC6",
+      "number": "538",
+      "webcode": "5146",
+      "utf-8": "EE94A6",
+      "unicode": "E526"
+    },
+    "539": {
+      "sjis": "FBC7",
+      "number": "539",
+      "webcode": "5147",
+      "utf-8": "EE94A7",
+      "unicode": "E527"
+    },
+    "540": {
+      "sjis": "FBC8",
+      "number": "540",
+      "webcode": "5148",
+      "utf-8": "EE94A8",
+      "unicode": "E528"
+    },
+    "541": {
+      "sjis": "FBC9",
+      "number": "541",
+      "webcode": "5149",
+      "utf-8": "EE94A9",
+      "unicode": "E529"
+    },
+    "542": {
+      "sjis": "FBCA",
+      "number": "542",
+      "webcode": "514A",
+      "utf-8": "EE94AA",
+      "unicode": "E52A"
+    },
+    "543": {
+      "sjis": "FBCB",
+      "number": "543",
+      "webcode": "514B",
+      "utf-8": "EE94AB",
+      "unicode": "E52B"
+    },
+    "544": {
+      "sjis": "FBCC",
+      "number": "544",
+      "webcode": "514C",
+      "utf-8": "EE94AC",
+      "unicode": "E52C"
+    },
+    "545": {
+      "sjis": "FBCD",
+      "number": "545",
+      "webcode": "514D",
+      "utf-8": "EE94AD",
+      "unicode": "E52D"
+    },
+    "546": {
+      "sjis": "FBCE",
+      "number": "546",
+      "webcode": "514E",
+      "utf-8": "EE94AE",
+      "unicode": "E52E"
+    },
+    "547": {
+      "sjis": "FBCF",
+      "number": "547",
+      "webcode": "514F",
+      "utf-8": "EE94AF",
+      "unicode": "E52F"
+    },
+    "548": {
+      "sjis": "FBD0",
+      "number": "548",
+      "webcode": "5150",
+      "utf-8": "EE94B0",
+      "unicode": "E530"
+    },
+    "549": {
+      "sjis": "FBD1",
+      "number": "549",
+      "webcode": "5151",
+      "utf-8": "EE94B1",
+      "unicode": "E531"
+    },
+    "550": {
+      "sjis": "FBD2",
+      "number": "550",
+      "webcode": "5152",
+      "utf-8": "EE94B2",
+      "unicode": "E532"
+    },
+    "551": {
+      "sjis": "FBD3",
+      "number": "551",
+      "webcode": "5153",
+      "utf-8": "EE94B3",
+      "unicode": "E533"
+    },
+    "552": {
+      "sjis": "FBD4",
+      "number": "552",
+      "webcode": "5154",
+      "utf-8": "EE94B4",
+      "unicode": "E534"
+    },
+    "553": {
+      "sjis": "FBD5",
+      "number": "553",
+      "webcode": "5155",
+      "utf-8": "EE94B5",
+      "unicode": "E535"
+    },
+    "554": {
+      "sjis": "FBD6",
+      "number": "554",
+      "webcode": "5156",
+      "utf-8": "EE94B6",
+      "unicode": "E536"
+    },
+    "555": {
+      "sjis": "FBD7",
+      "number": "555",
+      "webcode": "5157",
+      "utf-8": "EE94B7",
+      "unicode": "E537"
+    },
+    "556": {
+      "sjis": "FBD8",
+      "number": "556",
+      "webcode": "5158",
+      "utf-8": "EE94B8",
+      "unicode": "E538"
+    },
+    "557": {
+      "sjis": "FBD9",
+      "number": "557",
+      "webcode": "5159",
+      "utf-8": "EE94B9",
+      "unicode": "E539"
+    },
+    "558": {
+      "sjis": "FBDA",
+      "number": "558",
+      "webcode": "515A",
+      "utf-8": "EE94BA",
+      "unicode": "E53A"
+    },
+    "559": {
+      "sjis": "FBDB",
+      "number": "559",
+      "webcode": "515B",
+      "utf-8": "EE94BB",
+      "unicode": "E53B"
+    },
+    "560": {
+      "sjis": "FBDC",
+      "number": "560",
+      "webcode": "515C",
+      "utf-8": "EE94BC",
+      "unicode": "E53C"
+    },
+    "561": {
+      "sjis": "FBDD",
+      "number": "561",
+      "webcode": "515D",
+      "utf-8": "EE94BD",
+      "unicode": "E53D"
+    },
+    "562": {
+      "sjis": "FBDE",
+      "number": "562",
+      "webcode": "515E",
+      "utf-8": "EE94BE",
+      "unicode": "E53E"
+    }
+  }
+}
