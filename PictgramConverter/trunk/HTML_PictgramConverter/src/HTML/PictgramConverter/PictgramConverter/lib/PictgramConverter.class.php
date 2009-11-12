@@ -1,4 +1,11 @@
 <?php
+/**
+ * PictgramConverter
+ *
+ * @access  public
+ * @author  takada-at<takada-at@klab.jp>
+ * @create  2009/11/01
+ **/
 class PictgramConverter
 {
     const DOCOMO = 1;
@@ -17,23 +24,16 @@ class PictgramConverter
     private static $controllSequence = '$$';
 
 
-    /**
-     * データファイルのロード
-     */
-    public static function init(){
-        if(!self::$loaded){
-            $root = realpath(dirname(__FILE__).'/..');
-            $path = $root . DIRECTORY_SEPARATOR."data";
-            self::$datadir = $path;
-            self::$cacheFile = self::$datadir .DIRECTORY_SEPARATOR . self::$cacheKey;
-            self::loadData();
-        }
-    }
 
     /**
      * 文字コード変換(sjis->utf8) + 絵文字の変換(sjis->utf8)
-     */
-    public static function convert($str, $carrierCode, $fromEncoding="SJIS-WIN") {
+     *   usage: PictgramConverter::convert($str, PictgramConverter::DOCOMO);
+     * @access    public
+     * @param     String    $str    変換する文字列
+     * @param     Int       $carrier   絵文字のキャリア
+     * @return    String    変換結果
+     **/
+    public static function convert($str, $carrierCode) {
         if(!self::$loaded){
             self::init();
         }
@@ -51,8 +51,13 @@ class PictgramConverter
 
     /**
      * 絵文字の変換(utf-8->sjis) + キャリア間のマッピング
-     */
-    public static function restore($str, $carrierCode, $toEncoding="SJIS-WIN"){
+     *   usage: PictgramConverter::restore($str, PictgramConverter::DOCOMO);
+     * @access    public
+     * @param     String    $str    変換する文字列
+     * @param     Int       $carrier   絵文字のキャリア
+     * @return    String    変換結果
+     **/
+    public static function restore($str, $carrierCode){
         if(!self::$loaded){
             self::init();
         }
@@ -62,7 +67,9 @@ class PictgramConverter
     }
 
     /**
-     * 絵文字の表示: unicode文字列で指定。表示キャリアに合わせた変換を行なう
+     * 絵文字の表示: unicode文字列で指定。
+     * @public    String    $unicode    表示する絵文字を示すunicode16進文字列
+     * @return    String    絵文字バイナリ(utf-8)
      */
     public static function display($unicode){
         if(!self::$loaded){
@@ -86,6 +93,9 @@ class PictgramConverter
         }
     }
 
+    /**
+     * 絵文字の判別
+     */
     public static function hasPict($binary, $carrier, $encoding="UTF-8"){
         if($encoding=="UTF-8"){
             return self::_hasPictUTF8($binary, $carrier);
@@ -99,6 +109,20 @@ class PictgramConverter
                    "convertMap" => self::$convertMap
         );
         return self::dump_hash($c);
+    }
+
+
+    /**
+     * データファイルのロード
+     */
+    public static function init(){
+        if(!self::$loaded){
+            $root = realpath(dirname(__FILE__).'/..');
+            $path = $root . DIRECTORY_SEPARATOR."data";
+            self::$datadir = $path;
+            self::$cacheFile = self::$datadir .DIRECTORY_SEPARATOR . self::$cacheKey;
+            self::loadData();
+        }
     }
 
 
