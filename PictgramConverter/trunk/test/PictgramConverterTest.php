@@ -1,7 +1,8 @@
 <?php
 
 require_once(dirname(__FILE__).'/lime.php');
-require_once(dirname(__FILE__).'/../lib/PictgramConverter.class.php');
+require_once("HTML/PictgramConverter.php");
+//require_once(dirname(__FILE__).'/../HTML_PictgramConverter/src/HTML/PictgramConverter.php');
 
 
 $t = new lime_test(null, new lime_output_color());
