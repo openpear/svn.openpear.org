@@ -63,7 +63,7 @@ class Db_Fixture
     /**
      * Db_Fixture version
      */
-    const VERSION = '0.1.3';
+    const VERSION = '0.1.4';
 
     /**
      * Fixture
