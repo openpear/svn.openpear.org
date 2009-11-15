@@ -98,6 +98,19 @@ class Db_Fixture
     private static $_insertedData = null;
 
     /**
+     * Set pdo
+     *
+     * @param  Pdo $pdo Pdo object
+     * @access public
+     * @return Db_Fixture Fluent interface
+     */
+    public static function setPdo(Pdo $pdo)
+    {
+        self::$_pdo = $pdo;
+        return new self();
+    }
+
+    /**
      * Load parser class
      *
      * @param  mixed $fixture Fixture info
@@ -132,8 +145,10 @@ class Db_Fixture
 
             $parser = self::_getParser($extension);
 
-            // Get pdo object
-            self::$_pdo = $parser->createPdo($config);
+            if (is_null(self::$_pdo)) {
+                // Get pdo object
+                self::$_pdo = $parser->createPdo($config);
+            }
 
             // Parse fixture file
             self::$_fixtures = $parser->parse($fixturePath);

@@ -1,5 +1,5 @@
 {
-  "dsn": "mysql:host=localhost;dbname=test;port=3306",
-  "username": "test",
-  "password": "testtest"
+  "dsn": "mysql:host=localhost;dbname=test_db_fixture;port=3306",
+  "username": "test_db_fixture",
+  "password": "test_db_fixture"
 }
