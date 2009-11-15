@@ -196,4 +196,19 @@ $t->ok(count($rows) === 2, 'Inserted row count should be 2');
 $stmt = null;
 $pdo  = null;
 $obj->after();
+unset($obj);
 
+try {
+    $t->fail(Db_Fixture::load(array(dirname(__FILE__) . '/testdata/test.json')));
+} catch (Db_Fixture_Exception $e) {
+    $t->ok($e->getMessage() === '$fixturePath should be a string.', 'exception should be occured when fixture is an array');
+}
+
+$std = new stdClass;
+$std->path = dirname(__FILE__) . '/testdata/test.json';
+
+try {
+    $t->fail(Db_Fixture::load($std));
+} catch (Db_Fixture_Exception $e) {
+    $t->ok($e->getMessage() === '$fixturePath should be a string.', 'exception should be occured when fixture is a stdClass');
+}

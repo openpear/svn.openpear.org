@@ -113,20 +113,15 @@ class Db_Fixture
     /**
      * Load parser class
      *
-     * @param  mixed $fixture Fixture info
+     * @param  mixed $fixturePath Path to fixture file
      * @param  mixed $config Path to database config file
      * @access public
+     * @throws Db_Fixture_Exception When $fixturePath is not a string
      * @return Db_Fixture Fluent interface
      */
-    public static function load($fixtures, $config = null)
+    public static function load($fixturePath, $config = null)
     {
-        if (is_string($fixtures)) {
-            $fixtures = array(
-                pathinfo($fixtures, PATHINFO_FILENAME) => $fixtures
-            );
-        }
-
-        foreach ($fixtures as $fixtureName => $fixturePath) {
+        if (is_string($fixturePath)) {
             if (!file_exists($fixturePath)) {
                 throw new Db_Fixture_Exception($fixturePath . ' not found.');
             }
@@ -155,6 +150,7 @@ class Db_Fixture
 
             return new self();
         }
+        throw new Db_Fixture_Exception('$fixturePath should be a string.');
     }
 
     /**
