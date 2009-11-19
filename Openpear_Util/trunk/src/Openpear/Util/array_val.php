@@ -22,7 +22,7 @@
 
 if (!function_exists('array_val')) {
     function array_val(&$data, $key, $default = null) {
-        if (!is_array($data)) {
+        if (!is_array($data) && !($data instanceof ArrayAccess)) {
             return $default;
         }
         return isset($data[$key])? $data[$key]: $default;
