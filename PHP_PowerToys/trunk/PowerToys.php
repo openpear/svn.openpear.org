@@ -507,7 +507,7 @@ class PHP_PowerToys {
 		if($option == 'debug'){
 			echo "Before:".strlen($f)."Bytes<br>";
 		}
-		$f = preg_replace("/\r|\r\n|\n|\t|	/", "", $f);
+		$f = preg_replace("/\r\n|\r|\n|\t|	/", "", $f);
 		$f = str_replace("<br />", "<br>", $f);
 		$f = preg_replace("/[a-zA-Z0-9]+=\"{2}?/", "", $f);
 		$f = str_replace("<strong>", "<b>", $f);
@@ -516,7 +516,6 @@ class PHP_PowerToys {
 		$f = str_replace("</em>", "</i>", $f);
 		$f = str_replace("<strike>", "<s>", $f);
 		$f = str_replace("</strike>", "</s>", $f);
-		$f = preg_replace("/<!--.+?-->/", "", $f);
 		$f = mb_convert_kana($f, 'as');
 		$per = (int) (strlen($f) / $before * 100);
 		if($option == 'debug'){
