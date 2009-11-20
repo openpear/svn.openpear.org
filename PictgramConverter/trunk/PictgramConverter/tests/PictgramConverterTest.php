@@ -1,7 +1,7 @@
 <?php
 
 require_once(dirname(__FILE__).'/lime.php');
-require_once("Text/PictgramConverter.php");
+require_once(dirname(__FILE__). "/../src/Text/PictgramConverter.php");
 //require_once(dirname(__FILE__).'/../HTML_PictgramConverter/src/HTML/PictgramConverter.php');
 
 
@@ -197,7 +197,7 @@ function checkAllPictU(){
     }
 }
 //checkAllPictU();
-checkAllPict();
+//checkAllPict();
 
 
 foreach(array(array("EE9992", hex2bin("F6E6"), EZWEB),
@@ -231,3 +231,22 @@ $str = pack("H*","efbe8aefbdb9efbe9de381aee59381e6a0bce3818ce381a0e38184e38199e3
 $r = PictgramConverter::restore($str, DOCOMO);
 $last = mb_substr($r, mb_strlen($r)-1);
 $t->cmp_ok($last, "==", pack("H*", "F991"), "restore");
+
+
+$c = PictgramConverter::getData();
+
+
+foreach(array(array(hex2bin("EE9992"),  hex2bin("EE9992"), DOCOMO),
+              array(hex2bin("EE9992"), hex2bin("EEBFA6"), EZWEB),
+              array(hex2bin("EE9992"), hex2bin("EE8C99"), SOFTBANK),
+              array(hex2bin("EE9984"), hex2bin("EE9984"), DOCOMO),
+              array(hex2bin("EE9984"), hex2bin("EF82B5"), EZWEB),
+              array(hex2bin("EE9984"), "［霧］", SOFTBANK),
+              array(hex2bin("EEBD99"), hex2bin("EEBD99"), EZWEB),
+              array(hex2bin("EEBD99"), hex2bin("EE8992"), SOFTBANK),
+              array(hex2bin("EEBD99"), hex2bin("EE9CB7"), DOCOMO),
+              array(hex2bin("EF8189"), hex2bin("EF8189"), EZWEB),
+              array(hex2bin("EF818D"), "■", DOCOMO),
+              array(hex2bin("EF8189"), hex2bin("EE88BB"), SOFTBANK)) as $case){
+     $t->cmp_ok($case[1], "==", PictgramConverter::convertCarrier($case[0], $case[2]), "convert carrier:" . bin2hex($case[0]) . "->" . bin2hex($case[1]));
+}
