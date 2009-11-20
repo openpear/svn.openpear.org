@@ -11,11 +11,13 @@ class PictgramConverter
     const DOCOMO = 1;
     const EZWEB = 2;
     const SOFTBANK = 3;
+    const APC = false;
     private static $loaded = false;
     private static $datadir = "";
     private static $cacheFile = "";
     private static $convertFrom;
     private static $convertMap;
+    private static $carrierMap;
     private static $cacheKey = "pictgram_converter";
     private static $pictRegUTF8 = "/[\xEE\x80\x80-\xEF\x83\xBC]/u";
     private static $pictRegSJIS1 = "/[\xEE\x98\xBE-\xEE\x9D\x97]/u";
@@ -67,6 +69,21 @@ class PictgramConverter
     }
 
     /**
+     * utf-8絵文字をキャリア間で変換。文字コード変換はしない。
+     * @access    public
+     * @param     String    $str    変換する文字列
+     * @param     Int       $carrier   絵文字のキャリア
+     * @return    String    変換結果
+     **/
+    public static function convertCarrier($str, $carrierCode) {
+        if(!self::$loaded){
+            self::init();
+        }
+        $carrier = $carrierCode;
+        return strtr($str, self::$carrierMap[$carrier]);
+    }
+
+    /**
      * 絵文字の表示: unicode文字列で指定。
      * @public    String    $unicode    表示する絵文字を示すunicode16進文字列
      * @return    String    絵文字バイナリ(utf-8)
@@ -106,9 +123,10 @@ class PictgramConverter
         if(!self::$loaded)self::init();
         $c = array(
                    "convertFrom" => self::$convertFrom,
-                   "convertMap" => self::$convertMap
+                   "convertMap" => self::$convertMap,
+                   "carrierMap" => self::$carrierMap
         );
-        return self::dump_hash($c);
+        return $c;
     }
 
 
@@ -139,6 +157,9 @@ class PictgramConverter
         $convertMap = array(self::DOCOMO =>array(),
                                   self::EZWEB =>array(),
                                   self::SOFTBANK=>array());
+        $carrierMap = array(self::DOCOMO =>array(),
+                                  self::EZWEB =>array(),
+                                  self::SOFTBANK=>array());
         $defaultutf = array();
 
         foreach(array(self::DOCOMO, self::EZWEB, self::SOFTBANK) as $ca){
@@ -166,18 +187,20 @@ class PictgramConverter
         }
         foreach(array(self::DOCOMO, self::EZWEB, self::SOFTBANK) as $ca){
             $cname = self::cname($ca);
+            $is_kddi = $ca == self::EZWEB;
             foreach($emojiMap[$cname] as $map){
                 $data = $emojiList[$cname][$map[$cname]];
-                if($ca == self::EZWEB){
-                    $input = pack("H*", $data["utf-8-form"]);
-                    $convertMap[$ca][ $input ] = mb_convert_encoding(self::hex2bin($data["sjis"]), "UTF-8", "SJIS-WIN");
-                }else{
-                    $input = pack("H*", $data["utf-8"]);
-                    $convertMap[$ca][ $input  ] = mb_convert_encoding(self::hex2bin($data["sjis"]), "UTF-8", "SJIS-WIN");
-                }
+                $input = ($is_kddi ? pack("H*", $data["utf-8-form"]) : pack("H*", $data["utf-8"]));
+
+                //同一キャリアでの変換
+                $convertMap[$ca][ $input ] = mb_convert_encoding(self::hex2bin($data["sjis"]), "UTF-8", "SJIS-WIN");
+                $carrierMap[$ca][ $input ] = $input;
+
+                //他キャリアへの変換
                 foreach($map as $c => $code){
                     if($c==$ca)continue;
-                    if($ca==self::EZWEB){
+                    $carrierMap[self::ccode($c)][$input] = self::convCode($code, $emojiList[$c], false, (self::ccode($c) == self::EZWEB));
+                    if($is_kddi){
                         $convertMap[self::ccode($c)][ $input ] = self::convCode($code, $emojiList[$c]);
                     }else{
                         $convertMap[self::ccode($c)][ $input ] = self::convCode($code, $emojiList[$c]);
@@ -187,8 +210,12 @@ class PictgramConverter
         }
         $cacheObj = array(
                           "convertFrom" => $convertFrom,
-                          "convertMap" => $convertMap
+                          "convertMap" => $convertMap,
+                          "carrierMap" => $carrierMap
         );
+        self::$convertMap = $convertMap;
+        self::$carrierMap = $carrierMap;
+        self::$convertFrom = $convertFrom;
         return $cacheObj;
     }
 
@@ -198,13 +225,15 @@ class PictgramConverter
         if($cache!=null
            && array_key_exists("convertFrom", $cache)
            && array_key_exists("convertMap", $cache)
+           && array_key_exists("carrierMap", $cache)
            ){
             self::$convertFrom = $cache["convertFrom"];
             self::$convertMap = $cache["convertMap"];
+            self::$carrierMap = $cache["carrierMap"];
             self::$loaded = true;
             return;
         }
-        // 無制限にキャッシュ
+        // マッピングを作成してキャッシュ
         $cache = self::createMapping(self::$datadir);
         self::$convertFrom = $cache["convertFrom"];
         self::$convertMap = $cache["convertMap"];
@@ -214,10 +243,9 @@ class PictgramConverter
     }
 
     private static function loadCache($file){
-        //if (function_exists("apc_fetch"))
-        //{
-        //    return apc_fetch(self::$cacheKey);
-        //}
+        if (self::APC && function_exists("apc_fetch")){
+            return apc_fetch(self::$cacheKey);
+        }
         try{
             if(file_exists(self::$cacheFile)){
                 return unserialize(file_get_contents($file));
@@ -232,9 +260,8 @@ class PictgramConverter
     }
 
     private static function doCache($data){
-        if (function_exists("apc_store"))
+        if (self::APC && function_exists("apc_store"))
         {
-            var_dump(123);
             return apc_store(self::$cacheKey, $data, 0);
         }else{
             $cdata = serialize($data);
@@ -278,16 +305,21 @@ class PictgramConverter
             return "softbank";
         }
     }
-    private static function convCode($code, &$list){
+    private static function convCode($code, &$list, $sjis=true, $kddi=false){
         //echo "c: $code\n";
         $ret = "";
         if(strpos($code, ";")>0){
             $l = explode(";", $code);
             foreach($l as $n){
-                $ret .= self::convCode($n, $list);
+                $ret .= self::convCode($n, $list, $sjis, $kddi);
             }
         }else if(array_key_exists($code, $list)){
-            $ret = mb_convert_encoding(self::hex2bin($list[$code]["sjis"]), "UTF-8", "SJIS-WIN");
+            if($sjis){
+                $ret = mb_convert_encoding(self::hex2bin($list[$code]["sjis"]), "UTF-8", "SJIS-WIN");
+            }else{
+                $kddi ? $ret = self::hex2bin($list[$code]["utf-8-form"])
+                    : $ret = self::hex2bin($list[$code]["utf-8"]);
+            }
         }else{
             $ret = $code;
         }
