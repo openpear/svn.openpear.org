@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package    PHP_PowerToys
- *  @version    PHP_PowerToys v 0.2.5 2009/11/20
+ *  @version    PHP_PowerToys v 0.2.5 2009/11/23
  * 
  */
 class PHP_PowerToys {
@@ -86,20 +86,15 @@ class PHP_PowerToys {
 				return true;
 			}
 		}
-		if(is_file($file_path)){
-			return true;
-		}
 
 		$include = split(':|;', ini_get('include_path'));
 		foreach($include as $inc){
-                        if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
+			if($inc === '.' && is_file($inc . '/' . $file_path)) return true;
 			if(is_file($inc . '/' . $file_path)){
 				return true;
 			}
 		}
-		if(is_file($file_path)){
-			return true;
-		}
+
 		return false;
 	}
 	
@@ -495,12 +490,12 @@ class PHP_PowerToys {
 	}
 		
 	/**
-	 * HTMLの不要な部分を取り除いて圧縮する
+	 * HTMLの不要な部分を取り除いて圧縮する(携帯向け)
 	 * 携帯ではdeflateが効かないので主に携帯向け、デザイン構造が見られるわけでもないし
 	 * 最近では携帯も高速化されパケット節約の必要もなくなったが、より表示速度が速くなる事に越した事はない
 	 *
 	 */
-	function compressHtml($option=null){
+	function compressMobileHtml($option=null){
 		$f = ob_get_contents();
 		ob_clean();
 		$before = strlen($f);
@@ -509,7 +504,7 @@ class PHP_PowerToys {
 		}
 		$f = preg_replace("/\r\n|\r|\n|\t|	/", "", $f);
 		$f = str_replace("<br />", "<br>", $f);
-		$f = preg_replace("/[a-zA-Z0-9]+=\"{2}?/", "", $f);
+		$f = preg_replace('/id=\"[a-zA-Z0-9]+\" /', "", $f);
 		$f = str_replace("<strong>", "<b>", $f);
 		$f = str_replace("<\/strong>", "</b>", $f);
 		$f = str_replace("<em>", "<i>", $f);
