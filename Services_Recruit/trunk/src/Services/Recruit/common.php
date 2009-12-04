@@ -243,7 +243,7 @@ class Services_Recruit_common
                        $this->getServiceApiVersion(),
                        $api_key,
                        $query);
-        var_dump($url);
+
         // Open up our HTTP_Request and set our User-Agent field then send the
         // request for the URL.
         $http = &new HTTP_Request($url);
