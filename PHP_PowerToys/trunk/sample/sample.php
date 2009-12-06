@@ -54,6 +54,17 @@ $pt = new PHP_Powertoys();
 //$ini = $pt2->iniParser('sample.ini');
 //print_r($ini);
 
+//16進数表示
 //$data = $pt->hexFromFile('');
 //echo $data;
+//2進数表示
+//$data = $pt->binFromFile('');
+//echo $data;
+
+//ガベージコレクション
+//$pt->gerbageCollection(true);
+
+//携帯向けHTML圧縮
+//$pt = new PHP_Powertoys('compress');
+//$pt = compressMobileHtml('debug');
 ?>
