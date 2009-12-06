@@ -4,7 +4,7 @@
  *
  *  @author     FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package    PHP_PowerToys
- *  @version    PHP_PowerToys v 0.2.5 2009/11/23
+ *  @version    PHP_PowerToys v 0.2.5 2009/12/07
  * 
  */
 class PHP_PowerToys {
@@ -441,7 +441,7 @@ class PHP_PowerToys {
 	 *
 	 * @param string $str
 	 */
-	function hexFromFile($str, $format=false){
+	function hexFromFile($str){
 		if(!PHP_Powertoys::is_file_ex($str)) return false;
 		$str = file_get_contents($str);		
 		for($i = 0, $n = strlen($str) ; $i <= $n ; $i++){
@@ -456,7 +456,7 @@ class PHP_PowerToys {
 	 *
 	 * @param string $str
 	 */
-	function binFromFile($str, $format=false){
+	function binFromFile($str){
 		if(!PHP_Powertoys::is_file_ex($str)) return false;
 		$str = file_get_contents($str);		
 		for($i = 0, $n = strlen($str) ; $i <= $n ; $i++){
