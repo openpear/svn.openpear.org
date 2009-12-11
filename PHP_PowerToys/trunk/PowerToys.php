@@ -2,9 +2,9 @@
 /**
  *  PHP_PowerToys 0.2.5
  *
- *  @author     FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
- *  @package    PHP_PowerToys
- *  @version    PHP_PowerToys v 0.2.5 2009/12/07
+ *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
+ *  @package	PHP_PowerToys
+ *  @version	PHP_PowerToys v 0.2.5 2009/12/12
  * 
  */
 class PHP_PowerToys {
@@ -473,7 +473,7 @@ class PHP_PowerToys {
 	 *
 	 * @param int $debug メモリ使用量の参照(何故か減らない？(汗 から実験 )
 	 */
-	function garbageCollection($debug=true){
+	function garbageCollection($debug=false){
 		if($debug && preg_match('/^5\./', phpversion())){
 			echo memory_get_usage()."<br />";
 		}
