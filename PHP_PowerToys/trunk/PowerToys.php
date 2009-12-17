@@ -518,5 +518,16 @@ class PHP_PowerToys {
 		}
 		echo $f;
 	}
+	
+	/**
+	 * リサイズ
+	 * 
+	 */
+	function resize($img, $width, $height, $delta_x=null, $rigidity=null){
+		//Seam Carvingによる画像の伸縮
+		$img = new Imagick($img);
+		$img->liquidRescaleImage( 500, 200, $delta_x, $rigidity);
+		return $img;
+	}
 }
 ?>
