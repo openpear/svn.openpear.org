@@ -54,6 +54,49 @@ class Diggin_Http_Response_CharactorEncodingTest extends PHPUnit_Framework_TestC
         mb_detect_order($this->detectOrder);
     }
 
+    ///////////////
+
+
+
+    public function testEncode() {
+$header = <<<HEADER
+HTTP/1.1 200 OK
+Content-type: text/html charset=Shift-JIS;
+HEADER;
+
+$sjis1= mb_convert_encoding('あいうえお', 'SJIS', 'UTF-8');
+$sjis2= mb_convert_encoding('かきくけこ', 'SJIS', 'UTF-8');
+
+    $resBody = <<<BODY
+<html lang="ja">
+<head>
+<body>
+$sjis2
+</body>
+</html>
+BODY;
+    $expect = <<<BODY
+<html lang="ja">
+<head>
+<body>
+かきくけこ
+</body>
+</html>
+BODY;
+    
+    $responseString = $header."\r\n\r\n".$resBody;
+    $response = Zend_Http_Response::fromString($responseString);
+
+    // via Zend_Http_Response
+    $ret = 
+        Diggin_Http_Response_CharactorEncoding::createWrapper($response, 'UTF-8');
+
+    //$this->assertEquals('array', $ret);
+    
+    $this->assertEquals($expect, $ret->getBody());
+    
+    }
+
     /**
      * test "detect" part.1
      * 
