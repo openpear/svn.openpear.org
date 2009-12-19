@@ -100,7 +100,7 @@ class Diggin_Http_Response_CharactorEncoding
     public static function createWrapper($response, $encodingto = 'UTF-8')
     {
         if ($response instanceof Zend_Http_Response) {
-            $detect = self::detect($response);
+            $detect = self::detect($response->getBody(), $response->getHeader('content-type'));
             require_once 'Diggin/Http/Response/CharactorEncoding/Wrapper/Zf.php';
             return Diggin_Http_Response_CharactorEncoding_Wrapper_Zf::createWrapper($response, $detect, $encodingto);
         } else {
