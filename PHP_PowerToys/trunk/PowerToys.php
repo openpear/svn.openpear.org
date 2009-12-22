@@ -1,16 +1,16 @@
 <?php
 /**
- *  PHP_PowerToys 0.2.5
+ *  PHP_PowerToys 0.2.6
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.2.5 2009/12/12
+ *  @version	PHP_PowerToys v 0.2.5 2009/12/23
  * 
  */
 class PHP_PowerToys {
 	
 	function PHP_PowerToys($option=null){
-		if($option='compress') ob_start();
+		if($option=='compress') ob_start();
 	}
 	
 	/**
@@ -34,7 +34,7 @@ class PHP_PowerToys {
 	 * @return object
 	 */
 	function getPearI($pear, $arg=null){
-		require_once(str_replace('_', '/', $pear) . '.php');
+		require_once(strtr('_', '/', $pear) . '.php');
 		return new $pear($arg);
 	}
 	
@@ -47,7 +47,7 @@ class PHP_PowerToys {
 	 */
 	function getPear($pear, $arg=null){
 		require_once($pear);
-		$pear = str_replace('/', '_', $pear);
+		$pear = strtr('/', '_', $pear);
 		$pear = str_replace('.php', '', $pear);
 		return new $pear($arg);
 	}
@@ -107,7 +107,7 @@ class PHP_PowerToys {
 	function save_var_dump($var, $filename){
 		ob_start();
 		var_dump($var);
-		$var = ob_get_contents();
+		$v = ob_get_contents();
 		ob_clean();
 		$f = fopen($filename, "w");
 		fputs($f, $var);
@@ -161,7 +161,7 @@ class PHP_PowerToys {
 		if(mb_detect_encoding($str) != 'UTF-8') return false;
 		if (ord($str{0}) != 0xef && ord($str{1}) != 0xbb && ord($str{2}) != 0xbf) {
         		$str = chr(0xef) . chr(0xbb) . chr(0xbf) . $str;
-    	}
+		}
     	return $str;
 	}
 	
@@ -172,8 +172,8 @@ class PHP_PowerToys {
 	 * @return 成功:TRUE 失敗:FALSE
 	 */
 	function extensionExist($extension){
-		$extension_soname = $extension . "." . PHP_SHLIB_SUFFIX; 
-		$extension_fullname = PHP_EXTENSION_DIR . "/" . $extension_soname;
+		$extension_soname = $extension . '.' . PHP_SHLIB_SUFFIX;
+		$extension_fullname = PHP_EXTENSION_DIR . '/' . $extension_soname;
 		if(!extension_loaded($extension) && !is_file($extension_fullname)) { 
 		    return false; 
 		}
@@ -367,7 +367,7 @@ class PHP_PowerToys {
 	 */
 	function print_r_ex($var){
 		$tmp = print_r($var, true);
-		$tmp = preg_replace("/ /", "&nbsp;", $tmp);
+		$tmp = preg_replace('/ /', '&nbsp;', $tmp);
 		$tmp = nl2br($tmp);
 		$tmp = mb_convert_encoding($tmp, mb_internal_encoding());
 		echo $tmp;
@@ -475,7 +475,7 @@ class PHP_PowerToys {
 	 */
 	function garbageCollection($debug=false){
 		if($debug && preg_match('/^5\./', phpversion())){
-			echo memory_get_usage()."<br />";
+			echo memory_get_usage(),'<br />';
 		}
 		unset($GLOBALS);
 		foreach(get_defined_vars() as $key => $val){
@@ -485,7 +485,7 @@ class PHP_PowerToys {
 		unset($this);
 		if($debug && preg_match('/^5\./', phpversion())){
 			unset($debug);
-			echo memory_get_usage()."<br />";
+			echo memory_get_usage(),'<br />';
 		}
 	}
 		
@@ -500,34 +500,23 @@ class PHP_PowerToys {
 		ob_clean();
 		$before = strlen($f);
 		if($option == 'debug'){
-			echo "Before:".strlen($f)."Bytes<br>";
+			echo 'Before:',strlen($f),'Bytes<br>';
 		}
-		$f = preg_replace("/\r\n|\r|\n|\t|	/", "", $f);
-		$f = str_replace("<br />", "<br>", $f);
-		$f = preg_replace('/id=\"[a-zA-Z0-9]+\" /', "", $f);
-		$f = str_replace("<strong>", "<b>", $f);
-		$f = str_replace("<\/strong>", "</b>", $f);
-		$f = str_replace("<em>", "<i>", $f);
-		$f = str_replace("</em>", "</i>", $f);
-		$f = str_replace("<strike>", "<s>", $f);
-		$f = str_replace("</strike>", "</s>", $f);
+		$f = preg_replace('/\r\n|\r|\n|\t|	/', '', $f);
+		$f = str_replace('<br />', '<br>', $f);
+		$f = preg_replace('/id=\"[a-zA-Z0-9]+\" /', '', $f);
+		$f = str_replace('<strong>', '<b>', $f);
+		$f = str_replace('<\/strong>', '</b>', $f);
+		$f = str_replace('<em>', '<i>', $f);
+		$f = str_replace('</em>', '</i>', $f);
+		$f = str_replace('<strike>', '<s>', $f);
+		$f = str_replace('</strike>', '</s>', $f);
 		$f = mb_convert_kana($f, 'as');
 		$per = (int) (strlen($f) / $before * 100);
 		if($option == 'debug'){
-			echo "After:".strlen($f)."Bytes<br>Compressibility:".$per."%";
+			echo 'After:',strlen($f),'Bytes<br>Compressibility:'.$per.'%';
 		}
 		echo $f;
-	}
-	
-	/**
-	 * リサイズ
-	 * 
-	 */
-	function resize($img, $width, $height, $delta_x=null, $rigidity=null){
-		//Seam Carvingによる画像の伸縮
-		$img = new Imagick($img);
-		$img->liquidRescaleImage( 500, 200, $delta_x, $rigidity);
-		return $img;
 	}
 }
 ?>
