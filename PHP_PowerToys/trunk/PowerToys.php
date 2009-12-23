@@ -4,7 +4,7 @@
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.2.5 2009/12/23
+ *  @version	PHP_PowerToys v 0.2.6 2009/12/23
  * 
  */
 class PHP_PowerToys {
@@ -469,9 +469,8 @@ class PHP_PowerToys {
 	/**
 	 * メモリ開放を行う
 	 * PHP5.3からはガベージコレクタが追加されたので意味がなくなる
-	 * 実験
 	 *
-	 * @param int $debug メモリ使用量の参照(何故か減らない？(汗 から実験 )
+	 * @param int $debug メモリ使用量の参照
 	 */
 	function garbageCollection($debug=false){
 		if($debug && preg_match('/^5\./', phpversion())){
@@ -503,18 +502,18 @@ class PHP_PowerToys {
 			echo 'Before:',strlen($f),'Bytes<br>';
 		}
 		$f = preg_replace('/\r\n|\r|\n|\t|	/', '', $f);
-		$f = str_replace('<br />', '<br>', $f);
 		$f = preg_replace('/id=\"[a-zA-Z0-9]+\" /', '', $f);
-		$f = str_replace('<strong>', '<b>', $f);
-		$f = str_replace('<\/strong>', '</b>', $f);
-		$f = str_replace('<em>', '<i>', $f);
-		$f = str_replace('</em>', '</i>', $f);
-		$f = str_replace('<strike>', '<s>', $f);
-		$f = str_replace('</strike>', '</s>', $f);
+
+		$cvt_from = array('<br />','<strong>','<\/strong>','<em>','</em>','<strike>','</strike>');
+		$cvt_to = array('<br>','<b>','</b>','<i>','</i>','<s>','</s>');
+		foreach($cvt_from as $key => $val){
+		    $f = str_replace($cvt_from[$key], $cvt_to[$key], $f);
+		}
+
 		$f = mb_convert_kana($f, 'as');
 		$per = (int) (strlen($f) / $before * 100);
 		if($option == 'debug'){
-			echo 'After:',strlen($f),'Bytes<br>Compressibility:'.$per.'%';
+			echo 'After:',strlen($f),'Bytes<br>Compressibility:',$per,'%';
 		}
 		echo $f;
 	}
