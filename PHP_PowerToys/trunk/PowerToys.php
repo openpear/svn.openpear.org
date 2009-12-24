@@ -4,13 +4,13 @@
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.2.6 2009/12/23
+ *  @version	PHP_PowerToys v 0.2.6 2009/12/25
  * 
  */
 class PHP_PowerToys {
 	
 	function PHP_PowerToys($option=null){
-		if($option=='compress') ob_start();
+		if($option==='compress') ob_start();
 	}
 	
 	/**
@@ -124,7 +124,7 @@ class PHP_PowerToys {
 		if(PHP_Powertoys::is_file_ex($str)){
 			$str = file_get_contents($str);
 		}
-		if(mb_detect_encoding($str) != 'UTF-8') return false;
+		if(mb_detect_encoding($str) !== 'UTF-8') return false;
 		if (ord($str{0}) == 0xef && ord($str{1}) == 0xbb && ord($str{2}) == 0xbf) {
         	return true;
     	}
@@ -138,14 +138,14 @@ class PHP_PowerToys {
 	 * @return string
 	 */
 	function removeBom($str){
-		if(PHP_Powertoys::is_file_ex($str)){
-			$str = file_get_contents($str);
-		}
-		if(mb_detect_encoding($str) != 'UTF-8') return false;
-		if (ord($str{0}) == 0xef && ord($str{1}) == 0xbb && ord($str{2}) == 0xbf) {
-        		$str = substr($str, 3);
-    	}
-    	return $str;
+	    if(PHP_Powertoys::is_file_ex($str)){
+		$str = file_get_contents($str);
+	    }
+	    if(mb_detect_encoding($str) !== 'UTF-8') return false;
+	    if (ord($str{0}) == 0xef && ord($str{1}) == 0xbb && ord($str{2}) == 0xbf) {
+		    $str = substr($str, 3);
+	    }
+	    return $str;
 	}
 	
 	/**
@@ -155,14 +155,14 @@ class PHP_PowerToys {
 	 * @return string
 	 */
 	function addBom($str){
-		if(PHP_Powertoys::is_file_ex($str)){
-			$str = file_get_contents($str);
-		}
-		if(mb_detect_encoding($str) != 'UTF-8') return false;
-		if (ord($str{0}) != 0xef && ord($str{1}) != 0xbb && ord($str{2}) != 0xbf) {
-        		$str = chr(0xef) . chr(0xbb) . chr(0xbf) . $str;
-		}
-    	return $str;
+	    if(PHP_Powertoys::is_file_ex($str)){
+		$str = file_get_contents($str);
+	    }
+	    if(mb_detect_encoding($str) != 'UTF-8') return false;
+	    if (ord($str{0}) != 0xef && ord($str{1}) != 0xbb && ord($str{2}) != 0xbf) {
+		$str = chr(0xef) . chr(0xbb) . chr(0xbf) . $str;
+	    }
+	    return $str;
 	}
 	
 	/**
@@ -172,12 +172,12 @@ class PHP_PowerToys {
 	 * @return 成功:TRUE 失敗:FALSE
 	 */
 	function extensionExist($extension){
-		$extension_soname = $extension . '.' . PHP_SHLIB_SUFFIX;
-		$extension_fullname = PHP_EXTENSION_DIR . '/' . $extension_soname;
-		if(!extension_loaded($extension) && !is_file($extension_fullname)) { 
-		    return false; 
-		}
-		return true;
+	    $extension_soname = $extension . '.' . PHP_SHLIB_SUFFIX;
+	    $extension_fullname = PHP_EXTENSION_DIR . '/' . $extension_soname;
+	    if(!extension_loaded($extension) && !is_file($extension_fullname)) {
+		return false;
+	    }
+	    return true;
 	}
 	
 	/**
