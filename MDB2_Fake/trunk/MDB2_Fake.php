@@ -15,7 +15,10 @@
  */
 class MDB2_Fake{
 	public static function factory($dsn){
-		return new DataBaseManager($dsn);
+        return new DataBaseManager($dsn);
+	}
+	public static function connect($dsn){
+    	return self::factory($dsn);
 	}
 }
 
@@ -285,7 +288,7 @@ class DataBaseManager extends AbstractMDB implements IMDB{
 		
 		if(!$flg_connected){
 			throw new Exception("Error:No connection has been established to the database. Cannot close connection.");
-        	}
+        }
 		
 		DB::close($db_type, $db_connection);
 		$this->set_flg_connected(false);
@@ -409,8 +412,10 @@ class DataBaseManager extends AbstractMDB implements IMDB{
 		$db_type = $this->get_db_type();
 		$db_connection = $this->get_db_connection();
 		
-		if(!$unescaped_string){
-			throw new Exception("Error: unescaped_string is empty");
+		if($unescaped_string === ""){}
+		else if($unescaped_string === 0){}
+		else if(!$unescaped_string){
+            throw new Exception("Error: unescaped_string is empty");
 		}
 		
 		$escaped_string = DB::escape($db_type, $unescaped_string, $db_connection);
