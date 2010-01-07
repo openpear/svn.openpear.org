@@ -1,0 +1,1206 @@
+<?xml version="1.0" encoding="MS932"?>
+<umlclass:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:umlclass="http://www.nec.co.jp/xmlnec/mdatools/editors/umlclass" x="-13" y="-95" id="MELkmQn0" width="943" height="950">
+  <labels text="000000" type="ForegroundColor"/>
+  <labels text="1" type="LineStyle"/>
+  <labels text="FFFFFF" type="BackgroundColor"/>
+  <labels text="000000" type="FontColor"/>
+  <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+  <labels text="11" type="FontSize"/>
+  <labels text="false" type="GridEnabled"/>
+  <labels text="false" type="GridVisible"/>
+  <labels text="false" type="GridForegroundFlag"/>
+  <labels text="12" type="GridSpacing"/>
+  <labels text="class com.nec.jp.mdatools.editors.umlclass.ClassDiagramEditor@interface com.nec.jp.mdatools.editors.model.umlclass.UMLClass@102@116@000000@FFFFFF@000000@Hiragino Kaku Gothic ProN@11@false@true" type="appointNodeList"/>
+  <nodes xsi:type="umlclass:UMLClass" x="41" y="-45" id="MELkspn0" incomings="//@edges.4" width="170" height="96">
+    <labels text="MDB" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <labels text="" type="LABEL_CLASSIFIER_BEHAVIOR"/>
+    <nodes xsi:type="umlclass:Compartment" visible="false" id="MELksxd0"/>
+    <nodes xsi:type="umlclass:Compartment" id="MELksxd1">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MELyJ6O0" width="158" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="factory" type="Name"/>
+        <labels text="Object" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="false" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MEMeUid0" width="158" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="connect" type="Name"/>
+        <labels text="Object" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:Interface" x="643" y="-41" id="MELl6if0" outgoings="//@edges.1" width="231" height="209">
+    <labels text="IMDB" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="" type="PROTOCOL"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <nodes xsi:type="umlclass:Compartment" visible="false" id="MELl6y90"/>
+    <nodes xsi:type="umlclass:Compartment" id="MELl6yA0">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MELmw2A0" width="219" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="__init__" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="false" type="IsQuery"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MELnDCY0" width="219" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="open" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="40" id="MELnFWI0" width="219" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="close" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="60" id="MELnK7n0" width="219" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="free_connection" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="80" id="MELnVna0" width="219" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="query" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="100" id="MELnYi30" width="219" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="beginTransaction" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="120" id="MELna2A0" width="219" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="rollback" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="140" id="MELnahh0" width="219" height="16">
+        <labels text="public" type="Visibility"/>
+        <labels text="commit" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:UMLClass" x="613" y="223" id="MELmOcc0" outgoings="//@edges.0" width="267" height="359">
+    <labels text="AbstractMDB" type="Name"/>
+    <labels text="true" type="Abstract"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <labels text="" type="LABEL_CLASSIFIER_BEHAVIOR"/>
+    <nodes xsi:type="umlclass:Compartment" id="MELmP7f0">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Property" id="MELnuHr0">
+        <labels text="private" type="Visibility"/>
+        <labels text="$dsn" type="Name"/>
+        <labels text="Array" type="Type"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Property" id="MELo8S40">
+        <labels text="private" type="Visibility"/>
+        <labels text="$flg_connected" type="Name"/>
+        <labels text="int" type="Type"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+    </nodes>
+    <nodes xsi:type="umlclass:Compartment" id="MELmP7g0">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MELo4Qs0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_db_type" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="" type="Modifier"/>
+        <labels text="false" type="Abstract"/>
+        <labels text="false" type="IsQuery"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MELoVI50" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_db_type" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="" type="Modifier"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="40" id="MELogWY0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_db_connection" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="" type="Modifier"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="60" id="MELokan0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_db_connection" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="" type="Modifier"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="80" id="MELorWk0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_db_username" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="" type="Modifier"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="100" id="MELoxW70" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_db_username" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="" type="Modifier"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="120" id="MELrbP60" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_db_password" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="140" id="MELrfzM0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_db_password" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="160" id="MELrm1y0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_db_server" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="180" id="MELrs590" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_db_server" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="200" id="MELsFMp0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_db_database" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="220" id="MELsMZP0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_db_database" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="240" id="MELsZQU0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_flg_connected" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="260" id="MELsdEf0" width="255" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_flg_connected" type="Name"/>
+        <labels text="Int" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:UMLClass" x="287" y="39" id="MELtCHZ0" incomings="//@edges.0 //@edges.1 //@edges.5 //@edges.7" outgoings="//@edges.4" width="197" height="203">
+    <labels text="DataBaseManager" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="1" type="LineStyle"/>
+    <nodes xsi:type="umlclass:Compartment" visible="false" id="MELtCmT0"/>
+    <nodes xsi:type="umlclass:Compartment" id="MELtCmT1">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MELuSFJ0" width="185" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="__construct" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MELuYPO0" width="185" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="__init__" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="40" id="MELufF70" width="185" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="__analyse_dsn__" type="Name"/>
+        <labels text="Array" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="60" id="MELuwqn0" width="185" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="new_connection" type="Name"/>
+        <labels text="Boolean" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="" type="RaisedException"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="80" id="MELw4cC0" width="185" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="open" type="Name"/>
+        <labels text="Boolean" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="100" id="MELwS9F0" width="185" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="close" type="Name"/>
+        <labels text="Boolean" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="120" id="MELwi4N0" width="185" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="free_connection" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="140" id="MELwsUS0" width="185" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="query" type="Name"/>
+        <labels text="Object" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:UMLClass" x="310" y="392" id="MELxMeL0" incomings="//@edges.6" outgoings="//@edges.5" width="166" height="97">
+    <labels text="SolveQuery" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="1" type="LineStyle"/>
+    <nodes xsi:type="umlclass:Compartment" visible="false" id="MELxNAC0"/>
+    <nodes xsi:type="umlclass:Compartment" id="MELxNAC1">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MELxi4v0" width="154" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="factory" type="Name"/>
+        <labels text="Object" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:UMLClass" x="37" y="449" id="MELz1GA0" incomings="//@edges.3 //@edges.2 //@edges.8" outgoings="//@edges.6" width="162" height="110">
+    <labels text="Query" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="1" type="LineStyle"/>
+    <nodes xsi:type="umlclass:Compartment" visible="false" id="MELz1SO0"/>
+    <nodes xsi:type="umlclass:Compartment" id="MELz1SO1">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MEMHHCj0" width="150" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="__construct" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MEMHM5i0" width="150" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="fetchRow" type="Name"/>
+        <labels text="Array" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="40" id="MEMHSPl0" width="150" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="fetchAll" type="Name"/>
+        <labels text="Array" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="60" id="MEMHZYS0" width="150" height="14">
+        <labels text="public" type="Visibility"/>
+        <labels text="free" type="Name"/>
+        <labels text="Boolean" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:Interface" x="289" y="631" id="MELzIs80" outgoings="//@edges.3" width="162" height="109">
+    <labels text="ISolveQuery" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="" type="PROTOCOL"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <nodes xsi:type="umlclass:Compartment" visible="false" id="MELzJSK0"/>
+    <nodes xsi:type="umlclass:Compartment" id="MELzJSK1">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MELzgsA0" width="150" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="fetchRow" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MELzpaV0" width="150" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="fetchAll" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="40" id="MELzr6T0" width="150" height="16">
+        <labels text="public" type="Visibility"/>
+        <labels text="free" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:UMLClass" x="37" y="630" id="MELzzmm0" outgoings="//@edges.2" width="191" height="175">
+    <labels text="AbstractSolveQuery" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="1" type="LineStyle"/>
+    <nodes xsi:type="umlclass:Compartment" id="MEM00Kw0">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Property" id="MEM6BWQ0">
+        <labels text="public" type="Visibility"/>
+        <labels text="$db_type" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Property" id="MEM6KzX0">
+        <labels text="public" type="Visibility"/>
+        <labels text="$result" type="Name"/>
+        <labels text="int" type="Type"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+      </nodes>
+    </nodes>
+    <nodes xsi:type="umlclass:Compartment" id="MEM00Kw1">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MEM6MzU0" width="179" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_db_type" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MEM6RlW0" width="179" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_db_type" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="40" id="MEM6bIW0" width="179" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="set_result" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="60" id="MEM6duU0" width="179" height="17">
+        <labels text="protected" type="Visibility"/>
+        <labels text="get_result" type="Name"/>
+        <labels text="Object" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <nodes xsi:type="umlclass:UMLClass" x="45" y="183" id="MEM6qHq0" outgoings="//@edges.7 //@edges.8" width="161" height="158">
+    <labels text="DB" type="Name"/>
+    <labels text="false" type="Abstract"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="1" type="LineStyle"/>
+    <nodes xsi:type="umlclass:Compartment" visible="false" id="MEM6qkR0"/>
+    <nodes xsi:type="umlclass:Compartment" id="MEM6qkR1">
+      <labels text="000000" type="ForegroundColor"/>
+      <labels text="1" type="LineStyle"/>
+      <labels text="FFFFFF" type="BackgroundColor"/>
+      <labels text="000000" type="FontColor"/>
+      <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+      <labels text="11" type="FontSize"/>
+      <nodes xsi:type="umlclass:Operation" id="MEMEZf40" width="149" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="connect" type="Name"/>
+        <labels text="Array" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="20" id="MEMEogR0" width="149" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="select_db" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="40" id="MEMEwtA0" width="149" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="query" type="Name"/>
+        <labels text="Array" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="60" id="MEMF61B0" width="149" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="fetch_assoc" type="Name"/>
+        <labels text="Array" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="80" id="MEMGckh0" width="149" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="escape" type="Name"/>
+        <labels text="String" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+      <nodes xsi:type="umlclass:Operation" y="100" id="MEMGmqG0" width="149" height="17">
+        <labels text="public" type="Visibility"/>
+        <labels text="close" type="Name"/>
+        <labels text="void" type="Type"/>
+        <labels text="sequential" type="Concurrency"/>
+        <labels text="false" type="AutoResizing"/>
+        <labels text="true" type="TextFolding"/>
+        <labels text="000000" type="ForegroundColor"/>
+        <labels text="1" type="LineStyle"/>
+        <labels text="FFFFFF" type="BackgroundColor"/>
+        <labels text="000000" type="FontColor"/>
+        <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+        <labels text="11" type="FontSize"/>
+        <labels text="true" type="IsLeaf"/>
+        <labels text="true" type="Static"/>
+      </nodes>
+    </nodes>
+  </nodes>
+  <edges xsi:type="umlclass:Abstraction" id="MELtJlJ0" source="//@nodes.2" target="//@nodes.3">
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.0074626864,0.5)" type="SourceAnchor"/>
+    <labels text="(0.9949495,0.5)" type="TargetAnchor"/>
+    <labels x="-23" y="-51" width="88" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="614" y="402"/>
+    <waypoints x="483" y="140"/>
+  </edges>
+  <edges xsi:type="umlclass:Realization" id="MELtfI30" source="//@nodes.1" target="//@nodes.3">
+    <labels text="implements" type="Stereotype"/>
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.5,0.5)" type="SourceAnchor"/>
+    <labels text="(0.9949495,0.12254902)" type="TargetAnchor"/>
+    <labels x="-54" y="-47" width="89" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="758" y="63"/>
+    <waypoints x="483" y="63"/>
+  </edges>
+  <edges xsi:type="umlclass:Abstraction" id="MEM070I0" source="//@nodes.7" target="//@nodes.5">
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.5,0.0056818184)" type="SourceAnchor"/>
+    <labels text="(0.5030675,0.981982)" type="TargetAnchor"/>
+    <labels x="-89" y="-6" width="88" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="495" y="570"/>
+    <waypoints x="115" y="475"/>
+  </edges>
+  <edges xsi:type="umlclass:Realization" id="MEM0CIN0" source="//@nodes.6" target="//@nodes.5">
+    <labels text="implements" type="Stereotype"/>
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.5030675,0.009090909)" type="SourceAnchor"/>
+    <labels text="(0.5030675,0.981982)" type="TargetAnchor"/>
+    <labels x="10" y="-25" width="89" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="470" y="634"/>
+    <waypoints x="121" y="560"/>
+  </edges>
+  <edges xsi:type="umlclass:Composition" id="MEMCmmO0" source="//@nodes.3" target="//@nodes.0">
+    <labels text="合成" type="Name"/>
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.005050505,0.5)" type="SourceAnchor"/>
+    <labels text="(0.50292397,0.5051546)" type="TargetAnchor"/>
+    <labels x="-3" y="-29" width="28" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels x="9" y="5" width="20" height="23" text="true" type="TargetLowerLabelLocation"/>
+    <labels x="5" y="-28" width="20" height="23" text="true" type="SourceLowerLabelLocation"/>
+    <labels x="-38" y="-28" width="20" height="23" text="true" type="SourceUpperLabelLocation"/>
+    <labels x="-11" y="5" width="20" height="23" text="true" type="TargetUpperLabelLocation"/>
+    <labels x="-21" y="15" width="20" height="23" text="true" type="TargetFarLowerLabelLocation"/>
+    <labels x="15" y="15" width="20" height="23" text="true" type="SourceFarLowerLabelLocation"/>
+    <labels x="-3" y="-42" width="20" height="23" text="true" type="MiddleFarUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="287" y="164"/>
+    <waypoints x="132" y="5"/>
+  </edges>
+  <edges xsi:type="umlclass:Composition" id="MEMCqly0" source="//@nodes.4" target="//@nodes.3">
+    <labels text="合成" type="Name"/>
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.5988024,0.010204081)" type="SourceAnchor"/>
+    <labels text="(0.5,0.9880952)" type="TargetAnchor"/>
+    <labels x="6" y="-15" width="28" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels x="5" y="5" width="20" height="23" text="true" type="TargetLowerLabelLocation"/>
+    <labels x="5" y="-28" width="20" height="23" text="true" type="SourceLowerLabelLocation"/>
+    <labels x="-11" y="-28" width="20" height="23" text="true" type="SourceUpperLabelLocation"/>
+    <labels x="-11" y="5" width="20" height="23" text="true" type="TargetUpperLabelLocation"/>
+    <labels x="-21" y="15" width="20" height="23" text="true" type="TargetFarLowerLabelLocation"/>
+    <labels x="15" y="15" width="20" height="23" text="true" type="SourceFarLowerLabelLocation"/>
+    <labels x="-3" y="-42" width="20" height="23" text="true" type="MiddleFarUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="409" y="392"/>
+    <waypoints x="385" y="287"/>
+  </edges>
+  <edges xsi:type="umlclass:Composition" id="MEMCthR0" source="//@nodes.5" target="//@nodes.4">
+    <labels text="合成" type="Name"/>
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.993865,0.5045045)" type="SourceAnchor"/>
+    <labels text="(0.005988024,0.5)" type="TargetAnchor"/>
+    <labels x="-3" y="-29" width="28" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels x="-11" y="8" width="20" height="23" text="true" type="TargetLowerLabelLocation"/>
+    <labels x="5" y="5" width="20" height="23" text="true" type="SourceLowerLabelLocation"/>
+    <labels x="5" y="-29" width="20" height="23" text="true" type="SourceUpperLabelLocation"/>
+    <labels x="-11" y="-28" width="20" height="23" text="true" type="TargetUpperLabelLocation"/>
+    <labels x="-21" y="15" width="20" height="23" text="true" type="TargetFarLowerLabelLocation"/>
+    <labels x="15" y="15" width="20" height="23" text="true" type="SourceFarLowerLabelLocation"/>
+    <labels x="-3" y="-42" width="20" height="23" text="true" type="MiddleFarUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="201" y="507"/>
+    <waypoints x="310" y="440"/>
+  </edges>
+  <edges xsi:type="umlclass:Usage" id="MEMDGUE0" source="//@nodes.8" target="//@nodes.3">
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.99382716,0.5)" type="SourceAnchor"/>
+    <labels text="(0.005050505,0.8888889)" type="TargetAnchor"/>
+    <labels x="-23" y="-29" width="47" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="205" y="262"/>
+    <waypoints x="287" y="262"/>
+  </edges>
+  <edges xsi:type="umlclass:Usage" id="MEMDQll0" source="//@nodes.8" target="//@nodes.5">
+    <labels text="Straight" type="LineRouting"/>
+    <labels text="false" type="AutoResizing"/>
+    <labels text="true" type="TextFolding"/>
+    <labels text="2.6.0" type="version"/>
+    <labels text="(0.5,0.9848485)" type="SourceAnchor"/>
+    <labels text="(0.5030675,0.009009009)" type="TargetAnchor"/>
+    <labels x="-42" y="-17" width="47" height="23" text="true" type="MiddleUpperLabelLocation"/>
+    <labels text="000000" type="ForegroundColor"/>
+    <labels text="1" type="LineStyle"/>
+    <labels text="FFFFFF" type="BackgroundColor"/>
+    <labels text="000000" type="FontColor"/>
+    <labels text="Hiragino Kaku Gothic ProN" type="FontFamily"/>
+    <labels text="11" type="FontSize"/>
+    <waypoints x="127" y="343"/>
+    <waypoints x="121" y="452"/>
+  </edges>
+</umlclass:ClassDiagram>
