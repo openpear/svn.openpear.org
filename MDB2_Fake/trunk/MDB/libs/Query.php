@@ -10,6 +10,15 @@
  * @author    Ike Tohru <ike.tohru@gmail.com>
  */
 
+if (!defined('PATH_SEPARATOR')) {
+  if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+    define('PATH_SEPARATOR', ':');
+  } else {
+    define('PATH_SEPARATOR', ';');
+  }
+}
+set_include_path(PATH_SEPARATOR);
+
 require_once("DB.php");
 
 /**

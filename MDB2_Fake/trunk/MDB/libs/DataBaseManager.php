@@ -10,6 +10,15 @@
  * @author    Ike Tohru <ike.tohru@gmail.com>
  */
 
+if (!defined('PATH_SEPARATOR')) {
+  if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+    define('PATH_SEPARATOR', ':');
+  } else {
+    define('PATH_SEPARATOR', ';');
+  }
+}
+set_include_path(PATH_SEPARATOR);
+
 require_once("SolveQuery.php");
 require_once("DB.php");
 
@@ -247,18 +256,18 @@ class DataBaseManager extends AbstractMDB implements IMDB{
 		
 		try{
 		  $db_connection = DB::connect($db_type, $db_server, $db_username, $db_password, true);
-			$this->set_db_connection($db_connection);
+		  $this->set_db_connection($db_connection);
 			
-			//Select Database.
-			DB::select_db($db_type, $db_database);
-			
-			if(!$db_connection){
-				throw new Exception('MySQL Connection Database Error: ' . mysql_error());
-			}
-			else{
-				$this->set_flg_connected(true);
-				return true;
-			}
+		  //Select Database.
+		  DB::select_db($db_type, $db_database);
+		  
+		  if(!$db_connection){
+		    throw new Exception('MySQL Connection Database Error: ' . mysql_error());
+		  }
+		  else{
+		    $this->set_flg_connected(true);
+		    return true;
+		  }
 		}
 		catch (Exception $e){
 			die($e->GetMessage());
@@ -278,8 +287,8 @@ class DataBaseManager extends AbstractMDB implements IMDB{
 		$flg_connected = $this->get_flg_connected();
 		
 		if(!$flg_connected){
-			throw new Exception("Error:No connection has been established to the database. Cannot close connection.");
-        }
+		  throw new Exception("Error:No connection has been established to the database. Cannot close connection.");
+		}
 		
 		DB::close($db_type, $db_connection);
 		$this->set_flg_connected(false);
@@ -293,8 +302,8 @@ class DataBaseManager extends AbstractMDB implements IMDB{
 	 * @access public
 	 */
 	final public function free_connection(){
-		$this->db_connection = null;
-		$this->set_flg_connected(false);
+	   $this->set_db_connection(null);
+	   $this->set_flg_connected(false);
 	}
 	
 	/**
