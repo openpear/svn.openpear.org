@@ -4,10 +4,10 @@
 require_once('../MDB/MDB.php');
 
 //dsnの定義
-define('DB_USER', 'root');        //データベースのユーザー名
-define('DB_PASS', 'I8LNNOCrNh');  //データーベースのパスワード
-define('DB_HOST', 'localhost');   //データーベースのホスト
-define('DB_DATABASE', 'MDBTest'); //データーベースのデーターベース名
+define('DB_USER', '');     //データベースのユーザー名
+define('DB_PASS', '');     //データーベースのパスワード
+define('DB_HOST', '');     //データーベースのホスト
+define('DB_DATABASE', ''); //データーベースのデーターベース名
 define('DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_DATABASE);
 
 //接続の生成
@@ -21,12 +21,8 @@ if(!$result){
   throw new Exception($result->getMessage());
 }
 $con->close();
-print_r($con);
-$con->free_connection();
-print_r($con);
 
 $data = $result->fetchAll();
-
-#print_r($data);
+print_r($data);
 
 ?>
