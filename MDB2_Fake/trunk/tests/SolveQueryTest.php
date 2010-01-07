@@ -10,7 +10,7 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
-require_once "../src/libs/SolveQuery.php";
+require_once "../MDB/libs/SolveQuery.php";
 
 /**
  * Test class for SolveQuery.
