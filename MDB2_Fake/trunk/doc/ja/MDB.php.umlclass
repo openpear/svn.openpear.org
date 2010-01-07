@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="MS932"?>
-<umlclass:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:umlclass="http://www.nec.co.jp/xmlnec/mdatools/editors/umlclass" x="-13" y="-95" id="MELkmQn0" width="943" height="950">
+<umlclass:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:umlclass="http://www.nec.co.jp/xmlnec/mdatools/editors/umlclass" x="-13" y="-95" id="MELkmQn0" width="1242" height="950">
   <labels text="000000" type="ForegroundColor"/>
   <labels text="1" type="LineStyle"/>
   <labels text="FFFFFF" type="BackgroundColor"/>
@@ -730,7 +730,7 @@
     </nodes>
   </nodes>
   <nodes xsi:type="umlclass:Interface" x="289" y="631" id="MELzIs80" outgoings="//@edges.3" width="162" height="109">
-    <labels text="ISolveQuery" type="Name"/>
+    <labels text="IQuery" type="Name"/>
     <labels text="false" type="Abstract"/>
     <labels text="" type="PROTOCOL"/>
     <labels text="false" type="AutoResizing"/>
@@ -794,7 +794,7 @@
     </nodes>
   </nodes>
   <nodes xsi:type="umlclass:UMLClass" x="37" y="630" id="MELzzmm0" outgoings="//@edges.2" width="191" height="175">
-    <labels text="AbstractSolveQuery" type="Name"/>
+    <labels text="AbstractQuery" type="Name"/>
     <labels text="false" type="Abstract"/>
     <labels text="false" type="AutoResizing"/>
     <labels text="true" type="TextFolding"/>
