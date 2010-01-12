@@ -4,13 +4,18 @@
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.2.6 2009/12/25
+ *  @version	PHP_PowerToys v 0.2.6 2010/01/12
  * 
  */
 class PHP_PowerToys {
 	
 	function PHP_PowerToys($option=null){
-		if($option==='compress') ob_start();
+		if($option==='compress') {
+		    require_once 'Net/UserAgent/Mobile.php';
+		    $mobile =& Net_UserAgent_Mobile::factory();
+		    if (!$mobile->isDocomo() || !$mobile->isSoftbank() || !$mobile->isEZWeb()) return false;
+		    ob_start();
+		}
 	}
 	
 	/**
@@ -495,6 +500,9 @@ class PHP_PowerToys {
 	 *
 	 */
 	function compressMobileHtml($option=null){
+		require_once 'Net/UserAgent/Mobile.php';
+		$mobile =& Net_UserAgent_Mobile::factory();
+		if (!$mobile->isDocomo() || !$mobile->isSoftbank() || !$mobile->isEZWeb()) return false;
 		$f = ob_get_contents();
 		ob_clean();
 		$before = strlen($f);
@@ -502,7 +510,17 @@ class PHP_PowerToys {
 			echo 'Before:',strlen($f),'Bytes<br>';
 		}
 		$f = preg_replace('/\r\n|\r|\n|\t|	/', '', $f);
+		$f = preg_replace("/[a-zA-Z0-9]+=\"{2}?/", "", $f);
+		$f = str_replace("&nbsp;", " ", $f);
+		$f = str_replace("&amp;", "&", $f);
+		$f = trim($f);
+		$f = trim($f,"\x00..\x1F");
 		$f = preg_replace('/id=\"[a-zA-Z0-9]+\" /', '', $f);
+		$f = preg_replace('/style=\"[a-zA-Z0-9]+\" /', "", $f);
+		preg_match_all("/(<!--.+?-->)/ms", $f, $reg);
+		foreach($reg[0] as $val){
+		    $f = str_replace($val, "", $f);
+		}
 
 		$cvt_from = array('<br />','<strong>','<\/strong>','<em>','</em>','<strike>','</strike>');
 		$cvt_to = array('<br>','<b>','</b>','<i>','</i>','<s>','</s>');
@@ -516,6 +534,109 @@ class PHP_PowerToys {
 			echo 'After:',strlen($f),'Bytes<br>Compressibility:',$per,'%';
 		}
 		echo $f;
+	}
+
+	/**
+	 * 配列をオブジェクト(DTO)にして返す sample : $object->get
+	 * 但し、多次元配列の場合はgetで取れた値も配列のまま
+	 *
+	 * @param Array $array
+	 * @return Object
+	 */
+	function arrayToDto($array){
+	    $dto = & new DTO();
+	    foreach($array as $key => $val){
+		$dto->$key = $val;
+	    }
+	    return $dto;
+	}
+
+	/**
+	 * PHP_PowerToysでオブジェクト化(DTO)したのを配列に変換する
+	 *
+	 * @param Object $dto
+	 * @return Array
+	 */
+	function dtoToArray($dto){
+	    $array = array();
+	    foreach($dto as $key => $val){
+		$array[$key] = $val;
+	    }
+	    return $array;
+	}
+
+	/**
+	 * モザイクをかける(大昔に書いたコードの流用なので汚染済みw)
+	 *
+	 * @param string $filename ファイル名
+	 * @param int $level モザイクレベル
+	 * @return ImageResource
+	 */
+	function mosaic($filename, $level=2){
+	    if(!PHP_PowerToys::is_file_ex($filename)) return false;
+	    if(!PHP_PowerToys::extensionExist('gd')) return false;
+//	    $img = imagecreatefromjpeg($filename);
+	    $img = PHP_PowerToys::iopen($filename);
+	    $x = imagesx($img);
+	    $y = imagesy($img);
+	    if($x <= $level){
+		$level = $x;
+	    }
+	    define("BLOCK_SIZE", $level);
+
+	    //新しいイメージを元画像サイズを元に作成
+	    $newimg = imagecreatetruecolor($x,$y);
+
+	    $xx = 0;
+	    $res = $x * $y;
+
+	    for($i=0;$i<=$res;$i++){
+		for($j=$xx;$j<=$xx+BLOCK_SIZE;$j++){
+		    $rgb = imagecolorat($img, $j, $yy);
+		}
+		if($i % BLOCK_SIZE == 0 && $i != 0){
+		    $r[$k] = ($rgb >> 16) & 0xFF;
+		    $g[$k] = ($rgb >> 8) & 0xFF;
+		    $b[$k] = $rgb & 0xFF;
+		    $k++;
+		}
+		if($yy == $y){
+		    $xx += BLOCK_SIZE;
+		    $yy = 0;
+		}
+
+		$yy++;
+
+	    }
+	    $k = 0;
+	    $yy = 0;
+	    $xx = 0;
+	    //端から端までスキャンして色を取得
+	    for($i=0;$i<=$res;$i++){
+		for($j=$xx;$j<=$xx+BLOCK_SIZE;$j++){
+		    imagecolorallocate($newimg, $r[$k], $g[$k], $b[$k]); //使用する色をその都度登録
+		    imagesetpixel ($newimg,$j,$yy, imagecolorclosest($newimg, $r[$k], $g[$k], $b[$k])); //1pxずつ描画
+		}
+		if($i % BLOCK_SIZE == 0 && $i != 0){
+		    $k++;
+		}
+		if($yy == $y){
+		    $xx += BLOCK_SIZE;
+		    $yy = 0;
+		}
+		$yy++;
+	    }
+
+	    return $newimg;
+
+	    //処理が終わったら古いイメージ情報を破棄
+	    imagedestroy($img);
+	}
+}
+
+class DTO {
+	function get($key){
+	    return $this->$key;
 	}
 }
 ?>
