@@ -44,20 +44,12 @@ class Services_Twitter_Connection
      * Services_Twitterの通信クラスをインスタンス化する
      * @param Services_Twitter_Config $config Services_Twitter設定クラス
      */
-    public function __construct($config) {
+    public function __construct(&$config) {
         $this->_config = $config;
 
         // 認証情報を取得する
-        $authFile = $this->_config->getAuthFile();
-        if (file_exists($authFile)) {
-            $this->_authInfo = unserialize(file_get_contents($authFile));
-        } else {
-            $this->_authInfo = array(
-                 'oauth_access_token' => null
-                ,'oauth_access_token_secret' => null
-            );
-        }
-
+        $config = $this->_config;
+        $this->_authInfo = $config->raiseTokenRead();
     }
 
     /**
@@ -124,11 +116,22 @@ class Services_Twitter_Connection
 
         $_SESSION['oauth_state'] === 'authorized';
 
-        $authFile = $this->_config->getAuthFile();
-        file_put_contents($authFile, serialize($this->_authInfo));
+        $config = $this->_config;
+
+        $config->raiseTokenSave($this->_authInfo);
+
+        $authValue = sha1($config->getApplicationKey()
+                            . $this->_oauth->getToken()
+                            . $this->_oauth->getTokenSecret());
+
+        setcookie($this->_config->getCookieName(), $authValue);
 
         // リダイレクト
-        header('Location: ' . $this->_config->getCallback());
+        header('Location: ' . $config->getCallback());
+    }
+
+    public function sendRequest($target, $args, $method) {
+        return $this->_oauth->sendRequest($target, $args, $method);
     }
 
     /**
@@ -144,11 +147,16 @@ class Services_Twitter_Connection
 
         $requri = $this->_oauth->getAuthorizeURL('https://twitter.com/oauth/authorize');
 
-        if ($this->_auth_page !== null) {
-            require_once($this->_auth_page);
+        $authPage = $this->_config->getAuthPage();
+        if ($authPage !== null) {
+            require_once($authPage);
         } else {
             printf('<a href="%s">認証</a>', $requri);
         }
         die(0);
+    }
+
+    public function &getAuthInfo() {
+    	return $this->_authInfo;
     }
 }
