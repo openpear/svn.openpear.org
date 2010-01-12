@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<APIDefine>
+  <!-- タイムライン関連のAPI -->
+  <API function="getPublicTimeline" comment="公開かつアイコンを設定済みのユーザの最新のステータスを取得する(最大20件)">
+    <target>http://twitter.com/statuses/public_timeline.json</target>
+  </API>
+  <API function="getHomeTimeline" comment="自分と自分のfriendの過去24時間以内のステータス(retweetを含む)から最大20件を取得する(count引数使用時は最大200件)">
+    <target>http://twitter.com/statuses/home_timeline.json</target>
+    <args>
+      <option name="since_id" comment="指定したIDより大きな値のIDのステータスのみ取得する" />
+      <option name="max_id" comment="指定したステータスID以下の値のIDのステータスのみ取得する" />
+      <option name="count" comment="指定した数のステータスを取得する。ステータス数は最大 200まで指定可能" />
+      <option name="page" comment="ページ番号を指定することで、過去の任意の発言をcount件単位で取得する" />
+    </args>
+  </API>
+  <API function="getFriendsTimeline" comment="自分と自分のfriendの過去24時間以内のステータスから最大20件を取得する(count引数使用時は最大200件)">
+    <target>http://twitter.com/statuses/friends_timeline.json</target>
+    <target link="id">http://twitter.com/statuses/friends_timeline/%s.json</target>
+    <args>
+      <option name="id" comment="(削除予定?)指定したIDまたはスクリーン名のユーザのfriendのステータスを取得する" />
+      <option name="since_id" comment="指定したIDより大きな値のIDのステータスのみ取得する" />
+      <option name="max_id" comment="指定したステータスID以下の値のIDのステータスのみ取得する" />
+      <option name="count" comment="指定した数のステータスを取得する。ステータス数は最大 200 まで指定可能" />
+      <option name="page" comment="ページ番号を指定することで、過去の任意の発言をcount件単位で取得する" />
+    </args>
+  </API>
+  <API function="getUserTimeline">
+    <target>http://twitter.com/statuses/user_timeline.json</target>
+    <target link="id">http://twitter.com/statuses/user_timeline/%s.json</target>
+    <args>
+      <option name="id" />
+      <option name="user_id" />
+      <option name="screen_name" />
+      <option name="since_id" />
+      <option name="max_id" />
+      <option name="page" />
+    </args>
+  </API>
+  <API function="getMentions">
+    <target>http://twitter.com/statuses/mentions.json</target>
+    <args>
+      <option name="since_id" />
+      <option name="max_id" />
+      <option name="page" />
+      <option name="count" />
+    </args>
+  </API>
+  <API function="getRetweetedByMe">
+    <target>http://twitter.com/statuses/retweeted_by_me.json</target>
+    <args>
+      <option name="since_id" />
+      <option name="max_id" />
+      <option name="page" />
+      <option name="count" />
+    </args>
+  </API>
+  <API function="getRetweetedToMe">
+    <target>http://twitter.com/statuses/retweeted_to_me.json</target>
+    <args>
+      <option name="since_id" />
+      <option name="max_id" />
+      <option name="page" />
+      <option name="count" />
+    </args>
+  </API>
+  <API function="getRetweetedOfMe">
+    <target>http://twitter.com/statuses/retweets_of_me.json</target>
+    <args>
+      <option name="since_id" />
+      <option name="max_id" />
+      <option name="page" />
+      <option name="count" />
+    </args>
+  </API>
+  <!-- ステータス関連のAPI -->
+  <API function="showStatus">
+    <target link="id">http://twitter.com/statuses/show/%s.json</target>
+    <args>
+      <require name="id" />
+    </args>
+  </API>
+  <API function="updateStatus">
+    <method>POST</method>
+    <target>http://twitter.com/statuses/update.json</target>
+    <args>
+      <require name="status" />
+      <option name="in_reply_to_status_id" />
+      <option name="lat" />
+      <option name="long" />
+    </args>
+  </API>
+  <API function="destroyStatus">
+    <method>DELETE</method>
+    <target link="id">http://twitter.com/statuses/destroy/%s.json</target>
+    <args>
+      <require name="id" />
+    </args>
+  </API>
+  <API function="retweetStatus">
+    <method>PUT</method>
+    <target link="id">http://twitter.com/statuses/retweet/%s.json</target>
+    <args>
+      <require name="id" />
+    </args>
+  </API>
+  <API function="getRetweets">
+    <target link="id">http://twitter.com/statuses/retweets/%s.json</target>
+    <args>
+      <require name="id" />
+      <option name="count" />
+    </args>
+  </API>
+  <!-- ユーザ情報関連のAPI -->
+  <API function="getFriends">
+    <target>http://twitter.com/statuses/friends.json</target>
+    <target link="id">http://twitter.com/statuses/friends/%s.json</target>
+    <args>
+      <option name="id" />
+      <option name="user_id" />
+      <option name="screen_name" />
+      <option name="cursor" />
+    </args>
+  </API>
+  <API function="getFollowers">
+    <target>http://twitter.com/statuses/followers.json</target>
+    <target link="id">http://twitter.com/statuses/followers/%s.json</target>
+    <args>
+      <option name="id" />
+      <option name="user_id" />
+      <option name="screen_name" />
+      <option name="cursor" />
+    </args>
+  </API>
+  <API function="showUser">
+    <target>http://twitter.com/users/show.json</target>
+    <target link="id">http://twitter.com/users/show/%s.json</target>
+    <args>
+      <require select="1" name="id" />
+      <require select="1" name="user_id" />
+      <require select="1" name="screen_name" />
+    </args>
+  </API>
+  <API function="searchUser">
+    <target>http://api.twitter.com/1/users/search.json</target>
+    <args>
+      <require name="q" />
+      <option name="per_page" />
+      <option name="page" />
+    </args>
+  </API>
+  <!-- ダイレクトメッセージ関連のAPI -->
+  <API function="getReceivedDM">
+    <target>http://twitter.com/direct_messages.json</target>
+    <args>
+      <option name="since_id" />
+      <option name="max_id" />
+      <option name="count" />
+      <option name="page" />
+    </args>
+  </API>
+  <API function="getSentDM">
+    <target>http://twitter.com/direct_messages/sent.json</target>
+    <args>
+      <option name="since_id" />
+      <option name="max_id" />
+      <option name="count" />
+      <option name="page" />
+    </args>
+  </API>
+  <API function="sendDM">
+    <method>POST</method>
+    <target>http://twitter.com/direct_messages/new.json</target>
+    <args>
+      <require select="1" name="user" />
+      <require select="1" name="screen_name" />
+      <require select="1" name="user_id" />
+      <require name="text" />
+    </args>
+  </API>
+  <API function="destroyDM">
+    <method>DELETE</method>
+    <target link="id">http://twitter.com/direct_messages/destroy/%s.json</target>
+    <args>
+      <require name="id" />
+    </args>
+  </API>
+  <!-- フレンド関連のAPI -->
+  <API function="follow">
+    <method>POST</method>
+	<target>http://twitter.com/friendships/create.json</target>
+	<target link="id">http://twitter.com/friendships/create/%s.json</target>
+	<args>
+	  <require select="1" name="id" />
+      <require select="1" name="screen_name" />
+      <require select="1" name="user_id" />
+	  <option name="follow" />
+	</args>
+  </API>
+  <API function="remove">
+    <method>DELETE</method>
+	<target>http://twitter.com/friendships/destroy.json</target>
+	<target link="id">http://twitter.com/friendships/destroy/%s.json</target>
+	<args>
+	  <require select="1" name="id" />
+      <require select="1" name="screen_name" />
+      <require select="1" name="user_id" />
+	</args>
+  </API>
+  <API function="existsFriendships">
+    <target>http://twitter.com/friendships/exists.json</target>
+	<args>
+	  <require name="user_a" />
+	  <require name="user_b" />
+	</args>
+  </API>
+  <API function="showFriendships">
+    <target>http://twitter.com/friendships/show.json</target>
+	<args>
+	  <option select="1" name="source_id" />
+	  <option select="1" name="source_screen_name" />
+	  <require select="2" name="target_id" />
+	  <require select="2" name="target_screen_name" />
+	</args>
+  </API>
+  
+  <!-- ソーシャルグラフ関連のAPI -->
+  <API function="getFollowingList">
+    <target>http://twitter.com/friends/ids.json</target>
+	<target link="id">http://twitter.com/friends/ids/%s.json</target>
+	<args>
+	  <option name="id" />
+	  <option name="user_id" />
+	  <option name="screen_name" />
+	  <option name="page" />
+	</args>
+  </API>
+  
+  <API function="getFollowerssList">
+    <target>http://twitter.com/followers/ids.json</target>
+	<target link="id">http://twitter.com/followers/ids/%s.json</target>
+	<args>
+	  <option name="id" />
+	  <option name="user_id" />
+	  <option name="screen_name" />
+	  <option name="page" />
+	</args>
+  </API>
+  
+  <!-- アカウント関連のAPI -->
+  <API function="updateLocation">
+    <method>POST</method>
+    <target>http://twitter.com/account/update_location.json</target>
+	<args>
+	  <require name="location" />
+	</args>
+  </API>
+  <API function="getRateLimitStatus">
+    <target>http://twitter.com/account/rate_limit_status.json</target>
+  </API>
+  
+  <!-- お気に入り関連のAPI -->
+  <API function="getFavorites">
+    <target>http://twitter.com/favorites.json</target>
+    <target link="id">http://twitter.com/favorites/%s.json</target>
+	<args>
+	  <option name="id" />
+	  <option name="page" />
+	</args>
+  </API>
+  <API function="setFavorite">
+    <method>POST</method>
+    <target link="id">http://twitter.com/favorites/create/%s.json</target>
+	<args>
+	  <require name="id" />
+	</args>
+  </API>
+  <API function="deleteFavorite">
+    <method>DELETE</method>
+    <target link="id">http://twitter.com/favorites/destroy/%s.json</target>
+	<args>
+	  <require name="id" />
+	</args>
+  </API>
+  
+  <!-- ブロック関連のAPI -->
+  <API function="setBlock" comment="指定ユーザをブロックする。指定ユーザが friend だった場合、friend から外した上でブロックする">
+    <method>POST</method>
+	<target>http://twitter.com/blocks/create.json</target>
+	<target link="id">http://twitter.com/blocks/create/%s.json</target>
+	<args>
+	  <require select="1" name="id" />
+	  <require select="1" name="user_id" />
+	  <require select="1" name="screen_name" />
+	</args>
+  </API>
+  <API function="awakeBlock" comment="指定ユーザのブロックを解除する">
+    <method>DELETE</method>
+	<target>http://twitter.com/blocks/destroy.json</target>
+	<target link="id">http://twitter.com/blocks/destroy/%s.json</target>
+	<args>
+	  <require select="1" name="id" />
+	  <require select="1" name="user_id" />
+	  <require select="1" name="screen_name" />
+	</args>
+  </API>
+  <API function="checkBlock" comment="指定したユーザをブロックしているかどうかを調べる。ブロックをしていない場合、あるいは当該ユーザアカウントが存在しない場合は 404">
+	<target>http://twitter.com/blocks/exists.json</target>
+	<target link="id">http://twitter.com/blocks/exists/%s.json</target>
+	<args>
+	  <require select="1" name="id" />
+	  <require select="1" name="user_id" />
+	  <require select="1" name="screen_name" />
+	</args>
+  </API>
+  <API function="getBlocks" comment="自分がブロックしているユーザの一覧を取得する">
+	<target>http://twitter.com/blocks/blocking.json</target>
+	<args>
+	  <option name="page" />
+	</args>
+  </API>
+  <API function="getBlocksList" comment="自分がブロックしているユーザのID一覧(配列)を取得する">
+	<target>http://twitter.com/blocks/blocking/ids.json</target>
+	<args>
+	  <option name="page" />
+	</args>
+  </API>
+  
+  <!-- spam 報告関連のAPI -->
+  <API function="reportSpammer" comment="指定ユーザをスパマーであると報告し、ブロックする">
+    <method>POST</method>
+	<target>http://twitter.com/report_spam.json</target>
+	<args>
+	  <require select="1" name="id" />
+	  <require select="1" name="user_id" />
+	  <require select="1" name="screen_name" />
+	</args>
+  </API>
+  
+  <!-- list 関連のAPI -->
+  <API function="createList" comment="listを作成する">
+    <method>POST</method>
+	<target replace="user">http://api.twitter.com/1/user/lists.json</target>
+	<args>
+	  <require name="name" comment="作成しようとしているlistの名前を指定する" />
+	  <option name="mode" comment="作成しようとしているlistを公開(public)にするか、非公開(private)にするかを指定する。未指定時はpublic" />
+	  <option name="description" comment="作成しようとしているlistの説明文を指定する。説明文の長さは100文字まで" />
+	</args>
+  </API>
+  <API function="updateList" comment="listを更新する">
+    <method>POST</method>
+	<target replace="user" link="id">http://api.twitter.com/1/user/lists/%s.json</target>
+	<args>
+	  <require name="id" comment="更新しようとしているlistの名前を指定する" />
+	  <option name="name" comment="listの名前を本引数で指定した名前に変更する" />
+	  <option name="mode" comment="listを公開(public)にするか、非公開(private)にするかを指定する。未指定時はpublic" />
+	  <option name="description" comment="listの説明文を指定する。説明文の長さは100文字まで" />
+	</args>
+  </API>
+  <API function="getLists" comment="指定ユーザのlistの一覧を取得する">
+	<target link="user">http://api.twitter.com/1/%s/lists.json</target>
+	<args>
+      <require name="user" replace="user" comment="対象ユーザのスクリーン名" />
+	  <option name="cursor" comment="指定したカーソル位置以降のlistの一覧を20件分取得する" />
+	</args>
+  </API>
+   <API function="getList" comment="指定ユーザの指定listに関する情報を取得する">
+	<target link="id" replace="user">http://api.twitter.com/1/user/lists/%s.json</target>
+	<args>
+      <require name="user" replace="user" comment="対象ユーザのスクリーン名" />
+      <require name="id" comment="情報取得対象のlistの名前を指定する" />
+	</args>
+  </API>
+  <API function="deleteList" comment="指定listを削除する">
+    <method>DELETE</method>
+	<target link="id" replace="user">http://api.twitter.com/1/user/lists/%s.json</target>
+	<args>
+      <require name="user" replace="user" comment="対象ユーザのスクリーン名" />
+      <require name="id" comment="削除しようとしているlistの名前を指定する" />
+	</args>
+  </API>
+  <API function="getListStatus" comment="指定したlistに登録されているメンバーのみで構成されるタイムラインを取得する">
+	<target link="list_id" replace="user">http://api.twitter.com/1/user/lists/%s/statuses.format</target>
+	<args>
+      <require name="user" replace="user" comment="対象ユーザのスクリーン名" />
+      <require name="list_id" comment="タイムライン取得対象のlistの名前を指定する" />
+	  <option name="max_id" comment="指定したステータスID以下の値のIDのステータスのみ取得する" />
+	  <option name="per_page" comment="1ページ辺り何件の情報を取得するか指定する。指定できる最大件数は 200" />
+	  <option name="page" comment="ページ番号を指定することで、過去の任意の発言を取得する" />
+	</args>
+  </API>
+  <API function="getListMemberships" comment="指定したユーザが登録されているlist の一覧を取得する">
+	<target link="user" replace="user">http://api.twitter.com/1/user/lists/memberships.json</target>
+	<args>
+      <require name="user" replace="user" comment="対象ユーザのスクリーン名" />
+      <require name="list_id" comment="タイムライン取得対象のlistの名前を指定する" />
+	  <option name="max_id" comment="指定したステータスID以下の値のIDのステータスのみ取得する" />
+	  <option name="per_page" comment="1ページ辺り何件の情報を取得するか指定する。指定できる最大件数は 200" />
+	  <option name="page" comment="ページ番号を指定することで、過去の任意の発言を取得する" />
+	</args>
+  </API>
+     	<!--
+     GET list memberships
+     GET list subscriptions
+
+  list の登録内容に関する API:
+     GET list members
+     POST list members
+     DELETE list members
+     GET list members id
+
+  list の購読に関する API:
+     GET list subscribers
+     POST list subscribers
+     DELETE list subscribers
+     GET list subscribers id
+
+  OAuth関連:
+     oauth/request_token
+     oauth/authorize
+     oauth/authenticate
+     oauth/access_token
+
+  検索関連のAPI:
+     search
+     trends
+     trends/current
+     trends/daily
+     trends/weekly
+
+  地域情報検索関連のAPI:
+     trends/available         [まもなく登場]
+     trends/location          [まもなく登場]
+
+  検索条件保存:
+     saved_searches
+     saved_searches/show
+     saved_searches/create
+     saved_searches/destroy
+     
+-->
+</APIDefine>
