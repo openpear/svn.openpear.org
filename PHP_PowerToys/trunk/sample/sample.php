@@ -67,4 +67,17 @@ $pt = new PHP_Powertoys();
 //携帯向けHTML圧縮
 //$pt = new PHP_Powertoys('compress');
 //$pt = compressMobileHtml('debug');
+
+//配列をDTOに変換
+//$array = array('test' => 'php', 'test2' => 'perl');
+//$dto = $pt->arrayToDto($array);
+//echo $dto->get('test');
+
+//今度はDTOを配列に変換(PHP_PowerToys基準のDTO)
+//$array = $pt->dtoToArray($dto);
+//print_r($array);
+
+//モザイク
+//$img = $pt->mosaic(dirname(dirname(__FILE__)) . '/sample/sample.jpg');
+//imagejpeg($img, dirname(dirname(__FILE__)) . '/sample/mosaic.jpg');
 ?>
