@@ -24,6 +24,7 @@ include_once dirname(__FILE__) . '/PEG/EOS.php';
 include_once dirname(__FILE__) . '/PEG/Failure.php';
 include_once dirname(__FILE__) . '/PEG/Lookahead.php';
 include_once dirname(__FILE__) . '/PEG/Many.php';
+include_once dirname(__FILE__) . '/PEG/FlexibleMany.php';
 include_once dirname(__FILE__) . '/PEG/Memoize.php';
 include_once dirname(__FILE__) . '/PEG/Not.php';
 include_once dirname(__FILE__) . '/PEG/Optional.php';
@@ -104,6 +105,18 @@ class PEG
     static function choice()
     {
         return new PEG_Choice(self::parserArray(func_get_args()));
+    }
+
+    /**
+     * バックトラック可能なmany
+     *
+     * @param PEG_IParser
+     * @param PEG_IParser
+     * @return PEG_FlexibleMany
+     */
+    static function fmany($parser, $following)
+    {
+        return new PEG_FlexibleMany(self::parser($parser), self::parser($following));
     }
     
     /**
