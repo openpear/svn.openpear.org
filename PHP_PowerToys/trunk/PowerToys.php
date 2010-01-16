@@ -4,7 +4,7 @@
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.2.6 2010/01/12
+ *  @version	PHP_PowerToys v 0.2.6 2010/01/16
  * 
  */
 class PHP_PowerToys {
