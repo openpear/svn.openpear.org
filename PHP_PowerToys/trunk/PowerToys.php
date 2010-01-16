@@ -583,54 +583,48 @@ class PHP_PowerToys {
 		$level = $x;
 	    }
 	    define("BLOCK_SIZE", $level);
-
 	    //新しいイメージを元画像サイズを元に作成
 	    $newimg = imagecreatetruecolor($x,$y);
-
 	    $xx = 0;
 	    $res = $x * $y;
 
-	    for($i=0;$i<=$res;$i++){
-		for($j=$xx;$j<=$xx+BLOCK_SIZE;$j++){
+	    for($i=0;$i<=$res;++$i){
+		for($j=$xx,$n=$xx+BLOCK_SIZE;$j<=$n;++$j){
 		    $rgb = imagecolorat($img, $j, $yy);
 		}
 		if($i % BLOCK_SIZE == 0 && $i != 0){
 		    $r[$k] = ($rgb >> 16) & 0xFF;
 		    $g[$k] = ($rgb >> 8) & 0xFF;
 		    $b[$k] = $rgb & 0xFF;
-		    $k++;
+		    ++$k;
 		}
 		if($yy == $y){
 		    $xx += BLOCK_SIZE;
 		    $yy = 0;
 		}
-
-		$yy++;
-
+		++$yy;
 	    }
 	    $k = 0;
 	    $yy = 0;
 	    $xx = 0;
 	    //端から端までスキャンして色を取得
-	    for($i=0;$i<=$res;$i++){
-		for($j=$xx;$j<=$xx+BLOCK_SIZE;$j++){
+	    for($i=0;$i<=$res;++$i){
+		for($j=$xx,$n=$xx+BLOCK_SIZE;$j<=$n;++$j){
 		    imagecolorallocate($newimg, $r[$k], $g[$k], $b[$k]); //使用する色をその都度登録
 		    imagesetpixel ($newimg,$j,$yy, imagecolorclosest($newimg, $r[$k], $g[$k], $b[$k])); //1pxずつ描画
 		}
 		if($i % BLOCK_SIZE == 0 && $i != 0){
-		    $k++;
+		    ++$k;
 		}
 		if($yy == $y){
 		    $xx += BLOCK_SIZE;
 		    $yy = 0;
 		}
-		$yy++;
+		++$yy;
 	    }
-
-	    return $newimg;
-
 	    //処理が終わったら古いイメージ情報を破棄
 	    imagedestroy($img);
+	    return $newimg;
 	}
 }
 
