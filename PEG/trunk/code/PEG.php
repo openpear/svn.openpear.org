@@ -217,14 +217,16 @@ class PEG
     }
     
     /**
-     * 与えられた文字列とマッチするパーサを得る
+     * 与えられた引数とマッチするパーサを得る。
+     * PEG_Tokenパーサの処理はPEG_IContext::token()に移譲される。
      * 
-     * @param string $str
+     * @param ...
      * @return PEG_Token
      */
-    static function token($str, $caseSensitive = true)
+    static function token()
     {
-        return new PEG_Token($str, $caseSensitive);
+        $args = func_get_args();
+        return new PEG_Token($args);
     }
     
     /**

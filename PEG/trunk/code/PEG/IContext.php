@@ -28,17 +28,20 @@ interface PEG_IContext
      * 対象の一部を$i分返す。その際に$iだけ現在位置も変更する。
      *
      * @param int $i
-     * @return string
+     * @return ?
      */
     function read($i);
     
     /**
      * 対象の要素を一つ返す。その際に現在位置も変更する。
+     *
+     * @return ?
      */
     function readElement();
     
     /**
      * 読み込むべきものが無い場合trueを返す。
+     *
      * @return bool
      */
     function eos();
@@ -46,12 +49,14 @@ interface PEG_IContext
     /**
      * コンテキストが持つ対象全体を返す
      * 実装クラスは例外を投げることでこれを拒否できる
+     *
      * @return ?
      */
     function get();
     
     /**
      * このメソッドの実装にはPEG_Cacheクラスの使用を推奨する
+     *
      * @param PEG_IParser 
      * @param int 
      * @param ? 
@@ -61,9 +66,19 @@ interface PEG_IContext
     /**
      * このメソッドの実装にはPEG_Cacheクラスの使用を推奨する
      * array(hit, array(end, val))を返す
+     *
      * @param PEG_IParser
      * @param int
      * @return array
      */
     function cache(PEG_IParser $parser);
+
+    /**
+     * 与えられた引数にしたがって現在位置を変更し、マッチしたものを返す
+     * もしくはPEG_Failureを返す
+     *
+     * @param Array
+     * @return ?
+     */
+    function token(Array $args);
 }
