@@ -78,4 +78,18 @@ class PEG_StringContext implements PEG_IContext
     {
         return $this->cache->cache($parser, $this->tell());
     }
+
+    function token(Array $args)
+    {
+        list($str, $casesensitive) = $args + array(1 => true);
+
+        $matched = $this->read(strlen($str));
+
+        if ($casesensitive) {
+            return $str === $matched ? $str : PEG::failure();
+        }
+        else {
+            return strtolower($str) === strtolower($matched) ? $matched : PEG::failure();
+        }
+    }
 }

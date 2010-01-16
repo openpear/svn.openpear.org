@@ -86,4 +86,13 @@ class PEG_ArrayContext implements PEG_IContext
     {
         return $this->cache->cache($parser, $this->tell());
     }
+
+    function token(Array $args)
+    {
+        if (count($args) === 1) {
+            return $this->readElement() === $args[0] ? $args[0] : PEG::failure();
+        }
+
+        return $this->read(count($args)) === $args ? $args : PEG::failure();
+    }
 }

@@ -7,15 +7,13 @@
  */
 
 /**
- * どのような文字にでもヒットするパーサ
+ * どのような要素にもヒットするパーサ
  *
  */
 class PEG_Anything implements PEG_IParser
 {
-    function __construct() { }
     function parse(PEG_IContext $context)
     {
-        if ($context->eos()) return PEG_Failure;
-        return $context->read(1);
+        return $context->eos() ? PEG::failure() : $context->readElement();
     }
 }
