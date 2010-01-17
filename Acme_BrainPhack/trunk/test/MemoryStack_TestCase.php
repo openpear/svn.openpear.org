@@ -146,6 +146,25 @@ class MemoryStack_TestCase extends UnitTestCase
 
 
     }
+
+    function testClearReset()
+    {
+        $INIT = 2;
+        // init value = 2
+        $bpms =& new Acme_BrainPhack_MemoryStack(3, $INIT);
+        $bpms->set(9); $bpms->ptr_inc();
+        $bpms->set(8); $bpms->ptr_inc();
+        $bpms->set(7); $bpms->ptr_inc();
+        $bpms->clear_reset();
+        // test memory stack is initialized.
+        for ($i = 0; false !== ($r = $bpms->get($i)); $i++) {
+            $this->assertIdentical($INIT, $r);
+        }
+        // test pointer is reset.
+        list($old, $new) = $bpms->ptr_inc();
+        $this->assertIdentical(0, $old);
+        $this->assertIdentical(1, $new);
+    }
 }
 
 /**
