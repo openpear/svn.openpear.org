@@ -56,6 +56,14 @@ class Acme_BrainPhack_MemoryStack
      */
     var $_curr_ptr = 0;
 
+    /**
+     * initial value
+     *
+     * @var mixed
+     * @access protected
+     */
+    var $_initval = 0;
+
     // }}}
     // {{{ constructor
 
@@ -74,6 +82,7 @@ class Acme_BrainPhack_MemoryStack
         for ($i = 0; $i < $sz; $i++) {
             $this->_stack[$i] = $init;
         }
+        $this->_initval = $init;
     }
 
     // }}}
@@ -171,6 +180,17 @@ class Acme_BrainPhack_MemoryStack
         }
         $this->_curr_ptr--;
         return array($old, $this->_curr_ptr);
+    }
+
+    // }}}
+    // {{{ clear_reset()
+
+    function clear_reset()
+    {
+        for ($i = 0; $i < $this->_stack_size; $i++) {
+            $this->_stack[$i] = $this->_initval;
+        }
+        $this->_curr_ptr = 0;
     }
 
     // }}}
