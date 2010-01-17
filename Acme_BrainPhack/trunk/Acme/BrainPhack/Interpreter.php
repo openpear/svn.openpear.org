@@ -38,6 +38,18 @@ define('ACME_BRAINPHACK_OP_INPUT', ',');
 define('ACME_BRAINPHACK_OP_JMP_Z', '[');
 define('ACME_BRAINPHACK_OP_JMP_NZ', ']');
 
+// error levels
+define('ACME_BRAINPHACK_EL_INFO',  'info');
+define('ACME_BRAINPHACK_EL_WARN',  'warn');
+define('ACME_BRAINPHACK_EL_ERROR', 'error');
+
+// error codes
+define('ACME_BRAINPHACK_EC_ILLEGAL_CHAR', 100);
+define('ACME_BRAINPHACK_EC_PTR_INC', 200);
+define('ACME_BRAINPHACK_EC_PTR_DEC', 300);
+define('ACME_BRAINPHACK_EC_LACK_RBRACKET', 400);
+define('ACME_BRAINPHACK_EC_LACK_LBRACKET', 500);
+
 class Acme_BrainPhack_Interpreter
 {
     var $_memoryStack;
@@ -71,103 +83,115 @@ class Acme_BrainPhack_Interpreter
         $src_sz = strlen($src);
 
         while ($src_i < $src_sz) {
+            $src_curr = $src_i;
             $op = $src[$src_i];
             $src_i++;
 
             switch ($op) {
-            case OP_PTR_INC:
+            case ACME_BRAINPHACK_OP_PTR_INC:
                 $r = $this->_memoryStack->ptr_inc();
                 if (false === $r) {
                     $this->_errorStack->push(
                         ACME_BRAINPHACK_EC_PTR_INC,
-                        'Pointer Increment Error(maybe out of range).',
-                        ACME_BRAINPHACK_EL_WARN,
-                        array($src_i)
+                        ACME_BRAINPHACK_EL_ERROR,
+                        array($src_curr),
+                        'Pointer Increment Error(maybe out of range).'
                     );
                     return false;
                 }
                 break;
-            case OP_PTR_DEC:
+            case ACME_BRAINPHACK_OP_PTR_DEC:
                 $r = $this->_memoryStack->ptr_dec();
                 if (false === $r) {
                     $this->_errorStack->push(
                         ACME_BRAINPHACK_EC_PTR_DEC,
-                        'Pointer Decrement Error(maybe minus address).',
-                        ACME_BRAINPHACK_EL_WARN,
-                        array($src_i)
+                        ACME_BRAINPHACK_EL_ERROR,
+                        array($src_curr),
+                        'Pointer Decrement Error(maybe minus address).'
                     );
                     return false;
                 }
                 break;
-            case OP_VAL_INC:
+            case ACME_BRAINPHACK_OP_VAL_INC:
                 $v = $this->_memoryStack->get();
                 $this->_memoryStack->set($v + 1);
                 break;
-            case OP_VAL_DEC:
+            case ACME_BRAINPHACK_OP_VAL_DEC:
                 $v = $this->_memoryStack->get();
                 $this->_memoryStack->set($v - 1);
                 break;
-            case OP_PRINT:
+            case ACME_BRAINPHACK_OP_PRINT:
                 $v = $this->_memoryStack->get();
-                echo $v;
+                    printf('%c', $v);
                 break;
-            case OP_INPUT:
-                $c = fgetc(STDIN);
-                if ($c === false) {
-                    echo "input error.\n";
+            case ACME_BRAINPHACK_OP_INPUT:
+                if (!$this->_stdinReady) {
+                    // skip
                     break;
                 }
-                $stack->set($c);
+                $c = fgetc(STDIN);
+                if ($c === false) {
+                    // EOF
+                    $c = 0;
+                } else {
+                    $c = ord($c);
+                }
+                $this->_memoryStack->set($c);
                 break;
-            case OP_JMP_Z:
-                /*
-                $v = $stack->get();
+            case ACME_BRAINPHACK_OP_JMP_Z:
+                $v = $this->_memoryStack->get();
                 if (0 == $v) { // ambiguous compares... '0' == 0, 0 == 0.
-                    $bk_i = $src_i;
                     $_found = false;
                     while ($src_i < $src_sz) {
-                        if (OP_JMP_NZ == $src[$src_i]) {
+                        if (ACME_BRAINPHACK_OP_JMP_NZ == $src[$src_i]) {
                             $_found = true;
                             break;
                         }
                         $src_i++;
                     }
                     if (!$_found) {
-                        echo "not found pair ']' for '[' at {$bk_i}\n";
+                        $this->_errorStack->push(
+                            ACME_BRAINPHACK_EC_LACK_RBRACKET,
+                            ACME_BRAINPHACK_EL_ERROR,
+                            array($src_curr),
+                            "']' not found for '[' at {$src_curr}"
+                        );
+                        return false;
                     } else {
                         $src_i++;
                     }
                 }
-                 */
                 break;
-            case OP_JMP_NZ:
-                /*
-                $v = $stack->get();
+            case ACME_BRAINPHACK_OP_JMP_NZ:
+                $v = $this->_memoryStack->get();
                 if (0 != $v) { // ambiguous compares... '0' == 0, 0 == 0.
-                    $bk_i = $src_i;
                     $_found = false;
                     while (0 < $src_i) {
                         $src_i--;
-                        if (OP_JMP_Z == $src[$src_i]) {
+                        if (ACME_BRAINPHACK_OP_JMP_Z == $src[$src_i]) {
                             $_found = true;
                             break;
                         }
                     }
                     if (!$_found) {
-                        echo "not found pair '[' for ']' at {$bk_i}, ignored.\n";
-                        $src_i = $bk_i;
+                        $this->_errorStack->push(
+                            ACME_BRAINPHACK_EC_LACK_LBRACKET,
+                            ACME_BRAINPHACK_EL_ERROR,
+                            array($src_curr),
+                            "'[' not found for ']' at {$src_curr}"
+                        );
+                        return false;
                     } else {
                         $src_i++;
                     }
                 }
-                 */
                 break;
             default:
                 $this->_errorStack->push(
                     ACME_BRAINPHACK_EC_ILLEGAL_CHAR,
-                    'Illegal Character.',
                     ACME_BRAINPHACK_EL_INFO,
-                    array($src_i, $op)
+                    array($src_curr, $op),
+                    'Illegal Character.'
                 );
             }
         }
