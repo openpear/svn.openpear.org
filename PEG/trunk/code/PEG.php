@@ -33,6 +33,7 @@ include_once dirname(__FILE__) . '/PEG/Sequence.php';
 include_once dirname(__FILE__) . '/PEG/StringContext.php';
 include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/Util.php';
+include_once dirname(__FILE__) . '/PEG/ErrorReporter.php';
 
 class PEG
 {
@@ -108,7 +109,7 @@ class PEG
     }
 
     /**
-     * バックトラック可能なmany
+     * バックトラック可能なmanyパーサを返す
      *
      * @param PEG_IParser
      * @param PEG_IParser
@@ -117,6 +118,17 @@ class PEG
     static function fmany($parser, $following)
     {
         return new PEG_FlexibleMany(self::parser($parser), self::parser($following));
+    }
+
+    /**
+     * エラーを記録するパーサを返す
+     *
+     * @param string
+     * @return PEG_ErrorReporter
+     */
+    static function error($msg)
+    {
+        return new PEG_ErrorReporter($msg);
     }
     
     /**

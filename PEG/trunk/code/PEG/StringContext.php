@@ -8,7 +8,7 @@
 
 class PEG_StringContext implements PEG_IContext
 {
-    protected $str, $i = 0, $len, $cache;
+    protected $str, $i = 0, $len, $cache, $lastErrorOffset = 0, $lastError = null;
     
     /**
      * 与えられた文字列とその位置を保持するPEG_Contextインスタンスを生成する。
@@ -91,5 +91,18 @@ class PEG_StringContext implements PEG_IContext
         else {
             return strtolower($str) === strtolower($matched) ? $matched : PEG::failure();
         }
+    }
+
+    function logError($str)
+    {
+        if ($this->i >= $this->lastErrorOffset) {
+            $this->lastErrorOffset = $this->i;
+            $this->lastError = $str;
+        }
+    }
+
+    function lastError()
+    {
+        return is_null($this->lastError) ? null : array($this->lastErrorOffset, $this->lastError);
     }
 }

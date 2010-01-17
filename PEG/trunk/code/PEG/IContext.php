@@ -81,4 +81,21 @@ interface PEG_IContext
      * @return ?
      */
     function token(Array $args);
+
+    /**
+     * 現在位置と共にエラーを記録する
+     *
+     * @param string
+     * @return null
+     */
+    function logError($error);
+
+    /**
+     * 一番深い位置にあるエラーを返す
+     * 返すべきエラーがある場合は、位置とエラー内容の配列を返す
+     * そうでないばあいはnullを返す
+     *
+     * @return array|null
+     */
+    function lastError();
 }

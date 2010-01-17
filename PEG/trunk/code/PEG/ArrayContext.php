@@ -12,7 +12,7 @@
  */
 class PEG_ArrayContext implements PEG_IContext
 {
-    protected $arr, $i = 0, $len, $cache;
+    protected $arr, $i = 0, $len, $cache, $lastErrorOffset = 0, $lastError = null;
     
     /**
      *
@@ -94,5 +94,18 @@ class PEG_ArrayContext implements PEG_IContext
         }
 
         return $this->read(count($args)) === $args ? $args : PEG::failure();
+    }
+
+    function logError($str)
+    {
+        if ($this->i >= $this->lastErrorOffset) {
+            $this->lastErrorOffset = $this->i;
+            $this->lastError = $str;
+        }
+    }
+
+    function lastError()
+    {
+        return is_null($this->lastError) ? null : array($this->lastErrorOffset, $this->lastError);
     }
 }
