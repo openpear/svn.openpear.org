@@ -12,3 +12,7 @@ $lime->is($c->lastError(), array(0, 'hoge'));
 $c = PEG::context(array(1, 2));
 $p->parse($c);
 $lime->is($c->lastError(), array(0, 'hoge'));
+
+$c->readElement();
+$p->parse($c);
+$lime->is($c->lastError(), array(1, 'hoge'));
