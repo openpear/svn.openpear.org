@@ -1,6 +1,6 @@
 <?php
 /*
- *   Copyright (c) 2007 msakamoto-sf <msakamoto-sf@users.sourceforge.net>
+ *   Copyright (c) 2010 msakamoto-sf <msakamoto-sf@users.sourceforge.net>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ ini_set('include_path', $__pear_src_dir.PATH_SEPARATOR.$include_path);
 
 $test = &new TestSuite('All tests');
 $test->addTestFile('MemoryStack_TestCase.php');
-//$test->addTestFile('Bar_TestCase.php');
+$test->addTestFile('Interpreter_TestCase.php');
 $test->run(new TextReporter());
 
 
