@@ -33,6 +33,7 @@ ini_set('include_path',
 $test = &new TestSuite('All tests');
 $test->addTestFile('MemoryStack_TestCase.php');
 $test->addTestFile('Interpreter_TestCase.php');
+$test->addTestFile('Translator_TestCase.php');
 $test->run(new TextReporter());
 
 
