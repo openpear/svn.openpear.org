@@ -4,7 +4,7 @@
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.2.6 2010/01/16
+ *  @version	PHP_PowerToys v 0.2.6 2010/01/18
  * 
  */
 class PHP_PowerToys {
@@ -624,6 +624,10 @@ class PHP_PowerToys {
 	    }
 	    //処理が終わったら古いイメージ情報を破棄
 	    imagedestroy($img);
+	    //序でだからでかすぎる色情報も破棄
+	    unset($r);
+	    unset($g);
+	    unset($b);
 	    return $newimg;
 	}
 }
