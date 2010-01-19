@@ -639,7 +639,7 @@ class PEG
     }
     
     /**
-     * PEG::subtract($a, $b, $c), PEG::tailSeq(PEG::not($a), PEG::not($b), $c) は同等
+     * PEG::subtract($a, $b, $c), PEG::tailSeq(PEG::not($b), PEG::not($c), $a) は同等
      *
      * @param unknown_type $p
      * @return unknown
