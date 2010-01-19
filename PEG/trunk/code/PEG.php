@@ -240,43 +240,6 @@ class PEG
         $args = func_get_args();
         return new PEG_Token($args);
     }
-    
-    /**
-     * 与えられたパーサを実行した後、PEG_IContextの読み込み位置を元に戻すパーサを得る
-     * PEG::amp($parser)と同等
-     * PEG::lookahead(PEG::seq($a, $b, $c)), PEG::lookahead($a, $b, $c) は同等
-     * 非推奨。代わりにPEG::ampを使う
-     * 
-     * @param $p
-     * @return PEG_Lookahead
-     * @deprecated 
-     */
-    static function lookahead($p)
-    {
-        if (func_num_args() > 1) {
-            $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
-        }
-        return new PEG_Lookahead(self::parser($p));
-    }
-    
-    /**
-     * PEG::not($parser)と同等
-     * PEG::lookaheadNot(PEG::seq($a, $b, $c)), PEG::lookaheadNot($a, $b, $c) は同等
-     * 非推奨。代わりにPEG::notを使う
-     * 
-     * @param $p
-     * @return PEG_Not
-     * @deprecated 
-     */
-    static function lookaheadNot($p)
-    {
-        if (func_num_args() > 1) {
-            $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
-        }
-        return self::not(self::parser($p));
-    }
 
     /**
      * 
@@ -542,7 +505,7 @@ class PEG
      */
     static function listof($item, $glue)
     {
-        $parser = self::seq($item, self::many(self::secondSeq($glue, $item)));
+        $parser = self::seq($item, self::many(self::second($glue, $item)));
         return self::callbackAction(array('PEG_Util', 'cons'), $parser);
     }
 
@@ -556,49 +519,13 @@ class PEG
         static $obj = null;
         return $obj ? $obj : $obj = self::char(" \t");
     }
-    
-    /**
-     * PEG::first(PEG::seq($a, $b, ...)), PEG::first($a, $b, $c) 等と同等
-     * 非推奨。PEG::firstを使う
-     *
-     * @return PEG_At
-     * @deprecated 
-     */
-    static function firstSeq()
-    {
-        return self::first(new PEG_Sequence(self::parserArray(func_get_args())));
-    }
-    
-    /**
-     * PEG::second(PEG::seq($a, $b, ...)), PEG::second($a, $b, $c) 等と同等
-     * 非推奨。 PEG::secondを使う
-     * 
-     * @deprecated 
-     * @return PEG_At
-     */
-    static function secondSeq()
-    {
-        return self::second(new PEG_Sequence(self::parserArray(func_get_args())));
-    }
-    
-    /**
-     * PEG::third(PEG::seq($a, $b, ...)), PEG::third($a, $b, $c) 等と同等
-     * 非推奨。PEG::thirdを使う
-     * 
-     * @return PEG_At
-     * @deprecated 
-     */
-    static function thirdSeq()
-    {
-        return self::third(new PEG_Sequence(self::parserArray(func_get_args())));
-    }
-    
+
     /**
      * 渡されたパーサがパース時に返す値の最後の値を返すパーサを得る
      * PEG::tail(PEG::seq($a, $b, $c)), PEG::tail($a, $b, $c) は同等
      *
      * @param unknown_type $p
-     * @return unknown
+     * @return PEG_IParser
      */
     static function tail($p)
     {
@@ -607,18 +534,6 @@ class PEG
             $p = new PEG_Sequence(self::parserArray($args));
         }
         return self::callbackAction(array('PEG_Util', 'tail'), self::parser($p));
-    }
-    
-    /**
-     * PEG::tail(PEG::seq($a, $b, ...)), PEG::tail($a, $b, $c) 等と同等
-     * 非推奨。PEG::tailを使う
-     *
-     * @return PEG_CallbackAction
-     * @deprecated
-     */
-    static function tailSeq()
-    {
-        return self::tail(new PEG_Sequence(self::parserArray(func_get_args())));
     }
     
     /**
@@ -639,7 +554,7 @@ class PEG
     }
     
     /**
-     * PEG::subtract($a, $b, $c), PEG::tailSeq(PEG::not($b), PEG::not($c), $a) は同等
+     * PEG::subtract($a, $b, $c), PEG::tail(PEG::not($b), PEG::not($c), $a) は同等
      *
      * @param unknown_type $p
      * @return unknown
@@ -652,7 +567,7 @@ class PEG
             $elt = self::not(self::parser($elt));
         }
         $args[] = self::parser($p);
-        return call_user_func_array(array('PEG', 'tailSeq'), self::parserArray($args));
+        return call_user_func_array(array('PEG', 'tail'), self::parserArray($args));
     }
     
     /**
