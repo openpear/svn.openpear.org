@@ -6,17 +6,27 @@
  * @version $Id$
  */
 
-class PEG_CallbackAction extends PEG_Action
+class PEG_CallbackAction implements PEG_IParser 
 {
-    protected $callback;
+    protected $callback, $parser;
+
     function __construct($callback, PEG_IParser $parser)
     {
-        if (!is_callable($callback) && !function_exists($callback)) throw new InvalidArgumentException('first argument must be callable');
-        $this->callback = $callback;
-        parent::__construct($parser);
+        if (!is_callable($callback)) {
+            throw new InvalidArgumentException('first argument must be callable');
+        }
+
+        list($this->callback, $this->parser) = func_get_args();
     }
-    protected function process($result)
+
+    function parse(PEG_IContext $context)
     {
-        return call_user_func($this->callback, $result);
+        $buf = $this->parser->parse($context);
+
+        if ($buf instanceof PEG_Failure) {
+            return $buf;
+        }
+
+        return call_user_func($this->callback, $buf);
     }
 }
