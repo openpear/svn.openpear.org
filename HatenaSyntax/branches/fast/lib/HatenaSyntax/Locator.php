@@ -8,103 +8,106 @@
 
 class HatenaSyntax_Locator
 {
-    protected $block_ref = null;
-    protected $shared = array();
-    protected $facade;
+    protected $elt_ref = null;
+    protected $objects = array();
     
     private function __construct()
     {
         $this->setup();
     }
-
+    
     static function it()
     {
         static $obj = null;
         return $obj ? $obj : $obj = new self;
     }
     
-    function __get($name)
+    public function __get($name)
     {
-        return isset($this->shared[$name]) ? 
-            $this->shared[$name] : 
-            $this->shared[$name] = $this->{'create' . $name}();
+        return isset($this->objects[$name]) ? 
+            $this->objects[$name] : 
+            $this->objects[$name] = $this->{'create' . $name}();
     }
-
-    protected function nodeCreater($type, PEG_IParser $parser, Array $keys = array())
+    
+    protected function createFactory()
     {
-        return new HatenaSyntax_NodeCreater($type, $parser, $keys);
+        return new HatenaSyntax_Factory($this);
     }
     
     protected function createLineChar()
     {
-        return PEG::anything();
+        return PEG::second(PEG::not(PEG::char("\n\r")), PEG::anything());
+    }
+    
+    protected function createEndOfLine()
+    {
+        return PEG::choice(PEG::newLine(), PEG::eos());
     }
     
     protected function createFootnote()
     {
-        $elt = PEG::subtract(
-            PEG::choice($this->bracket, $this->lineChar), 
-            '))');
+        $close = '))';
+        $elt = PEG::andalso(PEG::not($close), 
+                            PEG::choice($this->bracket, $this->lineChar));
                             
         $parser = PEG::pack('((', 
-                            PEG::many1($elt), 
-                            '))');
+                            HatenaSyntax_Util::segment(PEG::many1($elt)), 
+                            $close);
                             
-        return $this->nodeCreater('footnote', $parser);
+        return $this->factory->createNodeCreater('footnote', $parser);
     }
     
     protected function createLineElement()
     {
-        return PEG::choice(
-            $this->bracket,
-            $this->footnote, 
-            $this->lineChar);
+        return $this->factory->createLineElement();
     }
     
     protected function createLineSegment()
     {
-        return PEG::many($this->lineElement);
+        return HatenaSyntax_Util::segment(PEG::many($this->lineElement));
     }
     
     protected function createHttpLink()
     {
-        $title_char = PEG::subtract($this->lineChar, ']');
+        $title_char = PEG::andalso(PEG::not(']'), 
+                                   $this->lineChar);
+        
         $title = PEG::second(':title=', PEG::join(PEG::many1($title_char)));
         
-        $url_char = PEG::subtract($this->lineChar, ']', ':title=');
-        $url = PEG::join(PEG::seq(
-            PEG::choice('http://', 'https://'), 
-            PEG::many1($url_char))); 
-
+        $url_char = PEG::andalso(PEG::not(PEG::choice(']', ':title=')), 
+                                 $this->lineChar);
+                                 
+        $url = PEG::join(PEG::seq(PEG::choice('http://', 'https://'), 
+                                  PEG::many1($url_char)));
         $parser = PEG::seq($url, PEG::optional($title));
         
-        return $this->nodeCreater('httplink', $parser, array('href', 'title'));
+        return $this->factory->createNodeCreater('httplink', $parser, array('href', 'title'));
     }
     
     protected function createImageLink()
     {
-        $url_char = PEG::subtract($this->lineChar, ']', ':image]');
-        $url = PEG::join(PEG::seq(
-            PEG::choice('http://', 'https://'), 
-            PEG::many1($url_char)));
+        $url_char = PEG::subtract(PEG::anything(), ']', ':image]');
+        
+        $url = PEG::join(PEG::seq(PEG::choice('http://', 'https://'),
+                                  PEG::many1($url_char)));
                                   
         $parser = PEG::first($url, ':image');
         
-        return $this->nodeCreater('imagelink', $parser);
+        return $this->factory->createNodeCreater('imagelink', $parser);
     }
     
     protected function createKeywordLink()
     {
-        $body = PEG::join(PEG::many1(PEG::subtract($this->lineChar, ']]')));
-        $body = PEG::subtract($body, 'javascript:');
+        $body = PEG::join(PEG::many1(PEG::subtract(PEG::anything(), PEG::newLine(), ']]')));
+        $body = PEG::subtract($body, 'javascript:', ' ', "\t");
         $parser = PEG::pack('[', $body, ']');
         
-        return $this->nodeCreater('keywordlink', $parser);
+        return $this->factory->createNodeCreater('keywordlink', $parser);
     }
     
     protected function createNullLink()
     {
-        $body = PEG::join(PEG::many1(PEG::subtract($this->lineChar, '[]')));
+        $body = PEG::join(PEG::many1(PEG::subtract(PEG::anything(), '[]', PEG::newLine())));
         $parser = PEG::pack(']', $body, '[');
         
         return $parser;
@@ -112,114 +115,168 @@ class HatenaSyntax_Locator
     
     protected function createTableOfContents()
     {
-        $parser = new HatenaSyntax_Regex('/^\[:contents]$/');
+        $parser = PEG::seq(PEG::token('[:contents]'), $this->endOfLine);
         
-        return $this->nodeCreater('tableofcontents', $parser);
+        return $this->factory->createNodeCreater('tableofcontents', $parser);
     }
     
     protected function createInlineTableOfContents()
     {
         $parser = PEG::token(':contents');
-        return $this->nodeCreater('tableofcontents', $parser);
+        return $this->factory->createNodeCreater('tableofcontents', $parser);
     }
     
     protected function createBracket()
     {
-        return PEG::pack('[', PEG::choice(
-            $this->inlineTableOfContents, 
-            $this->nullLink, 
-            $this->keywordLink, 
-            $this->imageLink, 
-            $this->httpLink), 
-        ']');
+        return PEG::pack('[', PEG::choice($this->inlineTableOfContents, $this->nullLink, $this->keywordLink, $this->imageLink, $this->httpLink), ']');
     }
-
+    
+    protected function createDefinition()
+    {
+        $c = PEG::token(':');
+        $sep = PEG::drop($c);
+        $factory = $this->factory;
+        $parser = PEG::seq($sep, 
+                           $factory->createLineSegment($c, true), 
+                           $sep, 
+                           $factory->createLineSegment($c), 
+                           PEG::drop($this->endOfLine));
+        return $parser;
+    }
+    
     protected function createDefinitionList()
     {
-        $parser = new HatenaSyntax_DefinitionList($this->lineElement);
-        return $this->nodeCreater('definitionlist', $parser);
+        $parser = PEG::many1($this->definition);
+        return $this->factory->createNodeCreater('definitionlist', $parser);
     }
     
     protected function createPre()
     {
-        $parser = new HatenaSyntax_Pre($this->lineElement);
+        $nl = PEG::newLine();
+        $closing = PEG::seq(PEG::optional($nl), '|<', $this->endOfLine);
+        $line = PEG::second($nl, $this->factory->createLineSegment($closing, true));
+        $parser = PEG::pack('>|', PEG::many1($line), $closing);
         
-        return $this->nodeCreater('pre', $parser);
+        return $this->factory->createNodeCreater('pre', $parser);
     }
     
-    protected function createSuperPre()
+    protected function createSuperPreElement()
     {
-        $parser = new HatenaSyntax_SuperPre;
-
-        return $this->nodeCreater('superpre', $parser, array('type', 'body'));
+        $cond = PEG::not(PEG::seq('||<', $this->endOfLine));
+        $elt = PEG::second($cond, $this->lineChar);
+        $parser = PEG::third(PEG::newLine(), $cond, PEG::join(PEG::many($elt)));
+        
+        return $parser;
+        
     }
     
     protected function createHeader()
     {
-        $parser = new HatenaSyntax_Header($this->lineElement);
+        $parser = PEG::seq(PEG::drop('*'),
+                           PEG::count(PEG::many('*')),
+                           HatenaSyntax_Util::segment(PEG::many(PEG::choice($this->lineChar, $this->footnote))),
+                           PEG::drop($this->endOfLine));
         
-        return $this->nodeCreater('header', $parser, array('level', 'body'));
+        return $this->factory->createNodeCreater('header', $parser, array('level', 'body'));
+    }
+
+    protected function createSuperPre()
+    {
+        $open = PEG::pack('>|', 
+                          PEG::join(PEG::many(PEG::secondSeq(PEG::lookaheadNot(PEG::char("\r\n|")), PEG::anything()))),
+                          '|');
+        $body = PEG::many1($this->superPreElement);
+        
+        $close = PEG::drop(PEG::optional(PEG::newLine()),
+                           '||<',
+                           $this->endOfLine);
+        
+        $parser = PEG::seq($open, $body, $close);
+        
+        return $this->factory->createNodeCreater('superpre', $parser, array('type', 'body'));
     }
 
     protected function createList()
     {
-        $parser = new HatenaSyntax_List($this->lineElement);
+        $item = PEG::callbackAction(array('HatenaSyntax_Util', 'processListItem'), PEG::many1(PEG::char('-+')),
+                                                                                   $this->lineSegment,
+                                                                                   PEG::drop($this->endOfLine));
+        $list = PEG::callbackAction(array('HatenaSyntax_Util', 'normalizeList'), PEG::many1($item));
         
-        return $this->nodeCreater('list', $parser);
+        return $this->factory->createNodeCreater('list', $list);
+    }
+
+    protected function createTableCell()
+    {
+        $parser = PEG::seq(PEG::drop('|', PEG::lookaheadNot($this->endOfLine)),
+                           PEG::optional('*'),
+                           $this->factory->createLineSegment(PEG::token('|'), true));
+        return $parser;
     }
     
     protected function createTable()
     {
-        $parser = new HatenaSyntax_Table($this->lineElement);
+        $line = PEG::first(PEG::many1($this->tableCell), 
+                           '|', 
+                           $this->endOfLine);
+        $parser = PEG::many1($line);
         
-        return $this->nodeCreater('table', $parser);
+        return $this->factory->createNodeCreater('table', $parser);
     }
 
     protected function createBlockQuote()
     {
-        $parser = new HatenaSyntax_Quote($this->block);
+        $url = PEG::join(PEG::seq(PEG::choice('http://', 'https://'), 
+                                  PEG::many1(PEG::subtract(PEG::anything(), 
+                                                           PEG::seq('>', PEG::newLine()), 
+                                                           PEG::newLine()))));
+        
+        $header = PEG::pack('>', PEG::optional($url), PEG::seq('>', PEG::newLine()));
+        
+        $elt = PEG::second(PEG::not('<<', $this->endOfLine), $this->element);
+        
+        $parser = PEG::seq($header, PEG::many1($elt), PEG::drop('<<', $this->endOfLine));
                                       
-        return $this->nodeCreater('blockquote', $parser, array('url', 'body'));
+        return $this->factory->createNodeCreater('blockquote', $parser, array('url', 'body'));
     }
     
     protected function createParagraph()
     {
-        $parser = new HatenaSyntax_Paragraph($this->lineElement);
+        $parser = PEG::first($this->lineSegment, $this->endOfLine); 
         
-        return $this->nodeCreater('paragraph', $parser);
+        return $this->factory->createNodeCreater('paragraph', $parser);
     }
     
     protected function createEmptyParagraph()
     {
-        return $this->nodeCreater('emptyparagraph', PEG::token(''));
+        $parser = PEG::count(PEG::many1(PEG::newLine()));
+        return $this->factory->createNodeCreater('emptyparagraph', $parser);
     }
     
-    protected function createBlock()
+    protected function createElement()
     {
-        $parser = PEG::ref($r);
-        $this->block_ref = &$r;
+        $parser = PEG::ref($ref);
+        $this->elt_ref = &$ref;
         return $parser;
     }
 
     protected function createParser()
     {
-        return $this->nodeCreater('root', PEG::many($this->block));
+        return $this->factory->createNodeCreater('root', PEG::many($this->element));
     }
     
     protected function setup()
     {
-        $this->block;
-        $this->block_ref = PEG::memo(PEG::choice(
-            $this->header,
-            $this->blockQuote,
-            $this->definitionList,
-            $this->table,
-            $this->list,
-            $this->pre,
-            $this->superpre,
-            $this->tableOfContents,
-            $this->emptyParagraph,
-            $this->paragraph
-        ));
+        $this->element;
+        $this->elt_ref = PEG::memo(PEG::choice($this->header,
+                                               $this->blockQuote,
+                                               $this->definitionList,
+                                               $this->table,
+                                               $this->list,
+                                               $this->pre,
+                                               $this->superpre,
+                                               $this->tableOfContents,
+                                               $this->emptyParagraph,
+                                               $this->paragraph));
     }
 }
