@@ -35,14 +35,14 @@ class Acme_BrainPhack_Translator_Jojo_Dio
     function getMap()
     {
         return array(
-            '+' => array('–³‘Ê'),
-            '-' => array('ƒ€ƒ_'),
-            '>' => array('‚`‚`‚`‚`‚`'), // KUAAAAAAAAAAAAA!!!!!!!
-            '<' => array('‚x‚x‚x‚x‚x'), // WRYYYYYYYYYYYYY!!!!!!!
-            '.' => array('ƒ[ƒhƒ[ƒ‰[‚¾ƒbI'),
-            ',' => array('‚¨‘O‚Í¡‚Ü‚ÅH‚Á‚½ƒpƒ“‚Ì–‡”‚ğŠo‚¦‚Ä‚¢‚é‚©H'),
-            '[' => array('‚æ~‚Ü‚êuƒUEƒ[ƒ‹ƒhvI'),
-            ']' => array('‚»‚µ‚Ä‚Í“®‚«o‚·'),
+            '+' => array('ç„¡é§„'),
+            '-' => array('ãƒ ãƒ€'),
+            '>' => array('ï¼¡ï¼¡ï¼¡ï¼¡ï¼¡'), // KUAAAAAAAAAAAAA!!!!!!!
+            '<' => array('ï¼¹ï¼¹ï¼¹ï¼¹ï¼¹'), // WRYYYYYYYYYYYYY!!!!!!!
+            '.' => array('ãƒ­ãƒ¼ãƒ‰ãƒ­ãƒ¼ãƒ©ãƒ¼ã ãƒƒï¼'),
+            ',' => array('ãŠå‰ã¯ä»Šã¾ã§é£Ÿã£ãŸãƒ‘ãƒ³ã®æšæ•°ã‚’è¦šãˆã¦ã„ã‚‹ã‹ï¼Ÿ'),
+            '[' => array('æ™‚ã‚ˆæ­¢ã¾ã‚Œã€Œã‚¶ãƒ»ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€ï¼'),
+            ']' => array('ãã—ã¦æ™‚ã¯å‹•ãå‡ºã™'),
             );
     }
 
@@ -52,7 +52,7 @@ class Acme_BrainPhack_Translator_Jojo_Dio
 /**
  * Local Variables:
  * mode: php
- * coding: iso-8859-1
+ * coding: utf-8
  * tab-width: 4
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil
