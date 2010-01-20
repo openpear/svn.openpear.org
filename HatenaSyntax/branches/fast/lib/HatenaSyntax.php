@@ -8,12 +8,20 @@
 
 include_once 'PEG.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Node.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Regex.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Locator.php';
-include_once dirname(__FILE__) . '/HatenaSyntax/Factory.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/NodeCreater.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Renderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/TOCRenderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Util.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Header.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Quote.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Table.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/DefinitionList.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/List.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Paragraph.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Pre.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/SuperPre.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/TreeRenderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Tree.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Tree/INode.php';
@@ -29,7 +37,7 @@ class HatenaSyntax
      */
     static function parse($str)
     {
-        return HatenaSyntax_Locator::it()->parser->parse(PEG::context(self::preparse($str)));
+        return HatenaSyntax_Locator::it()->parser->parse(self::context($str));
     }
     
     /**
@@ -46,10 +54,14 @@ class HatenaSyntax
     
     /**
      * @param string
-     * @return string
+     * @return PEG_IContext
      */
-    static protected function preparse($str)
+    static protected function context($str)
     {
-        return preg_replace('/<!--.*?-->/s', '', $str);
+        $str = preg_replace('/<!--.*?-->/s', '', $str);
+        $str = str_replace("\r\n", "\n", $str);
+        $str = str_replace("\r", "\n", $str);
+
+        return PEG::context(preg_split("/\n/", $str));
     }
 }
