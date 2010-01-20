@@ -1,5 +1,5 @@
 <?php
-include_once dirname(__FILE__) . '/../code/HatenaSyntax.php';
+include_once dirname(__FILE__) . '/../lib/HatenaSyntax.php';
 
 
 $str = '*header1
@@ -58,13 +58,29 @@ function keywordlinkhandler($path)
 }
 
 // オプションは全て省略可。第二引数自体も省略可。
-echo HatenaSyntax::render($str, array('headerlevel' => 3,                           // ヘッダの基準値。デフォルトは1
-                                      'id' => 'hoge',                               // 記事の識別子。指定しない場合はランダムなIDが生成される
-                                      'htmlescape' => false,                        // デフォルトはtrue。
-                                      'sectionclass' => 'section',                  // 記事本体を囲むdiv要素のクラス。デフォルトは'section'
-                                      'footnoteclass' => 'footnote',                // 脚注を囲むdiv要素のクラス。デフォルトは'footnote'
-                                      'keywordlinkhanlder' => 'keywordlinkhandler', // キーワード記法のキーワードをアドレスに処理するコールバック
-                                      'superprehandler' => 'sprehandler'));         // superpre記法の中身を処理するコールバック
+echo HatenaSyntax::render($str, array(
+
+    // ヘッダの基準値。デフォルトは1
+    'headerlevel' => 3,                           
+
+    // 記事の識別子。指定しない場合はランダムなIDが生成される
+    'id' => 'hoge',                               
+
+    // デフォルトはtrue。
+    'htmlescape' => false,                        
+
+    // 記事本体を囲むdiv要素のクラス。デフォルトは'section'
+    'sectionclass' => 'section',                  
+
+    // 脚注を囲むdiv要素のクラス。デフォルトは'footnote'
+    'footnoteclass' => 'footnote',                
+
+    // キーワード記法のキーワードをアドレスに処理するコールバック
+    'keywordlinkhanlder' => 'keywordlinkhandler', 
+
+    // superpre記法の中身を処理するコールバック
+    'superprehandler' => 'sprehandler'));         
+
 /* 結果
 <div class="section">
 <h3><a name="ea703e7aa1efda0064eaa507d9e8ab7e_header_0" id="ea703e7aa1efda0064eaa507d9e8ab7e_header_0"></a>header1</h3>
