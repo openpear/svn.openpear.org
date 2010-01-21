@@ -15,6 +15,8 @@ include_once dirname(__FILE__) . '/HatenaSyntax/Renderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/TOCRenderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Util.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Header.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/Block.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/LineElement.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Quote.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Table.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/DefinitionList.php';
