@@ -62,7 +62,7 @@ class HatenaSyntax_TreeRenderer
         $ret = '<li>' . PHP_EOL;
         if ($node->hasValue()) $ret .= $this->renderValue($node->getValue());
         $ordered = $this->isOrdered($node);
-        $ret .= $this->listOpenTag($ordered);
+        $ret .= PHP_EOL . $this->listOpenTag($ordered);
         foreach ($node->getChildren() as $child) {
             $ret .= $this->_render($child);
         }
@@ -73,6 +73,6 @@ class HatenaSyntax_TreeRenderer
     
     protected function renderLeaf($node)
     {
-        return '<li>' . $this->renderValue($node->getValue()) . '</li>';
+        return '<li>' . $this->renderValue($node->getValue()) . '</li>' . PHP_EOL;
     }
 }

@@ -188,7 +188,9 @@ class HatenaSyntax_Locator
     
     protected function createEmptyParagraph()
     {
-        return $this->nodeCreater('emptyparagraph', PEG::token(''));
+        $parser = PEG::count(PEG::many1(PEG::token('')));
+
+        return $this->nodeCreater('emptyparagraph', $parser);
     }
     
     protected function createBlock()
