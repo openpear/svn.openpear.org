@@ -96,7 +96,7 @@ class HatenaSyntax_Renderer
         $level = $data['level'] + $this->config['headerlevel'];   
         $name = md5($this->config['id']) . '_header_' . $this->headerCount++;
         $anchor = '<a name="' . $name . '" id="' . $name . '"></a>';
-        return "<h{$level}>" . $anchor . $this->renderLineSegment($data['body']) . "</h{$level}>";
+        return "<h{$level}>" . $this->renderLineSegment($data['body']) . $anchor . "</h{$level}>";
     }
     
     protected function renderLineSegment(Array $data)
