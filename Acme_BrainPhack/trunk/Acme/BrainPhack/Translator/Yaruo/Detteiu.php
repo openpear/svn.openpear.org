@@ -30,6 +30,14 @@
  */
 class Acme_BrainPhack_Translator_Yaruo_Detteiu
 {
+    // {{{ getName()
+
+    function getName()
+    {
+        return "Yaruo's 'でっていう' mapping";
+    }
+
+    // }}}
     // {{{ getMap()
 
     function getMap()

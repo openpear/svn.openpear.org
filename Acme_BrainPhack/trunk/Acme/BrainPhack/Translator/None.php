@@ -30,6 +30,14 @@
  */
 class Acme_BrainPhack_Translator_None
 {
+    // {{{ getName()
+
+    function getName()
+    {
+        return "Default BrainF*ck Translator mapping";
+    }
+
+    // }}}
     // {{{ getMap()
 
     function getMap()

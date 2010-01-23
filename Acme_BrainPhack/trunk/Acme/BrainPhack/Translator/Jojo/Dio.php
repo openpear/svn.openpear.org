@@ -30,6 +30,14 @@
  */
 class Acme_BrainPhack_Translator_Jojo_Dio
 {
+    // {{{ getName()
+
+    function getName()
+    {
+        return "JOJO's DIO mapping";
+    }
+
+    // }}}
     // {{{ getMap()
 
     function getMap()
