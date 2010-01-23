@@ -24,6 +24,10 @@
  */
 
 require_once('Console/GetOpt.php');
+require_once('PEAR/ErrorStack.php');
+require_once('Acme/BrainPhack/Translator.php');
+require_once('Acme/BrainPhack/MemoryStack.php');
+require_once('Acme/BrainPhack/Interpreter.php');
 
 function usage()
 {
@@ -96,6 +100,39 @@ if (false === $src) {
     exit(1);
 }
 
+$bpt =& new Acme_BrainPhack_Translator();
+$bptm =& $bpt->getMapper($settings['translator']);
+$map = $bptm->getMap();
+$bpsrc = $bpt->translate($map, $src);
 
-var_dump($settings);
+if (true === $settings['convert_not_run']) {
+    echo $bpsrc;
+    echo "\n";
+    exit(0);
+}
 
+$sz = 1024 * $settings['stack_size'];
+$bpms =& new Acme_BrainPhack_MemoryStack($sz, 0);
+$errorStack =& new PEAR_ErrorStack('Acme_BrainPhack CUI ErrorStack');
+$bpi =& new Acme_BrainPhack_Interpreter($bpms, $errorStack);
+$bpi->run($bpsrc);
+$errors = $errorStack->getErrors(true);
+foreach ($errors as $e) {
+    $_l = $e['level'];
+    $_m = $e['message'];
+    $_c = $e['code'];
+    $_p = '(' . implode(', ', $e['params']) . ')';
+    echo "{$_l} {$_m} {$_p} (code={$_c})\n";
+}
+
+/**
+ * Local Variables:
+ * mode: php
+ * coding: iso-8859-1
+ * tab-width: 4
+ * c-basic-offset: 4
+ * c-hanging-comment-ender-p: nil
+ * indent-tabs-mode: nil
+ * End:
+ * vim: set expandtab tabstop=4 shiftwidth=4 filetype=php:
+ */

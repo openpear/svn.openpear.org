@@ -8,6 +8,9 @@ see: http://simpletest.sourceforge.net/
 
 - stdin_test.php : Run only "," instruction. Confirm input and output by hand..
 
+- scripts_test.php : Run scripts/brainphack.sh wrapper.
+                     Try sample helloworlds in "testsrc" directory.
+
 For more details, read source codes.
 
 Thank you.
