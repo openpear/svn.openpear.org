@@ -87,6 +87,31 @@ class Acme_BrainPhack_Translator
     }
 
     // }}}
+    // {{{ getMapper()
+
+    function &getMapper($name = 'None')
+    {
+
+        /*
+         * simple and easy implementation.
+         * don't need consideratioons about error handling and 
+         * mapper instance memory performance, yet.
+         */
+
+        $__base_dir = dirname(__FILE__);
+        $_name = strtr($name, '_', '/');
+        $_filename = realpath($__base_dir . '/Translator/' . $_name . '.php');
+
+        include_once($_filename);
+
+        $klassname = 'Acme_BrainPhack_Translator_' . $name;
+
+        $ret =& new $klassname();
+
+        return $ret;
+    }
+
+    // }}}
 }
 
 /**

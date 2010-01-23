@@ -291,6 +291,30 @@ TEXT;
     }
 
     // }}}
+    // {{{ testGetMapping()
+
+    function testGetMapping()
+    {
+        $bpt =& new Acme_BrainPhack_Translator();
+
+        // default
+        $bptm =& $bpt->getMapper();
+        $r = $bptm->getName();
+        $this->assertIdentical($r, 'Default BrainF*ck Translator mapping');
+
+        // JOJO's DIO
+        $bptm =& $bpt->getMapper('JOJO_Dio');
+        $r = $bptm->getName();
+        $this->assertIdentical($r, "JOJO's DIO mapping");
+
+        // Yaruo's Detteiu
+        $bptm =& $bpt->getMapper('Yaruo_Detteiu');
+        $r = $bptm->getName();
+        $this->assertIdentical($r, "Yaruo's 'でっていう' mapping");
+
+    }
+
+    // }}}
 }
 
 /**
