@@ -1,0 +1,42 @@
+[project]
+src_dir = src
+release_dir = release
+
+[document]
+doc_dir = doc
+
+[package]
+baseinstalldir = /
+package_name = Acme_BrainPhack
+package_type = php
+channel = openpear.org
+summary_file = desc.txt
+description_file = desc.txt
+notes_file = notes.txt
+
+[role]
+sh = script
+
+[version]
+release_ver = 0.0.1
+release_stab = beta
+php_min = 4.4.0
+pear_min = 1.8.0
+api_ver = 0.0.1
+api_stab = beta
+
+[license]
+name = Apache License Version 2.0
+uri = http://www.apache.org/licenses/LICENSE-2.0
+
+[maintainer://msakamoto-sf]
+name = "msakamoto-sf"
+mail = "sakamoto-gsyc-3s@glamenv-septzen.net"
+role = "lead"
+
+
+[file://scripts/brainphack.sh]
+commandscript = "brainphack"
+
+[file://scripts/brainphack.bat]
+commandscript = "brainphack.bat"
