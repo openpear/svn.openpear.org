@@ -1,0 +1,18 @@
+* Acme_BrainPhack test code README
+
+Acme_BrainPhack test codes require "simpletest" php unit test library.
+see: http://simpletest.sourceforge.net/
+
+- all_test.php : Run unit tests for all Acme_BrainPhack classes, 
+                 except ","(read a char from stdin) instruction.
+
+- stdin_test.php : Run only "," instruction. Confirm input and output by hand..
+
+- scripts_test.php : Run scripts/brainphack.sh wrapper.
+                     Try sample helloworlds in "testsrc" directory.
+
+For more details, read source codes.
+
+Thank you.
+
+Copyright 2010 sakamoto-gsyc-3s@glamenv-septzen.net
