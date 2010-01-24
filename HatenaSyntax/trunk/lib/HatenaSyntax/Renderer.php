@@ -123,6 +123,14 @@ class HatenaSyntax_Renderer
         $this->footnote .= sprintf('<p><a href="#%s" name="%s" id="%s">*%d</a>: %s</p>' . PHP_EOL, $fnlinkname, $fnname, $fnname, $n, $body);
         return sprintf('(<a href="#%s" name="%s" id="%s" title="%s">*%d</a>)', $fnname, $fnlinkname, $fnlinkname, $title, $n);
     }
+
+    protected function renderInlineTag(Array $data)
+    {
+        return 
+            "<{$data['name']}>" 
+            . $this->renderLineSegment($data['body']) 
+            . "</{$data['name']}>";
+    }
     
     protected function renderHttpLink(Array $data)
     {
