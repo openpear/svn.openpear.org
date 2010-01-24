@@ -8,13 +8,21 @@
 
 class HatenaSyntax_Locator
 {
-    protected $block_ref = null;
+    protected $blockRef = null, $lineElementRef = null;
     protected $shared = array();
     protected $facade;
     
     private function __construct()
     {
         $this->setup();
+    }
+
+    protected function setup()
+    {
+        $this->lineElement;
+        $this->lineElementRef = new HatenaSyntax_LineElement($this->bracket, $this->footnote, $this->inlineTag);
+        $this->block;
+        $this->blockRef = PEG::memo(new HatenaSyntax_Block($this));
     }
 
     static function it()
@@ -52,10 +60,17 @@ class HatenaSyntax_Locator
                             
         return $this->nodeCreater('footnote', $parser);
     }
+
+    protected function createInlineTag()
+    {
+        $parser = new HatenaSyntax_InlineTag($this->lineElement);
+
+        return $this->nodeCreater('inlinetag', $parser, array('name', 'body'));
+    }
     
     protected function createLineElement()
     {
-        return new HatenaSyntax_LineElement($this->bracket, $this->footnote);
+        return PEG::ref($this->lineElementRef);
     }
     
     protected function createLineSegment()
@@ -195,8 +210,8 @@ class HatenaSyntax_Locator
     
     protected function createBlock()
     {
-        $parser = PEG::ref($r);
-        $this->block_ref = &$r;
+        $parser = PEG::ref($this->blockRef);
+
         return $parser;
     }
 
@@ -205,9 +220,4 @@ class HatenaSyntax_Locator
         return $this->nodeCreater('root', PEG::many($this->block));
     }
     
-    protected function setup()
-    {
-        $this->block;
-        $this->block_ref = PEG::memo(new HatenaSyntax_Block($this));
-    }
 }

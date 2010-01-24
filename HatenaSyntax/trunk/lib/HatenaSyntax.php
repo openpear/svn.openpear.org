@@ -11,6 +11,7 @@ include_once dirname(__FILE__) . '/HatenaSyntax/Node.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Regex.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Locator.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/NodeCreater.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/InlineTag.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Renderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/TOCRenderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Util.php';

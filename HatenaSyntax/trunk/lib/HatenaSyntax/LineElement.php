@@ -10,11 +10,12 @@ class HatenaSyntax_LineElement implements PEG_IParser
 {
     protected $table;
 
-    function __construct(PEG_IParser $bracket, PEG_IParser $footnote)
+    function __construct(PEG_IParser $bracket, PEG_IParser $footnote, PEG_IParser $inlinetag)
     {
         $this->table = array(
             '[' => PEG::choice($bracket, PEG::anything()),
-            '(' => PEG::choice($footnote, PEG::anything())
+            '(' => PEG::choice($footnote, PEG::anything()),
+            '<' => PEG::choice($inlinetag, PEG::anything())
         );
     }
 
@@ -26,18 +27,11 @@ class HatenaSyntax_LineElement implements PEG_IParser
 
         $char = $context->readElement();
 
-        if ($char === '[' || $char === '(') {
+        if (isset($this->table[$char])) {
             $offset = $context->tell() - 1;
             $context->seek($offset);
 
-            $result = $this->table[$char]->parse($context);
-
-            if ($result instanceof PEG_Failure) {
-                $context->seek($offset + 1);
-                return $char;
-            }
-
-            return $result;
+            return $this->table[$char]->parse($context);
         }
 
         return $char;
