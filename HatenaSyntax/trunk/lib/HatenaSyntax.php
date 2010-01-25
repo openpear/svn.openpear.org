@@ -65,9 +65,7 @@ class HatenaSyntax
      */
     static protected function context($str)
     {
-        $str = preg_replace('/<!--.*?-->/s', '', $str);
-        $str = str_replace("\r\n", "\n", $str);
-        $str = str_replace("\r", "\n", $str);
+        $str = str_replace(array("\r\n", "\r"), "\n", $str);
 
         return PEG::context(preg_split("/\n/", $str));
     }

@@ -79,8 +79,8 @@ echo HatenaSyntax::render($str, array(
     'keywordlinkhanlder' => 'keywordlinkhandler', 
 
     // superpre記法の中身を処理するコールバック
-    'superprehandler' => 'sprehandler')
-);         
+    'superprehandler' => 'sprehandler'
+));         
 
 /* 結果
 <div class="section">
