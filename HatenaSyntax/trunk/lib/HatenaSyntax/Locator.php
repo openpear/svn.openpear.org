@@ -170,7 +170,7 @@ class HatenaSyntax_Locator
     {
         $parser = new HatenaSyntax_Header($this->lineElement);
         
-        return $this->nodeCreater('header', $parser, array('level', 'body'));
+        return $this->nodeCreater('header', $parser, array('level', 'name', 'body'));
     }
 
     protected function createList()
