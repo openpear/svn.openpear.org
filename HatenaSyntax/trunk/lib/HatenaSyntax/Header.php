@@ -48,12 +48,12 @@ class HatenaSyntax_Header implements PEG_IParser
             }
         }
 
-        return array($level, substr($line, $level));
+        return array($level, (string)substr($line, $level));
     }
 
     protected function nameAndBody($rest)
     {
-        if (preg_match('/^(.*?)\*/', $rest, $matches)) {
+        if (preg_match('/^([-[:alnum:]_]*)\*/', $rest, $matches)) {
             return array($matches[1], (string)substr($rest, strlen($matches[0])));
         }
 
