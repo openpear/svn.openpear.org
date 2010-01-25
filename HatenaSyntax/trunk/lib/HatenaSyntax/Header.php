@@ -24,10 +24,13 @@ class HatenaSyntax_Header implements PEG_IParser
     function map($line)
     {
         if (strpos($line, '*') === 0) {
-            list($level, $rest) = $this->levelAndRest($line);
-            list($name, $body) = $this->nameAndBody($rest);
+            list($level, $rest) = $this->toLevelAndRest((string)substr($line, 1));
 
-            $body = $this->child->parse(PEG::context($body));
+            list($name, $rest) = $level === 0 
+                ? $this->toNameAndRest($rest) 
+                : array(false, $rest);
+
+            $body = $this->child->parse(PEG::context($rest));
 
             return array($level, $name, $body);
         }
@@ -35,10 +38,9 @@ class HatenaSyntax_Header implements PEG_IParser
         return PEG::failure();
     }
 
-    protected function levelAndRest($line)
+    protected function toLevelAndRest($line)
     {
         $level = 0;
-        $line = (string)substr($line, 1);
 
         for ($i = 0, $len = strlen($line); $i < $len; $i++) {
             if ($line[$i] === '*') {
@@ -51,7 +53,7 @@ class HatenaSyntax_Header implements PEG_IParser
         return array($level, (string)substr($line, $level));
     }
 
-    protected function nameAndBody($rest)
+    protected function toNameAndRest($rest)
     {
         if (preg_match('/^([-[:alnum:]_]*)\*/', $rest, $matches)) {
             return array($matches[1], (string)substr($rest, strlen($matches[0])));
