@@ -24,12 +24,39 @@ class HatenaSyntax_Header implements PEG_IParser
     function map($line)
     {
         if (strpos($line, '*') === 0) {
-            preg_match('/^\**/', substr($line, 1), $matches);
-            $level = strlen($matches[0]);
-            $body = $this->child->parse(PEG::context((string)substr($line, $level + 1)));
-            return array($level, $body);
+            list($level, $rest) = $this->levelAndRest($line);
+            list($name, $body) = $this->nameAndBody($rest);
+
+            $body = $this->child->parse(PEG::context($body));
+
+            return array($level, $name, $body);
         }
 
         return PEG::failure();
+    }
+
+    protected function levelAndRest($line)
+    {
+        $level = 0;
+        $line = (string)substr($line, 1);
+
+        for ($i = 0, $len = strlen($line); $i < $len; $i++) {
+            if ($line[$i] === '*') {
+                $level++;
+            } else {
+                break;
+            }
+        }
+
+        return array($level, substr($line, $level));
+    }
+
+    protected function nameAndBody($rest)
+    {
+        if (preg_match('/^(.*?)\*/', $rest, $matches)) {
+            return array($matches[1], (string)substr($rest, strlen($matches[0])));
+        }
+
+        return array(false, $rest);
     }
 }

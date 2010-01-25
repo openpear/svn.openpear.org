@@ -8,21 +8,38 @@
 
 class HatenaSyntax_Renderer
 {
-    protected $config, $footnote, $fncount, $root, $treeRenderer, $headerCount;
+    protected 
+        $config, 
+        $footnote, 
+        $fncount, 
+        $root, 
+        $treeRenderer, 
+        $headerCount;
     
     function __construct(Array $config = array())
     {
         $this->config = $config + array(
-            'headerlevel' => 1,
-            'htmlescape' => true,
-            'id' => uniqid('sec'),
-            'sectionclass' => 'section',
-            'footnoteclass' => 'footnote',
+            'headerlevel'        => 1,
+            'htmlescape'         => true,
+            'id'                 => uniqid('sec'),
+            'sectionclass'       => 'section',
+            'footnoteclass'      => 'footnote',
             'keywordlinkhandler' => array($this, 'keywordLinkHandler'),
-            'superprehandler' => array($this, 'superPreHandler')
+            'superprehandler'    => array($this, 'superPreHandler')
         );
         
         $this->treeRenderer = new HatenaSyntax_TreeRenderer(array($this, 'listItemCallback'), array($this, 'isOrderedCallback'));
+    }
+    
+    static function superPreHandler($type, $lines)
+    {
+        $body = join(PHP_EOL, array_map(array('HatenaSyntax_Renderer', 'escape'), $lines));
+        return '<pre class="superpre">' . PHP_EOL . $body . '</pre>';
+    }
+    
+    static function keywordLinkHandler($path)
+    {
+        return './' . $path;
     }
     
     function listItemCallback(Array $data)
@@ -62,17 +79,6 @@ class HatenaSyntax_Renderer
         return $ret;
     }
     
-    static function superPreHandler($type, $lines)
-    {
-        $body = join(PHP_EOL, array_map(array('HatenaSyntax_Renderer', 'escape'), $lines));
-        return '<pre class="superpre">' . PHP_EOL . $body . '</pre>';
-    }
-    
-    static function keywordLinkHandler($path)
-    {
-        return './' . $path;
-    }
-    
     protected function renderTableOfContents()
     {
         $tocRenderer = new HatenaSyntax_TOCRenderer();
@@ -93,9 +99,10 @@ class HatenaSyntax_Renderer
     
     protected function renderHeader(Array $data)
     {
-        $level = $data['level'] + $this->config['headerlevel'];   
-        $name = md5($this->config['id']) . '_header_' . $this->headerCount++;
+        $level  = $data['level'] + $this->config['headerlevel'];   
+        $name   = md5($this->config['id']) . '_header_' . $this->headerCount++;
         $anchor = '<a name="' . $name . '" id="' . $name . '"></a>';
+
         return "<h{$level}>" . $this->renderLineSegment($data['body']) . $anchor . "</h{$level}>";
     }
     

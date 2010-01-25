@@ -35,6 +35,8 @@ include_once dirname(__FILE__) . '/HatenaSyntax/Tree/Leaf.php';
 class HatenaSyntax
 {
     /**
+     * 文字列をパースしてHatenaSyntax_Nodeインスタンからなる構文木を返す。
+     *
      * @param string
      * @return HatenaSyntax_Node
      */
@@ -44,11 +46,13 @@ class HatenaSyntax
     }
     
     /**
+     * 文字列をパースしてhtmlを返す。
+     *
      * @param string
      * @param Array
      * @return string
      */
-    static function render($str, $config = array())
+    static function render($str, Array $config = array())
     {
         $node = self::parse($str);
         $renderer = new HatenaSyntax_Renderer($config);
@@ -66,5 +70,43 @@ class HatenaSyntax
         $str = str_replace("\r", "\n", $str);
 
         return PEG::context(preg_split("/\n/", $str));
+    }
+
+    /**
+     * HatenaSyntax_Nodeインスタンスからなる構文木をhtmlにして返す。
+     *
+     * @param HatenaSyntax_Node 
+     * @param Array
+     * @return string
+     */
+    static function renderNode(HatenaSyntax_Node $root, Array $config = array())
+    {
+        $renderer = new HatenaSyntax_Renderer($config);
+        return $renderer->render($root);
+    }
+
+    /**
+     * セクション名を取得する。
+     * 見つからなかった場合は空の文字列を返す。
+     *
+     * @param HatenaSyntax_Node
+     * @return string
+     */
+    static function getSectionName(HatenaSyntax_Node $root)
+    {
+        if ($root->getType() !== 'root') {
+            throw new InvalidArgumentException('$root must be root node');
+        }
+
+        foreach ($root->getData() as $block) {
+            if ($block->getType() === 'header') {
+                $data = $block->getData();
+                if (is_string($data['name'])) {
+                    return $data['name'];
+                }
+            }
+        }
+
+        return '';
     }
 }
