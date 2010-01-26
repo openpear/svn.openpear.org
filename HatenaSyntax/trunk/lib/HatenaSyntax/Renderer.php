@@ -25,10 +25,18 @@ class HatenaSyntax_Renderer
             'sectionclass'       => 'section',
             'footnoteclass'      => 'footnote',
             'keywordlinkhandler' => array($this, 'keywordLinkHandler'),
-            'superprehandler'    => array($this, 'superPreHandler')
+            'superprehandler'    => array($this, 'superPreHandler'),
+            'linktitlehandler'   => array($this, 'linkTitleHandler')
         );
         
-        $this->treeRenderer = new HatenaSyntax_TreeRenderer(array($this, 'listItemCallback'), array($this, 'isOrderedCallback'));
+        $this->treeRenderer = new HatenaSyntax_TreeRenderer(
+            array($this, 'listItemCallback'), 
+            array($this, 'isOrderedCallback'));
+    }
+
+    static function linkTitleHandler($url)
+    {
+        return $url;
     }
     
     static function superPreHandler($type, $lines)
@@ -142,10 +150,12 @@ class HatenaSyntax_Renderer
     protected function renderHttpLink(Array $data)
     {
         list($href, $title) = array($data['href'], $data['title']);
-        $title = $title ? $title : $href;
-        if ($this->config['htmlescape']) $title = $this->escape($title); 
-        $href = $this->escape($href);
-        return sprintf('<a href="%s">%s</a>', $href, $title);
+
+        if ($title === '') {
+            $title = call_user_func($this->config['linktitlehandler'], $href);
+        }
+
+        return sprintf('<a href="%s">%s</a>', self::escape($href), self::escape($title));
     }
     
     protected function renderImageLink($url)

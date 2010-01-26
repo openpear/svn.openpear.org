@@ -81,9 +81,12 @@ class HatenaSyntax_Locator
     protected function createHttpLink()
     {
         $title_char = PEG::subtract($this->lineChar, ']');
-        $title = PEG::second(':title=', PEG::join(PEG::many1($title_char)));
+        $title = PEG::choice(
+            PEG::second(':title', ''), 
+            PEG::second(':title=', PEG::join(PEG::many1($title_char)))
+        );
         
-        $url_char = PEG::subtract($this->lineChar, ']', ':title=');
+        $url_char = PEG::subtract($this->lineChar, ']', ':title');
         $url = PEG::join(PEG::seq(
             PEG::choice('http://', 'https://'), 
             PEG::many1($url_char))); 
