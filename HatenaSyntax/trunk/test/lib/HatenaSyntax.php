@@ -11,3 +11,9 @@ $t->is(HatenaSyntax::getSectionName($node), '');
 
 $node = HatenaSyntax::parse('**hoge*header');
 $t->is(HatenaSyntax::getSectionName($node), '');
+
+$nodes = HatenaSyntax::parseAsSections("\n*hoge\n*fuga\n*piyo");
+$t->is(count($nodes), 3);
+
+$nodes = HatenaSyntax::parseAsSections("*hoge\n\nfuga");
+$t->is(count($nodes), 1);

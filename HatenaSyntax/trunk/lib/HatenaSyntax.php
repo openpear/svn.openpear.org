@@ -45,6 +45,60 @@ class HatenaSyntax
     {
         return HatenaSyntax_Locator::it()->parser->parse(self::context($str));
     }
+
+    /**
+     * 文字列をパースしてHatenaSyntax_Nodeインスタンスからなる構文木の配列を返す
+     *
+     * @param string
+     * @return Array
+     */
+    static function parseAsSections($str)
+    {
+        $blocks = self::parse($str)->getData();
+
+        // 先頭にある空のパラグラフを削る
+        foreach ($blocks as $i => $block) {
+            if ($block->getType() === 'emptyparagraph') {
+                unset($blocks[$i]);
+            }
+            else {
+                break;
+            }
+        }
+        $blocks = array_values($blocks);
+
+        // セクションごとにブロック要素をまとめる
+        $sections = array();
+        $len = count($blocks);
+        $blocks = array_reverse($blocks);
+        for ($i = 0; $i < $len; $i++) {
+            $section = array();
+            for (;$i < $len; $i++) {
+                $section[] = $blocks[$i];
+                if (self::isTopHeader($blocks[$i])) {
+                    break;
+                }
+            }
+            $sections[] = array_reverse($section);
+        }
+        $sections = array_reverse($sections);
+
+        // ブロック要素の配列をノードにする
+        foreach ($sections as $i => $section) {
+            $sections[$i] = new HatenaSyntax_Node('root', $section);
+        }
+
+        return $sections;
+    }
+
+    static protected function isTopHeader(HatenaSyntax_Node $node)
+    {
+        if ($node->getType() !== 'header') {
+            return false;
+        }
+        $data = $node->getData();
+        return $data['level'] === 0;
+    }
     
     /**
      * 文字列をパースしてhtmlを返す。
