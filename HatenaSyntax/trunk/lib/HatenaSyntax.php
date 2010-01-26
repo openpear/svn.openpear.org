@@ -27,6 +27,7 @@ include_once dirname(__FILE__) . '/HatenaSyntax/Pre.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/SuperPre.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/TreeRenderer.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Tree.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/CommentRemover.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Tree/INode.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Tree/Node.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Tree/Root.php';
@@ -35,7 +36,7 @@ include_once dirname(__FILE__) . '/HatenaSyntax/Tree/Leaf.php';
 class HatenaSyntax
 {
     /**
-     * 文字列をパースしてHatenaSyntax_Nodeインスタンからなる構文木を返す。
+     * 文字列をパースしてHatenaSyntax_Nodeインスタンスからなる構文木を返す。
      *
      * @param string
      * @return HatenaSyntax_Node
@@ -66,6 +67,7 @@ class HatenaSyntax
     static protected function context($str)
     {
         $str = str_replace(array("\r\n", "\r"), "\n", $str);
+        $str = strpos('<!--', $str) === false ? $str : HatenaSyntax_CommentRemover::remove($str);
 
         return PEG::context(preg_split("/\n/", $str));
     }
