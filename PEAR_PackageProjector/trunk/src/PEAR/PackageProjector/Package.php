@@ -89,6 +89,14 @@ class PEAR_PackageProjector_Package {
         $this->Installgroups[$groupname] = $groupname;
     }
     
+    public function addDirectoryRole($path, $role)
+    {
+        if (isset($this->options['dir_roles'])) {
+            $this->options['dir_roles'] = array();
+        }
+        $this->options['dir_roles'][$path] = $role;
+    }
+    
     public function addExceptions($path, $role)
     {
         if (isset($this->options['exceptions'])) {
@@ -159,6 +167,8 @@ class PEAR_PackageProjector_Package {
         $this->pkg->addRelease();
 
         $this->pkg->generateContents();
+        // for debug dump:
+        //$result = $this->pkg->debugPackageFile();
         $result = $this->pkg->writePackageFile();
         if (PEAR::isError($result)) {
             throw new PEAR_Exception($result->getMessage(), $result->getCode());
