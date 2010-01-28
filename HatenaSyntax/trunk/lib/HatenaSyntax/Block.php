@@ -17,7 +17,8 @@ class HatenaSyntax_Block implements PEG_IParser
     function __construct(HatenaSyntax_Locator $locator)
     {
         /*
-         * 当該パーサへのディスパッチは以下の順で行われる。
+         * 当該パーサへのディスパッチの試行は以下の順で行われる。
+         * ディスパッチが失敗した場合、次のディスパッチが試行される
          *
          * 1. lineTableからのディスパッチ
          * 2. paragraphCheckTableからのディスパッチ
@@ -69,6 +70,7 @@ class HatenaSyntax_Block implements PEG_IParser
             '>' => PEG::choice(
                 $locator->superpre,
                 $locator->blockquote,
+                $locator->noParagraph,
                 $locator->paragraph
             )
         );

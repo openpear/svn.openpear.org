@@ -23,6 +23,7 @@ include_once dirname(__FILE__) . '/HatenaSyntax/Table.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/DefinitionList.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/List.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Paragraph.php';
+include_once dirname(__FILE__) . '/HatenaSyntax/NoParagraph.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Pre.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/SuperPre.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/TreeRenderer.php';

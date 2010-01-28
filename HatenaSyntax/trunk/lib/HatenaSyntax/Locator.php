@@ -176,6 +176,13 @@ class HatenaSyntax_Locator
         return $this->nodeCreater('header', $parser, array('level', 'name', 'body'));
     }
 
+    protected function createNoParagraph()
+    {
+        $parser = new HatenaSyntax_NoParagraph($this->lineElement);
+
+        return $this->nodeCreater('noparagraph', $parser, array('tag', 'attr', 'body'));
+    }
+
     protected function createList()
     {
         $parser = new HatenaSyntax_List($this->lineElement);
