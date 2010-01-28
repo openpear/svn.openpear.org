@@ -1,3 +1,6 @@
+[1.0.2]
+- bug fix ignore role option when role target is directory. 
+
 [1.0.1]
 - update pearproj.sh. To support old project
 

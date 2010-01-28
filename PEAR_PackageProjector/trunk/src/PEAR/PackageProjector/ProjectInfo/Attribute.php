@@ -192,7 +192,11 @@ class PEAR_PackageProjector_ProjectInfo_Attribute implements PEAR_PackageProject
         $role = $this->_getAttr('role');
         if (!is_null($role)) {
             $handler->buildMessage(5, "Add attribute 'role' of [{$this->path}]... {$role}", true);
-            $package->addExceptions($this->path, $role);
+            if (is_dir($fullpath)) {
+                $package->addDirectoryRole($this->path, $role);
+            } else {
+                $package->addExceptions($this->path, $role);
+            }
         }
         //
         $platform = $this->_getAttr('platform');
