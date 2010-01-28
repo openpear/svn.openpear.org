@@ -80,4 +80,8 @@ $pt = new PHP_Powertoys();
 //モザイク
 //$img = $pt->mosaic(dirname(dirname(__FILE__)) . '/sample/sample.jpg');
 //imagejpeg($img, dirname(dirname(__FILE__)) . '/sample/mosaic.jpg');
+
+//$array['test1']['test2']['test3'] = 'a';
+//$count = $pt->getCountDimentionArrays($array);
+//echo $count;
 ?>

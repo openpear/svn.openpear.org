@@ -630,6 +630,70 @@ class PHP_PowerToys {
 	    unset($b);
 	    return $newimg;
 	}
+
+	/**
+	 *
+	 * 多次元配列の最多次元数を返す
+	 *
+	 * @param Array $array
+	 * @return int
+	 */
+	function getCountDimentionArrays($array){
+	    if(!is_array($array)) return false;
+	    foreach($array as $val){
+		if(is_array($val)){
+		    global $cnt;
+		    $cnt++;
+		    $this->getCountDimentionArrays($val);
+		}
+	    }
+	    return $cnt++;
+	}
+
+	/**
+	 * 変数の中に格納されているデータの型をチェックする(若干gettypeと似ている)
+	 *
+	 * @param mixed $var
+	 * @return mixed but Not setting to false
+	 */
+	function strictTypeChecker($var){
+	    if(isset($var)) return false;
+	    if(is_null($var)){
+		return 'null';
+	    }elseif(empty($var)){
+		return 'empty';
+	    }elseif($var === 0){
+		return 'int 0';
+	    }elseif(is_string($var)){
+		return 'string';
+	    }elseif($var == 0 && is_string($var)){
+		return 'str 0';
+	    }elseif($var == 0 && is_numeric($var)){
+		return 'num 0';
+	    }elseif(is_float($var)){
+		return 'float';
+	    }elseif(is_array($var)){
+		return 'Array';
+	    }elseif(is_object($var)){
+		return 'Object';
+	    }elseif(is_resource($var)){
+		return 'resource';
+	    }elseif(is_binary($var)){
+		return 'binary';
+	    }elseif(is_bool($var)){
+		return 'Boolean';
+	    }
+	}
+
+	/**
+	 * UNIXのコアダンプ情報を返す(Experiment)
+	 * @return Array
+	 */
+	function coreDumpList(){
+	    $core = `locate /usr | grep \\.core$`;
+	    $core = preg_split("/\r\n|\n|\r/", $core);
+	    return $core;
+	}
 }
 
 class DTO {
