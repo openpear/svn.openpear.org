@@ -113,6 +113,22 @@ class HatenaSyntax_Renderer
 
         return "<h{$level}>" . $this->renderLineSegment($data['body']) . $anchor . "</h{$level}>";
     }
+
+    protected function renderNoParagraph(Array $data)
+    {
+        $ret = '';
+        $ret .= "<{$data['tag']}";
+        foreach ($data['attr'] as $name => $value) {
+            $ret .= " {$name}=\"{$value}\"";
+        }
+        $ret .= ">" . PHP_EOL;
+
+        $ret .= $this->renderLineSegment($data['body']);
+
+        $ret .= PHP_EOL . "</{$data['tag']}>" . PHP_EOL;
+
+        return $ret;
+    }
     
     protected function renderLineSegment(Array $data)
     {
