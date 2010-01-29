@@ -24,4 +24,16 @@ class HatenaSyntax_Node
     {
         return $this->data;
     }
+
+    function at($name, $defaultVal = null)
+    {
+        return array_key_exists($name, $this->data) 
+            ? $this->data[$name] 
+            : $defaultVal;
+    }
+
+    function isTopHeader()
+    {
+        return $this->type === 'header' && $this->at('level') === 0;
+    }
 }

@@ -76,7 +76,7 @@ class HatenaSyntax
             $section = array();
             for (;$i < $len; $i++) {
                 $section[] = $blocks[$i];
-                if (self::isTopHeader($blocks[$i])) {
+                if ($blocks[$i]->isTopHeader()) {
                     break;
                 }
             }
@@ -92,15 +92,6 @@ class HatenaSyntax
         return $sections;
     }
 
-    static protected function isTopHeader(HatenaSyntax_Node $node)
-    {
-        if ($node->getType() !== 'header') {
-            return false;
-        }
-        $data = $node->getData();
-        return $data['level'] === 0;
-    }
-    
     /**
      * 文字列をパースしてhtmlを返す。
      *
@@ -153,15 +144,29 @@ class HatenaSyntax
             throw new InvalidArgumentException('$root must be root node');
         }
 
-        foreach ($root->getData() as $block) {
-            if ($block->getType() === 'header') {
-                $data = $block->getData();
-                if (is_string($data['name'])) {
-                    return $data['name'];
-                }
-            }
+        list($block) = $root->getData() + array(false);
+
+        return $block && $block->isTopHeader() 
+            ? (string)$block->at('name', '')
+            : '';
+    }
+
+    /**
+     * セクションのタイトルを取得する。
+     * 見つからなかった場合は空の文字列を返す。
+     *
+     * @param HatenaSyntax_Node
+     * @param Array $config HatenaSyntax_Rendererに渡す設定
+     * @return string
+     */
+    static function getSectionTitle(HatenaSyntax_Node $root, Array $config = array())
+    {
+        if ($root->getType() !== 'root') {
+            throw new InvalidArgumentException('$root must be root node');
         }
 
-        return '';
+        $renderer = new HatenaSyntax_Renderer($config);
+        return $renderer->renderTitle($root);
     }
+
 }
