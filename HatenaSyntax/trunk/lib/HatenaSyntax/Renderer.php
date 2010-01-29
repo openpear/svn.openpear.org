@@ -289,6 +289,6 @@ class HatenaSyntax_Renderer
     
     protected static function escape($str)
     {
-        return htmlspecialchars($str, ENT_QUOTES);
+        return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
     }
 }
