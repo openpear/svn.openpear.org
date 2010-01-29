@@ -86,6 +86,25 @@ class HatenaSyntax_Renderer
         
         return $ret;
     }
+
+    function renderTitle(HatenaSyntax_Node $root)
+    {
+        if ($root->getType() !== 'root') {
+            throw new InvalidArgumentException();
+        }
+
+        $this->footnote = '';
+        $this->fncount = 0;
+        $this->root = $root;
+        $this->headerCount = 0;
+
+        $nodes = $root->getData();
+
+        if (isset($nodes[0]) && $nodes[0]->isTopHeader()) {
+            return strip_tags($this->renderLineSegment($nodes[0]->at('body')));
+        }
+        return '';
+    }
     
     protected function renderTableOfContents()
     {
@@ -169,6 +188,9 @@ class HatenaSyntax_Renderer
 
         if ($title === '') {
             $title = call_user_func($this->config['linktitlehandler'], $href);
+        }
+        elseif ($title === false) {
+            $title = $href;
         }
 
         return sprintf('<a href="%s">%s</a>', self::escape($href), self::escape($title));

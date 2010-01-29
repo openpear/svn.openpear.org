@@ -17,3 +17,9 @@ $t->is(count($nodes), 3);
 
 $nodes = HatenaSyntax::parseAsSections("*hoge\n\nfuga");
 $t->is(count($nodes), 1);
+
+$title = HatenaSyntax::getSectionTitle(HatenaSyntax::parse('*hahaha'));
+$t->is($title, 'hahaha');
+
+$title = HatenaSyntax::getSectionTitle(HatenaSyntax::parse('*hoge*s[http://google.com]'));
+$t->is($title, 'shttp://google.com');
