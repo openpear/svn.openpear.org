@@ -23,3 +23,9 @@ $t->is($title, 'hahaha');
 
 $title = HatenaSyntax::getSectionTitle(HatenaSyntax::parse('*hoge*s[http://google.com]'));
 $t->is($title, 'shttp://google.com');
+
+$hasTopHeader = HatenaSyntax::hasTopHeader(HatenaSyntax::parse('*hoge'));
+$t->ok($hasTopHeader);
+
+$hasTopHeader = HatenaSyntax::hasTopHeader(HatenaSyntax::parse('hoge'));
+$t->ok(!$hasTopHeader);

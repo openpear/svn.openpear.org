@@ -169,4 +169,20 @@ class HatenaSyntax
         return $renderer->renderTitle($root);
     }
 
+    /**
+     * セクションの先頭にトップのヘッダを持っているかを取得する
+     *
+     * @param HatenaSyntax_Node
+     * @return bool
+     */
+    static function hasTopHeader(HatenaSyntax_Node $root)
+    {
+        if ($root->getType() !== 'root') {
+            throw new InvalidArgumentException('$root must be root node');
+        }
+
+        list($block) = $root->getData() + array(false);
+
+        return $block && $block->isTopHeader();
+    }
 }
