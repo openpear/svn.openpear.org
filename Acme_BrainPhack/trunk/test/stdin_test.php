@@ -22,8 +22,7 @@
  */
 
 $include_path = ini_get('include_path');
-//$__pear_src_dir = realpath(dirname(__FILE__).'/../');
-$__pear_src_dir = realpath(dirname(__FILE__).'/../../../'); // TODO
+$__pear_src_dir = realpath(dirname(__FILE__).'/../');
 ini_set('include_path', $__pear_src_dir.PATH_SEPARATOR.$include_path);
 
 require_once('PEAR/ErrorStack.php');

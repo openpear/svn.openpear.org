@@ -25,13 +25,12 @@
 
 $include_path = ini_get('include_path');
 $__base_dir = realpath(dirname(__FILE__));
-//$__pear_src_dir = realpath($__base_dir.'/../');
-$__pear_src_dir = realpath($__base_dir.'/../../../'); // TODO
+$__pear_src_dir = realpath($__base_dir.'/../');
 ini_set('include_path', 
     $__base_dir.PATH_SEPARATOR.$__pear_src_dir.PATH_SEPARATOR.$include_path);
 
 // load and invoke script file
-$_script = realpath($__base_dir.'/../../../scripts/brainphack.sh');
+$_script = realpath($__base_dir.'/../scripts/brainphack.sh');
 require_once($_script);
 
 /**
