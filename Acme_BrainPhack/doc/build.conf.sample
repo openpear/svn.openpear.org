@@ -14,9 +14,6 @@ summary_file = desc.txt
 description_file = desc.txt
 notes_file = notes.txt
 
-[role]
-sh = script
-
 [version]
 release_ver = 0.0.1
 release_stab = beta
@@ -34,6 +31,12 @@ name = "msakamoto-sf"
 mail = "sakamoto-gsyc-3s@glamenv-septzen.net"
 role = "lead"
 
+
+[role]
+sh = script
+
+[file://test]
+role = test
 
 [file://scripts/brainphack.sh]
 commandscript = "brainphack"
