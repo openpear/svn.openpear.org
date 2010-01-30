@@ -26,8 +26,7 @@ require_once('simpletest/reporter.php');
 
 $include_path = ini_get('include_path');
 $__base_dir = realpath(dirname(__FILE__));
-//$__pear_src_dir = realpath($__base_dir.'/../');
-$__pear_src_dir = realpath($__base_dir.'/../../../'); // TODO
+$__pear_src_dir = realpath($__base_dir.'/../');
 ini_set('include_path', 
     $__base_dir.PATH_SEPARATOR.$__pear_src_dir.PATH_SEPARATOR.$include_path);
 
