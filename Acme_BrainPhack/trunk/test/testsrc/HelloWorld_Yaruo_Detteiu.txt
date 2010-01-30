@@ -1,4 +1,5 @@
 ﻿# default mapping HelloWorld and input & output a character
+# This is utf-8 japanese text file
 PHPでっていう
 今更っていう
 しかもBrainF*ckでっていう

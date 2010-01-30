@@ -1,4 +1,5 @@
 ﻿# JOJO's DIO mapping HelloWorld and input & output a character
+# This is utf-8 japanese text file
 無駄無駄無駄無駄無駄無駄無駄無駄無駄！！！！！！
 おおおおおおおお！！！！！！！！
 
