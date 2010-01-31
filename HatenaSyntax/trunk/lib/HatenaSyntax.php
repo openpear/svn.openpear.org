@@ -140,9 +140,7 @@ class HatenaSyntax
      */
     static function getSectionName(HatenaSyntax_Node $root)
     {
-        if ($root->getType() !== 'root') {
-            throw new InvalidArgumentException('$root must be root node');
-        }
+        self::assertRootNode($root);
 
         list($block) = $root->getData() + array(false);
 
@@ -161,9 +159,7 @@ class HatenaSyntax
      */
     static function getSectionTitle(HatenaSyntax_Node $root, Array $config = array())
     {
-        if ($root->getType() !== 'root') {
-            throw new InvalidArgumentException('$root must be root node');
-        }
+        self::assertRootNode($root);
 
         $renderer = new HatenaSyntax_Renderer($config);
         return $renderer->renderTitle($root);
@@ -177,12 +173,57 @@ class HatenaSyntax
      */
     static function hasTopHeader(HatenaSyntax_Node $root)
     {
-        if ($root->getType() !== 'root') {
-            throw new InvalidArgumentException('$root must be root node');
-        }
+        self::assertRootNode($root);
 
         list($block) = $root->getData() + array(false);
 
         return $block && $block->isTopHeader();
+    }
+
+    /**
+     * 続きを読む記法があるかどうかを取得する
+     *
+     * @param HatenaSyntax_Node
+     * @return bool
+     */
+    static function hasSeparator(HatenaSyntax_Node $root)
+    {
+        self::assertRootNode($root);
+        
+        foreach ($root->getData() as $block) {
+            if ($block->getType() === 'separator') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 続きを読む記法よりも後ろの部分を切り離した前半の章を取得する
+     * 
+     * @param HatenaSyntax_Node
+     * @return HatenaSyntax_Node
+     */
+    static function separate(HatenaSyntax_Node $root)
+    {
+        self::assertRootNode($root);
+
+        $blocks = array();
+
+        foreach ($root->getData() as $block) {
+            $blocks[] = $block;
+            if ($block->getType() === 'separator') {
+                break;
+            }
+        }
+
+        return new HatenaSyntax_Node('root', $blocks);
+    }
+
+    static protected function assertRootNode(HatenaSyntax_Node $node)
+    {
+        if ($node->getType() !== 'root') {
+            throw new InvalidArgumentException('this node must be root node');
+        }
     }
 }

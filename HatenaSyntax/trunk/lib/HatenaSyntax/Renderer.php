@@ -105,6 +105,11 @@ class HatenaSyntax_Renderer
         }
         return '';
     }
+
+    protected function renderSeparator()
+    {
+        return '<div class="separator"></div>' . PHP_EOL;
+    }
     
     protected function renderTableOfContents()
     {

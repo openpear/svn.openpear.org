@@ -41,7 +41,8 @@ class HatenaSyntax_Block implements PEG_IParser
                 $locator->superpre,
                 $locator->paragraph
             ),
-            '[:contents]' => $locator->tableOfContents
+            '[:contents]' => $locator->tableOfContents,
+            '====' => $locator->separator
         );
 
         // 行の最初の一文字が存在し、かつこの配列のキー以外だった場合
