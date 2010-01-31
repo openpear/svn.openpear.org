@@ -149,6 +149,12 @@ class HatenaSyntax_Locator
         ']');
     }
 
+    protected function createSeparator()
+    {
+        $parser = PEG::token('====');
+        return $this->nodeCreater('separator', $parser);
+    }
+
     protected function createDefinitionList()
     {
         $parser = new HatenaSyntax_DefinitionList($this->lineElement);
