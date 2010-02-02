@@ -33,17 +33,21 @@ include_once dirname(__FILE__) . '/PEG/StringContext.php';
 include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/Util.php';
 include_once dirname(__FILE__) . '/PEG/ErrorReporter.php';
+include_once dirname(__FILE__) . '/PEG/InstantParser.php';
 
 class PEG
 {
-    protected static function parser($val)
+    protected static function asParser($val)
     {
-        return is_string($val) ?  self::token($val) : $val;
+        return $val instanceof PEG_IParser ?  $val : self::token($val);
     }
     
-    protected static function parserArray(Array $arr)
+    protected static function asParserArray(Array $arr)
     {
-        foreach ($arr as &$val) $val = self::parser($val);
+        foreach ($arr as &$val) {
+            $val = self::asParser($val);
+        }
+
         return $arr;
     }
     
@@ -56,8 +60,14 @@ class PEG
      */
     static function context($val)
     {
-        if (is_string($val)) return new PEG_StringContext($val);
-        if (is_array($val)) return new PEG_ArrayContext($val);
+        if (is_string($val)) {
+            return new PEG_StringContext($val);
+        }
+
+        if (is_array($val)) {
+            return new PEG_ArrayContext($val);
+        }
+
         throw new InvalidArgumentException();
     }
     
@@ -65,8 +75,8 @@ class PEG
      * PEG_CallbackActionインスタンスを生成する。
      * PEG::callbackAction($callback, PEG::seq($a, $b, $c)), PEG::callbackAction($callback, $a, $b, $c) は同等
      * 
-     * @param callback $callback
-     * @param $p
+     * @param callable $callback
+     * @param ?
      * @return PEG_CallbackAction
      * @see PEG_CallbackAction
      */
@@ -75,9 +85,37 @@ class PEG
         if (func_num_args() > 2) {
             $args = func_get_args();
             array_shift($args);
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return new PEG_CallbackAction($callback, self::parser($p));
+        return new PEG_CallbackAction($callback, self::asParser($p));
+    }
+
+    /**
+     * self::callbackActionのエイリアス
+     *
+     * @param callable 
+     * @param ?
+     * @return PEG_CallbackAction
+     */
+    static function hook($callback, $p)
+    {
+        if (func_num_args() > 2) {
+            $args = func_get_args();
+            array_shift($args);
+            $p = new PEG_Sequence(self::asParserArray($args));
+        }
+        return new PEG_CallbackAction($callback, self::asParser($p));
+    }
+
+    /**
+     * 渡されたコールバックからPEG_InstantParserを返す
+     *
+     * @param callable
+     * @return PEG_InstantParser
+     */
+    static function parserOf($callback)
+    {
+        return new PEG_InstantParser($callback);
     }
     
     /**
@@ -104,7 +142,7 @@ class PEG
      */
     static function choice()
     {
-        return new PEG_Choice(self::parserArray(func_get_args()));
+        return new PEG_Choice(self::asParserArray(func_get_args()));
     }
 
     /**
@@ -145,9 +183,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return new PEG_Not(self::parser($p));
+        return new PEG_Not(self::asParser($p));
     }
     
     /**
@@ -162,9 +200,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return new PEG_Optional(self::parser($p));
+        return new PEG_Optional(self::asParser($p));
     }
     
     
@@ -177,7 +215,7 @@ class PEG
      */
     static function seq()
     {
-        return new PEG_Sequence(self::parserArray(func_get_args()));
+        return new PEG_Sequence(self::asParserArray(func_get_args()));
     }
     
     /**
@@ -192,9 +230,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return new PEG_Many(self::parser($p));
+        return new PEG_Many(self::asParser($p));
     }
     
     /**
@@ -210,7 +248,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
         return self::callbackAction(array('PEG_Util', 'cons'), self::seq($p, self::many($p)));
     }
@@ -234,7 +272,7 @@ class PEG
      */
     static function andalso()
     {
-        return new PEG_And(self::parserArray(func_get_args()));
+        return new PEG_And(self::asParserArray(func_get_args()));
     }
 
     /**
@@ -360,9 +398,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return self::at(0, self::parser($p));
+        return self::at(0, self::asParser($p));
     }
 
     /**
@@ -376,9 +414,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return self::at(1, self::parser($p));
+        return self::at(1, self::asParser($p));
     }
 
     /**
@@ -392,9 +430,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return self::at(2, self::parser($p));
+        return self::at(2, self::asParser($p));
     }
 
     /**
@@ -407,7 +445,7 @@ class PEG
      */
     static function pack($start, $body, $end)
     {
-        return self::second(self::seq(self::parser($start), self::parser($body), self::parser($end)));
+        return self::second(self::seq(self::asParser($start), self::asParser($body), self::asParser($end)));
     }
 
     /**
@@ -420,7 +458,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
         return self::callbackAction(array('PEG_Util', 'flatten'), $p);
     }
@@ -438,7 +476,7 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
         return self::callbackAction(array('PEG_Util', 'drop'), $p);
     }
@@ -454,7 +492,7 @@ class PEG
         if (func_num_args() > 2) {
             $args = func_get_args();
             array_shift($args);
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
         $curry = PEG_Curry::make(array('PEG_Util', 'create'), $klass);
         return self::callbackAction($curry, $p);
@@ -518,9 +556,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return self::callbackAction(array('PEG_Util', 'tail'), self::parser($p));
+        return self::callbackAction(array('PEG_Util', 'tail'), self::asParser($p));
     }
     
     /**
@@ -535,9 +573,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return new PEG_Lookahead(self::parser($p));
+        return new PEG_Lookahead(self::asParser($p));
     }
     
     /**
@@ -551,10 +589,10 @@ class PEG
         $args = func_get_args();
         array_shift($args);
         foreach ($args as &$elt) {
-            $elt = self::not(self::parser($elt));
+            $elt = self::not(self::asParser($elt));
         }
-        $args[] = self::parser($p);
-        return call_user_func_array(array('PEG', 'tail'), self::parserArray($args));
+        $args[] = self::asParser($p);
+        return call_user_func_array(array('PEG', 'tail'), self::asParserArray($args));
     }
     
     /**
@@ -578,9 +616,9 @@ class PEG
     {
         if (func_num_args() > 1) {
             $args = func_get_args();
-            $p = new PEG_Sequence(self::parserArray($args));
+            $p = new PEG_Sequence(self::asParserArray($args));
         }
-        return new PEG_Memoize(self::parser($p));
+        return new PEG_Memoize(self::asParser($p));
     }
 
     /**
