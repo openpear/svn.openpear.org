@@ -8,16 +8,25 @@
 
 class PEG_Char implements PEG_IParser
 {
-    protected $dict = array();
-    function __construct($str)
+    protected $dict = array(), $except;
+
+    /**
+     * @param string
+     * @param bool
+     */
+    function __construct($str, $except = false)
     {
+        $this->except = $except;
         foreach (str_split($str) as $c) {
             $this->dict[$c] = true;
         }
     }
+
     function parse(PEG_IContext $context)
     {
         $char = $context->readElement();
-        return isset($this->dict[$char]) ? $char : PEG::failure();
+        return ($this->except xor isset($this->dict[$char]))
+            ? $char
+            : PEG::failure();
     }
 }

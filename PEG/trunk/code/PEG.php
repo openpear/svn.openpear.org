@@ -291,9 +291,9 @@ class PEG
      * @param string $str
      * @return PEG_Char
      */
-    static function char($str)
+    static function char($str, $except = false)
     {
-        return new PEG_Char($str);
+        return new PEG_Char($str, $except);
     }
 
     /**
