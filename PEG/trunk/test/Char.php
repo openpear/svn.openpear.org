@@ -1,5 +1,14 @@
 <?php
 include_once dirname(__FILE__) . '/t/t.php';
-$lime = new lime_test;
 
+$t = new lime_test;
 
+$p = PEG::char('abc');
+
+$t->is($p->parse(PEG::context('a')), 'a');
+$t->is($p->parse(PEG::context('d')), PEG::failure());
+
+$p = PEG::char('abc', true);
+
+$t->is($p->parse(PEG::context('b')), PEG::failure());
+$t->is($p->parse(PEG::context('d')), 'd');
