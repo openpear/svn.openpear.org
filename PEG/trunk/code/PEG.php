@@ -34,6 +34,7 @@ include_once dirname(__FILE__) . '/PEG/Token.php';
 include_once dirname(__FILE__) . '/PEG/Util.php';
 include_once dirname(__FILE__) . '/PEG/ErrorReporter.php';
 include_once dirname(__FILE__) . '/PEG/InstantParser.php';
+include_once dirname(__FILE__) . '/PEG/Delay.php';
 
 class PEG
 {
@@ -116,6 +117,17 @@ class PEG
     static function parserOf($callback)
     {
         return new PEG_InstantParser($callback);
+    }
+
+    /**
+     * パーサを遅延評価する。パーサの実行時に与えられたコールバックが呼ばれ、返されたパーサを使う。
+     *
+     * @param callable
+     * @return PEG_Delay
+     */
+    static function delay($callback)
+    {
+        return new PEG_Delay($callback);
     }
     
     /**
