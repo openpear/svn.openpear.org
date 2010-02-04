@@ -1,10 +1,10 @@
 <?php
 /**
- *  PHP_PowerToys 0.2.6
+ *  PHP_PowerToys 0.3.0+
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.2.6 2010/01/18
+ *  @version	PHP_PowerToys v 0.3.0+ 2010/02/04
  * 
  */
 class PHP_PowerToys {
@@ -657,7 +657,7 @@ class PHP_PowerToys {
 	 * @return mixed but Not setting to false
 	 */
 	function strictTypeChecker($var){
-	    if(isset($var)) return false;
+	    if(!isset($var)) return false;
 	    if(is_null($var)){
 		return 'null';
 	    }elseif(empty($var)){
@@ -686,13 +686,71 @@ class PHP_PowerToys {
 	}
 
 	/**
-	 * UNIXのコアダンプ情報を返す(Experiment)
+	 * UNIXのコアダンプと思われる情報を返す(Experiment)
+	 * @return Array
+	 */
+	function coreDumpSeemsList(){
+	    $core = `locate / | grep \\\.core$`;
+	    $core = preg_split("/\r\n|\n|\r/", $core);
+	    array_pop($core);
+	    return $core;
+	}
+
+	/**
+	 * UNIXのコアダンプと判断された情報を返す(Experiment)
 	 * @return Array
 	 */
 	function coreDumpList(){
-	    $core = `locate /usr | grep \\.core$`;
+	    $core = `locate / | grep \\\.core$`;
 	    $core = preg_split("/\r\n|\n|\r/", $core);
-	    return $core;
+	    array_pop($core);
+	    foreach($core as $val){
+		if ( preg_match( '/^\x7f\x45\x4c\x46/', file_get_contents($val)) )  {
+		    $cores[] = $val . ' ' . round(filesize($val) / 1024, 2) . 'KB';
+		}
+	    }
+	    return $cores;
+	}
+
+	/**
+	 * UNIXのコアダンプと判断されたファイルを削除する(Experiment)
+	 */
+	function coreDumpCleaner(){
+	    $core = `locate / | grep \\\.core$`;
+	    $core = preg_split("/\r\n|\n|\r/", $core);
+	    array_pop($core);
+	    foreach($core as $val){
+		if ( preg_match( '/^\x7f\x45\x4c\x46/', file_get_contents($val)) )  {
+		    if(is_writable($val)){
+			unlink($val);
+			if(!file_exists($val)){
+			    $fail_cores[] = $val;
+			}
+		    }else{
+			$fail_cores[] = $val;
+		    }
+		}
+	    }
+	    return $fail_cores;
+	}
+
+	/**
+	 *
+	 * PHP5のfile_put_contents関数をPHP4向けに提供
+	 *
+	 * @param string $filename
+	 * @param string $data
+	 * @param string $mode
+	 * @return TRUE:成功 FALSE:失敗
+	 */
+	function file_put_contents($filename, $data, $mode='w'){
+	    $f = fopen($filename, $mode);
+	    fputs($f, $data);
+	    fclose($f);
+	    if(!file_exists($filename)){
+		return false;
+	    }
+	    return true;
 	}
 }
 
