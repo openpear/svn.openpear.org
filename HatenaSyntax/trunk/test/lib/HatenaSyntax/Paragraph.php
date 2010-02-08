@@ -11,10 +11,13 @@ $c = PEG::context(array(
 
 $t->is(
     $p->parse($c),
-    array('a', 'b', 'c')
+    array('abc')
 );
 
 $t->is(
     $p->parse($c),
-    array('d', 'e', 'f')
+    array('def')
 );
+
+$c = PEG::context(array('日本語'));
+$t->is($p->parse($c), array('日本語'));
