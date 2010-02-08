@@ -44,6 +44,7 @@ fuga
 echo "hogehoge";||<
 
 [http://google.com]
+
 ';
 
 function spreHandler($type, Array $lines)
