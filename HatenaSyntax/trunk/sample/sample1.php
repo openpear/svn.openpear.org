@@ -74,7 +74,7 @@ echo HatenaSyntax::render($str, array(
     // 記事の識別子。指定しない場合はランダムなIDが生成される
     'id' => 'hoge',                               
 
-    // デフォルトはtrue。
+    // htmlをエスケープするか。デフォルトはtrue。
     'htmlescape' => false,                        
 
     // 記事本体を囲むdiv要素のクラス。デフォルトは'section'

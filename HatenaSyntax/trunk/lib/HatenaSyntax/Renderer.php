@@ -156,9 +156,12 @@ class HatenaSyntax_Renderer
     
     protected function renderLineSegment(Array $data)
     {
-        foreach ($data as &$elt) 
-            $elt = !$elt instanceof HatenaSyntax_Node ? ($this->config['htmlescape'] ? $this->escape($elt) : $elt) 
-                                                      : $this->renderNode($elt);
+        $data = self::normalize($data);
+        foreach ($data as &$elt) {
+            $elt = !$elt instanceof HatenaSyntax_Node 
+                ? ($this->config['htmlescape'] ? $this->escape($elt) : $elt) 
+                : $this->renderNode($elt);
+        }
         return join('', $data);
     }
     
@@ -294,6 +297,50 @@ class HatenaSyntax_Renderer
     
     protected static function escape($str)
     {
+        if (!is_string($str)) {
+            debug_print_backtrace();
+            return;
+        }
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
+     * @param Array  
+     * @return Array
+     */
+    protected static function normalize(Array $arr)
+    {
+        $ret = array();
+        
+        while ($arr) {
+            list($elt, $arr) = self::segment($arr);
+            $ret[] = $elt;
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param Array
+     * @return Array array($elt, $rest)
+     */
+    static function segment(Array $arr)
+    {
+        $first = array_shift($arr);
+
+        if (!is_string($first)) {
+            return array($first, $arr);
+        }
+
+        $str = $first;
+        while ($arr) {
+            if (is_string($arr[0])) {
+                $str .= array_shift($arr);
+            }
+            else {
+                return array($str, $arr);
+            }
+        }
+        return array($str, array());
     }
 }
