@@ -214,7 +214,7 @@ class HatenaSyntax_Renderer
     {
         $path = self::escape($path);
         $href = call_user_func($this->config['keywordlinkhandler'], $path);
-        return '<a href="' . $href . '">' . $path . '</a>';
+        return '<a href="' . self::escape($href) . '">' . $path . '</a>';
     }
     
     protected function renderDefinitionList(Array $data)
