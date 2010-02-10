@@ -82,8 +82,8 @@ class HatenaSyntax_Locator
     {
         $title_char = PEG::subtract($this->lineChar, ']');
         $title = PEG::choice(
-            PEG::second(':title', ''), 
-            PEG::second(':title=', PEG::join(PEG::many1($title_char)))
+            PEG::second(':title=', PEG::join(PEG::many1($title_char))),
+            PEG::second(':title', '') 
         );
         
         $url_char = PEG::subtract($this->lineChar, ']', ':title');
