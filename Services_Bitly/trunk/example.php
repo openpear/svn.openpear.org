@@ -29,7 +29,7 @@ try {
 
 try {
     $bitly = new Services_Bitly($login,$apikey);
-    $bitly->changeBaseDomain();
+    $bitly->setBaseDomain('j.mp');
     $shorten = $bitly->shorten("http://openpear.org");
 } catch (Services_Bitly_Exception $e) {
     echo $e->getMessage();
@@ -37,7 +37,7 @@ try {
 
 try {
     $bitly = new Services_Bitly($login,$apikey);
-    $bitly->changeBaseDomain();
+    $bitly->setBaseDomain('j.mp');
     $expand = $bitly->expand($shorten);
 } catch (Services_Bitly_Exception $e) {
     echo $e->getMessage();
