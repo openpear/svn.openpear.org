@@ -6,7 +6,7 @@
  * @category    Services
  * @package     Services_Bitly
  * @author      tknzk <info@tknzk.com>
- * @copyright   Copyright (c) 2009, tknzk.com All rights reserved.
+ * @copyright   Copyright (c) 2009-2010, tknzk.com All rights reserved.
  * @license     BSD License
  * @link        http://openpear.org/package/Services_Bitly
  * @link        http://bit.ly
@@ -17,17 +17,19 @@ require_once 'Services/Bitly/Exception.php';
 
 class Services_Bitly
 {
-    const DEBUG = false;
+    const API_URL_BITLY = 'http://api.bit.ly';
+    const API_URL_JMP   = 'http://api.j.mp';
 
-    const BITLY_API_URL = 'http://api.bit.ly';
+    const DOMAIN_BITLY  = 'bit.ly';
+    const DOMAIN_JMP    = 'j.mp';
 
-    const JMP_API_URL = 'http://api.j.mp';
+    const FORMAT_JSON   = 'json';
+    const FORMAT_XML    = 'xml';
 
-    const FORMAT = 'json';
+    const API_VERSION   = '2.0.1';
 
-    const VERSION = '0.1.0';
+    const VERSION       = '0.2.0';
 
-    const API_VERSION = '2.0.1';
 
     /**
      * API Login Account
@@ -41,14 +43,35 @@ class Services_Bitly
      *
      * @var string
      */
-    private $apikey;
+    private $apiKey;
 
     /**
      * API Version
      *
      * @var string
      */
-    private $apiversion;
+    private $apiVersion;
+
+    /**
+     * Base Domain
+     *
+     * @var string
+     */
+    private $baseDamain;
+
+    /**
+     * Base Url
+     *
+     * @var string
+     */
+    private $baseUrl;
+
+    /**
+     * regex string
+     *
+     * @var string
+     */
+    private $regexString;
 
     /**
      * Default constructor
@@ -59,25 +82,13 @@ class Services_Bitly
      * @param   string  @apiversion
      * @param   string  @format
      */
-    public function __construct($login, $apikey, $apiversion = self::API_VERSION, $format = self::FORMAT)
+    public function __construct($login, $apikey, $domain = self::DOMAIN_BITLY, $format = self::FORMAT_JSON)
     {
-        if($login !== null) {
-            $this->setLogin($login);
-        }
-
-        if($apikey !== null) {
-            $this->setApikey($apikey);
-        }
-
-        if($apiversion !== null) {
-            $this->setApiVersion($apiversion);
-        }
-
-        if($format !== null) {
-            $this->setFormat($format);
-        }
-
-        $this->changedomain = false;
+        $this->setLogin($login);
+        $this->setApikey($apikey);
+        $this->setFormat($format);
+        $this->setBaseDomain($domain);
+        $this->setApiVersion(self::API_VERSION);
     }
 
     /**
@@ -90,19 +101,14 @@ class Services_Bitly
      */
     public function shorten($longurl)
     {
-        if($this->changedomain === false) {
-            $baseurl = self::BITLY_API_URL;
-        }else{
-            $baseurl = self::JMP_API_URL;
-        }
 
-        $apiurl = $baseurl  . '/shorten?'
-                            . 'version='    . $this->apiversion
-                            . '&longUrl='   . urlencode($longurl)
-                            . '&login='     . $this->login
-                            . '&apiKey='    . $this->apikey
-                            . '&format='    . $this->format
-                            . '';
+        $apiurl = $this->baseUrl    . '/shorten?'
+                                    . 'version='    . $this->apiVersion
+                                    . '&longUrl='   . urlencode($longurl)
+                                    . '&login='     . $this->login
+                                    . '&apiKey='    . $this->apiKey
+                                    . '&format='    . $this->format
+                                    . '';
 
         $curl   = curl_init();
         curl_setopt($curl,  CURLOPT_URL,            $apiurl);
@@ -117,7 +123,7 @@ class Services_Bitly
 
         curl_close($curl);
 
-        if($this->format === 'json') {
+        if($this->format === self::FORMAT_JSON) {
 
             $json = json_decode($response,true);
 
@@ -140,7 +146,7 @@ class Services_Bitly
             }
         }
 
-        if($this->format === 'xml') {
+        if($this->format === self::FORMAT_XML) {
 
             require_once 'XML/Unserializer.php';
 
@@ -179,41 +185,18 @@ class Services_Bitly
      */
     public function expand($shorturl)
     {
-        if($this->changedomain === false) {
 
-            $reg_str = 'http:\/\/bit.ly\/';
-
-            if(preg_match("/$reg_str/",$shorturl)) {
-                $baseurl = self::BITLY_API_URL;
-            }else{
-                $baseurl = self::JMP_API_URL;
-                $reg_str = 'http:\/\/j.mp\/';
-            }
-
-        }else{
-
-            $reg_str = 'http:\/\/j.mp\/';
-
-            if(preg_match("/$reg_str/",$shorturl)) {
-                $baseurl = self::JMP_API_URL;
-            }else{
-                $baseurl = self::BITLY_API_URL;
-                $reg_str = 'http:\/\/bit.ly\/';
-            }
-
-        }
-
-        if(!preg_match("/$reg_str/",$shorturl)) {
+        if (!preg_match("/^$this->regexString/", $shorturl)) {
             throw new Services_Bitly_Exception("URL domain you tried to expand was invalid.");
         }
 
-        $apiurl = $baseurl  . '/expand?'
-                            . 'version='    . $this->apiversion
-                            . '&shortUrl='  . urlencode($shorturl)
-                            . '&login='     . $this->login
-                            . '&apiKey='    . $this->apikey
-                            . '&format='    . $this->format
-                            . '';
+        $apiurl = $this->baseUrl    . '/expand?'
+                                    . 'version='    . $this->apiVersion
+                                    . '&shortUrl='  . urlencode($shorturl)
+                                    . '&login='     . $this->login
+                                    . '&apiKey='    . $this->apiKey
+                                    . '&format='    . $this->format
+                                    . '';
 
         $curl   = curl_init();
         curl_setopt($curl,  CURLOPT_URL,            $apiurl);
@@ -228,11 +211,11 @@ class Services_Bitly
 
         curl_close($curl);
 
-        if($this->format === 'json') {
+        if($this->format === self::FORMAT_JSON) {
 
             $json = json_decode($response,true);
 
-            $userhash = preg_replace("/$reg_str/", "", $shorturl);
+            $userhash = preg_replace("/^$this->regexString/", "", $shorturl);
 
             if($json['errorCode'] === 0 && $json['statusCode'] === 'OK') {
 
@@ -253,7 +236,7 @@ class Services_Bitly
             }
         }
 
-        if($this->format === 'xml') {
+        if($this->format === self::FORMAT_XML) {
 
             require_once 'XML/Unserializer.php';
 
@@ -261,7 +244,7 @@ class Services_Bitly
             $unserializer->unserialize($response);
             $xml = $unserializer->getUnserializedData();
 
-            $userhash = preg_replace("/$reg_str/", "", $shorturl);
+            $userhash = preg_replace("/^$this->regexString/", "", $shorturl);
 
             if($xml['errorCode'] == 0 && $xml['statusCode'] == 'OK') {
 
@@ -289,7 +272,7 @@ class Services_Bitly
      * @return  void
      * @param   string  $login
      */
-    public function setLogin($login)
+    private function setLogin($login)
     {
         $this->login = (string) $login;
     }
@@ -300,9 +283,9 @@ class Services_Bitly
      * @return  void
      * @param   string  $apikey
      */
-    public function setApikey($apikey)
+    private function setApikey($apikey)
     {
-        $this->apikey = (string) $apikey;
+        $this->apiKey = (string) $apikey;
     }
 
     /**
@@ -311,9 +294,9 @@ class Services_Bitly
      * @return  void
      * @param   string  $apiversion
      */
-    public function setApiVersion($apiversion)
+    private function setApiVersion($apiversion)
     {
-        $this->apiversion = (string) $apiversion;
+        $this->apiVersion = (string) $apiversion;
     }
 
     /**
@@ -328,14 +311,25 @@ class Services_Bitly
     }
 
     /**
-     * Change Base Domain
+     * Set Base Domain
      *
-     * @return  void
-     * @parma   bool    $change
+     * @return  bool
+     * @parma   string  $domain
      */
-    public function changeBaseDomain($change = true)
+    public function setBaseDomain($domain = self::DOMAIN_BITLY)
     {
-        $this->changedomain = $change;
+        $this->baseDomain   = (string) $domain;
+        switch($domain) {
+            case self::DOMAIN_BITLY:
+                $this->baseUrl = self::API_URL_BITLY;
+                break;
+            case self::DOMAIN_JMP:
+                $this->baseUrl = self::API_URL_JMP;
+                break;
+            default:
+                $this->baseUrl = self::API_URL_BITLY;
+        }
+        $this->regexString  = (string) 'http:\/\/' . $domain . '\/';
     }
 
 }
