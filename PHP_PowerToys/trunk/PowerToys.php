@@ -4,7 +4,7 @@
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.3.0+ 2010/02/04
+ *  @version	PHP_PowerToys v 0.3.0+ 2010/02/18
  * 
  */
 class PHP_PowerToys {
@@ -752,6 +752,35 @@ class PHP_PowerToys {
 	    }
 	    return true;
 	}
+
+	/**
+	 * PHP5のscandir関数でカレントディレクトリを示す「.」や親ディレクトリを示す「..」を除去して返す
+	 * PHP4も一応サポート
+	 *
+	 * @param String $dir
+	 * @param int $options
+	 * @param int $ignore_parent
+	 * @return $dirs Array
+	 */
+	function scandir_ex($dir, $options=0, $ignore_parent=false){
+	    if (version_compare(PHP_VERSION, '5.0.0', '<')) {
+		if ($handle = opendir($dir)) {
+		    while (false !== ($file = readdir($handle))) {
+		    if($ignore_parent === true && $file !== '.' || $file !== '..'){
+			$dirs[] = $val;
+		    }
+		}
+		return $dirs;
+	    }
+	    $tmp = scandir($dir, $options);
+	    foreach($tmp as $val){
+		if($ignore_parent === true && $val !== '.' || $val !== '..'){
+		    $dirs[] = $val;
+		}
+	    }
+	    return $dirs;
+	}
+    }
 }
 
 class DTO {
