@@ -92,7 +92,7 @@ class LoggerAppenderTweet extends LoggerAppenderSkeleton
      * @param LoggerLoggingEvent $event
      * @return void
      */
-    function append($event)
+    public function append($event)
     {
         LoggerLog::debug("LoggerAppenderTweet::append()");
         if ($this->layout !== null) {
