@@ -46,7 +46,11 @@ class Net_Clamd {
 	}
 	
 	private function _open(){
-		return fsockopen($this->_hostname, $this->_port, $errno, $errstr, $this->_timeout);
+		if($f = fsockopen($this->_hostname, $this->_port, $errno, $errstr, $this->_timeout)){
+			return $f;
+		}
+		trigger_error($errstr.' ('.$errno.')', E_USER_ERROR);
+		return false;
 	}
 	private function _read($f){
 		$r='';
@@ -67,11 +71,13 @@ class Net_Clamd {
 	 * @return string "PONG" on success. false on failure.
 	 */
 	function ping(){
-		$f = $this->_open();
-		fwrite($f, "zPING\0");
-		$r = $this->_read($f);
-		fclose($f);
-		return $r;
+		if($f = $this->_open()){
+			fwrite($f, "zPING\0");
+			$r = $this->_read($f);
+			fclose($f);
+			return $r;
+		}
+		return false;
 	}
 	
 	/**
@@ -79,11 +85,13 @@ class Net_Clamd {
 	 * @return string Version string like "ClamAV 0.95.3/10442/Wed Feb 24 07:09:42 2010"
 	 */
 	function version(){
-		$f = $this->_open();
-		fwrite($f, "zVERSION\0");
-		$r = $this->_read($f);
-		fclose($f);
-		return $r;
+		if($f = $this->_open()){
+			fwrite($f, "zVERSION\0");
+			$r = $this->_read($f);
+			fclose($f);
+			return $r;
+		}
+		return false;
 	}
 	
 	/**
@@ -91,11 +99,13 @@ class Net_Clamd {
 	 * @return string
 	 */
 	function reload(){
-		$f = $this->_open();
-		fwrite($f, "zRELOAD\0");
-		$r = $this->_read($f);
-		fclose($f);
-		return $r;
+		if($f = $this->_open()){
+			fwrite($f, "zRELOAD\0");
+			$r = $this->_read($f);
+			fclose($f);
+			return $r;
+		}
+		return false;
 	}
 	
 	/**
@@ -103,11 +113,13 @@ class Net_Clamd {
 	 * @return string empty string on success or false.
 	 */
 	function shutdown(){
-		$f = $this->_open();
-		fwrite($f, "zSHUTDOWN\0");
-		$r = $this->_read($f);
-		fclose($f);
-		return $r;
+		if($f = $this->_open()){
+			fwrite($f, "zSHUTDOWN\0");
+			$r = $this->_read($f);
+			fclose($f);
+			return $r;
+		}
+		return false;
 	}
 	
 	/**
@@ -117,11 +129,17 @@ class Net_Clamd {
 	 * @return string "$abspath: OK" will be returned if OK. false on failure.
 	 */
 	function scan($abspath, $mode='MULTI'){
-		$f = $this->_open();
-		fwrite($f, "z".$mode."SCAN ".$abspath."\0");
-		$r = $this->_read($f);
-		fclose($f);
-		return $r;
+		if(!in_array($mode, array('','RAW','CONT','MULTI'))){
+			trigger_error("invalid mode ".$mode, E_USER_ERROR);
+			return false;
+		}
+		if($f = $this->_open()){
+			fwrite($f, "z".$mode."SCAN ".$abspath."\0");
+			$r = $this->_read($f);
+			fclose($f);
+			return $r;
+		}
+		return false;
 	}
 	
 	/**
@@ -130,15 +148,17 @@ class Net_Clamd {
 	 * @return string "stream: OK" will be returned if OK. false on failure.
 	 */
 	function instream($data){
-		$f = $this->_open();
-		fwrite($f, "zINSTREAM\0");
-		if(strlen($data)>0){
-			fwrite($f, pack("N",strlen($data)).$data);
+		if($f = $this->_open()){
+			fwrite($f, "zINSTREAM\0");
+			if(strlen($data)>0){
+				fwrite($f, pack("N",strlen($data)).$data);
+			}
+			fwrite($f, pack("N",0)); // chunk termination
+			$r = $this->_read($f);
+			fclose($f);
+			return $r;
 		}
-		fwrite($f, pack("N",0)); // chunk termination
-		$r = $this->_read($f);
-		fclose($f);
-		return $r;
+		return false;
 	}
 	
 	/**
@@ -146,10 +166,12 @@ class Net_Clamd {
 	 * @return string The status information of clamd.
 	 */
 	function stats(){
-		$f = $this->_open();
-		fwrite($f, "zSTATS\0");
-		$r = $this->_read($f);
-		fclose($f);
-		return $r;
+		if($f = $this->_open()){
+			fwrite($f, "zSTATS\0");
+			$r = $this->_read($f);
+			fclose($f);
+			return $r;
+		}
+		return false;
 	}
 }
