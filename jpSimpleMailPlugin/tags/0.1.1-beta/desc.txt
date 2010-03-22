@@ -26,13 +26,18 @@ $rs = $mailer->send();
 
 ^ライブラリ名^バージョン^
 |[[http://phpmailer.codeworxtech.com/|PHPMailer]]|v2.3|
-|[[http://swiftmailer.org/|Swift Mailer]]|3.3.3|
+|[[http://swiftmailer.org/|Swift Mailer]]|3.3.3, 4.0.6|
 |[[http://hal456.net/qdmail/|Qdmailに用意されているsfQdmail]]|1.2.6b|
 
 ※Qdmailを利用される場合は環境によって、Strictエラー、Noticeのエラーが発生する場合があります。
-
+※symfony1.3以降ではSwiftMailer4が標準でバンドルされています。
 ===== 基本的な利用 =====
 まず、PHPMailer, Swift Mailer, Qdmailのどれかをダウンロードし、autoloadに登録するかincludeしておきます。
+symfony1.3以降ではSwiftMailer4がバンドルされているのでSwift Mailerをダウンロードする必要はありません。
+ただし、iso-2022-jpでエンコードするためにkzl_Jp_Swift_Mime_Headers_UnstructuredHeaderクラスが必要になります。
+以下のサイトを参考にし、プロジェクトでライブラリが利用できるようにしてください。
+[[http://www.kuzilla.co.jp/article.php/20100301symfony]]
+
 あとは、jpMail::createメソッドの引数にメーラーを指定し、以下のように呼び出します。
 
 （例）PHPMailerで送信するサンプル
@@ -47,7 +52,8 @@ $rs = $mailer->send();
 </code>
 
 createメソッドで渡す事ができる名前は以下の３つです。
-`PHPMailer`, `SwiftMailer`, `Qdmail`
+`PHPMailer`, `SwiftMailer`, `Qdmail`, `SwiftMailer4`
+symfony1.3以降ではSwiftMailer4を利用することになるはずです。
 
 ===== メール本文を動的に作成する =====
 
@@ -152,3 +158,5 @@ $ php /path-to-plugin/test/bin/prove.php
 このライブラリはテストするためにsymfonyを活用していますが、ライブラリ自体は最後のメール送信時(sendメソッド)で失敗したときに投げる例外sfExceptionのみsymfonyに依存しています。
 
 なので、フレームワークとは関係なくても各ファイルを読み込みさえできれば移植も簡単（なはず）。
+
+(追記) symfony 1.3以降で標準となったSwiftMailer4対応したため、sfContextインスタンスに依存する部分があります。
