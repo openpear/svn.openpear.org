@@ -86,6 +86,7 @@ class jpSwiftMailer4 extends jpMailer
     {
       list($address, $name) = jpSimpleMail::splitAddress($address);
     }
+    $name = jpSimpleMail::mb_encode_mimeheader($name);
     $this->message->addTo($address, $name);
   }
   public function setFrom($address, $name = null)
@@ -98,6 +99,7 @@ class jpSwiftMailer4 extends jpMailer
       list($address, $name) = jpSimpleMail::splitAddress($address);
     }
     $this->mailer->From     = $address;
+    $name = jpSimpleMail::mb_encode_mimeheader($name);
     $this->message->setFrom($address, $name);
   }
   public function addCc($address, $name = null)
@@ -105,6 +107,7 @@ class jpSwiftMailer4 extends jpMailer
     if ($name == null) {
       list($address, $name) = jpSimpleMail::splitAddress($address);
     }
+    $name = jpSimpleMail::mb_encode_mimeheader($name);
     $this->message->addCc($address, $name);
   }
   public function addBcc($address, $name = null)
@@ -112,6 +115,7 @@ class jpSwiftMailer4 extends jpMailer
     if ($name == null) {
       list($address, $name) = jpSimpleMail::splitAddress($address);
     }
+    $name = jpSimpleMail::mb_encode_mimeheader($name);
     $this->message->addBcc($address, $name);
   }
   public function setSubject($subject)
@@ -134,6 +138,7 @@ class jpSwiftMailer4 extends jpMailer
     if ($name == null) {
       list($address, $name) = jpSimpleMail::splitAddress($address);
     }
+    $name = jpSimpleMail::mb_encode_mimeheader($name);
     $this->message->setReplyTo($address, $name);
   }
   public function getFrom()
