@@ -3,13 +3,17 @@
 /**
  * This file is part of Net_IPv4_NetworkGroup library.
  *
+ * This library fork of sfMobileIPPlugin.
+ * 
  * PHP version 5.2
  *
  * @category Networking
  * @package Net_IPv4_NetworkGroup
  * @link http://openper.org/package/Net_IPv4_NetworkGroup
+ * @link http://openpear.org/package/sfMobileIPPlugin
  * @license MIT
  * @author MugeSo <mugeso@mugeso.com>
+ * @author bto
  */
 
 require_once "Cache/Lite.php";
