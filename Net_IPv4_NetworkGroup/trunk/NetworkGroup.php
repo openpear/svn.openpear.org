@@ -168,10 +168,12 @@ class Net_IPv4_NetworkGroup
   {
     if(class_exists('Spyc')) {
       // noting todo.
+    } elseif(@fclose(@fopen('Spyc.php', 'r', true))) {
+      require_once 'Spyc.php';
     } elseif(@fclose(@fopen('spyc.php', 'r', true))) {
       require_once 'spyc.php';
     } else {
-      throw new RuntimeException('Net_IPv4_NetworkGroup requries Spyc. see http://code.google.com/p/spyc/');
+      throw new RuntimeException('Net_IPv4_NetworkGroup depends Spyc.');
     }
 
     return Spyc::YAMLLoad($yamlFile);
