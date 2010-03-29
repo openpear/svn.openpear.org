@@ -1,6 +1,6 @@
 <?php
 require_once 'Net/IPv4/NetworkGroup.php';
-//require_once '../../lib/NetworkGroup.php';
+//require_once dirname(__FILE__) . '/../../NetworkGroup.php';
 
 if($argc<2) {
   echo 'Usage: ' . $_SERVER['SCRIPT_NAME'] . ' <ip-address>' . PHP_EOL;
