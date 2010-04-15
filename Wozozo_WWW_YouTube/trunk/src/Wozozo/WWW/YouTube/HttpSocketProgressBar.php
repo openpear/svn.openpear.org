@@ -183,7 +183,8 @@ class Wozozo_WWW_YouTube_HttpSocketProgressBar extends Zend_Http_Client_Adapter_
                     if ($this->out_stream) {
                          $fwrite = fwrite($this->out_stream, $chunk);
                          if ($fwrite === false) {
-                             throw new Exception();
+                             $this->close();
+                             throw new Exception('cannot write stream');
                          }
                     } else {
                         $response .= $chunk;
