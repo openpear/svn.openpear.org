@@ -1,0 +1,243 @@
+<?php
+require_once 'Wozozo/WWW/YouTube/VideoInfo.php';
+class Wozozo_WWW_YouTube
+{
+    const PATH_INFO = 'http://www.youtube.com/get_video_info?video_id=%s';
+    const PATH_DOWNLOAD = 'http://www.youtube.com/get_video?video_id=%s&t=%s&fmt=%s';
+
+    /**
+     * @var Zend_Http_Client
+     */
+    protected $_httpClient;
+
+    /**
+     * @var array
+     */
+    protected $_config = array('fmt' => 18,
+                               'save' => 'PWD', //'TMP' will use getcwd();
+                               'download_stream' => true, //output stream 
+                               'download_response_cleanup' => true
+                               );
+
+    public function __construct($config = null)
+    {
+        if ($config) $this->setConfig($config);
+    }
+
+    public function setConfig($config = array())
+    {
+        if ($config instanceof Zend_Config) {
+            $config = $config->toArray();
+
+        } elseif (! is_array($config)) {
+            throw new Exception('Array or Zend_Config object expected, got ' . gettype($config));
+        }
+
+        foreach ($config as $k => $v) {
+            $this->_config[strtolower($k)] = $v;
+        }
+        
+        return $this;
+    }
+
+    /**
+     *
+     * @param string|Zend_Uri $videoId
+     * @param array|Zend_Config $config
+     * @param $path
+     * @return Wozozo_WWW_YouTube_VideoInfo
+     */
+    public static function download($videoId, $config = array())
+    {
+        $videoId = self::detectVideoId($videoId);
+
+        $self = new self($config);
+
+        $videoInfo = $self->getVideoInfo($videoId);
+        $self->downloadByVideoInfo($videoInfo);
+        
+        return $videoInfo;
+    }
+
+    protected function _putVideo($response, Wozozo_WWW_YouTube_VideoInfo $videoInfo, $config)
+    {
+
+        if (is_string($config['save'])) {
+            $path = $this->suggestSavePath($videoInfo);
+        } else {
+
+            return call_user_func($config['save'], $response, $videoInfo, $config);
+        }
+
+        $ret = @file_put_contents($path, $response->getRawBody());
+        if ($ret === false) {
+            throw new Exception('cannot write at' . $path);
+        }
+    }
+
+    /**
+     * request & get videoinfo
+     *
+     * @param string $videoId
+     */
+    public function getVideoInfo($videoId)
+    {
+        $client = $this->getHttpClient();
+
+        $client->setUri(sprintf(self::PATH_INFO, $videoId));
+        $response = $client->request();
+
+        parse_str($response->getBody(), $parse);
+
+        return new Wozozo_WWW_YouTube_VideoInfo($parse);
+    }
+
+    /**
+     * Request video file
+     *
+     * @param Wozozo_WWW_YouTube_VideoInfo
+     * @return Zend_Http_Response_Stream
+     */
+    public function requestVideo(Wozozo_WWW_YouTube_VideoInfo $videoInfo)
+    {
+        if ($videoInfo['status'] !== 'ok') {
+            if ($videoInfo['status'] === 'fail') {
+                throw new Exception($videoInfo['reason'], $videoInfo['errorcode']);
+            } else {
+                throw new Exception('error raise by unknown status'.$videoInfo['status']);
+            }
+        }
+        
+        // retrive url & save-file-path
+        $url = $videoInfo->makeDownloadUrl($this->_config['fmt']);
+
+        $client = $this->getHttpClient();
+        
+        try {
+            $client->setUri($url);
+            $response = $client->request();
+            $response->setCleanup($this->_config['download_response_cleanup']);
+
+            return $response;
+        } catch (Zend_Http_Client_Exception $e) {
+            $uri = $client->getUri();
+            throw new Exception("request faild {$client->getUri()} - ".$e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function downloadByVideoInfo(Wozozo_WWW_YouTube_VideoInfo $videoInfo)
+    {
+        $this->setupClientStream();
+        $response = $this->requestVideo($videoInfo);
+        
+        $this->_putVideo($response, $videoInfo, $this->_config);
+    }
+
+    public function setupClientStream()
+    {
+        $stream = $this->_config['download_stream'];
+        $client = clone $this->getHttpClient();
+        // @see Zend_Http_Client::_openTempStream
+        // If original client's stream is set 
+        if (is_string($stream)) {
+            $client->setStream($stream);
+        } else if ($stream == true) {
+            if ($client->getStream() == false) {
+                $client->setStream();
+            }
+        }
+
+        $this->setHttpClient($client);
+    }
+ 
+    public function getHttpClient()
+    {
+        if (!$this->_httpClient) {
+            require_once 'Zend/Http/Client.php';
+            $this->_httpClient = new Zend_Http_Client(null, array('useragent' => __CLASS__));
+        }
+
+        return $this->_httpClient;
+    }
+
+    public function setHttpClient(Zend_Http_Client $client)
+    {
+        $this->_httpClient = $client;
+    }
+
+    public function suggestSavePath($videoInfo)
+    {
+        $dir = $this->_config['save'];
+        $fmt = $this->_config['fmt'];
+        if ('PWD' ===  $dir) {
+            $dir = $_SERVER['PWD'];
+        } else {
+            if(!is_dir($dir)) {
+                throw new InvalidArgumentException('Invalid dir'.$dir);
+            }
+        }
+        $path = $dir . DIRECTORY_SEPARATOR . $videoInfo['video_id'] . self::detectSuffix($fmt);
+        
+        return $path;
+    }
+
+    /**
+     * Request video file
+     *
+     * @param Wozozo_WWW_YouTube_VideoInfo
+
+    /**
+     * borrowed from WWW::YouTube::Download
+     */
+    public static function detectSuffix($fmt)
+    {
+        switch ($fmt) {
+            case '18' :
+            case '22' :
+            case '37' :
+                return '.mp4';
+            case '13' :
+            case '17' :
+                return '.3gp';
+            default :
+                return '.flv';
+        }
+    }
+
+    /**
+     * detect videoId
+     *
+     * @param string $var (url)
+     * @return string|false
+     */
+    public static function detectVideoId($var)
+    {
+        if (is_string($var)) {
+            if (!preg_match('#^h*(?:ttp\:\/\/)(.+\/watch\?v=.*)#', $var, $match)) {
+                return trim($var);
+            }
+            //uri
+            require_once 'Zend/Uri.php';
+            $var = Zend_Uri::factory('http://'.$match[1]);
+        }
+
+        if ($var instanceof Zend_Uri_Http) {
+            $query = $var->getQueryAsArray();
+            return $query['v'];
+        } 
+        
+        return false;
+    }
+
+    /*
+    public function __destruct()
+    {
+        if (is_string($s = $this->_config['output_stream']) && $this->_config['download_response_cleanup']) {
+            if (file_exists($s)) {
+                unlink($s);
+            }
+        }
+    }
+    */
+}
+
