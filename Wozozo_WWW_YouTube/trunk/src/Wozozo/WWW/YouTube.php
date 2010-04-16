@@ -1,5 +1,6 @@
 <?php
 require_once 'Wozozo/WWW/YouTube/VideoInfo.php';
+
 class Wozozo_WWW_YouTube
 {
     const PATH_INFO = 'http://www.youtube.com/get_video_info?video_id=%s';
@@ -14,10 +15,11 @@ class Wozozo_WWW_YouTube
      * @var array
      */
     protected $_config = array('fmt' => 18,
-                               'save' => 'PWD', //'TMP' will use getcwd();
-                               'download_stream' => true, //output stream 
-                               'download_response_cleanup' => true
+                               'save' => 'PWD', //'PWD' will use getcwd();
+                               'request_video_stream' => true, //output stream 
+                               'response_video_cleanup' => true
                                );
+    private $_clientStream;
 
     public function __construct($config = null)
     {
@@ -99,55 +101,43 @@ class Wozozo_WWW_YouTube
      * @return Zend_Http_Response_Stream
      */
     public function requestVideo(Wozozo_WWW_YouTube_VideoInfo $videoInfo)
-    {
-        if ($videoInfo['status'] !== 'ok') {
-            if ($videoInfo['status'] === 'fail') {
-                throw new Exception($videoInfo['reason'], $videoInfo['errorcode']);
-            } else {
-                throw new Exception('error raise by unknown status'.$videoInfo['status']);
-            }
-        }
-        
+    {   
         // retrive url & save-file-path
         $url = $videoInfo->makeDownloadUrl($this->_config['fmt']);
 
         $client = $this->getHttpClient();
+        $client->setUri($url);
         
         try {
-            $client->setUri($url);
+            $this->_setupClientStream();
             $response = $client->request();
-            $response->setCleanup($this->_config['download_response_cleanup']);
+            $this->_restoreClientStream();
+            $response->setCleanup($this->_config['response_video_cleanup']);
 
             return $response;
-        } catch (Zend_Http_Client_Exception $e) {
-            $uri = $client->getUri();
-            throw new Exception("request faild {$client->getUri()} - ".$e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            // ensure, restore HttpClient's origin stream
+            $this->_restoreClientStream();
+            throw $e;
         }
     }
 
     public function downloadByVideoInfo(Wozozo_WWW_YouTube_VideoInfo $videoInfo)
     {
-        $this->setupClientStream();
         $response = $this->requestVideo($videoInfo);
         
         $this->_putVideo($response, $videoInfo, $this->_config);
     }
 
-    public function setupClientStream()
+    private function _setupClientStream()
     {
-        $stream = $this->_config['download_stream'];
-        $client = clone $this->getHttpClient();
-        // @see Zend_Http_Client::_openTempStream
-        // If original client's stream is set 
-        if (is_string($stream)) {
-            $client->setStream($stream);
-        } else if ($stream == true) {
-            if ($client->getStream() == false) {
-                $client->setStream();
-            }
-        }
-
-        $this->setHttpClient($client);
+        $this->_clientStream = $this->getHttpClient()->getStream();
+        $this->getHttpClient()->setStream($this->_config['request_video_stream']);
+    }
+    
+    private function _restoreClientStream()
+    {
+        $this->getHttpClient()->setStream($this->_clientStream);
     }
  
     public function getHttpClient()
