@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.7.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>sfMobileIPPlugin</name>
+ <channel>pear.symfony-project.com</channel>
+ <summary>JP mobile ip detector</summary>
+ <description>Detect a carrier from an ip address</description>
+ <lead>
+  <name />
+  <user />
+  <email />
+  <active>yes</active>
+ </lead>
+ <date>2010-04-16</date>
+ <time>13:57:09</time>
+ <version>
+  <release>0.0.10</release>
+  <api>0.0.1</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.symfony-project.com/license">MIT license</license>
+ <notes>-</notes>
+ <contents>
+  <dir name="/">
+   <file md5sum="2ed4b9b22b01a98b23d5ea8c8ee4e5c1" name="lib/sfMobileIP.class.php" role="data" />
+   <file md5sum="3f9ea7819c4f7accf4126f37989fea0a" name="lib/sfMobileIPConfigHandler.class.php" role="data" />
+   <file md5sum="b29c9427cccb2ebacad644f8e9907877" name="config/config_handlers.yml" role="data" />
+   <file md5sum="af4216d9516de103cd953057f7ea40d7" name="config/mobile_ips.yml" role="data" />
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="README" role="data" />
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="LICENSE" role="data" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.1</min>
+   </pearinstaller>
+   <package>
+    <name>symfony</name>
+    <channel>pear.symfony-project.com</channel>
+    <min>0.8.1</min>
+    <max>1.1.0</max>
+    <exclude>1.1.0</exclude>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog />
+</package>
