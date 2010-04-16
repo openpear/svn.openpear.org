@@ -6,11 +6,24 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
 
     public function __construct(array $parsedVideoInfo)
     {
+        if (!isset($parsedVideoInfo['status'])) {
+            $msg = implode('', $parsedVideoInfo);
+            throw new UnexpectedValueException("invalid array is passed, array has not 'status' - key");
+        }
+
         $this->_parsedVideoInfo = $parsedVideoInfo;
     }
 
     public function makeDownloadUrl($fmt = '18')
     {
+        if ($this->_parsedVideoInfo['status'] !== 'ok') {
+            if ($this->_parsedVideoInfo['status'] === 'fail') {
+                throw new Exception($this->_parsedVideoInfo['reason'], $this->_parsedVideoInfo['errorcode']);
+            } else {
+                throw new Exception('error raise by unknown status'.$this->_parsedVideoInfo['status']);
+            }
+        }
+
         $videoId = $this->_parsedVideoInfo['video_id'];
         $token = $this->_parsedVideoInfo['token'];
 
@@ -41,4 +54,10 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
     {
         return $this->_parsedVideoInfo;
     }
+
+    public function __toString()
+    {
+        return http_build_query($this->_parsedVideoInfo);
+    }
+
 }
