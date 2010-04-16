@@ -10,10 +10,10 @@
   <email />
   <active>yes</active>
  </lead>
- <date>2010-04-07</date>
- <time>12:39:42</time>
+ <date>2010-04-16</date>
+ <time>13:57:09</time>
  <version>
-  <release>0.0.9</release>
+  <release>0.0.10</release>
   <api>0.0.1</api>
  </version>
  <stability>
@@ -27,7 +27,7 @@
    <file md5sum="2ed4b9b22b01a98b23d5ea8c8ee4e5c1" name="lib/sfMobileIP.class.php" role="data" />
    <file md5sum="3f9ea7819c4f7accf4126f37989fea0a" name="lib/sfMobileIPConfigHandler.class.php" role="data" />
    <file md5sum="b29c9427cccb2ebacad644f8e9907877" name="config/config_handlers.yml" role="data" />
-   <file md5sum="4dc02e4ee5a4783aef02ac29be03bd6e" name="config/mobile_ips.yml" role="data" />
+   <file md5sum="af4216d9516de103cd953057f7ea40d7" name="config/mobile_ips.yml" role="data" />
    <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="README" role="data" />
    <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="LICENSE" role="data" />
   </dir>
