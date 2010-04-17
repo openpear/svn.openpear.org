@@ -25,10 +25,11 @@ class Services_Bitly
 
     const FORMAT_JSON   = 'json';
     const FORMAT_XML    = 'xml';
+    const FORMAT_TXT    = 'txt';
 
-    const API_VERSION   = '2.0.1';
+    const API_VERSION   = 'v3';
 
-    const VERSION       = '0.2.0';
+    const VERSION       = '0.3.0';
 
 
     /**
@@ -67,13 +68,6 @@ class Services_Bitly
     private $baseUrl;
 
     /**
-     * regex string
-     *
-     * @var string
-     */
-    private $regexString;
-
-    /**
      * Default constructor
      *
      * @return  void
@@ -87,8 +81,8 @@ class Services_Bitly
         $this->setLogin($login);
         $this->setApikey($apikey);
         $this->setFormat($format);
-        $this->setBaseDomain($domain);
         $this->setApiVersion(self::API_VERSION);
+        $this->setBaseDomain($domain);
     }
 
     /**
@@ -101,14 +95,14 @@ class Services_Bitly
      */
     public function shorten($longurl)
     {
+        $queryParameters    = array(
+                'login'     => $this->login,
+                'apiKey'    => $this->apiKey,
+                'uri'       => $longurl,
+                'format'    => $this->format,
+                );
 
-        $apiurl = $this->baseUrl    . '/shorten?'
-                                    . 'version='    . $this->apiVersion
-                                    . '&longUrl='   . urlencode($longurl)
-                                    . '&login='     . $this->login
-                                    . '&apiKey='    . $this->apiKey
-                                    . '&format='    . $this->format
-                                    . '';
+        $apiurl = $this->baseUrl . '/shorten?' . http_build_query($queryParameters);
 
         $curl   = curl_init();
         curl_setopt($curl,  CURLOPT_URL,            $apiurl);
@@ -125,52 +119,31 @@ class Services_Bitly
 
         if($this->format === self::FORMAT_JSON) {
 
-            $json = json_decode($response,true);
+            $json = json_decode($response, true);
 
-            if($json['errorCode'] === 0 && $json['statusCode'] === 'OK') {
-
-                if($json['results'][$longurl]['errorCode'] !== null) {
-
-                    throw new Services_Bitly_Exception($json['results'][$longurl]['errorMessage'], $json['results'][$longurl]['errorCode']);
-
-                }else{
-
-                    return $json['results'][$longurl]['shortUrl'];
-
-                }
-
-            }else{
-
-                throw new Services_Bitly_Exception($json['errorMessage'], $json['errorCode']);
-
+            if ($json['status_code'] == "200" && $json['status_txt'] == "OK") {
+                return $json['data']['url'];
+            } else {
+                throw new Services_Bitly_Exception($json['status_txt'], $json['status_code']);
             }
         }
 
         if($this->format === self::FORMAT_XML) {
 
-            require_once 'XML/Unserializer.php';
+            $xml = simplexml_load_string($response);
 
-            $unserializer = new XML_Unserializer(array(XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE => 'parseAttributes'));
-            $unserializer->unserialize($response);
-            $xml = $unserializer->getUnserializedData();
+            if ($xml->status_code == "200" && $xml->status_txt == 'OK') {
+                return $xml->data->url;
+            } else {
+                throw new Services_Bitly_Exception($xml->status_txt, $xml->status_code);
+            }
+        }
 
-
-            if($xml['errorCode'] == 0 && $xml['statusCode'] == 'OK') {
-
-                if(is_array($xml['results'][$longurl])) {
-
-                    throw new Services_Bitly_Exception($xml['results'][$longurl]['errorMessage'], (int)($xml['results'][$longurl]['errorCode']));
-
-                }else{
-
-                    return $xml['results']['nodeKeyVal']['shortUrl'];
-
-                }
-
-            }else{
-
-                throw new Services_Bitly_Exception($xml['errorMessage'], (int)($xml['errorCode']));
-
+        if ($this->format === self::FORMAT_TXT) {
+            if ($response) {
+                return $response;
+            } else {
+                throw new Services_Bitly_Exception('UNKNOWN ERROR. if more information: set fomat json or xml.');
             }
         }
     }
@@ -185,18 +158,14 @@ class Services_Bitly
      */
     public function expand($shorturl)
     {
+        $queryParameters    = array(
+                'login'     => $this->login,
+                'apiKey'    => $this->apiKey,
+                'shortUrl'  => trim($shorturl),
+                'format'    => $this->format,
+                );
 
-        if (!preg_match("/^$this->regexString/", $shorturl)) {
-            throw new Services_Bitly_Exception("URL domain you tried to expand was invalid.");
-        }
-
-        $apiurl = $this->baseUrl    . '/expand?'
-                                    . 'version='    . $this->apiVersion
-                                    . '&shortUrl='  . urlencode($shorturl)
-                                    . '&login='     . $this->login
-                                    . '&apiKey='    . $this->apiKey
-                                    . '&format='    . $this->format
-                                    . '';
+        $apiurl = $this->baseUrl . '/expand?' . http_build_query($queryParameters);
 
         $curl   = curl_init();
         curl_setopt($curl,  CURLOPT_URL,            $apiurl);
@@ -213,55 +182,31 @@ class Services_Bitly
 
         if($this->format === self::FORMAT_JSON) {
 
-            $json = json_decode($response,true);
+            $json = json_decode($response, true);
 
-            $userhash = preg_replace("/^$this->regexString/", "", $shorturl);
-
-            if($json['errorCode'] === 0 && $json['statusCode'] === 'OK') {
-
-                if(is_array($json['results'][$userhash]['longUrl'])) {
-
-                    throw new Services_Bitly_Exception($json['results'][$userhash]['longUrl']['errorMessage'], $json['results'][$userhash]['longUrl']['errorCode']);
-
-                }else{
-
-                    return $json['results'][$userhash]['longUrl'];
-
-                }
-
-            }else{
-
-                throw new Services_Bitly_Exception($json['errorMessage'], $json['errorCode']);
-
+            if ($json['status_code'] == "200" && $json['status_txt'] === 'OK') {
+                return $json['data']['expand'][0]['long_url'];
+            } else {
+                throw new Services_Bitly_Exception($json['status_txt'], $json['status_code']);
             }
         }
 
-        if($this->format === self::FORMAT_XML) {
+        if ($this->format === self::FORMAT_XML) {
 
-            require_once 'XML/Unserializer.php';
+            $xml = simplexml_load_string($response);
 
-            $unserializer = new XML_Unserializer(array(XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE => 'parseAttributes'));
-            $unserializer->unserialize($response);
-            $xml = $unserializer->getUnserializedData();
+            if ($xml->status_code == "200" && $xml->status_txt == 'OK') {
+                return $xml->data->entry->long_url;
+            } else {
+                throw new Services_Bitly_Exception($xml->statas_txt, $xml->status_code);
+            }
+        }
 
-            $userhash = preg_replace("/^$this->regexString/", "", $shorturl);
-
-            if($xml['errorCode'] == 0 && $xml['statusCode'] == 'OK') {
-
-                if(is_array($xml['results'][$userhash]['longUrl'])) {
-
-                    throw new Services_Bitly_Exception($xml['results'][$userhash]['longUrl']['errorMessage'], (int)($xml['results'][$userhash]['longUrl']['errorCode']));
-
-                }else{
-
-                    return $xml['results'][$userhash]['longUrl'];
-
-                }
-
-            }else{
-
-                throw new Services_Bitly_Exception($xml['errorMessage'], (int)($xml['errorCode']));
-
+        if ($this->format === self::FORMAT_TXT) {
+            if ($response) {
+                return $response;
+            } else {
+                throw new Services_Bitly_Exception('UNKNOWN ERROR. if more information: set fomat json or xml.');
             }
         }
     }
@@ -321,15 +266,14 @@ class Services_Bitly
         $this->baseDomain   = (string) $domain;
         switch($domain) {
             case self::DOMAIN_BITLY:
-                $this->baseUrl = self::API_URL_BITLY;
+                $this->baseUrl = self::API_URL_BITLY    . "/" . $this->apiVersion;
                 break;
             case self::DOMAIN_JMP:
-                $this->baseUrl = self::API_URL_JMP;
+                $this->baseUrl = self::API_URL_JMP      . "/" . $this->apiVersion;;
                 break;
             default:
-                $this->baseUrl = self::API_URL_BITLY;
+                $this->baseUrl = self::API_URL_BITLY    . "/" . $this->apiVersion;;
         }
-        $this->regexString  = (string) 'http:\/\/' . $domain . '\/';
     }
 
 }
