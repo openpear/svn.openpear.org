@@ -211,7 +211,7 @@ class HTML_CSS_Selector2XPath
         switch (trim($e[1]))
         {
           case ',':
-            $parts[] = ' | //*';
+            $parts[] = ' | //';
             break;
           case '>':
             $parts[] = '/';
