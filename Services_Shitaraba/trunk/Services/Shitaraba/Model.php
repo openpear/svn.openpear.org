@@ -29,7 +29,7 @@ class Services_Shitaraba_Model{
 			//ログイン
 				const SHITARABA_MAN_LOGIN='login/';
 			//スレッド倉庫送りURL-確認送信先
-				const SHITARABA_MAN_THREAD_CONF='config/data/thread_delete';
+				const SHITARABA_MAN_THREAD_CONF='config/data/thread_delete_confirm';
 			//スレッド倉庫送りURL-完了送信先
 				const SHITARABA_MAN_THREAD_COMP='config/data/thread_delete_confirm';
 			//個別削除URL
@@ -296,13 +296,18 @@ class Services_Shitaraba_Model{
 	
 	
 	
+	//--------------------------------------------------------------------------------------
+	//GETする
+	protected function _GET($url,$post_array=false){
+		$this->_POST($url,$post_array, true);
+	}
 	
 	
 	
 	
 	//--------------------------------------------------------------------------------------
 	//POSTする
-	private function _POST($url,$post_array=false){
+	protected function _POST($url,$post_array=false, $is_get=false){
 	
 		/*
 			file_get_contents、及びCurl系の関数は302のリダイレクトを正しく処理しないので
@@ -311,6 +316,8 @@ class Services_Shitaraba_Model{
 			そういう設定が何処かにあるのかもしれんがよくわからん
 			
 			てかブラウザからだとリダイレクトにGET送っててOKなのにPHPからだとエラーになるんだが何故
+			
+			いつのまにかsetCookieJarとか出来てるので使うと楽そう
 		*/
 	
 		// Zend_Http_Client
@@ -320,10 +327,18 @@ class Services_Shitaraba_Model{
 			$http->setUri($url); 
 			
 			//配列で来てたらsetParameterPost、文字列で来てたら生データを入れる
-			if(is_array($post_array)){
-				$http->setParameterPost($post_array);
+			if($is_get===true){
+				if(is_array($post_array)){
+					$http->setParameterGet($post_array);
+				}else{
+					$http->setRawData($post_array);
+				}
 			}else{
-				$http->setRawData($post_array);
+				if(is_array($post_array)){
+					$http->setParameterPost($post_array);
+				}else{
+					$http->setRawData($post_array);
+				}
 			}
 			
 			//302に対し正しくリダイレクトを行う
@@ -334,46 +349,49 @@ class Services_Shitaraba_Model{
 			}
 		
 		//実行
-			$httpResponse = $http->request('POST');
+			if($is_get===true){
+				$httpResponse = $http->request('GET');
+			}else{
+				$httpResponse = $http->request('POST');
+			}
 			if(!$httpResponse->isSuccessful()){return false;}
-		
 		//Cookieを取得してセット
 			$a=$http->getLastResponse();
 			$a=$a->getHeaders();
 			if($a['Set-cookie']){
 				$this->cookie=Zend_Http_Cookie::fromString($a['Set-cookie']);
 			}
-		
+			
 		//返却
 			return true;
 	}
 	
 	//--------------------------------------------------------------------------------------
 	//管理画面にログイン
-		protected function _shitaraba_Login(){
-			//パラメータチェック
-				if(!$this->checkParamPw()){return false;}
-				
-			//ログインURL
-				$login_url=self::SHITARABA_MAN_BASE
-					.$this->gerne.'/'.$this->bbsnum.'/'.self::SHITARABA_MAN_LOGIN;
-				
-			//POSTするデータ
-				$login_post=array(
-					 'login_password'=>$this->pw
-					,'login'=>'login'
-				);
-			//POSTするお
-				$ret=$this->_POST($login_url,$login_post);
-				
-			//返却
-				return $ret;
-		}
+	protected function _shitaraba_Login(){
+		//パラメータチェック
+			if(!$this->checkParamPw()){return false;}
+			
+		//ログインURL
+			$login_url=self::SHITARABA_MAN_BASE
+				.$this->gerne.'/'.$this->bbsnum.'/'.self::SHITARABA_MAN_LOGIN;
+			
+		//POSTするデータ
+			$login_post=array(
+				 'login_password'=>$this->pw
+				,'login'=>'login'
+			);
+		//POSTするお
+			$ret=$this->_POST($login_url,$login_post);
+			
+		//返却
+			return $ret;
+	}
 		
 	
 	//--------------------------------------------------------------------------------------
 	//スレ毎に投稿削除
-	private function _shitaraba_Delete($thread_id,$res_id_array){
+	protected function _shitaraba_Delete($thread_id,$res_id_array){
 		//準備	引数はスレッドID、レスID配列
 			if(!$thread_id || !is_array($res_id_array)){return false;}
 			$form_post_string='';
@@ -420,46 +438,52 @@ class Services_Shitaraba_Model{
 	
 	//--------------------------------------------------------------------------------------
 	//スレ毎に投稿dat落ち	実行
-	private function _shitaraba_DatThread($thread_id_array){
+	protected function _shitaraba_DatThread($thread_id_array){
 		
 		//管理画面にログイン
 			$ret=$this->_shitaraba_Login();
 			if(!$ret){return false;}
 		
-		//削除準備
-			$ret=$this->_shitaraba_DatThread_conf($thread_id_array);
-			if(!$ret){return false;}
+		//全スレッドに対し
+		foreach($thread_id_array as $key=>$thread_id){
+			//削除準備
+				$ret=$this->_shitaraba_DatThread_conf($thread_id);
+				//if(!$ret){return false;}
+			
+			//削除実行
+				$ret=$this->_shitaraba_DatThread_comp($thread_id);
+				//if(!$ret){return false;}
+		}
 		
-		//削除実行
-			return $this->_shitaraba_DatThread_comp();
+		//終了
+			return true;
 	}
 	
 	
 	//--------------------------------------------------------------------------------------
 	//スレッドdat落ち	//確認画面
-	private function _shitaraba_DatThread_conf($thread_id_array){
+	protected function _shitaraba_DatThread_conf($thread_id){
 	
-		//準備	引数はスレッドID配列
-			if(!$thread_id_array || !is_array($thread_id_array)){return false;}
+		//準備	引数はスレッドID単品
+			if(!$thread_id ){return false;}
 		
 		//POSTパラメータ用意
 			//URL
-				$form_url=self::SHITARABA_MAN_BASE.$this->gerne.'/'.$this->bbsnum.'/'
+				$form_url = self::SHITARABA_MAN_BASE.$this->gerne.'/'.$this->bbsnum.'/'
 					.self::SHITARABA_MAN_THREAD_CONF;
 			//内容
 				//dat落ちするスレッドID
-				foreach($thread_id_array as $val){
-					$form_post_array['key_'.$val]='on';
-				}
-		
+					$form_post_array['key'] = $thread_id;
+				//過去ログ送り
+				$form_post_array['subcommand']='save';
 		//POST
-			return $this->_POST($form_url,$form_post_array);
+			return $this->_GET($form_url,$form_post_array);
 	}
 	
 	
 	//--------------------------------------------------------------------------------------
 	//スレッドdat落ち	//完了画面
-	private function _shitaraba_DatThread_comp(){
+	protected function _shitaraba_DatThread_comp($thread_id){
 		
 		//POSTパラメータ用意
 			//URL
@@ -467,7 +491,7 @@ class Services_Shitaraba_Model{
 					.self::SHITARABA_MAN_THREAD_COMP;
 			
 			//内容
-				//削除するスレはconfで送っているので不要、下記はダミー
+				//削除するスレはconfで送っているので不要
 				$form_post_array=array('a'=>'a');
 		
 		//POST
