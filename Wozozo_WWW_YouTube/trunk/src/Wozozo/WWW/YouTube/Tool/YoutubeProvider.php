@@ -1,11 +1,17 @@
 <?php
 require_once 'Wozozo/WWW/YouTube.php';
 require_once 'Zend/Tool/Framework/Provider/Abstract.php';
+
 class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provider_Abstract
 {
-    protected $_specialties = array('Echo', 'SendQueue');
+    protected $_specialties = array('SendQueue', 'Couchdb');
 
-    public function downloadEcho($id)
+    /**
+     * @var Wozozo_WWW_YouTube
+     */
+    protected $_youtube;
+
+    public function getDownloadUrl($id)
     {
         $videoId = Wozozo_WWW_YouTube::detectVideoId($id);
         $youtube = $this->_loadYoutube();
@@ -15,6 +21,35 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
     }
 
     public function download($id, $path = 'PWD')
+    {
+        $this->_download($id, $path, false);
+    }
+
+    public function downloadCouchdb($id)
+    {
+        $this->_download($id, null, true);
+    }
+
+    private function _setupSave($videoInfo, $path, $couch = false)
+    {
+        if ($couch) {
+            $config = $this->_loadConfig('couchdb');
+            if ($dbname = $config->dbname) {
+                require_once 'Wozozo/WWW/YouTube/Storage/Couchdb.php';
+                $storage = new Wozozo_WWW_YouTube_Storage_Couchdb($videoInfo, $videoInfo['video_id'], $dbname);
+                $this->_youtube->setConfig(array('save' => array($storage, 'callbackUpdate')));
+
+                return $storage->getUrl();
+            } else {
+                throw new Exception();
+            }
+        } else {
+            $this->_youtube->setConfig(array('save' => $path));
+            return $this->_youtube->suggestSavePath($videoInfo);
+        }
+    }
+
+    protected function _download($id, $save, $couch = false)
     {
         $videoId = Wozozo_WWW_YouTube::detectVideoId($id);
         $this->_out("Video ID :$videoId");
@@ -35,8 +70,11 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
         $client->setAdapter('Wozozo_WWW_YouTube_HttpSocketProgressBar');
 
         $youtube->setHttpClient($client);
+        /*
         if ($path) $youtube->setConfig(array('save' => $path)); 
         $path = $youtube->suggestSavePath($videoInfo);
+        */
+        $path = $this->_setupSave($videoInfo, $save, $couch);
 
         $this->_out("Downloading ..: ". $path);
         $youtube->downloadByVideoInfo($videoInfo);
@@ -48,17 +86,21 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
 
     protected function _loadYoutube()
     {
-        $youtube = new Wozozo_WWW_YouTube();
-        if ($config = $this->_loadConfig('youtube')) {
-            if ($config->httpClient) {
-                require_once 'Zend/Http/Client.php';
-                $client = new Zend_Http_Client(null, $config->httpClient);
-                $youtube->setHttpClient($client);
+        if (null === $this->_youtube) {
+            $youtube = new Wozozo_WWW_YouTube();
+            if ($config = $this->_loadConfig('youtube')) {
+                if ($config->httpClient) {
+                    require_once 'Zend/Http/Client.php';
+                    $client = new Zend_Http_Client(null, $config->httpClient);
+                    $youtube->setHttpClient($client);
+                }
+                $youtube->setConfig($config);
             }
-            $youtube->setConfig($config);
+
+            $this->_youtube = $youtube;
         }
 
-        return $youtube;
+        return $this->_youtube;
     }
 
     protected function _loadConfig($key)
