@@ -172,11 +172,6 @@ class Wozozo_WWW_YouTube
     }
 
     /**
-     * Request video file
-     *
-     * @param Wozozo_WWW_YouTube_VideoInfo
-
-    /**
      * borrowed from WWW::YouTube::Download
      */
     public static function detectSuffix($fmt)
