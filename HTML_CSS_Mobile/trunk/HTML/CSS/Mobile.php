@@ -38,7 +38,7 @@ require_once 'HTML/CSS.php';
  *   のPHP移殖版
  *
  * @package
- * @version 0.1.6
+ * @version 0.1.7
  * @copyright 2008 yudoufu
  * @author Daichi Kamemoto(a.k.a yudoufu) <daikame@gmail.com>
  * @license MIT License
@@ -136,6 +136,10 @@ class HTML_CSS_Mobile
       $declaration = $e[0];
       $document = substr($document, strlen($declaration));
     }
+
+    // 同様に、<br />が<br>になってしまう問題のために退避
+    #TODO: meta hr 等も同様だが、危険なのでさける。。。本質的な解決になっていない。
+    $document = preg_replace('/<(br\s*.*\/)>/', 'HTMLCSSBRESCAPE%$1%::::::::', $document);
 
     // 文字参照をエスケープ
     $document = preg_replace('/&(#(?:\d+|x[0-9a-fA-F]+)|[A-Za-z0-9]+);/', 'HTMLCSSINLINERESCAPE%$1%::::::::', $document);
@@ -264,6 +268,9 @@ class HTML_CSS_Mobile
 
     // エスケープしていた参照を復元
     $result = preg_replace('/HTMLCSSINLINERESCAPE%(#(?:\d+|x[0-9a-fA-F]+)|[A-Za-z0-9]+)%::::::::/', '&$1;', $result);
+
+    // <br />を復元
+    $result = preg_replace('/HTMLCSSBRESCAPE%(br\s*.*\/)%::::::::/', '<$1>', $result);
 
     // 退避したXML宣言を復元
     if (!empty($declaration))
