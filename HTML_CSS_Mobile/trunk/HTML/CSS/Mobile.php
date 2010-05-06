@@ -51,6 +51,7 @@ class HTML_CSS_Mobile
   private $dom_xpath;
   private $css_files = array();
   private $html_css;
+  private $errors = array();
 
   /**
    * getInstance インスタンスを取得
@@ -109,6 +110,17 @@ class HTML_CSS_Mobile
     }
 
     return $this;
+  }
+
+  /**
+   * libxmlのエラーをハンドリングした結果を返す。
+   *   LibXMLErrorオブジェクトの配列が返ってくる。
+   * 
+   * @return array
+   */
+  public function getXmlErrors()
+  {
+    return $this->errors;
   }
 
   /**
@@ -183,6 +195,8 @@ class HTML_CSS_Mobile
     /****************************************
      * 本処理
      ****************************************/
+    // libxmlのエラーをハンドリング
+    libxml_use_internal_errors(true);
 
     // XHTMLをパース
     $this->dom = new DOMDocument();
@@ -249,6 +263,11 @@ class HTML_CSS_Mobile
     }
 
     $result = $this->dom->saveHTML();
+
+
+    // libxmlのエラーを退避して削除
+    $this->errors = libxml_get_errors();
+    libxml_clear_errors();
 
     /****************************************
      * 後処理
