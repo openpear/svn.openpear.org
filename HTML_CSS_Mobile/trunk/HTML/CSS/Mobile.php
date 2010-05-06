@@ -7,7 +7,7 @@
 /**
  * The MIT License
  *
- * Copyright (c) 2008 Daichi Kamemoto <daikame@gmail.com>
+ * Copyright (c) 2008 - 2010 Daichi Kamemoto <daikame@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,8 +38,8 @@ require_once 'HTML/CSS.php';
  *   のPHP移殖版
  *
  * @package
- * @version 0.1.7
- * @copyright 2008 yudoufu
+ * @version 1.8
+ * @copyright 2008 - 2010 yudoufu
  * @author Daichi Kamemoto(a.k.a yudoufu) <daikame@gmail.com>
  * @license MIT License
  */
