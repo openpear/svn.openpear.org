@@ -15,7 +15,7 @@ class Wozozo_WWW_YouTube
      * @var array
      */
     protected $_config = array('fmt' => 18,
-                               'save' => 'PWD', //'PWD' will use getcwd();
+                               'save' => 'GETCWD', //'GETCWD' will use getcwd();
                                'request_video_stream' => true, //output stream 
                                'response_video_cleanup' => true
                                );
@@ -159,8 +159,8 @@ class Wozozo_WWW_YouTube
     {
         $dir = $this->_config['save'];
         $fmt = $this->_config['fmt'];
-        if ('PWD' ===  $dir) {
-            $dir = $_SERVER['PWD'];
+        if ('GETCWD' ===  $dir) {
+            $dir = getcwd();
         } else {
             if(!is_dir($dir)) {
                 throw new InvalidArgumentException('Invalid dir'.$dir);
@@ -173,6 +173,12 @@ class Wozozo_WWW_YouTube
 
     /**
      * borrowed from WWW::YouTube::Download
+     *
+     * @see 
+     * http://cpansearch.perl.org/src/XAICRON/WWW-YouTube-Download-0.13/lib/WWW/YouTube/Download.pm
+     *
+     * @param string 
+     * @return string  
      */
     public static function detectSuffix($fmt)
     {
