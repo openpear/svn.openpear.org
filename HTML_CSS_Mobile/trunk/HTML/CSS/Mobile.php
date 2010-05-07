@@ -347,7 +347,7 @@ class HTML_CSS_Mobile
       foreach ($this->css_files as $file)
       {
         $css_string = '';
-        if (substr($file, 0, 1) != '/')
+        if (substr($file, 0, 1) != '/' || substr($file, 1, 2) != ':\\')
         {
           $file = $this->base_dir . $file;
         }
