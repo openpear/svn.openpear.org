@@ -38,7 +38,7 @@ require_once 'HTML/CSS.php';
  *   のPHP移殖版
  *
  * @package
- * @version 1.8
+ * @version 1.8.1
  * @copyright 2008 - 2010 yudoufu
  * @author Daichi Kamemoto(a.k.a yudoufu) <daikame@gmail.com>
  * @license MIT License
