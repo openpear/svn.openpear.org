@@ -20,7 +20,7 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
         $this->_out($url);
     }
 
-    public function download($id, $path = 'PWD')
+    public function download($id, $path = 'GETCWD')
     {
         $this->_download($id, $path, false);
     }
