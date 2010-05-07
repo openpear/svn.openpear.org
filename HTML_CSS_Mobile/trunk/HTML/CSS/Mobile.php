@@ -227,6 +227,7 @@ class HTML_CSS_Mobile
       $xpath = HTML_CSS_Selector2XPath::toXPath($selector);
       $elements = $this->dom_xpath->query($xpath);
 
+      if (!($elements instanceof DOMNodeList)) continue;
       if ($elements->length == 0) continue;
       // inlineにするCSS文を構成(toInline($selector)だとh2, h3 などでうまくいかない問題があったため)
       $inline_style = '';
