@@ -1,5 +1,6 @@
 <?php
 require_once 'Net/IRC.php';
+require_once 'Net/IRC/Pattern.php';
 
 class Net_IRC_Client
 {
@@ -36,7 +37,6 @@ class Net_IRC_Client
             if (!isset($this->options[$r]))
                 throw new Net_IRC_Exception($r. ' is required.');
         }
-
         $stream = stream_socket_client(
             sprintf("tcp://%s:%d", $this->server, $this->port),
             $errno, $errmsg, self::TIMEOUT
@@ -49,15 +49,15 @@ class Net_IRC_Client
         if (isset($this->options['password'])) {
             $this->post('PASS', $this->options['password']);
         }
-        $this->post('NICK', $options['nick']);
-        $this->post('USER', $options['user']);
+        $this->post('NICK', $this->options['nick']);
+        $this->post('USER', $this->options['user']);
 
         while ($l = fgets($this->stream)) {
             try {
                 $msg = $this->parse_message($l);
                 if ($this->on_message($msg) === true) continue;
                 $method = strtolower('on_'. $msg->command);
-                if (method_exists(array($this, $method))) {
+                if (method_exists($this, $method)) {
                     $this->$method($msg);
                 }
             } catch (Net_IRC_Exception $e) {
@@ -87,7 +87,7 @@ class Net_IRC_Client
      * @return void
      **/
     protected function on_connected() {
-        # pass
+        usleep(500);
     }
 
     /**
@@ -103,7 +103,7 @@ class Net_IRC_Client
      * PING PONG
      **/
     protected function on_ping($arg) {
-        $this->post('PONG '. $arg);
+        $this->post('PONG', $arg);
     }
 
     /**
@@ -118,6 +118,39 @@ class Net_IRC_Client
      **/
     protected function on_error(Exception $e) {
         echo $e->getMessage(), PHP_EOL;
+    }
+
+    protected function parse_message($line) {
+        if (preg_match(Net_IRC_Pattern::p('MESSAGE'), $line, $match)) {
+            $_ = array_shift($match);
+            $prefix = array_shift($match);
+            $command = array_shift($match);
+
+            if (isset($match[0]) && !empty($match[0])) {
+                list($middle, $trailer) = $match;
+            } else if (isset($match[2]) && !empty($match[2])) {
+                list($middle, $trailer) = array_slice($match, 2, 2);
+            } else if (isset($match[1])) {
+                $params = array();
+                $trailer = $rest[1];
+            } else if (isset($match[3])) {
+                $params = array();
+                $trailer = $match[3];
+            } else {
+                $params = array();
+            }
+
+            if (!isset($params)) {
+                $params = explode(' ', $middle);
+            }
+            if (!empty($trailer)) {
+                $params += array($trailer);
+            }
+
+            // FIXME
+            return (object) compact('prefix', 'command', 'params');
+        }
+        throw new Net_IRC_Exception('invalid message');
     }
 
     public function __destruct() {
