@@ -47,6 +47,7 @@ require_once 'HTTP/Request.php';
 /**
  * Handling Wedata Service
  * 
+ * @deprecated
  * @category  Services
  * @package   Services_Wedata
  * @author    Sasezaki <sasezaki at gmail.com>
@@ -90,6 +91,8 @@ class Services_Wedata
      */
     public function __construct(array $params = null, $decodetype = null)
     {
+        trigger_error(__CLASS__ .'is deprecated, use Diggin_Service_Wedata instead.', E_USER_NOTICE);
+        //http://diggin.googlecode.com/svn/standard/trunk/library/Diggin/Service/Wedata.php
         self::$_params = $params;
         self::$_decodetype = $decodetype;
     }
