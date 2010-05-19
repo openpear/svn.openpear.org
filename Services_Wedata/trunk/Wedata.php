@@ -197,6 +197,7 @@ class Services_Wedata
         $url = new Net_URL(self::API_URL.$path);
         
         $request = new HTTP_Request($url->getURL());
+        $request->setMethod($method);
         
         if (!is_null($params)) {            
             if ($method === HTTP_REQUEST_METHOD_GET) {
