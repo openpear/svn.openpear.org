@@ -33,6 +33,7 @@ class Net_IRC_Client
      * @return void
      **/
     public function connect() {
+        $this->debug('connect to '. $this->server. ':'. $this->port. '...');
         foreach ($this->required_options as $r) {
             if (!isset($this->options[$r]))
                 throw new Net_IRC_Exception($r. ' is required.');
@@ -44,6 +45,7 @@ class Net_IRC_Client
         if ($stream === false) {
             throw new Net_IRC_Exception($errmsg, $errno);
         }
+        $this->debug('connected');
         $this->stream = $stream;
         $this->on_connected();
         if (isset($this->options['password'])) {
@@ -54,10 +56,12 @@ class Net_IRC_Client
 
         while ($l = fgets($this->stream)) {
             try {
+                $this->debug($l);
                 $msg = $this->parse_message($l);
                 if ($this->on_message($msg) === true) continue;
                 $method = strtolower('on_'. $msg->command);
                 if (method_exists($this, $method)) {
+                    $this->debug('call: '. $method);
                     $this->$method($msg);
                 }
             } catch (Net_IRC_Exception $e) {
@@ -75,7 +79,9 @@ class Net_IRC_Client
         if (!$this->stream) {
             throw new Net_IRC_Exception('connection not found');
         }
-        if (fwrite($this->stream, implode(' ', func_get_args()))) {
+        $msg = implode(' ', func_get_args());
+        $this->debug($msg);
+        if (fwrite($this->stream, $msg. PHP_EOL)) {
             return true;
         }
         throw new Net_IRC_Exception('post error');
@@ -103,7 +109,7 @@ class Net_IRC_Client
      * PING PONG
      **/
     protected function on_ping($arg) {
-        $this->post('PONG', $arg);
+        $this->post('PONG', implode('', $arg->params));
     }
 
     /**
@@ -120,6 +126,10 @@ class Net_IRC_Client
         echo $e->getMessage(), PHP_EOL;
     }
 
+    protected function privmsg($prefix, $msg) {
+        $this->post('PRIVMSG', $prefix, ':'. $msg);
+    }
+
     protected function parse_message($line) {
         if (preg_match(Net_IRC_Pattern::p('MESSAGE'), $line, $match)) {
             $_ = array_shift($match);
@@ -132,19 +142,19 @@ class Net_IRC_Client
                 list($middle, $trailer) = array_slice($match, 2, 2);
             } else if (isset($match[1])) {
                 $params = array();
-                $trailer = $rest[1];
+                $trailer = $match[1];
             } else if (isset($match[3])) {
                 $params = array();
                 $trailer = $match[3];
             } else {
                 $params = array();
             }
-
+            
             if (!isset($params)) {
-                $params = explode(' ', $middle);
+                $params = explode(' ', trim($middle));
             }
             if (!empty($trailer)) {
-                $params += array($trailer);
+                $params = array_merge($params, array($trailer));
             }
 
             // FIXME
@@ -158,5 +168,9 @@ class Net_IRC_Client
             fclose($this->stream);
             $this->on_disconnected();
         }
+    }
+
+    protected function debug($msg) {
+        #pass
     }
 }
