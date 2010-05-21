@@ -45,6 +45,8 @@ class Net_IRC_Client
         if ($stream === false) {
             throw new Net_IRC_Exception($errmsg, $errno);
         }
+        stream_set_timeout($stream, -1);
+        stream_set_blocking($stream, 1);
         $this->debug('connected');
         $this->stream = $stream;
         $this->on_connected();
@@ -109,7 +111,7 @@ class Net_IRC_Client
      * PING PONG
      **/
     protected function on_ping($arg) {
-        $this->post('PONG', implode('', $arg->params));
+        $this->post('PONG', ':'. implode('', $arg->params));
     }
 
     /**
@@ -123,11 +125,14 @@ class Net_IRC_Client
      * エラーが発生したとき
      **/
     protected function on_error(Exception $e) {
-        echo $e->getMessage(), PHP_EOL;
+        $this->debug($e->getMessage());
     }
 
     protected function privmsg($prefix, $msg) {
         $this->post('PRIVMSG', $prefix, ':'. $msg);
+    }
+    protected function notice($prefix, $msg) {
+        $this->post('NOTICE', $prefix, ':'. $msg);
     }
 
     protected function parse_message($line) {
