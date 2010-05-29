@@ -1,5 +1,11 @@
 <?php
 
+/**
+
+Kenjiro Hirakawa <kenjiro@kenjiro.net>
+
+*/
+
 class Twins {
 
     public $template_dir;
