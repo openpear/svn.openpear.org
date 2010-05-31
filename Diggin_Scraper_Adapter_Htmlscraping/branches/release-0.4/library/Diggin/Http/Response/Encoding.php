@@ -70,10 +70,10 @@ class Diggin_Http_Response_Encoding
      * @return mixed
      * @throws Diggin_Http_Response_Encoder_Exception
      */
-    public static function encode($responseBody, $contentType = null, $encodingto = 'UTF-8', $convertVars = array())
+    public static function encode($responseBody, $contentType = null, $encodingto = 'UTF-8', $convertVars = array(), $sjisStrict = false)
     {
         
-        $encodingfrom = self::detect($responseBody, $contentType);
+        $encodingfrom = self::detect($responseBody, $contentType, $sjisStrict);
         
         /*
          * Use mbstring to convert character encoding if available.
@@ -125,13 +125,14 @@ class Diggin_Http_Response_Encoding
      * @param string $contentType
      * @return string $encoding
      */
-    public static function detect($responseBody, $contentType = null)
+    public static function detect($responseBody, $contentType = null, $sjisStrict = false)
     {
         $encoding = false;
         if (isset($contentType)) {
             $encoding = self::_getCharsetFromCType($contentType);
         }
-        if (!$encoding and preg_match_all('/<meta\b[^>]*?>/si', $responseBody, $matches)) {
+        if ((!$encoding or ((strtolower($encoding) === 'shift_jis') and !$sjisStrict)) 
+            and preg_match_all('/<meta\b[^>]*?>/si', $responseBody, $matches)) {
             foreach ($matches[0] as $value) {
                 if (strtolower(self::_getAttribute('http-equiv', $value)) == 'content-type'
                     and false !== $encoding = self::_getAttribute('content', $value)) {
@@ -144,10 +145,11 @@ class Diggin_Http_Response_Encoding
         /*
          * Use mbstring to detect character encoding if available.
          */
-        if (extension_loaded('mbstring') and !$encoding) {
+        if (extension_loaded('mbstring') and (!$encoding or (!$sjisStrict and strtolower($encoding) === 'shift_jis'))) {
             $detectOrder = @mb_detect_order();
             @mb_detect_order(self::getDetectOrder());
-            if (false === $encoding = @mb_preferred_mime_name(@mb_detect_encoding($responseBody))) {
+            if (($sjisStrict === false) and (false !== $encoding = @mb_detect_encoding($responseBody))) {
+            } else if (false === $encoding = @mb_preferred_mime_name(@mb_detect_encoding($responseBody))) {
                 @mb_detect_order($detectOrder);//restore
                 require_once 'Diggin/Http/Response/Encoding/Exception.php';
                 throw new Diggin_Http_Response_Encoding_Exception('Failed detecting character encoding.');
