@@ -1,6 +1,6 @@
 <?php
 require_once 'Net/IRC.php';
-require_once 'Net/IRC/Pattern.php';
+require_once 'Net/IRC/Message.php';
 
 class Net_IRC_Client
 {
@@ -59,9 +59,10 @@ class Net_IRC_Client
         while ($l = fgets($this->stream)) {
             try {
                 $this->debug('<= '. $l);
-                $msg = $this->parse_message($l);
+                // $msg = $this->parse_message($l);
+                $msg = new Net_IRC_Message($l);
                 if ($this->on_message($msg) === true) continue;
-                $method = strtolower('on_'. $msg->command);
+                $method = strtolower('on_'. $msg->command());
                 if (method_exists($this, $method)) {
                     $this->debug('call: '. $method);
                     $this->$method($msg);
@@ -77,7 +78,7 @@ class Net_IRC_Client
      *
      * @param   可変
      **/
-    protected function post() {
+    public function post() {
         if (!$this->stream) {
             throw new Net_IRC_Exception('connection not found');
         }
@@ -87,6 +88,12 @@ class Net_IRC_Client
             return true;
         }
         throw new Net_IRC_Exception('post error');
+    }
+    public function privmsg($prefix, $msg) {
+        $this->post('PRIVMSG', $prefix, ':'. $msg);
+    }
+    public function notice($prefix, $msg) {
+        $this->post('NOTICE', $prefix, ':'. $msg);
     }
 
     /**
@@ -126,46 +133,6 @@ class Net_IRC_Client
      **/
     protected function on_error(Exception $e) {
         $this->debug($e->getMessage());
-    }
-
-    protected function privmsg($prefix, $msg) {
-        $this->post('PRIVMSG', $prefix, ':'. $msg);
-    }
-    protected function notice($prefix, $msg) {
-        $this->post('NOTICE', $prefix, ':'. $msg);
-    }
-
-    protected function parse_message($line) {
-        if (preg_match(Net_IRC_Pattern::message_pattern(), $line, $match)) {
-            $_ = array_shift($match);
-            $prefix = array_shift($match);
-            $command = array_shift($match);
-
-            if (isset($match[0]) && !empty($match[0])) {
-                list($middle, $trailer) = $match;
-            } else if (isset($match[2]) && !empty($match[2])) {
-                list($middle, $trailer) = array_slice($match, 2, 2);
-            } else if (isset($match[1])) {
-                $params = array();
-                $trailer = $match[1];
-            } else if (isset($match[3])) {
-                $params = array();
-                $trailer = $match[3];
-            } else {
-                $params = array();
-            }
-            
-            if (!isset($params)) {
-                $params = explode(' ', trim($middle));
-            }
-            if (!empty($trailer)) {
-                $params = array_merge($params, array($trailer));
-            }
-
-            // FIXME
-            return (object) compact('prefix', 'command', 'params');
-        }
-        throw new Net_IRC_Exception('invalid message');
     }
 
     public function __destruct() {
