@@ -65,6 +65,10 @@ class Net_IRC_Pattern
         self::$_is_init_ = true;
     }
 
+    static public function message_pattern() {
+        return '/\A'. self::$MESSAGE. '\z/S';
+    }
+
     static public function p($name) {
         if (isset(self::$$name)) {
             return '/'. self::$$name. '/u';

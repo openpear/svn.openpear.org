@@ -58,7 +58,7 @@ class Net_IRC_Client
 
         while ($l = fgets($this->stream)) {
             try {
-                $this->debug($l);
+                $this->debug('<= '. $l);
                 $msg = $this->parse_message($l);
                 if ($this->on_message($msg) === true) continue;
                 $method = strtolower('on_'. $msg->command);
@@ -82,8 +82,8 @@ class Net_IRC_Client
             throw new Net_IRC_Exception('connection not found');
         }
         $msg = implode(' ', func_get_args());
-        $this->debug($msg);
-        if (fwrite($this->stream, $msg. PHP_EOL)) {
+        $this->debug('=> '. $msg);
+        if (fwrite($this->stream, trim($msg). PHP_EOL)) {
             return true;
         }
         throw new Net_IRC_Exception('post error');
@@ -136,7 +136,7 @@ class Net_IRC_Client
     }
 
     protected function parse_message($line) {
-        if (preg_match(Net_IRC_Pattern::p('MESSAGE'), $line, $match)) {
+        if (preg_match(Net_IRC_Pattern::message_pattern(), $line, $match)) {
             $_ = array_shift($match);
             $prefix = array_shift($match);
             $command = array_shift($match);
