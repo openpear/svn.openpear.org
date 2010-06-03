@@ -12,6 +12,8 @@ class Net_IRC_Client
     protected $options = array();
     protected $channels = array();
 
+    protected $nick;
+
     private $required_options = array('user', 'nick');
 
     /**
@@ -54,6 +56,7 @@ class Net_IRC_Client
             $this->post('PASS', $this->options['password']);
         }
         $this->post('NICK', $this->options['nick']);
+        $this->nick = $this->options['nick'];
         $this->post('USER', $this->options['user']);
 
         while ($l = fgets($this->stream)) {
@@ -110,20 +113,27 @@ class Net_IRC_Client
      *
      * @return bool trueだと他のアクションを行わない
      **/
-    protected function on_message($msg) {
+    protected function on_message(Net_IRC_Message $message) {
         # pass
     }
 
     /**
      * PING PONG
      **/
-    protected function on_ping($arg) {
-        $this->post('PONG', ':'. implode('', $arg->params));
+    protected function on_ping(Net_IRC_Message $message) {
+        $this->post('PONG', ':'. implode('', $message->params()));
+    }
+    protected function on_nick(Net_IRC_Message $message) {
+        if (preg_match('/^'. preg_quote($this->nick. '!'). '/', $message->prefix(), $match)) {
+            list($nick) = $message->params();
+            $this->debug('nick changed: '. $nick);
+            $this->nick = $nick;
+        }
     }
 
     /**
      * 切断時のアクション
-     */
+     **/
     protected function on_disconnected() {
         # pass
     }
