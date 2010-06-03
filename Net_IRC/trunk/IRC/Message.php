@@ -3,6 +3,7 @@ require_once 'Net/IRC/Pattern.php';
 
 class Net_IRC_Message
 {
+    protected $raw;
     protected $prefix;
     protected $command;
     protected $params;
@@ -12,9 +13,10 @@ class Net_IRC_Message
     protected $message;
 
     public function __construct($line) {
+        $this->raw = $line;
         if (preg_match(Net_IRC_Pattern::message_pattern(), $line, $match)) {
             $_ = array_shift($match);
-            if (preg_match('/^(.+?)!/', $_, $nick)) {
+            if (preg_match('/^:(.+?)!/', $_, $nick)) {
                 $this->nick = $nick[1];
             }
             $prefix = array_shift($match);
