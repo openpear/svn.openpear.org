@@ -17,15 +17,38 @@ $t->is(
         array('a')
     ));
 
+
 $c = PEG::context(array(
     '>http://google.com>',
     'a',
     '<<'
 ));
 
-$t->is(
-    $p->parse($c),
-    array(
-        'http://google.com',
-        array('a')
-    ));
+$result = $p->parse($c);
+$t->is($result[1], array('a'));
+$t->is($result[0]->at('url'), 'http://google.com');
+$t->is($result[0]->at('title'), false);
+
+
+$c = PEG::context(array(
+    '>http://google.com:title>',
+    'a',
+    '<<'
+));
+
+$result = $p->parse($c);
+$t->is($result[1], array('a'));
+$t->is($result[0]->at('url'), 'http://google.com');
+$t->is($result[0]->at('title'), '');
+
+
+$c = PEG::context(array(
+    '>http://google.com:title=hoge>',
+    'a',
+    '<<'
+));
+
+$result = $p->parse($c);
+$t->is($result[1], array('a'));
+$t->is($result[0]->at('url'), 'http://google.com');
+$t->is($result[0]->at('title'), 'hoge');

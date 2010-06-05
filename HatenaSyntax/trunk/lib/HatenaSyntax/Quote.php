@@ -28,14 +28,27 @@ class HatenaSyntax_Quote implements PEG_IParser
 
     function mapHeader($line)
     {
-        if (substr($line, 0, 1) !== '>') {
+        if (substr($line, 0, 1) !== '>' || substr($line, -1, 1) !== '>') {
             return PEG::failure();
         }
 
-        if (!preg_match('#^>(|https?://[^>]+)>$#', $line, $matches)) {
+        if ($line === '>>') {
+            return false;
+        }
+
+        $link_exp = substr($line, 1, strlen($line) - 2);
+
+        if (!preg_match('#^(https?://[^>:]+)(:title(=(.+))?)?$#', $link_exp, $matches)) {
             return PEG::failure();
         }
 
-        return $matches[1] === '' ? false : $matches[1]; 
+        $title = !isset($matches[2]) 
+            ? false
+            : (isset($matches[4]) ? $matches[4] : '');
+
+        return new HatenaSyntax_Node('httplink', array(
+            'href'   => $matches[1], 
+            'title' => isset($matches[4]) ? $matches[4] : false)
+        );
     }
 }
