@@ -10,9 +10,9 @@ class Wozozo
     {
         print "wozozo is hello";
     }
-    
+
     function __destruct()
     {
-    	echo 'ヽ( ・∀・)ﾉ ｳﾝｺｰー！';
+    	echo 'ヽ( ・∀・)ﾉ ｳﾝｺｰー！'
     }
 }
