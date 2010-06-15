@@ -21,7 +21,7 @@ class HatenaSyntax_TOCRenderer
     
     protected function escape($str)
     {
-        return htmlspecialchars($str, ENT_QUOTES);
+        return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
     }
     
     function renderHeader($node)
@@ -37,7 +37,7 @@ class HatenaSyntax_TOCRenderer
                 $buf [] = $this->{'render' . $leaf->getType()}($lead->getData());
             }
         }
-        return '<a href="#' . md5($this->id) . '_header_' . $count . '">' . $this->escape(join('', $buf)) . '</a>';
+        return '<a href="#hs_' . md5($this->id) . '_header_' . $count . '">' . $this->escape(join('', $buf)) . '</a>';
     }
     
     protected function renderFootnote($data)

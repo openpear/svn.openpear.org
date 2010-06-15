@@ -131,11 +131,10 @@ class HatenaSyntax_Renderer
     
     protected function renderHeader(Array $data)
     {
-        $level  = $data['level'] + $this->config['headerlevel'];   
-        $name   = md5($this->config['id']) . '_header_' . $this->headerCount++;
-        $anchor = '<a name="' . $name . '" id="' . $name . '"></a>';
+        $level = $data['level'] + $this->config['headerlevel'];   
+        $name  = 'hs_' . md5($this->config['id']) . '_header_' . $this->headerCount++;
 
-        return "<h{$level}>" . $this->renderLineSegment($data['body']) . $anchor . "</h{$level}>";
+        return "<h{$level} id=\"{$name}\">" . $this->renderLineSegment($data['body']) . "</h{$level}>";
     }
 
     protected function renderNoParagraph(Array $data)
@@ -168,18 +167,23 @@ class HatenaSyntax_Renderer
     protected function renderFootnote(Array $data)
     {
         $this->fncount++;
+
         $id = md5($this->config['id']);
         $n = $this->fncount;
-        $title = $body = $this->renderLineSegment($data);
+
+        $body = $this->renderLineSegment($data);
         $title = strip_tags($body);
+
         if (!$this->config['htmlescape']) {
             $title = $this->escape($title);
         }
         
-        $fnname = sprintf('%s_footnote_%d', $id, $n);
-        $fnlinkname = sprintf('%s_footnotelink_%d', $id, $n);
-        $this->footnote .= sprintf('<p><a href="#%s" name="%s" id="%s">*%d</a>: %s</p>' . PHP_EOL, $fnlinkname, $fnname, $fnname, $n, $body);
-        return sprintf('(<a href="#%s" name="%s" id="%s" title="%s">*%d</a>)', $fnname, $fnlinkname, $fnlinkname, $title, $n);
+        $fnname = sprintf('hs_%s_footnote_%d', $id, $n);
+        $fnlinkname = sprintf('hs_%s_footnotelink_%d', $id, $n);
+
+        $this->footnote .= sprintf('<p id="%s"><a href="#%s">*%d</a>: %s</p>' . PHP_EOL, $fnname, $fnlinkname, $n, $body);
+
+        return sprintf('(<a href="#%s" id="%s" title="%s">*%d</a>)', $fnname, $fnlinkname, $title, $n);
     }
 
     protected function renderInlineTag(Array $data)
