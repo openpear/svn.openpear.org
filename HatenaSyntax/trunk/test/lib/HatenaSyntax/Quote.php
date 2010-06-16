@@ -26,7 +26,7 @@ $c = PEG::context(array(
 
 $result = $p->parse($c);
 $t->is($result[1], array('a'));
-$t->is($result[0]->at('url'), 'http://google.com');
+$t->is($result[0]->at('href'), 'http://google.com');
 $t->is($result[0]->at('title'), false);
 
 
@@ -38,7 +38,7 @@ $c = PEG::context(array(
 
 $result = $p->parse($c);
 $t->is($result[1], array('a'));
-$t->is($result[0]->at('url'), 'http://google.com');
+$t->is($result[0]->at('href'), 'http://google.com');
 $t->is($result[0]->at('title'), '');
 
 
@@ -50,5 +50,5 @@ $c = PEG::context(array(
 
 $result = $p->parse($c);
 $t->is($result[1], array('a'));
-$t->is($result[0]->at('url'), 'http://google.com');
+$t->is($result[0]->at('href'), 'http://google.com');
 $t->is($result[0]->at('title'), 'hoge');
