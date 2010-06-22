@@ -205,6 +205,9 @@ class Wozozo_WWW_YouTube
     {
         if (is_string($var)) {
             if (!preg_match('#^h*(?:ttp\:\/\/)(.+\/watch\?v=.*)#', $var, $match)) {
+                if (!preg_match('#^[A-Za-z0-9]+$#', $var)) {
+                    throw new InvalidArgumentException('Invalid id '.$var);
+                }
                 return trim($var);
             }
             //uri
