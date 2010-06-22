@@ -34,14 +34,15 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
     {
         if ($couch) {
             $config = $this->_loadConfig('couchdb');
+            if (!isset($config->dbname)) {
+                throw new Exception ('should config dbname');
+            }
             if ($dbname = $config->dbname) {
                 require_once 'Wozozo/WWW/YouTube/Storage/Couchdb.php';
                 $storage = new Wozozo_WWW_YouTube_Storage_Couchdb($videoInfo, $videoInfo['video_id'], $dbname);
                 $this->_youtube->setConfig(array('save' => array($storage, 'callbackUpdate')));
 
                 return $storage->getUrl();
-            } else {
-                throw new Exception();
             }
         } else {
             $this->_youtube->setConfig(array('save' => $path));
@@ -59,7 +60,10 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
         $this->_out("Status :". $videoInfo['status']);
 
         if ($videoInfo['status'] != 'ok') {
-            throw new Exception("Status is not ok ". (string) $videoInfo);
+            $videoInfo = $videoInfo->toArray();
+            $message = '';
+            array_walk($videoInfo, function($v, $k) use (&$message){$message .= $k .' : '. $v .PHP_EOL;});
+            throw new Exception("Status is not ok ". PHP_EOL .$message);
         }
 
         $this->_out("Title : ". $videoInfo['title']);
