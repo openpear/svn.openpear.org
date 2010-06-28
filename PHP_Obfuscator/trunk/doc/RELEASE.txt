@@ -1,0 +1,11 @@
+-2010/06/XX ver.0.1
+--introduce Encoder and Processor
+
+-2010/06/XX ver.0.2
+--PreFilter
+
+-2010/07/XX ver.0.9
+--cli options
+
+-2010/07/XX ver.0.9
+--first stable version
