@@ -28,12 +28,28 @@ class PHP_Obfuscator
 
     private function loadClass($class_name) {
         $class_file = str_replace('_', '/', $class_name) . '.php';
-        if (!is_readable($class_file)) {
+        if (!$this->isIncludeable($class_file)) {
             throw new Exception("class file {$class_file} is not readable");
         }
         include_once $class_file;
         if (!class_exists($class_name)) {
             throw new Exception("class {$class_name} does not exist");
         }
+    }
+
+    /**
+     * @see PEAR/PackageFileManager2.php
+     */
+    private function isIncludeable($file) {
+        if (!defined('PATH_SEPARATOR')) {
+            define('PATH_SEPARATOR', strtolower(substr(PHP_OS, 0, 3)) == 'win' ? ';' : ':');
+        }
+        foreach (explode(PATH_SEPARATOR, ini_get('include_path')) as $path) {
+            if (file_exists($path . DIRECTORY_SEPARATOR . $file) &&
+                  is_readable($path . DIRECTORY_SEPARATOR . $file)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

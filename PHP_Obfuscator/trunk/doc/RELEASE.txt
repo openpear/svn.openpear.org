@@ -9,3 +9,6 @@
 
 -2010/07/XX ver.1.0
 --first stable version
+
+-TODOS
+--stdin
