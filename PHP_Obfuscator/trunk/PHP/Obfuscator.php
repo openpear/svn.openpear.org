@@ -17,7 +17,7 @@ class PHP_Obfuscator
             $chain->add(new $class_name());
         }
 
-        $filter = new PHP_Obfuscator_Filter_FilterChain(file_get_contents($file_name), $chain);
+        $filter = new PHP_Obfuscator_Filter_FilterChain('?>' . file_get_contents($file_name), $chain);
         foreach ($filters as $filter) {
             $class_name = "PHP_Obfuscator_Filter_{$filter}Filter";
             $this->loadClass($class_name);
