@@ -1,10 +1,10 @@
 <?php
 /**
- *  PHP_PowerToys 0.3.0+
+ *  PHP_PowerToys 0.2.9
  *
  *  @author	    FreeBSE <freebse@live.jp> <http://panasocli.cc/wordpress>
  *  @package	PHP_PowerToys
- *  @version	PHP_PowerToys v 0.3.0+ 2010/02/18
+ *  @version	PHP_PowerToys v 0.2.9
  * 
  */
 class PHP_PowerToys {
@@ -566,72 +566,6 @@ class PHP_PowerToys {
 	}
 
 	/**
-	 * モザイクをかける(大昔に書いたコードの流用なので汚染済みw)
-	 *
-	 * @param string $filename ファイル名
-	 * @param int $level モザイクレベル
-	 * @return ImageResource
-	 */
-	function mosaic($filename, $level=2){
-	    if(!PHP_PowerToys::is_file_ex($filename)) return false;
-	    if(!PHP_PowerToys::extensionExist('gd')) return false;
-//	    $img = imagecreatefromjpeg($filename);
-	    $img = PHP_PowerToys::iopen($filename);
-	    $x = imagesx($img);
-	    $y = imagesy($img);
-	    if($x <= $level){
-		$level = $x;
-	    }
-	    define("BLOCK_SIZE", $level);
-	    //新しいイメージを元画像サイズを元に作成
-	    $newimg = imagecreatetruecolor($x,$y);
-	    $xx = 0;
-	    $res = $x * $y;
-
-	    for($i=0;$i<=$res;++$i){
-		for($j=$xx,$n=$xx+BLOCK_SIZE;$j<=$n;++$j){
-		    $rgb = imagecolorat($img, $j, $yy);
-		}
-		if($i % BLOCK_SIZE == 0 && $i != 0){
-		    $r[$k] = ($rgb >> 16) & 0xFF;
-		    $g[$k] = ($rgb >> 8) & 0xFF;
-		    $b[$k] = $rgb & 0xFF;
-		    ++$k;
-		}
-		if($yy == $y){
-		    $xx += BLOCK_SIZE;
-		    $yy = 0;
-		}
-		++$yy;
-	    }
-	    $k = 0;
-	    $yy = 0;
-	    $xx = 0;
-	    //端から端までスキャンして色を取得
-	    for($i=0;$i<=$res;++$i){
-		for($j=$xx,$n=$xx+BLOCK_SIZE;$j<=$n;++$j){
-		    imagecolorallocate($newimg, $r[$k], $g[$k], $b[$k]); //使用する色をその都度登録
-		    imagesetpixel ($newimg,$j,$yy, imagecolorclosest($newimg, $r[$k], $g[$k], $b[$k])); //1pxずつ描画
-		}
-		if($i % BLOCK_SIZE == 0 && $i != 0){
-		    ++$k;
-		}
-		if($yy == $y){
-		    $xx += BLOCK_SIZE;
-		    $yy = 0;
-		}
-		++$yy;
-	    }
-	    //処理が終わったら古いイメージ情報を破棄
-	    imagedestroy($img);
-	    //序でだからでかすぎる色情報も破棄
-	    unset($r);
-	    unset($g);
-	    unset($b);
-	    return $newimg;
-	}
-
-	/**
 	 *
 	 * 多次元配列の最多次元数を返す
 	 *
@@ -648,90 +582,6 @@ class PHP_PowerToys {
 		}
 	    }
 	    return $cnt++;
-	}
-
-	/**
-	 * 変数の中に格納されているデータの型をチェックする(若干gettypeと似ている)
-	 *
-	 * @param mixed $var
-	 * @return mixed but Not setting to false
-	 */
-	function strictTypeChecker($var){
-	    if(!isset($var)) return false;
-	    if(is_null($var)){
-		return 'null';
-	    }elseif(empty($var)){
-		return 'empty';
-	    }elseif($var === 0){
-		return 'int 0';
-	    }elseif(is_string($var)){
-		return 'string';
-	    }elseif($var == 0 && is_string($var)){
-		return 'str 0';
-	    }elseif($var == 0 && is_numeric($var)){
-		return 'num 0';
-	    }elseif(is_float($var)){
-		return 'float';
-	    }elseif(is_array($var)){
-		return 'Array';
-	    }elseif(is_object($var)){
-		return 'Object';
-	    }elseif(is_resource($var)){
-		return 'resource';
-	    }elseif(is_binary($var)){
-		return 'binary';
-	    }elseif(is_bool($var)){
-		return 'Boolean';
-	    }
-	}
-
-	/**
-	 * UNIXのコアダンプと思われる情報を返す(Experiment)
-	 * @return Array
-	 */
-	function coreDumpSeemsList(){
-	    $core = `locate / | grep \\\.core$`;
-	    $core = preg_split("/\r\n|\n|\r/", $core);
-	    array_pop($core);
-	    return $core;
-	}
-
-	/**
-	 * UNIXのコアダンプと判断された情報を返す(Experiment)
-	 * @return Array
-	 */
-	function coreDumpList(){
-	    $core = `locate / | grep \\\.core$`;
-	    $core = preg_split("/\r\n|\n|\r/", $core);
-	    array_pop($core);
-	    foreach($core as $val){
-		if ( preg_match( '/^\x7f\x45\x4c\x46/', file_get_contents($val)) )  {
-		    $cores[] = $val . ' ' . round(filesize($val) / 1024, 2) . 'KB';
-		}
-	    }
-	    return $cores;
-	}
-
-	/**
-	 * UNIXのコアダンプと判断されたファイルを削除する(Experiment)
-	 */
-	function coreDumpCleaner(){
-	    $core = `locate / | grep \\\.core$`;
-	    $core = preg_split("/\r\n|\n|\r/", $core);
-	    array_pop($core);
-	    foreach($core as $val){
-		if ( preg_match( '/^\x7f\x45\x4c\x46/', file_get_contents($val)) )  {
-		    if(is_writable($val)){
-			unlink($val);
-			if(!file_exists($val)){
-			    $fail_cores[] = $val;
-			}
-		    }else{
-			$fail_cores[] = $val;
-		    }
-		}
-	    }
-	    return $fail_cores;
 	}
 
 	/**
@@ -780,6 +630,24 @@ class PHP_PowerToys {
 	    }
 	    return $dirs;
 	}
+    }
+
+    /**
+     * 指定した数字で文字列を区切って配列で返す
+     *
+     * @param String $str
+     * @param int $num
+     * @return Array
+     */
+    function numSplit($str, $num){
+	for($i = 1, $n = strlen($str); $i <= $n ; $i++){
+		$tmp .= substr($str, $i -1, 1);
+		if($i % $num === 0){
+			$splits[] = $tmp;
+			$tmp = "";
+		}
+	}
+	return $splits;
     }
 }
 
