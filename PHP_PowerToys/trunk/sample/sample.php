@@ -77,11 +77,11 @@ $pt = new PHP_Powertoys();
 //$array = $pt->dtoToArray($dto);
 //print_r($array);
 
-//モザイク
-//$img = $pt->mosaic(dirname(dirname(__FILE__)) . '/sample/sample.jpg');
-//imagejpeg($img, dirname(dirname(__FILE__)) . '/sample/mosaic.jpg');
-
 //$array['test1']['test2']['test3'] = 'a';
 //$count = $pt->getCountDimentionArrays($array);
 //echo $count;
+
+//$str = "aaaaaaaaaa"
+//$data = $pt->numSplit($str, 5);
+//print_r_($data);
 ?>
