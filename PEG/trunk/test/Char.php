@@ -12,3 +12,6 @@ $p = PEG::char('abc', true);
 
 $t->is($p->parse(PEG::context('b')), PEG::failure());
 $t->is($p->parse(PEG::context('d')), 'd');
+
+$p = PEG::char('0');
+$t->ok($p->parse(PEG::context('')) instanceof PEG_Failure);

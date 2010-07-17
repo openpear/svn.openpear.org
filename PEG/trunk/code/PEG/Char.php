@@ -25,7 +25,7 @@ class PEG_Char implements PEG_IParser
     function parse(PEG_IContext $context)
     {
         $char = $context->readElement();
-        return ($this->except xor isset($this->dict[$char]))
+        return $char !== false && ($this->except xor isset($this->dict[$char]))
             ? $char
             : PEG::failure();
     }
