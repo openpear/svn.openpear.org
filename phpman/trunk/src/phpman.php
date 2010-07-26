@@ -31,7 +31,7 @@ class phpman
     public function __construct($browser = 'w3m')
     {
         $this->pear_config = &PEAR_Config::singleton();
-        $this->base_dir = $this->pear_config->get('data_dir') . '/phpman/html/';
+        $this->base_dir = $this->pear_config->get('data_dir') . '/phpman/php-chunked-xhtml/';
 
         exec('which ' . $browser, $output, $status);
         !$status or die("$browser does not installed!\n");
