@@ -19,6 +19,16 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	protected $getParams = array();
 
 
+	/* construct */
+
+	public function __construct($url = null, $method = self::METHOD_GET, array $config = array())
+	{
+		HTTP_Request2::__construct($url, $method, $config);
+		$agent = 'HTTP_OAuthConsumer/1.0.2 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
+		$this->setHeader('user-agent', $agent);
+	}
+
+
 	/* factory */
 
 	public static function factory($sig_method='HMAC-SHA1')
@@ -96,6 +106,17 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	}
 
 
+	/* override */
+
+	public function setURL($url)
+	{
+		HTTP_Request2::setURL($url);
+		parse_str($this->url->getQuery(), $this->getParams);
+		$this->url->setQuery(false);
+		return $this;
+	}
+
+
 	/* send */
 
 	public function send()
@@ -137,16 +158,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		}
 
 		// set get parameters
-		if ($this->getParams) {
-			$query = $this->url->getQuery();
-			if (strlen($query)) {
-				$query .= '&';
-			} else {
-				$query = '';
-			}
-			$query .= http_build_query($this->getParams);
-			$this->url->setQuery($query);
-		}
+		$this->url->setQuery(http_build_query($this->getParams));
 
 		// add oauth body hash
 		$body = (string)$this->getBody();
@@ -178,11 +190,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$url = sprintf('%s://%s%s', $net_url->getScheme(), $net_url->getHost(), $net_url->getPath());
 
 		// param
-		$query = array();
-		if ($net_url->getQuery()) {
-			parse_str($net_url->getQuery(), $query);
-		}
-		$params = array_merge($this->postParams, $query, $this->_oauth);
+		$params = array_merge($this->getParams, $this->postParams, $this->_oauth);
 		ksort($params);
 
 		$base = array(
