@@ -38,7 +38,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 
 		$file = sprintf('%s/OAuthConsumer/%s.php', dirname(__FILE__), $sig_method);
 		$class = sprintf('HTTP_OAuthConsumer_%s', $sig_method);
-		if (!file_exists($file)) {
+		if (!is_file($file)) {
 			throw new HTTP_OAuthConsumer_Exception('No such file');
 		}
 		require_once($file);
