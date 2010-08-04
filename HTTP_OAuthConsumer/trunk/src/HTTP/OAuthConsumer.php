@@ -1,5 +1,6 @@
 <?php
 require_once('HTTP/Request2.php');
+require_once('HTTP/OAuthConsumer/Exception.php');
 
 abstract class HTTP_OAuthConsumer extends HTTP_Request2
 {
@@ -38,13 +39,13 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$file = sprintf('%s/OAuthConsumer/%s.php', dirname(__FILE__), $sig_method);
 		$class = sprintf('HTTP_OAuthConsumer_%s', $sig_method);
 		if (!file_exists($file)) {
-			throw new Exception('No such file');
+			throw new HTTP_OAuthConsumer_Exception('No such file');
 		}
 		require_once($file);
-		if (!class_exists($class)) {
-			throw new Exception('No such signature class');
+		if (!class_exists($class) || !is_subclass_of($class, 'HTTP_OAuthConsumer')) {
+			throw new HTTP_OAuthConsumer_Exception('No such signature class');
 		}
-		return new $class;
+		return new $class();
 	}
 
 
@@ -123,7 +124,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	{
 		// parameter check
 		if (empty($this->_consumer_key) || empty($this->_consumer_secret)) {
-			throw new Exception('No consumer given');
+			throw new HTTP_OAuthConsumer_Exception('No consumer given');
 		}
 
 		// remove oauth_* parameters
@@ -185,7 +186,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		// url
 		$net_url = $this->getURL();
 		if (!$net_url instanceof Net_URL2) {
-			throw new HTTP_Request2_Exception('No URL given');
+			throw new HTTP_OAuthConsumer_Exception('No URL given');
 		}
 		$url = sprintf('%s://%s%s', $net_url->getScheme(), $net_url->getHost(), $net_url->getPath());
 
