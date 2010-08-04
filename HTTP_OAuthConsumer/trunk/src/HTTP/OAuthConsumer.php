@@ -15,6 +15,9 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	protected $_oauth = array();
 	protected $_realm = '';
 
+	// http options
+	protected $getParams = array();
+
 
 	/* factory */
 
@@ -25,14 +28,15 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$file = sprintf('%s/OAuthConsumer/%s.php', dirname(__FILE__), $sig_method);
 		$class = sprintf('HTTP_OAuthConsumer_%s', $sig_method);
 		if (!file_exists($file)) {
-			throw new Exception('No such signature method');
+			throw new Exception('No such file');
 		}
 		require_once($file);
 		if (!class_exists($class)) {
 			throw new Exception('No such signature class');
 		}
-        return new $class;
+		return new $class;
 	}
+
 
 	/* OAuth options setter */
 
@@ -51,6 +55,21 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	public function setRealm($realm)
 	{
 		$this->_realm = $realm;
+	}
+
+
+	/* HTTP options setter */
+
+	public function addGetParameter($name, $value = null)
+	{   
+		if (!is_array($name)) {
+			$this->getParams[$name] = $value;
+		} else {
+			foreach ($name as $k => $v) {
+				$this->addGetParameter($k, $v);
+			}   
+		}   
+		return $this;
 	}
 
 
@@ -113,16 +132,20 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		}
 
 		// http method is get
-		if (HTTP_Request2::METHOD_GET==$this->getMethod() && $this->postParams) {
+		if (HTTP_Request2::METHOD_GET==$this->getMethod()) {
+			$this->postParams = array();
+		}
+
+		// set get parameters
+		if ($this->getParams) {
 			$query = $this->url->getQuery();
 			if (strlen($query)) {
 				$query .= '&';
 			} else {
 				$query = '';
 			}
-			$query .= http_build_query($this->postParams);
+			$query .= http_build_query($this->getParams);
 			$this->url->setQuery($query);
-			$this->postParams = array();
 		}
 
 		// add oauth body hash
