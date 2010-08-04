@@ -6,7 +6,7 @@ class HTTP_OAuthConsumer_RSA_SHA1 extends HTTP_OAuthConsumer
 	public function setConsumer($consumer_key, $privatekey, $is_file=false)
 	{
 		if ($is_file) {
-			if (!file_exists($privatekey)) {
+			if (!is_file($privatekey)) {
 				throw new HTTP_OAuthConsumer_Exception('No such private key file');
 			}
 			$privatekey = file_get_contents($privatekey);
