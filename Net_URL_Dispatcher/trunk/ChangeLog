@@ -1,3 +1,7 @@
+2010-08-05  Heavens hell <Heavens.jp@gmail.com>
+	* Change Testing framework PHPUnit.
+	* Change split() to explode().
+
 2009-01-07  Heavens hell <heavenshell.jp@gmail.com>
 
 	* Add __call method in Net_URL_Dispatcher class.

@@ -47,11 +47,13 @@ $libPath  = $rootPath . DIRECTORY_SEPARATOR . 'src';
 
 $includePath = get_include_path();
 if (!preg_match('"' . $libPath . '"', $includePath, $match)) {
-    set_include_path($includePath . PATH_SEPARATOR . $libPath);
+    set_include_path($libPath . PATH_SEPARATOR . $includePath);
 }
 
 define('ROOT_PATH', $rootPath);
 define('LIB_PATH', $libPath);
+
+error_reporting('E_ALL');
 
 /**
  * @see Net_URL_Dispatcher
@@ -61,4 +63,4 @@ require_once 'Net/URL/Dispatcher.php';
 /**
  * @see SpecCommon
  */
-require_once 'SpecCommon.php';
+//require_once 'SpecCommon.php';
