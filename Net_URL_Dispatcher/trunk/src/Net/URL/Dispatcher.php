@@ -217,7 +217,7 @@ class Net_URL_Dispatcher
 
         $controller = null;
         if (is_string($path)) {
-            $map = split('/', $path);
+            $map = explode('/', $path);
             if (substr($map[0], 0, 1) !== ':') {
                 $controller = $map[0];
             }
@@ -524,7 +524,7 @@ class Net_URL_Dispatcher
             $value = ltrim($value, '/');
             // key/value      -> array('key' => 'value');
             // key/value/key2 -> array('key => 'value', 'key2' => null);
-            $params = split('/', $value);
+            $params = explode('/', $value);
             if (is_array($params)) {
                 $i = 1;
                 foreach ($params as $key => $val) {
