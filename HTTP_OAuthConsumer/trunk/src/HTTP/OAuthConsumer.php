@@ -24,8 +24,8 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 
 	public function __construct($url = null, $method = self::METHOD_GET, array $config = array())
 	{
-		HTTP_Request2::__construct($url, $method, $config);
-		$agent = 'HTTP_OAuthConsumer/1.0.2 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
+		parent::__construct($url, $method, $config);
+		$agent = 'HTTP_OAuthConsumer/1.0.3 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
 		$this->setHeader('user-agent', $agent);
 	}
 
@@ -111,7 +111,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 
 	public function setURL($url)
 	{
-		HTTP_Request2::setURL($url);
+		parent::setURL($url);
 		parse_str($this->url->getQuery(), $this->getParams);
 		$this->url->setQuery(false);
 		return $this;
@@ -154,7 +154,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		}
 
 		// http method is get
-		if (HTTP_Request2::METHOD_GET==$this->getMethod()) {
+		if (parent::METHOD_GET==$this->getMethod()) {
 			$this->postParams = array();
 		}
 
@@ -172,13 +172,13 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		ksort($this->_oauth);
 
 		// make auth header
-		$auth = sprintf('OAuth realm="%s"', HTTP_OAuthConsumer::urlencode_rfc3986($this->_realm));
+		$auth = sprintf('OAuth realm="%s"', self::urlencode_rfc3986($this->_realm));
 		foreach ($this->_oauth as $k=>$v) {
-			$auth .= sprintf(', %s="%s"', HTTP_OAuthConsumer::urlencode_rfc3986($k), HTTP_OAuthConsumer::urlencode_rfc3986($v));
+			$auth .= sprintf(', %s="%s"', self::urlencode_rfc3986($k), self::urlencode_rfc3986($v));
 		}
 		$this->setHeader('authorization', $auth);
 
-		return HTTP_Request2::send();
+		return parent::send();
 	}
 
 	protected function _makeSignatureBaseString()
@@ -193,11 +193,12 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		// param
 		$params = array_merge($this->getParams, $this->postParams, $this->_oauth);
 		ksort($params);
+		$params_str = self::http_build_query_rfc3986($params);
 
 		$base = array(
-			HTTP_OAuthConsumer::urlencode_rfc3986($this->getMethod()),
-			HTTP_OAuthConsumer::urlencode_rfc3986($url),
-			HTTP_OAuthConsumer::urlencode_rfc3986(http_build_query($params))
+			self::urlencode_rfc3986($this->getMethod()),
+			self::urlencode_rfc3986($url),
+			self::urlencode_rfc3986($params_str)
 		);
 		return implode('&', $base);
 	}
@@ -217,5 +218,16 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$str = str_replace('%7E', '~', $str);
 		$str = str_replace('+', ' ', $str);
 		return $str;
+	}
+
+	protected static function http_build_query_rfc3986($params)
+	{
+		$tmp = array();
+		foreach ($params as $key=>$value) {
+			$key = self::urlencode_rfc3986($key);
+			$value = self::urlencode_rfc3986($value);
+			$tmp[] = sprintf('%s=%s', $key, $value);
+		}
+		return implode('&', $tmp);
 	}
 }
