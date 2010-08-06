@@ -649,6 +649,21 @@ class PHP_PowerToys {
 	}
 	return $splits;
     }
+    
+    /**
+     * strip_tagsの拡張版(strip_tagsで対応出来ないタグやNULLバイトを除去する)
+     * 
+     * @param String $str
+     * @param String $tag
+     * @return String
+     */
+    function strip_tags_ex($str, $tag=null){
+	$str = strip_tags($tag);
+	$str = is_null($tag) ? htmlspecialchars($str, ENT_QUOTES) : $str ;
+	$str = trim($str);
+	$str = preg_replace("/\/x00|\/00/", "", $str);
+	return $str;
+    }
 }
 
 class DTO {
