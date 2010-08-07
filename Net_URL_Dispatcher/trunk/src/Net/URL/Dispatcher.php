@@ -63,7 +63,7 @@ class Net_URL_Dispatcher
     /**
      * Net_URL_Dispatcher VERSION
      */
-    const VERSION = '0.1.1';
+    const VERSION = '0.2';
 
     /**
      * Router
@@ -104,6 +104,22 @@ class Net_URL_Dispatcher
      * @access private
      */
     private $_params = null;
+
+    /**
+     * Controller directory name
+     *
+     * @var    mixed
+     * @access private
+     */
+    private $_controllerDirectryName = null;
+
+    /**
+     * action directory name
+     *
+     * @var mixed
+     * @access private
+     */
+    private $_actionDirectoryName = null;
 
     /**
      * Constructor
@@ -161,6 +177,61 @@ class Net_URL_Dispatcher
     public function setParams(array $value)
     {
         $this->_params = $value;
+        return $this;
+    }
+
+    /**
+     * Get controller directory name
+     *
+     * @access public
+     * @return string Controller directory name
+     */
+    public function getControllerDirectoryName()
+    {
+        if (is_null($this->_controllerDirectryName)) {
+            $this->_controllerDirectryName = 'controllers';
+        }
+        return $this->_controllerDirectryName;
+    }
+
+    /**
+     * Set controller directory name
+     *
+     * @param  mixed $value Controller path name
+     * @access public
+     * @return Net_URL_Dispatcher Fluent interface
+     */
+    public function setControllerDirectoryName($value)
+    {
+        $this->_controllerDirectryName = $value;
+        return $this;
+    }
+
+    /**
+     * Get action directory name
+     *
+     * @access public
+     * @return string Action directory name
+     */
+    public function getActionDirectoryName()
+    {
+        if (is_null($this->_actionDirectoryName)) {
+            $this->_actionDirectoryName = 'actions';
+        }
+
+        return $this->_actionDirectoryName;
+    }
+
+    /**
+     * Set action directory name
+     *
+     * @param  mixed $value Action directory name
+     * @access public
+     * @return Net_URL_Dispatcher Fluent interface
+     */
+    public function setActionDirectoryName($value)
+    {
+        $this->_actionDirectoryName = $value;
         return $this;
     }
 
@@ -325,7 +396,7 @@ class Net_URL_Dispatcher
         }
 
         if (!is_dir($directory)) {
-            throw new Net_URL_Dispatcher_Exception('Direcotry not found.');
+            throw new Net_URL_Dispatcher_Exception('Directory found.');
         }
 
         $path  = $this->getPathInfo();
@@ -383,7 +454,7 @@ class Net_URL_Dispatcher
     public function dispatchController($controller, $action, $params, $directory = null)
     {
         if (!class_exists($controller, false)) {
-            $controllerPath = $directory . 'controllers'
+            $controllerPath = $directory . $this->getControllerDirectoryName()
                             . DIRECTORY_SEPARATOR . $controller . '.php';
 
             self::securityCheck($controllerPath);
@@ -457,7 +528,7 @@ class Net_URL_Dispatcher
     public function dispatchAction($action, $params, $directory = null)
     {
         if (!class_exists($action, false)) {
-            $actionPath = $directory . 'actions'
+            $actionPath = $directory . $this->getActionDirectoryName()
                         . DIRECTORY_SEPARATOR . $action . '.php';
 
             self::securityCheck($actionPath);
