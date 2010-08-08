@@ -11,6 +11,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	// oauth token
 	protected $_oauth_token = '';
 	protected $_oauth_token_secret = '';
+	protected $_oauth_verifier = '';
 
 	// oauth parameters
 	protected $_oauth = array();
@@ -25,7 +26,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	public function __construct($url = null, $method = self::METHOD_GET, array $config = array())
 	{
 		parent::__construct($url, $method, $config);
-		$agent = 'HTTP_OAuthConsumer/1.0.3 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
+		$agent = 'HTTP_OAuthConsumer/1.0.4 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
 		$this->setHeader('user-agent', $agent);
 	}
 
@@ -57,10 +58,15 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$this->_consumer_secret = $consumer_secret;
 	}
 
-	public function setOAuthToken($oauth_token, $oauth_token_secret)
+	public function setToken($token, $token_secret)
 	{
-		$this->_oauth_token = $oauth_token;
-		$this->_oauth_token_secret = $oauth_token_secret;
+		$this->_oauth_token = $token;
+		$this->_oauth_token_secret = $token_secret;
+	}
+
+	public function setVerifier($verifier)
+	{
+		$this->_oauth_verifier = $verifier;
 	}
 
 	public function setRealm($realm)
@@ -122,16 +128,14 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 
 	public function send()
 	{
-		// parameter check
-		if (empty($this->_consumer_key) || empty($this->_consumer_secret)) {
-			throw new HTTP_OAuthConsumer_Exception('No consumer given');
+		// check url
+		if (!$this->url instanceof Net_URL2) {
+			throw new HTTP_OAuthConsumer_Exception('No URL given');
 		}
 
-		// remove oauth_* parameters
-		foreach (array_keys($this->postParams) as $key) {
-			if (strpos($key, 'oauth_')===0) {
-				unset($this->postParams[$key]);
-			}
+		// check consumer
+		if (empty($this->_consumer_key) || empty($this->_consumer_secret)) {
+			throw new HTTP_OAuthConsumer_Exception('No consumer given');
 		}
 
 		// init oauth param
@@ -143,9 +147,14 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 			'oauth_version'			=> $this->getVersion()
 		);
 
-		// add oauth_token
+		// add oauth token
 		if (strlen($this->_oauth_token)) {
 			$this->_oauth['oauth_token'] = $this->_oauth_token;
+		}
+
+		// add oauth verifier
+		if (strlen($this->_oauth_verifier)) {
+			$this->_oauth['oauth_verifier'] = $this->_oauth_verifier;
 		}
 
 		// set default content type
