@@ -48,7 +48,6 @@ class Services_Thanks
 
     /**
      * Say Thanks message
-     *
      */
     public function say($toName, $body, $publicYn, $tag = array())
     {
@@ -80,7 +79,6 @@ class Services_Thanks
 
     /**
      * Say Thanks message from guest
-     *
      */
     public function guestSay($toName, $guestName, $body, $publicYn, $tag = array())
     {
@@ -111,6 +109,9 @@ class Services_Thanks
         }
     }
 
+    /**
+     * Read Thanks message
+     */
     public function read($page)
     {
         $this->setApiUrl = self::API_BASE_URL . '/api/pub/read/thanks';
@@ -136,6 +137,9 @@ class Services_Thanks
         }
     }
 
+    /**
+     * Read Thanks message from geuest
+     */
     public function guestRead($page)
     {
         $this->setApiUrl = self::API_BASE_URL . '/api/pub/read/guest_thanks';
@@ -161,6 +165,9 @@ class Services_Thanks
         }
     }
 
+    /**
+     * Delete Thanks message
+     */
     public function delete($id)
     {
         $this->setApiUrl = self::API_BASE_URL . '/api/pub/delete/thanks';
