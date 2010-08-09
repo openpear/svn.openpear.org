@@ -55,7 +55,7 @@ class HTTP_OAuthProvider
     );
 
     // Handler
-    protected $_get_consumer_handler = null;
+    protected $_find_consumer_handler = null;
     protected $_check_timestamp_handler = null;
 
     // Result
@@ -79,7 +79,7 @@ class HTTP_OAuthProvider
         $this->_request = new HTTP_OAuthProvider_Request();
         // set default handler
         $this->setCheckTimestampHandler(array('HTTP_OAuthProvider', 'checkTimestampHandler'));
-        $this->setGetConsumerHandler(array('HTTP_OAuthProvider', 'getConsumerHandler'));
+        $this->setFindConsumerHandler(array('HTTP_OAuthProvider', 'findConsumerHandler'));
     }
 
 
@@ -103,17 +103,17 @@ class HTTP_OAuthProvider
         // check request
         $this->getRequest()->checkParameters(self::$_2l_params, true);
         $this->getRequest()->checkBodyHash();
-        if (!call_user_func($this->_check_timestamp_handler, $this->getRequest()->getParameter('oauth_timestamp'))) {
+        if (!$this->checkTimestamp($this->getRequest()->getParameter('oauth_timestamp'))) {
             throw new HTTP_OAuthProvider_Exception('401 Invalid timestamp', 401);
         }
 
         // get consumer
-        $this->_consumer = call_user_func($this->_get_consumer_handler, $this->getRequest()->getParameter('oauth_consumer_key'));
+        $this->_consumer = $this->findConsumer($this->getRequest()->getParameter('oauth_consumer_key'));
         if (!$this->_consumer) {
             throw new HTTP_OAuthProvider_Exception('401 Consumer is not found', 401);
         }
         if (!$this->_consumer instanceof HTTP_OAuthProvider_Consumer) {
-            throw new HTTP_OAuthProvider_Exception('500 GetConsumerHandler did not return HTTP_OAuthProvider_Consumer instance', 500);
+            throw new HTTP_OAuthProvider_Exception('500 FindConsumerHandler did not return HTTP_OAuthProvider_Consumer instance', 500);
         }
 
         // check signature method
@@ -190,8 +190,8 @@ class HTTP_OAuthProvider
         $store = $this->getStore();
         $type = $store->loadToken($this);
 
-        // get consumer
-        $this->_consumer = call_user_func($this->_get_consumer_handler, $store->getConsumerKey());
+        // find consumer
+        $this->_consumer = $this->findConsumer($store->getConsumerKey());
 
         // return result
         if ($type=='request') {
@@ -221,8 +221,8 @@ class HTTP_OAuthProvider
             throw new HTTP_OAuthProvider_Exception('404 Not found request token in store', 404);
         }
 
-        // get consumer
-        $this->_consumer = call_user_func($this->_get_consumer_handler, $store->getConsumerKey());
+        // find consumer
+        $this->_consumer = $this->findConsumer($store->getConsumerKey());
 
         // agree
         if ($agree) {
@@ -324,12 +324,12 @@ class HTTP_OAuthProvider
 
     /* Set handler */
 
-    public function setGetConsumerHandler($handler)
+    public function setFindConsumerHandler($handler)
     {
         if (!is_callable($handler)) {
-            throw new HTTP_OAuthProvider_Exception('500 GetConsumerHandler is not callable', 500);
+            throw new HTTP_OAuthProvider_Exception('500 FindConsumerHandler is not callable', 500);
         }
-        $this->_get_consumer_handler = $handler;
+        $this->_find_consumer_handler = $handler;
     }
 
     public function setCheckTimestampHandler($handler)
@@ -379,6 +379,19 @@ class HTTP_OAuthProvider
     }
 
 
+    /* exec handler */
+
+    public function checkTimestamp($timestamp)
+    {
+        return call_user_func($this->_check_timestamp_handler, $timestamp);
+    }
+
+    public function findConsumer($consumer_key)
+    {
+        return call_user_func($this->_find_consumer_handler, $consumer_key);
+    }
+
+
     /* Handler */
 
     /**
@@ -401,8 +414,8 @@ class HTTP_OAuthProvider
         return false;
     }
 
-    public static function getConsumerHandler($consumer_key)
+    public static function findConsumerHandler($consumer_key)
     {
-        throw new HTTP_OAuthProvider_Exception('500 GetConsumerHandler is not set', 500);
+        throw new HTTP_OAuthProvider_Exception('500 FindConsumerHandler is not set', 500);
     }
 }
