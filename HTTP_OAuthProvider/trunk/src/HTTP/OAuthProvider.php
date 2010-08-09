@@ -186,16 +186,19 @@ class HTTP_OAuthProvider
      */
     public function existsRequestToken()
     {
-        // load token
         $store = $this->getStore();
-        $type = $store->loadToken($this);
+        try {
+            // load token
+            $type = $store->loadToken($this);
 
-        // find consumer
-        $this->_consumer = $this->findConsumer($store->getConsumerKey());
+            // find consumer
+            $this->_consumer = $this->findConsumer($store->getConsumerKey());
 
-        // return result
-        if ($type=='request') {
-            return true;
+            // return result
+            if ($type=='request') {
+                return true;
+            }
+        } catch(Exception $e) {
         }
         return false;
     }
@@ -272,7 +275,11 @@ class HTTP_OAuthProvider
         // load token
         $store = $this->getStore();
         $type = $store->loadToken($this);
-        if ($type!='authorize') {
+
+        // check consumer
+        $request_consumer = $this->getConsumer()->getKey();
+        $token_consumer = $store->getConsumerKey();
+        if ($type!='authorize' || $token_consumer!=$request_consumer) {
             throw new HTTP_OAuthProvider_Exception('404 Not found authorized request token in store', 404);
         }
 
@@ -315,7 +322,11 @@ class HTTP_OAuthProvider
         // load token
         $store = $this->getStore();
         $type = $store->loadToken($this);
-        if ($type!='access') {
+
+        // check consumer
+        $request_consumer = $this->getConsumer()->getKey();
+        $token_consumer = $store->getConsumerKey();
+        if ($type!='access' || $token_consumer!=$request_consumer) {
             throw new HTTP_OAuthProvider_Exception('404 Not found access token in store', 404);
         }
         return true;
