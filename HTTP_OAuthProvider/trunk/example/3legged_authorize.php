@@ -32,18 +32,14 @@ try {
 
 		// agree form
 		$content .= '<form action="?" method="post">'."\n";
-		foreach ($_REQUEST as $key=>$value) {
-			$content .= sprintf('<input type="hidden" name="%s" value="%s" />', $key, $value)."\n";
-		}
+		$content .= sprintf('<input type="hidden" name="oauth_token" value="%s" />', $_REQUEST['oauth_token'])."\n";
 		$content .= '<input type="hidden" name="authorize_confirm" value="1" />'."\n";
 		$content .= sprintf('<input type="submit" value="agree">')."\n";
 		$content .= "</form>\n";
 
 		// disagree form
 		$content .= '<form action="?" method="post">'."\n";
-		foreach ($_REQUEST as $key=>$value) {
-			$content .= sprintf('<input type="hidden" name="%s" value="%s" />', $key, $value)."\n";
-		}
+		$content .= sprintf('<input type="hidden" name="oauth_token" value="%s" />', $_REQUEST['oauth_token'])."\n";
 		$content .= '<input type="hidden" name="authorize_confirm" value="0" />'."\n";
 		$content .= sprintf('<input type="submit" value="disagree">')."\n";
 		$content .= "</form>\n";
