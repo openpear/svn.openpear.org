@@ -26,14 +26,14 @@ $content = '';
 /* セッションのクリア */
 if (@$_REQUEST['test'] === 'clear') {
     session_destroy();
-	$_SESSION = array();
+    $_SESSION = array();
     session_start();
 }
 
 try {
 
-	// -- init HTTP_OAuth_Consumer
-	$oauth = new HTTP_OAuth_Consumer($consumer_key, $consumer_secret);
+    // -- init HTTP_OAuth_Consumer
+    $oauth = new HTTP_OAuth_Consumer($consumer_key, $consumer_secret);
     // ssl通信を可能に
     $http_request = new HTTP_Request2();
     $http_request->setConfig('ssl_verify_peer', false);
