@@ -12,6 +12,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	protected $_oauth_token = '';
 	protected $_oauth_token_secret = '';
 	protected $_oauth_verifier = '';
+	protected $_oauth_callback = '';
 
 	// oauth parameters
 	protected $_oauth = array();
@@ -26,7 +27,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	public function __construct($url = null, $method = self::METHOD_GET, array $config = array())
 	{
 		parent::__construct($url, $method, $config);
-		$agent = 'HTTP_OAuthConsumer/1.0.4 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
+		$agent = 'HTTP_OAuthConsumer/1.0.5 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
 		$this->setHeader('user-agent', $agent);
 	}
 
@@ -64,14 +65,78 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$this->_oauth_token_secret = $token_secret;
 	}
 
-	public function setVerifier($verifier)
-	{
-		$this->_oauth_verifier = $verifier;
-	}
-
 	public function setRealm($realm)
 	{
 		$this->_realm = $realm;
+	}
+
+
+	/* 3Legged OAuth */
+
+	public function getRequestToken($callback)
+	{
+		$this->_oauth_callback = $callback;
+		$res = $this->send();
+
+		// check response body
+		parse_str($res->getBody(), $request);
+		if (!isset($request['oauth_token'], $request['oauth_token_secret'])) {
+			$message = sprintf('Response body error: %s', $res->getBody());
+			throw new HTTP_OAuthConsumer_Exception($message);
+		}
+
+		// set token
+		$this->setToken($request['oauth_token'], $request['oauth_token_secret']);
+
+		return $request;
+	}	
+
+	public function getAuthorizeURL($authorize_url)
+	{
+		// check oauth token
+		if (!strlen($this->_oauth_token)) {
+			throw new HTTP_OAuthConsumer_Exception('oauth token is not set');
+		}
+
+		// default params
+		$params = array(
+			'oauth_token' => $this->_oauth_token
+		);
+
+		// parse url
+		if (strpos($authorize_url, '?')) {
+			list($authorize_url, $params_str) = explode('?', $authorize_url, 2);
+			parse_str($params_str, $params_tmp);
+			$params = array_merge($params_tmp, $params);
+		}
+
+		return sprintf('%s?%s', $authorize_url, http_build_query($params));
+	}
+
+	public function getAccessToken($verifier)
+	{
+		// set oauth verifier
+		$this->_oauth_verifier = $verifier;
+
+		// check oauth token
+		if (!strlen($this->_oauth_token)) {
+			throw new HTTP_OAuthConsumer_Exception('oauth token is not set');
+		}
+
+		// send
+		$res = $this->send();
+
+		// check response body
+		parse_str($res->getBody(), $access);
+		if (!isset($access['oauth_token'], $access['oauth_token_secret'])) {
+			$message = sprintf('Response body error: %s', $res->getBody());
+			throw new HTTP_OAuthConsumer_Exception($message);
+		}
+
+		// set token
+		$this->setToken($access['oauth_token'], $access['oauth_token_secret']);
+
+		return $access;
 	}
 
 
@@ -152,6 +217,11 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 			$this->_oauth['oauth_token'] = $this->_oauth_token;
 		}
 
+		// add oauth callback
+		if (strlen($this->_oauth_callback)) {
+			$this->_oauth['oauth_callback'] = $this->_oauth_callback;
+		}
+
 		// add oauth verifier
 		if (strlen($this->_oauth_verifier)) {
 			$this->_oauth['oauth_verifier'] = $this->_oauth_verifier;
@@ -187,7 +257,16 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		}
 		$this->setHeader('authorization', $auth);
 
-		return parent::send();
+		// send
+		$res = parent::send();
+
+		// check response status
+		if ($res->getStatus()!=200) {
+			$message = sprintf('Response status error: %s', $res->getBody());
+			throw new HTTP_OAuthConsumer_Exception($message);
+		}
+
+		return $res;
 	}
 
 	protected function _makeSignatureBaseString()
