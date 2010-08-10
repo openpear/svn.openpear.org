@@ -10,11 +10,11 @@ abstract class HTTP_OAuthProvider_Store
 		$file = sprintf('%s/Store/%s.php', dirname(__FILE__), $driver);
 		$class = sprintf('HTTP_OAuthProvider_Store_%s', $driver);
 		if (!is_file($file)) {
-			throw new HTTP_OAuthProvider_Store_Exception('No such file');
+			throw new HTTP_OAuthProvider_Store_Exception('Store driver is not found', 500);
 		}
 		require_once($file);
 		if (!class_exists($class) || !is_subclass_of($class, 'HTTP_OAuthProvider_Store')) {
-			throw new HTTP_OAuthProvider_Store_Exception('No such store class');
+			throw new HTTP_OAuthProvider_Store_Exception('Store driver is not found', 500);
 		}
 		return new $class($options);
 	}
@@ -45,7 +45,7 @@ abstract class HTTP_OAuthProvider_Store
 		if ($this->_row) {
 			return $this->_row['type'];
 		}
-		throw new HTTP_OAuthProvider_Store_Exception('404 Not found token in store', 404);
+		throw new HTTP_OAuthProvider_Exception('404 Not found token in store', 404);
 	}
 
 
@@ -59,7 +59,7 @@ abstract class HTTP_OAuthProvider_Store
 			$this->_row['user_id'] = $user_id;
 			return;
 		}
-		throw new HTTP_OAuthProvider_Store_Exception('404 Not found request token in store', 404);
+		throw new HTTP_OAuthProvider_Exception('404 Not found request token in store', 404);
 	}
 
 	public function exchangeAccessToken()
@@ -69,7 +69,7 @@ abstract class HTTP_OAuthProvider_Store
 			$this->_row['token'] = self::makeToken();
 			return;
 		}
-		throw new HTTP_OAuthProvider_Store_Exception('404 Not found authorize token in store', 404);
+		throw new HTTP_OAuthProvider_Exception('404 Not found authorize token in store', 404);
 	}
 
 
