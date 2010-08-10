@@ -19,6 +19,7 @@ require_once('HTTP/OAuthProvider/Signature.php');
 require_once('HTTP/OAuthProvider/Consumer.php');
 require_once('HTTP/OAuthProvider/Store.php');
 require_once('HTTP/OAuthProvider/Exception.php');
+require_once('HTTP/OAuthProvider/Store/Exception.php');
 
 /**
  * OAuth authentication class for service provider.
@@ -233,7 +234,7 @@ class HTTP_OAuthProvider
             $store->authorizeToken($user_id);
             $ok = $store->save();
             if (!$ok) {
-                throw new HTTP_OAuthProvider_Exception('500 Store error', 500);
+                throw new HTTP_OAuthProvider_Store_Exception('500 Store error', 500);
             }
 
             // build callback url
@@ -249,7 +250,7 @@ class HTTP_OAuthProvider
             // delete token
             $ok = $store->remove();
             if (!$ok) {
-                throw new HTTP_OAuthProvider_Exception('500 Store error', 500);
+                throw new HTTP_OAuthProvider_Store_Exception('500 Store error', 500);
             }
 
             // return callback url
@@ -286,14 +287,14 @@ class HTTP_OAuthProvider
         // delete authorized request token
         $ok = $store->remove();
         if (!$ok) {
-            throw new HTTP_OAuthProvider_Exception('500 Store error', 500);
+            throw new HTTP_OAuthProvider_Store_Exception('500 Store error', 500);
         }
 
         // change from authorized request token to access token
         $store->exchangeAccessToken();
         $ok = $store->save();
         if (!$ok) {
-            throw new HTTP_OAuthProvider_Exception('500 Store error', 500);
+            throw new HTTP_OAuthProvider_Store_Exception('500 Store error', 500);
         }
 
         // response
