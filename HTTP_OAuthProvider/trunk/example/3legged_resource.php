@@ -4,7 +4,7 @@ require_once('config.php');
 
 $o = new HTTP_OAuthProvider();
 try {
-	$o->setFindConsumerHandler('findConsumer');
+	$o->setFetchConsumerHandler('fetchConsumer');
 	$o->authenticate3L();
 	echo "this is provider's protected resource !!\n";
 	printf("consumer: %s\n", $o->getConsumer()->getKey());

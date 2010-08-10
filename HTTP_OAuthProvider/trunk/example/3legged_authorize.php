@@ -5,7 +5,7 @@ require_once('config.php');
 $content = "<b>this is provider's page !!</b><br />\n";
 $o = new HTTP_OAuthProvider();
 try {
-	$o->setFindConsumerHandler('findConsumer');
+	$o->setFetchConsumerHandler('fetchConsumer');
 
 	// check request token
 	if (!$o->existsRequestToken()) {
