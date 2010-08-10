@@ -3,7 +3,7 @@ require_once('Cache/Lite.php');
 
 class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
 {
-	protected $_default = array(
+	protected $_options = array(
 		'cacheDir' => '/tmp/http_oauthprovider/',
 		'lifeTime' => 3600
 	);
@@ -11,14 +11,19 @@ class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
 
 	public function __construct(array $options=array())
 	{
-		$options = array_merge($this->_default, $options);
-		$options['cacheDir'] = rtrim($options['cacheDir'], '/').'/';
+		$this->_options = array_merge($this->_options, $options);
+		$this->_options['cacheDir'] = rtrim($this->_options['cacheDir'], '/').'/';
+		$dir = $this->_options['cacheDir'];
 		// make cache dir
-		if (!is_dir($options['cacheDir'])) {
-			mkdir($options['cacheDir'], 0777, true);
+		if (!is_dir($dir)) {
+			$maked = @mkdir($dir, 0777, true);
+			if (!$maked) {
+				$message = sprintf("Can's make directory: %s", $dir);
+				throw new HTTP_OAuthProvider_Store_Exception($message, 500);
+			}
 		}
 		// make store instance
-		$this->_cache = new Cache_Lite($options);
+		$this->_cache = new Cache_Lite($this->_options);
 	}
 
 	public function get($token)
