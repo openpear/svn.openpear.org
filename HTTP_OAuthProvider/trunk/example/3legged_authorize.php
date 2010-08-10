@@ -6,6 +6,7 @@ $content = "<b>this is provider's page !!</b><br />\n";
 $o = new HTTP_OAuthProvider();
 try {
 	$o->setFetchConsumerHandler('fetchConsumer');
+	$o->setStore($store);
 
 	// check request token
 	if (!$o->existsRequestToken()) {

@@ -37,6 +37,23 @@ wuBWH4L6Rw3ml0ODXW64bdTx/QsAv5M1SyCp/nl8R27dz3MX2D1Ov2o4ipTlZw==
 }
 
 
+// store
+
+$mem_options = array(
+	'host' => '127.0.0.1',
+	'port' => 11211
+);
+try {
+	$store = HTTP_OAuthProvider_Store::factory('CacheLite');
+//	$store = HTTP_OAuthProvider_Store::factory('Memcached', $mem_options);
+//	$store = HTTP_OAuthProvider_Store::factory('Memcache', $mem_options);
+} catch(HTTP_OAuthProvider_Store_Exception $e) {
+	echo "StoreException<br />\n";
+	echo $e->getMessage();
+	exit();
+}
+
+
 // user
 
 $user_id = 12345;
