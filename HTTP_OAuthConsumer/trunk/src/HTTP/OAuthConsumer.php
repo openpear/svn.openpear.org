@@ -21,6 +21,9 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	// http options
 	protected $getParams = array();
 
+	// last response
+	protected $_last_response = null;
+
 
 	/* construct */
 
@@ -259,6 +262,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 
 		// send
 		$res = parent::send();
+		$this->_last_response = $res;
 
 		// check response status
 		if ($res->getStatus()!=200) {
@@ -289,6 +293,11 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 			self::urlencode_rfc3986($params_str)
 		);
 		return implode('&', $base);
+	}
+
+	public function getLastResponse()
+	{
+		return $this->_last_response;
 	}
 
 
