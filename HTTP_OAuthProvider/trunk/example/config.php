@@ -2,7 +2,7 @@
 
 // consumer
 
-function findConsumer($consumer_key)
+function fetchConsumer($consumer_key)
 {
 	$row = array(
 		'id' => 1,
