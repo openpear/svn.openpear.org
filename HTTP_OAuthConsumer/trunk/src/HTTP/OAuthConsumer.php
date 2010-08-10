@@ -30,7 +30,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	public function __construct($url = null, $method = self::METHOD_GET, array $config = array())
 	{
 		parent::__construct($url, $method, $config);
-		$agent = 'HTTP_OAuthConsumer/1.0.5 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
+		$agent = 'HTTP_OAuthConsumer/1.0.6 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
 		$this->setHeader('user-agent', $agent);
 	}
 
