@@ -11,15 +11,15 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   Release: 0.1
- * @link      http://pear.php.net/package/PackageName
+ * @version   1.0.4
+ * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
-require_once('HTTP/OAuthProvider/Request.php');
-require_once('HTTP/OAuthProvider/Signature.php');
-require_once('HTTP/OAuthProvider/Consumer.php');
-require_once('HTTP/OAuthProvider/Store.php');
-require_once('HTTP/OAuthProvider/Exception.php');
-require_once('HTTP/OAuthProvider/Store/Exception.php');
+require_once 'HTTP/OAuthProvider/Request.php';
+require_once 'HTTP/OAuthProvider/Signature.php';
+require_once 'HTTP/OAuthProvider/Consumer.php';
+require_once 'HTTP/OAuthProvider/Store.php';
+require_once 'HTTP/OAuthProvider/Exception.php';
+require_once 'HTTP/OAuthProvider/Store/Exception.php';
 
 /**
  * OAuth authentication class for service provider.
@@ -28,42 +28,43 @@ require_once('HTTP/OAuthProvider/Store/Exception.php');
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  Release: 0.1
- * @link     http://pear.php.net/package/PackageName
+ * @version  1.0.4
+ * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 class HTTP_OAuthProvider
 {
     // OAuth parameters
-    protected static $_2l_params = array(
+    protected static $PARAMS_2L = array(
         'oauth_consumer_key',
         'oauth_signature_method',
         'oauth_timestamp',
         'oauth_nonce',
         'oauth_version'
     );
-    protected static $_3l_request_params = array(
+    protected static $PARAMS_3L_REQUEST = array(
         'oauth_callback'
     );
-    protected static $_3l_authorize_params = array(
+    protected static $PARAMS_3L_AUTHORIZE = array(
         'oauth_token'
     );
-    protected static $_3l_access_params = array(
+    protected static $PARAMS_3L_ACCESS = array(
         'oauth_token',
         'oauth_verifier'
     );
-    protected static $_3l_resource_params = array(
+    protected static $PARAMS_3L_RESOURCE = array(
         'oauth_token'
     );
+    protected $valid_timestamp_past = 300;
+    protected $valid_timestamp_future = 5;
 
     // Handler
-    protected $_fetch_consumer_handler = null;
-    protected $_check_timestamp_handler = null;
+    protected $fetch_consumer_handler = null;
 
     // Result
-    protected $_success = null;
-    protected $_request = null;
-    protected $_consumer = null;
-    protected $_store = null;
+    protected $success = null;
+    protected $request = null;
+    protected $consumer = null;
+    protected $store = null;
 
 
     /* Construct */
@@ -71,50 +72,55 @@ class HTTP_OAuthProvider
     /**
      * __construct
      * 
-     * Generate the OAuthProvider instance
+     * Generate the HTTP_OAuthProvider instance
      * 
-     * @return OAuthProvider
+     * @return HTTP_OAuthProvider
      */
     public function __construct()
     {
-        $this->_request = new HTTP_OAuthProvider_Request();
+        $this->request = new HTTP_OAuthProvider_Request();
         // set default handler
-        $this->setCheckTimestampHandler(array('HTTP_OAuthProvider', 'checkTimestampHandler'));
-        $this->setFetchConsumerHandler(array('HTTP_OAuthProvider', 'fetchConsumerHandler'));
+        $fetch_consumer = array('HTTP_OAuthProvider', 'fetchConsumerHandler');
+        $this->setFetchConsumerHandler($fetch_consumer);
     }
 
+
+    /* 2legged OAuth */
 
     /**
      * authenticate
      * 
-     * Authenticate consumer by 2legged OAuth
+     * Authenticate consumer by 2legged OAuth.
      * 
      * @return Boolean
      */
     public function authenticate()
     {
         // already executed
-        if (isset($this->_success)) {
-            return $this->_success;
+        if (isset($this->success)) {
+            return $this->success;
         }
 
         // start authentication
-        $this->_success = false;
+        $this->success = false;
 
         // check request
-        $this->getRequest()->checkParameters(self::$_2l_params, true);
+        $this->getRequest()->checkParameters(self::$PARAMS_2L, true);
         $this->getRequest()->checkBodyHash();
-        if (!$this->checkTimestamp($this->getRequest()->getParameter('oauth_timestamp'))) {
-            throw new HTTP_OAuthProvider_Exception('401 Invalid timestamp', 401);
-        }
+        $this->getRequest()->checkTimestamp(
+            $this->valid_timestamp_past,
+            $this->valid_timestamp_future
+        );
 
         // get consumer
-        $this->_consumer = $this->fetchConsumer($this->getRequest()->getParameter('oauth_consumer_key'));
-        if (!$this->_consumer) {
+        $consumer_key = $this->getRequest()->getParameter('oauth_consumer_key');
+        $this->consumer = $this->fetchConsumer($consumer_key);
+        if (!$this->consumer) {
             throw new HTTP_OAuthProvider_Exception('401 Consumer is not found', 401);
         }
-        if (!$this->_consumer instanceof HTTP_OAuthProvider_Consumer) {
-            throw new HTTP_OAuthProvider_Exception('500 FetchConsumerHandler did not return HTTP_OAuthProvider_Consumer instance', 500);
+        if (!$this->consumer instanceof HTTP_OAuthProvider_Consumer) {
+            $message = '500 FetchConsumerHandler did not return HTTP_OAuthProvider_Consumer instance';
+            throw new HTTP_OAuthProvider_Exception($message, 500);
         }
 
         // check signature method
@@ -124,7 +130,7 @@ class HTTP_OAuthProvider
         if (!is_file($sig_file)) {
             throw new HTTP_OAuthProvider_Exception('400 Signature method is not implemented', 400);
         }
-        require_once($sig_file);
+        include_once $sig_file;
         $sig_class = sprintf('HTTP_OAuthProvider_Signature_%s', $sig_method);
         if (!class_exists($sig_class) || !is_subclass_of($sig_class, 'HTTP_OAuthProvider_Signature')) {
             throw new HTTP_OAuthProvider_Exception('400 Signature method is not implemented', 400);
@@ -135,7 +141,7 @@ class HTTP_OAuthProvider
         $sig->checkSignature();
 
         // Success
-        $this->_success = true;
+        $this->success = true;
         return true;
     }
 
@@ -145,7 +151,7 @@ class HTTP_OAuthProvider
     /**
      * issueRequestToken
      * 
-     * issue request token to consumer
+     * Issue a request token to authenticated consumer.
      * 
      * @return String
      */
@@ -155,10 +161,11 @@ class HTTP_OAuthProvider
         $this->authenticate();
 
         // Check parameter
-        $this->getRequest()->checkParameters(self::$_3l_request_params);
+        $this->getRequest()->checkParameters(self::$PARAMS_3L_REQUEST);
         $callback = $this->getRequest()->getParameter('oauth_callback');
         if (!preg_match('#^https?://.#', $callback)) {
-            throw new HTTP_OAuthProvider_Exception('400 oauth_callback is not correct: '.$callback, 400);
+            $message = sprintf('400 oauth_callback is not correct: %s', $callback);
+            throw new HTTP_OAuthProvider_Exception($message, 400);
         }
 
         // make token
@@ -181,7 +188,7 @@ class HTTP_OAuthProvider
     /**
      * existsRequestToken
      * 
-     * Checks if the request token exists
+     * Checks if the request token exists.
      * 
      * @return Boolean
      */
@@ -193,7 +200,7 @@ class HTTP_OAuthProvider
             $type = $store->loadToken($this);
 
             // fetch consumer
-            $this->_consumer = $this->fetchConsumer($store->getConsumerKey());
+            $this->consumer = $this->fetchConsumer($store->getConsumerKey());
 
             // return result
             if ($type=='request') {
@@ -204,32 +211,36 @@ class HTTP_OAuthProvider
         return false;
     }
 
-
     /**
      * authorizeToken
      * 
-     * Authorize consumer to access protected resources
-     * Redirect user to returnd callback_url
+     * Authorize consumer to access user's protected resources.
+     * Redirect user to returned callback_url.
+     * 
+     * @param String  $user_id User who authorizes access to protected resources.
+     * @param Boolean $agree   Authorizes access to protected resources.
      * 
      * @return String
      */
     public function authorizeToken($user_id, $agree)
     {
         // check parameter
-        $this->getRequest()->checkParameters(self::$_3l_authorize_params);
+        $this->getRequest()->checkParameters(self::$PARAMS_3L_AUTHORIZE);
 
         // load token
         $store = $this->getStore();
         $type = $store->loadToken($this);
         if ($type!='request') {
-            throw new HTTP_OAuthProvider_Exception('404 Not found request token in store', 404);
+            $message = '404 Not found request token in store';
+            throw new HTTP_OAuthProvider_Exception($message, 404);
         }
 
         // fetch consumer
-        $this->_consumer = $this->fetchConsumer($store->getConsumerKey());
+        $this->consumer = $this->fetchConsumer($store->getConsumerKey());
 
-        // agree
         if ($agree) {
+            // agree
+
             // update token
             $store->authorizeToken($user_id);
             $ok = $store->save();
@@ -245,8 +256,9 @@ class HTTP_OAuthProvider
             $callback_query['oauth_verifier'] = $store->getVerifier();
             return $callback_url.'?'.http_build_query($callback_query);
 
-        // disagree
         } else {
+            // disagree
+
             // delete token
             $ok = $store->remove();
             if (!$ok) {
@@ -261,7 +273,7 @@ class HTTP_OAuthProvider
     /**
      * exchangeAccessToken
      * 
-     * issue access token to consumer
+     * Issue a access token to consumer.
      * 
      * @return String
      */
@@ -271,7 +283,7 @@ class HTTP_OAuthProvider
         $this->authenticate();
 
         // Check parameter
-        $this->getRequest()->checkParameters(self::$_3l_access_params);
+        $this->getRequest()->checkParameters(self::$PARAMS_3L_ACCESS);
 
         // load token
         $store = $this->getStore();
@@ -281,7 +293,8 @@ class HTTP_OAuthProvider
         $request_consumer = $this->getConsumer()->getKey();
         $token_consumer = $store->getConsumerKey();
         if ($type!='authorize' || $token_consumer!=$request_consumer) {
-            throw new HTTP_OAuthProvider_Exception('404 Not found authorized request token in store', 404);
+            $message = '404 Not found authorized request token in store';
+            throw new HTTP_OAuthProvider_Exception($message, 404);
         }
 
         // delete authorized request token
@@ -308,7 +321,7 @@ class HTTP_OAuthProvider
     /**
      * authenticate3L
      * 
-     * Authenticate consumer by 3legged OAuth
+     * Authenticate consumer by 3legged OAuth.
      * 
      * @return Boolean
      */
@@ -318,7 +331,7 @@ class HTTP_OAuthProvider
         $this->authenticate();
 
         // Check parameter
-        $this->getRequest()->checkParameters(self::$_3l_resource_params);
+        $this->getRequest()->checkParameters(self::$PARAMS_3L_RESOURCE);
 
         // load token
         $store = $this->getStore();
@@ -328,106 +341,139 @@ class HTTP_OAuthProvider
         $request_consumer = $this->getConsumer()->getKey();
         $token_consumer = $store->getConsumerKey();
         if ($type!='access' || $token_consumer!=$request_consumer) {
-            throw new HTTP_OAuthProvider_Exception('404 Not found access token in store', 404);
+            $message = '404 Not found access token in store';
+            throw new HTTP_OAuthProvider_Exception($message, 404);
         }
         return true;
     }
 
 
-    /* Set handler */
+    /* Set method */
 
+    /**
+     * setFetchConsumerHandler
+     * 
+     * Set the handler to fetch the consumer.
+     * 
+     * @param String $handler A name of the function to fetch the consumer
+     * 
+     * @return void
+     */
     public function setFetchConsumerHandler($handler)
     {
         if (!is_callable($handler)) {
-            throw new HTTP_OAuthProvider_Exception('500 FetchConsumerHandler is not callable', 500);
+            $message = '500 FetchConsumerHandler is not callable';
+            throw new HTTP_OAuthProvider_Exception($message, 500);
         }
-        $this->_fetch_consumer_handler = $handler;
+        $this->fetch_consumer_handler = $handler;
     }
 
-    public function setCheckTimestampHandler($handler)
-    {
-        if (!is_callable($handler)) {
-            throw new HTTP_OAuthProvider_Exception('500 CheckTimestampHandler is not callable', 500);
-        }
-        $this->_check_timestamp_handler = $handler;
-    }
-
+    /**
+     * setStore
+     * 
+     * Set a HTTP_OAuthProvider_Store instance.
+     * 
+     * @param HTTP_OAuthProvider_Store $store HTTP_OAuthProvider_Store instance
+     * 
+     * @return void
+     */
     public function setStore(HTTP_OAuthProvider_Store $store)
     {
-        $this->_store = $store;
+        $this->store = $store;
+    }
+
+    /**
+     * setValidTimestamp
+     * 
+     * Set a HTTP_OAuthProvider_Store instance.
+     * 
+     * @param Integer $valid_past   Valid past time
+     * @param Integer $valid_future Valid future time
+     * 
+     * @return void
+     */
+    public function setValidTimestamp($valid_past, $valid_future=5)
+    {
+        $this->valid_timestamp_past = (int)$valid_past;
+        $this->valid_timestamp_future = (int)$valid_future;
     }
 
 
     /* Get method */
 
     /**
-     * isSuccess
+     * getConsumer
      * 
-     * Return an authentication result
+     * Return a consumer instance.
+     * If process is 'authorize', it is a consumer who issued the token.
+     * Otherwise, a consumer is requested consumer.
      * 
      * @return Boolean
      */
-    public function isSuccess()
-    {
-        return $this->_success;
-    }
-
     public function getConsumer()
     {
-        return $this->_consumer;
+        return $this->consumer;
     }
 
+    /**
+     * getRequest
+     * 
+     * Return a HTTP_OAuthProvider_Request instance.
+     * 
+     * @return HTTP_OAuthProvider_Request
+     */
     public function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
+    /**
+     * getStore
+     * 
+     * Return a HTTP_OAuthProvider_Store instance.
+     * If store is not set, store is generated by using the setting of default.
+     * 
+     * @return HTTP_OAuthProvider_Store
+     */
     public function getStore()
     {
-        if (!isset($this->_store)) {
-            $this->_store = HTTP_OAuthProvider_Store::factory();
+        if (!isset($this->store)) {
+            $this->store = HTTP_OAuthProvider_Store::factory();
         }
-        return $this->_store;
-    }
-
-
-    /* exec handler */
-
-    public function checkTimestamp($timestamp)
-    {
-        return call_user_func($this->_check_timestamp_handler, $timestamp);
-    }
-
-    public function fetchConsumer($consumer_key)
-    {
-        return call_user_func($this->_fetch_consumer_handler, $consumer_key);
+        return $this->store;
     }
 
 
     /* Handler */
 
     /**
-     * checkTimestampHandler
+     * fetchConsumer
      * 
-     * Check timestamp
+     * Return a HTTP_OAuthProvider_Consumer instance for consumer_key if consumer_key is valid, else null.
+     * Execute setFetchConsumerHandler() or override fetchConsumer().
      * 
-     * @param String $oauth_timestamp Received oauth_timestamp
+     * @param String $consumer_key A consumer key to fetch.
      * 
-     * @return Boolean
+     * @return HTTP_OAuthProvider_Consumer
      */
-    public static function checkTimestampHandler($timestamp)
+    protected function fetchConsumer($consumer_key)
     {
-        $req_time = (int)$timestamp;
-        $parmit_past = time()-300;
-        $parmit_future = time()+5;
-        if ($parmit_past<$req_time && $req_time<$parmit_future) {
-            return true;
-        }
-        return false;
+        return call_user_func($this->fetch_consumer_handler, $consumer_key);
     }
 
+    /**
+     * fetchConsumerHandler
+     * 
+     * Return a fetched HTTP_OAuthProvider_Consumer instance.
+     * Execute setFetchConsumerHandler() or override fetchConsumer().
+     * 
+     * @param String $consumer_key A consumer key to fetch.
+     * 
+     * @return HTTP_OAuthProvider_Consumer
+     */
     public static function fetchConsumerHandler($consumer_key)
     {
-        throw new HTTP_OAuthProvider_Exception('500 FetchConsumerHandler is not set', 500);
+        $message = '500 FetchConsumerHandler is not set';
+        throw new HTTP_OAuthProvider_Exception($message, 500);
     }
 }
