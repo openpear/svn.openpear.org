@@ -11,8 +11,8 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   Release: 0.1
- * @link      http://pear.php.net/package/PackageName
+ * @version   1.0.4
+ * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 require_once 'PEAR/Exception.php';
 
@@ -23,10 +23,9 @@ require_once 'PEAR/Exception.php';
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  Release: 0.1
+ * @version  1.0.4
  * @link     http://pear.php.net/package/PackageName
  */
 class HTTP_OAuthProvider_Exception extends PEAR_Exception
 {
 }
-?>

@@ -1,138 +1,314 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * OAuth authentication class for service provider.
+ *
+ * PHP versions 5
+ *
+ * @category  HTTP
+ * @package   OAuthProvider
+ * @author    Tetsuya Yoshida <tetu@eth0.jp>
+ * @copyright 2010 Tetsuya Yoshida
+ * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version   1.0.4
+ * @link      http://openpear.org/package/HTTP_OAuthProvider
+ */
+
+/**
+ * OAuth token store class for service provider.
+ *
+ * @category HTTP
+ * @package  OAuthProvider
+ * @author   Tetsuya Yoshida <tetu@eth0.jp>
+ * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version  1.0.4
+ * @link     http://openpear.org/package/HTTP_OAuthProvider
+ */
 abstract class HTTP_OAuthProvider_Store
 {
-	protected $_row = null;
+    protected $row = null;
 
-	public static function factory($driver='CacheLite', array $options=array())
-	{
-		$driver = str_replace('-', '_', $driver);
+    /**
+     * factory
+     * 
+     * Generate the HTTP_OAuthProvider_Store instance.
+     * 
+     * @param String $driver  Store driver name.
+     * @param Array  $options Store options.
+     * 
+     * @return HTTP_OAuthProvider_Store
+     */
+    public static function factory($driver='CacheLite', array $options=array())
+    {
+        $driver = str_replace('-', '_', $driver);
 
-		$file = sprintf('%s/Store/%s.php', dirname(__FILE__), $driver);
-		$class = sprintf('HTTP_OAuthProvider_Store_%s', $driver);
-		if (!is_file($file)) {
-			throw new HTTP_OAuthProvider_Store_Exception('Store driver is not found', 500);
-		}
-		require_once($file);
-		if (!class_exists($class) || !is_subclass_of($class, 'HTTP_OAuthProvider_Store')) {
-			throw new HTTP_OAuthProvider_Store_Exception('Store driver is not found', 500);
-		}
-		return new $class($options);
-	}
+        $file = sprintf('%s/Store/%s.php', dirname(__FILE__), $driver);
+        $class = sprintf('HTTP_OAuthProvider_Store_%s', $driver);
+        if (!is_file($file)) {
+            $message = 'Store driver is not found';
+            throw new HTTP_OAuthProvider_Store_Exception($message, 500);
+        }
+        include_once $file;
+        if (class_exists($class)) {
+            if (is_subclass_of($class, 'HTTP_OAuthProvider_Store')) {
+                return new $class($options);
+            }
+        }
+        $message = 'Store driver is not found';
+        throw new HTTP_OAuthProvider_Store_Exception($message, 500);
+    }
 
 
-	/* initialize */
+    /* initialize token */
 
-	public function issueRequestToken(HTTP_OAuthProvider $provider)
-	{
+    /**
+     * issueRequestToken
+     * 
+     * Issue a new request token.
+     * 
+     * @param HTTP_OAuthProvider $provider A HTTP_OAuthProvider instance.
+     * 
+     * @return void
+     */
+    public function issueRequestToken(HTTP_OAuthProvider $provider)
+    {
         $consumer = $provider->getConsumer();
         $request = $provider->getRequest();
-        $this->_row = array(
-            'type'			=> 'request',
-            'consumer_key'	=> $consumer->getKey(),
-            'callback'		=> $request->getParameter('oauth_callback'),
-            'timestamp'		=> $request->getParameter('oauth_timestamp'),
-			'token'			=> self::makeToken(),
-			'secret'		=> self::makeSecret()
+        $this->row = array(
+            'type'          => 'request',
+            'consumer_key'  => $consumer->getKey(),
+            'callback'      => $request->getParameter('oauth_callback'),
+            'timestamp'     => $request->getParameter('oauth_timestamp'),
+            'token'         => self::makeToken(),
+            'secret'        => self::makeSecret()
         );
-	}
+    }
 
-	public function loadToken(HTTP_OAuthProvider $provider)
-	{
+    /**
+     * loadToken
+     * 
+     * Load a token by store.
+     * 
+     * @param HTTP_OAuthProvider $provider A HTTP_OAuthProvider instance.
+     * 
+     * @return String
+     */
+    public function loadToken(HTTP_OAuthProvider $provider)
+    {
         $consumer = $provider->getConsumer();
         $request = $provider->getRequest();
-		$token = $request->getParameter('oauth_token');
-		$this->_row = $this->get($token);
-		if ($this->_row) {
-			return $this->_row['type'];
-		}
-		throw new HTTP_OAuthProvider_Exception('404 Not found token in store', 404);
-	}
+        $token = $request->getParameter('oauth_token');
+        $this->row = $this->get($token);
+        if ($this->row) {
+            return $this->row['type'];
+        }
+        throw new HTTP_OAuthProvider_Exception('404 Not found token in store', 404);
+    }
 
 
-	/* update */
+    /* update token */
 
-	public function authorizeToken($user_id)
-	{
-		if (isset($this->_row['type']) && $this->_row['type']=='request') {
-			$this->_row['type'] = 'authorize';
-			$this->_row['verifier'] = self::makeVerifier();
-			$this->_row['user_id'] = $user_id;
-			return;
-		}
-		throw new HTTP_OAuthProvider_Exception('404 Not found request token in store', 404);
-	}
+    /**
+     * authorizeToken
+     * 
+     * Authorize request token.
+     * 
+     * @param String $user_id User who authorizes access to protected resources.
+     * 
+     * @return String
+     */
+    public function authorizeToken($user_id)
+    {
+        if (isset($this->row['type']) && $this->row['type']=='request') {
+            $this->row['type'] = 'authorize';
+            $this->row['verifier'] = self::makeVerifier();
+            $this->row['user_id'] = $user_id;
+            return;
+        }
+        $message ='404 Not found request token in store';
+        throw new HTTP_OAuthProvider_Exception($message, 404);
+    }
 
-	public function exchangeAccessToken()
-	{
-		if (isset($this->_row['type']) && $this->_row['type']=='authorize') {
-			$this->_row['type'] = 'access';
-			$this->_row['token'] = self::makeToken();
-			return;
-		}
-		throw new HTTP_OAuthProvider_Exception('404 Not found authorize token in store', 404);
-	}
+    /**
+     * exchangeAccessToken
+     * 
+     * Change from authorized request token to access token.
+     * 
+     * @return void
+     */
+    public function exchangeAccessToken()
+    {
+        if (isset($this->row['type']) && $this->row['type']=='authorize') {
+            $this->row['type'] = 'access';
+            $this->row['token'] = self::makeToken();
+            return;
+        }
+        $message = '404 Not found authorize token in store';
+        throw new HTTP_OAuthProvider_Exception($message, 404);
+    }
 
 
-	/* Get method */
+    /* Get method */
 
-	public function getParam($key)
-	{
-		if (isset($this->_row[$key])) {
-			return $this->_row[$key];
-		}
-		return null;
-	}
+    /**
+     * getParameter
+     * 
+     * Return a row parameter.
+     * 
+     * @param String $key The key to the row.
+     * 
+     * @return String
+     */
+    public function getParameter($key)
+    {
+        if (isset($this->row[$key])) {
+            return $this->row[$key];
+        }
+        return null;
+    }
 
-	public function getType()
-	{
-		return $this->getParam('type');
-	}
+    /**
+     * getType
+     * 
+     * Return a token type.
+     * 
+     * @return String
+     */
+    public function getType()
+    {
+        return $this->getParameter('type');
+    }
 
-	public function getConsumerKey()
-	{
-		return $this->getParam('consumer_key');
-	}
+    /**
+     * getConsumerKey
+     * 
+     * Return a consumer key.
+     * 
+     * @return String
+     */
+    public function getConsumerKey()
+    {
+        return $this->getParameter('consumer_key');
+    }
 
-	public function getCallback()
-	{
-		return $this->getParam('callback');
-	}
+    /**
+     * getCallback
+     * 
+     * Return a callback url.
+     * 
+     * @return String
+     */
+    public function getCallback()
+    {
+        return $this->getParameter('callback');
+    }
 
-	public function getTimestamp()
-	{
-		return $this->getParam('timestamp');
-	}
+    /**
+     * getTimestamp
+     * 
+     * Return a timestamp.
+     * 
+     * @return String
+     */
+    public function getTimestamp()
+    {
+        return $this->getParameter('timestamp');
+    }
 
+    /**
+     * getToken
+     * 
+     * Return a token.
+     * 
+     * @return String
+     */
     public function getToken()
     {
-		return $this->getParam('token');
+        return $this->getParameter('token');
     }
 
+    /**
+     * getSecret
+     * 
+     * Return a token secret.
+     * 
+     * @return String
+     */
     public function getSecret()
     {
-		return $this->getParam('secret');
+        return $this->getParameter('secret');
     }
 
+    /**
+     * getVerifier
+     * 
+     * Return a token secret.
+     * 
+     * @return String
+     */
     public function getVerifier()
     {
-		return $this->getParam('verifier');
+        return $this->getParameter('verifier');
     }
 
-	public function getUserID()
-	{
-		return $this->getParam('user_id');
-	}
+    /**
+     * getUserID
+     * 
+     * Return a user id.
+     * 
+     * @return String
+     */
+    public function getUserID()
+    {
+        return $this->getParameter('user_id');
+    }
 
 
-	/* abstract */
+    /* abstract */
 
-	abstract public function __construct(array $options=array());
-	abstract public function get($token);
-	abstract public function save();
-	abstract public function remove();
+    /**
+     * __construct
+     * 
+     * Generate the HTTP_OAuthProvider_Store instance.
+     * 
+     * @param Array $options Store options
+     * 
+     * @return HTTP_OAuthProvider_Store
+     */
+    abstract public function __construct(array $options=array());
+
+    /**
+     * get
+     * 
+     * Retrieve a token
+     * 
+     * @param String $token A token to retrive.
+     * 
+     * @return Array
+     */
+    abstract public function get($token);
+
+    /**
+     * save
+     * 
+     * Save a token
+     * 
+     * @return Boolean
+     */
+    abstract public function save();
+
+    /**
+     * remove
+     * 
+     * Remove a token
+     * 
+     * @return Boolean
+     */
+    abstract public function remove();
 
 
-	/* utils */
+    /* utils */
 
     /**
      * makeToken
