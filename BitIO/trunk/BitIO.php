@@ -142,7 +142,6 @@ class BitIO {
      * set method
      */
     function setUI32LE($value, $byte_offset) {
-        $this->byteAlign();
         $data .= pack('V', $value);
         $this->_data{$byte_offset + 0} = $data{0};
         $this->_data{$byte_offset + 1} = $data{1};
