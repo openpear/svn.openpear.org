@@ -34,6 +34,14 @@ class IO_Bit {
     /*
      * offset method
      */
+    function setOffset($byte_offset, $bit_offset) {
+        $this->_byte_offset = $byte_offset;
+        $this->_bit_offset  = $bit_offset;
+        return true;
+    }
+    function getOffset() {
+        return array($this->_byte_offset, $this->_bit_offset); 
+    }
     function byteAlign() {
         if ($this->_bit_offset > 0) {
             $this->_byte_offset ++;
@@ -154,7 +162,7 @@ class IO_Bit {
      * set method
      */
     function setUI32LE($value, $byte_offset) {
-        $data .= pack('V', $value);
+        $data = pack('V', $value);
         $this->_data{$byte_offset + 0} = $data{0};
         $this->_data{$byte_offset + 1} = $data{1};
         $this->_data{$byte_offset + 2} = $data{2};
