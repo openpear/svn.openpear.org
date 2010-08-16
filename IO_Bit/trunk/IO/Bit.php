@@ -96,11 +96,7 @@ class IO_Bit {
         return $value;
     }
     function getSIBits($width) {
-        $value = 0;
-        for ($i = 0 ; $i < $width ; $i++) {
-            $value <<= 1;
-            $value |= $this->getUIBit();
-        }
+        $value = $this->getUIBits($width);
         $msb = $value & (1 << ($width - 1));
         if ($msb) {
             $bitmask = (2 * $msb) - 1;
@@ -176,14 +172,7 @@ class IO_Bit {
             $bitmask = (2 * $msb) - 1;
             $value = (-$value  - 1) ^ $bitmask;
         }
-        for ($i = $width - 1 ; $i >= 0 ; $i--) {
-            $bit = ($value >> $i) & 1;
-            $ret = $this->putUIBit($bit);
-            if ($ret !== true) {
-                return $ret;
-            }
-        }
-        return true;
+        return $this->putUIBits($value, $width);
     }
 
     /*
