@@ -37,7 +37,7 @@ abstract class HTTP_OAuthProvider_Signature
      * 
      * Generate the HTTP_OAuthProvider_Signature instance.
      * 
-     * @param HTTP_OAuthProvider $provider a HTTP_OAuthProvider instance.
+     * @param HTTP_OAuthProvider $provider A HTTP_OAuthProvider instance.
      * 
      * @return HTTP_OAuthProvider_Signature
      */
@@ -50,7 +50,7 @@ abstract class HTTP_OAuthProvider_Signature
     /**
      * getSignatureBaseString
      * 
-     * Return a signature base string
+     * Return a signature base string.
      * 
      * @return String
      */

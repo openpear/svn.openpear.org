@@ -30,9 +30,11 @@ class HTTP_OAuthProvider_Signature_HMAC_SHA1 extends HTTP_OAuthProvider_Signatur
     /**
      * checkSignature
      * 
-     * Finds whether a $oauth_signature is a valid string
+     * Finds whether a $oauth_signature is a valid string.
      * 
      * @return String
+     * 
+     * @throws HTTP_OAuthProvider_Exception If oauth_signature is not valid.
      */
     public function checkSignature()
     {
@@ -47,7 +49,7 @@ class HTTP_OAuthProvider_Signature_HMAC_SHA1 extends HTTP_OAuthProvider_Signatur
     /**
      * getSignature
      * 
-     * Return a signature
+     * Return a signature.
      * 
      * @return String
      */

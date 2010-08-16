@@ -93,6 +93,8 @@ abstract class HTTP_OAuthProvider_Store
      * @param HTTP_OAuthProvider $provider A HTTP_OAuthProvider instance.
      * 
      * @return String
+     * 
+     * @throws HTTP_OAuthProvider_Exception If a token is not found.
      */
     public function loadToken(HTTP_OAuthProvider $provider)
     {
@@ -103,7 +105,7 @@ abstract class HTTP_OAuthProvider_Store
         if ($this->row) {
             return $this->row['type'];
         }
-        throw new HTTP_OAuthProvider_Exception('404 Not found token in store', 404);
+        throw new HTTP_OAuthProvider_Exception('404 A token is not found', 404);
     }
 
 
@@ -117,6 +119,8 @@ abstract class HTTP_OAuthProvider_Store
      * @param String $user_id User who authorizes access to protected resources.
      * 
      * @return String
+     * 
+     * @throws HTTP_OAuthProvider_Exception If a request token is not found.
      */
     public function authorizeToken($user_id)
     {
@@ -126,7 +130,7 @@ abstract class HTTP_OAuthProvider_Store
             $this->row['user_id'] = $user_id;
             return;
         }
-        $message ='404 Not found request token in store';
+        $message ='404 A request token is not found';
         throw new HTTP_OAuthProvider_Exception($message, 404);
     }
 
@@ -136,6 +140,8 @@ abstract class HTTP_OAuthProvider_Store
      * Change from authorized request token to access token.
      * 
      * @return void
+     * 
+     * @throws HTTP_OAuthProvider_Exception If an authorize token is not found.
      */
     public function exchangeAccessToken()
     {
@@ -144,7 +150,7 @@ abstract class HTTP_OAuthProvider_Store
             $this->row['token'] = self::makeToken();
             return;
         }
-        $message = '404 Not found authorize token in store';
+        $message = '404 An authorize token is not found';
         throw new HTTP_OAuthProvider_Exception($message, 404);
     }
 
@@ -272,7 +278,7 @@ abstract class HTTP_OAuthProvider_Store
      * 
      * Generate the HTTP_OAuthProvider_Store instance.
      * 
-     * @param Array $options Store options
+     * @param Array $options Store options.
      * 
      * @return HTTP_OAuthProvider_Store
      */
@@ -281,7 +287,7 @@ abstract class HTTP_OAuthProvider_Store
     /**
      * get
      * 
-     * Retrieve a token
+     * Retrieve a token.
      * 
      * @param String $token A token to retrive.
      * 
@@ -292,7 +298,7 @@ abstract class HTTP_OAuthProvider_Store
     /**
      * save
      * 
-     * Save a token
+     * Save a token.
      * 
      * @return Boolean
      */
@@ -301,7 +307,7 @@ abstract class HTTP_OAuthProvider_Store
     /**
      * remove
      * 
-     * Remove a token
+     * Remove a token.
      * 
      * @return Boolean
      */
@@ -313,7 +319,7 @@ abstract class HTTP_OAuthProvider_Store
     /**
      * makeToken
      * 
-     * create random string
+     * create random string.
      * 
      * @return String
      */
@@ -332,7 +338,7 @@ abstract class HTTP_OAuthProvider_Store
     /**
      * makeSecret
      * 
-     * create random string
+     * create random string.
      * 
      * @return String
      */
@@ -344,7 +350,7 @@ abstract class HTTP_OAuthProvider_Store
     /**
      * makeVerifier
      * 
-     * create random string
+     * create random string.
      * 
      * @return String
      */

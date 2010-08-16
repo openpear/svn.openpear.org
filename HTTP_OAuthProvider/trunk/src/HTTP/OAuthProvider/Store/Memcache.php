@@ -44,6 +44,8 @@ class HTTP_OAuthProvider_Store_Memcache extends HTTP_OAuthProvider_Store
      * @param Array $options Store options
      * 
      * @return HTTP_OAuthProvider_Store_Memcache
+     * 
+     * @throws HTTP_OAuthProvider_Store_Exception If failing in the connection.
      */
     public function __construct(array $options=array())
     {

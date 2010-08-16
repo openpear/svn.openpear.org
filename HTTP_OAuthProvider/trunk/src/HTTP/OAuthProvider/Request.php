@@ -67,9 +67,9 @@ class HTTP_OAuthProvider_Request
     /**
      * getHeader
      * 
-     * Return a request header.
+     * Returns either the named header or all request headers.
      * 
-     * @param String $key The key to the request header.
+     * @param String $key Name of header to return.
      * 
      * @return String
      */
@@ -88,9 +88,9 @@ class HTTP_OAuthProvider_Request
     /**
      * getParameter
      * 
-     * Return a request parameter.
+     * Returns either the named parameter or all request parameters.
      * 
-     * @param String $key The key to the request parameter.
+     * @param String $key Name of parameter to return.
      * 
      * @return String
      */
@@ -149,25 +149,31 @@ class HTTP_OAuthProvider_Request
      * 
      * Check necessary parameters
      * 
-     * @param Array   $keys            Necessary parameters
-     * @param Boolean $check_signature is signature checked?
+     * @param Array $keys Necessary parameters.
      * 
      * @return Boolean
+     * 
+     * @throws HTTP_OAuthProvider_Exception If a necessary parameter doesn't exist.
      */
-    public function checkParameters($keys, $check_signature=false)
+    public function checkParameters($keys)
     {
         $noparam = array();
         foreach ($keys as $key) {
-            if (!$this->getParameter($key)) {
-                $noparam[] = $key;
+            if ($key=='oauth_signature') {
+                if (!$this->getSignature()) {
+                    $noparam[] = $key;
+                }
+            } else {
+                if (!$this->getParameter($key)) {
+                    $noparam[] = $key;
+                }
             }
         }
-        if ($check_signature && !$this->getSignature()) {
-            $noparam[] = 'oauth_signature';
-        }
         if (0<count($noparam)) {
-            $noparam = implode(', ', $noparam);
-            $message = sprintf('400 OAuth parameter(s) does not exist: ', $noparam);
+            $message = sprintf(
+                '400 OAuth parameter(s) does not exist: %s',
+                implode(', ', $noparam)
+            );
             throw new HTTP_OAuthProvider_Exception($message, 400);
         }
         return true;
@@ -176,9 +182,11 @@ class HTTP_OAuthProvider_Request
     /**
      * checkBodyHash
      * 
-     * check oauth_body_hash
+     * Check oauth_body_hash
      * 
      * @return Boolean
+     * 
+     * @throws HTTP_OAuthProvider_Exception If oauth_body_hash is not valid.
      */
     public function checkBodyHash()
     {
@@ -200,12 +208,14 @@ class HTTP_OAuthProvider_Request
     /**
      * checkTimestamp
      * 
-     * Check timestamp
+     * Check request timestamp.
      * 
      * @param Integer $valid_past   Valid past time
      * @param Integer $valid_future Valid future time
      * 
      * @return Boolean
+     * 
+     * @throws HTTP_OAuthProvider_Exception If oauth_timestamp is not valid.
      */
     public function checkTimestamp($valid_past, $valid_future)
     {
@@ -225,9 +235,9 @@ class HTTP_OAuthProvider_Request
     /**
      * initialize
      * 
-     * Set request parameters
+     * Set request parameters.
      * 
-     * @return Array
+     * @return void
      */
     protected function initialize()
     {
@@ -236,7 +246,7 @@ class HTTP_OAuthProvider_Request
             return;
         }
 
-        // header
+        // Header
         $this->header = array_change_key_case(apache_request_headers(), CASE_UPPER);
 
         // HTTP Method
@@ -245,10 +255,10 @@ class HTTP_OAuthProvider_Request
             $this->method = $this->header['HTTP_X_HTTP_METHOD_OVERRIDE'];
         }
 
-        // parameters
-        list($this->params, $this->signature) = $this->parseRequestParameters();
+        // Parameters
+        $this->parseRequestParameters();
 
-        // body
+        // Body
         $this->body = file_get_contents('php://input');
 
         $initialized = true;
@@ -257,29 +267,30 @@ class HTTP_OAuthProvider_Request
     /**
      * parseRequestParameters
      * 
-     * Parse request parameters
+     * Parse request parameters.
      * 
-     * @return Array
+     * @return void
      */
     protected function parseRequestParameters()
     {
-        // get
+        // GET
         $params = $_GET;
 
-        // post
+        // POST
         if ($this->getHeader('CONTENT-TYPE')=='application/x-www-form-urlencoded') {
             $params = array_merge($params, $_POST);
         }
 
-        // header
-        if (strpos($this->getHeader('AUTHORIZATION'), 'OAuth ')===0) {
-            $params_tmp = preg_split("/,[\r\n\s]*/", $this->header['AUTHORIZATION']);
-            foreach ($params_tmp as $v) {
-                if (preg_match('/^([^"= ]+)="([^"]*)"$/', $v, $m)) {
-                    $params[urldecode($m[1])] = urldecode($m[2]);
-                }
+        // Header
+        $header = $this->getHeader('AUTHORIZATION');
+        if (strpos($header, 'OAuth ')===0) {
+            preg_match_all('/([^"= ]*)="([^"]*)"/', $header, $match, PREG_SET_ORDER);
+            foreach ($match as $m) {
+                $params[urldecode($m[1])] = urldecode($m[2]);
             }
         }
+
+        // Remove realm
         if (isset($params['realm'])) {
             unset($params['realm']);
         }
@@ -291,6 +302,7 @@ class HTTP_OAuthProvider_Request
             unset($params['oauth_signature']);
         }
 
-        return array($params, $signature);
+        $this->params = $params;
+        $this->signature = $signature;
     }
 }
