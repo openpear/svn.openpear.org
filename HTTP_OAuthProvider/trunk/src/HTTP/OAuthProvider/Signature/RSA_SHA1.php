@@ -30,9 +30,11 @@ class HTTP_OAuthProvider_Signature_RSA_SHA1 extends HTTP_OAuthProvider_Signature
     /**
      * checkSignature
      * 
-     * Finds whether a $oauth_signature is a valid string
+     * Finds whether a $oauth_signature is a valid string.
      * 
      * @return String
+     * 
+     * @throws HTTP_OAuthProvider_Exception If oauth_signature is not valid.
      */
     public function checkSignature()
     {
@@ -49,5 +51,4 @@ class HTTP_OAuthProvider_Signature_RSA_SHA1 extends HTTP_OAuthProvider_Signature
         }
         throw new HTTP_OAuthProvider_Exception('401 Unauthorized', 401);
     }
-
 }

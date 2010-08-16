@@ -32,9 +32,9 @@ class HTTP_OAuthProvider_Consumer
     /**
      * __construct
      * 
-     * Generate the HTTP_OAuthProvider_Consumer instance
+     * Generate the HTTP_OAuthProvider_Consumer instance.
      * 
-     * @param Array $row Consumer data
+     * @param Array $row Consumer data.
      * 
      * @return HTTP_OAuthProvider_Consumer
      */
@@ -46,9 +46,9 @@ class HTTP_OAuthProvider_Consumer
     /**
      * getParameter
      * 
-     * Return a consumer parameter.
+     * Returns either the named parameter.
      * 
-     * @param String $key The key to the consumer parameter.
+     * @param String $key Name of parameter to return.
      * 
      * @return String
      */

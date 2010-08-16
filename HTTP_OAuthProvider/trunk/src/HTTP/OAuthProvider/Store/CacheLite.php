@@ -40,9 +40,11 @@ class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
      * 
      * Generate the HTTP_OAuthProvider_Store_CacheLite instance.
      * 
-     * @param Array $options Store options
+     * @param Array $options Store options.
      * 
      * @return HTTP_OAuthProvider_Store_CacheLite
+     * 
+     * @throws HTTP_OAuthProvider_Store_Exception If failing in the make directory.
      */
     public function __construct(array $options=array())
     {
