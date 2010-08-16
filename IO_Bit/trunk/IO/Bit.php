@@ -95,6 +95,19 @@ class IO_Bit {
         }
         return $value;
     }
+    function getSIBits($width) {
+        $value = 0;
+        for ($i = 0 ; $i < $width ; $i++) {
+            $value <<= 1;
+            $value |= $this->getUIBit();
+        }
+        $msb = $value & (1 << ($width - 1));
+        if ($msb) {
+            $bitmask = (2 * $msb) - 1;
+            $value = - ($value ^ $bitmask) - 1;
+        }
+        return $value;
+    }
     
     /*
      * put method
@@ -148,6 +161,21 @@ class IO_Bit {
         return true;
     }
     function putUIBits($value, $width) {
+        for ($i = $width - 1 ; $i >= 0 ; $i--) {
+            $bit = ($value >> $i) & 1;
+            $ret = $this->putUIBit($bit);
+            if ($ret !== true) {
+                return $ret;
+            }
+        }
+        return true;
+    }
+    function putSIBits($value, $width) {
+        if ($value < 0) {
+            $msb = 1 << ($width - 1);
+            $bitmask = (2 * $msb) - 1;
+            $value = (-$value  - 1) ^ $bitmask;
+        }
         for ($i = $width - 1 ; $i >= 0 ; $i--) {
             $bit = ($value >> $i) & 1;
             $ret = $this->putUIBit($bit);
