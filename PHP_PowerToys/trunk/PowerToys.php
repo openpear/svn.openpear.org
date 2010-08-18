@@ -658,11 +658,26 @@ class PHP_PowerToys {
      * @return String
      */
     function strip_tags_ex($str, $tag=null){
-	$str = strip_tags($tag);
+	$str = strip_tags($str, $tag);
 	$str = is_null($tag) ? htmlspecialchars($str, ENT_QUOTES) : $str ;
 	$str = trim($str);
 	$str = preg_replace("/\/x00|\/00/", "", $str);
 	return $str;
+    }
+
+    /**
+     * 正しいメールアドレスがチェックする(Ethnaから移植)
+     *
+     * @param String $mailaddress
+     * @return bool
+     */
+    function checkMailAddress($mailaddress)
+    {
+        if (preg_match('/^([a-z0-9_]|\-|\.|\+)+@(([a-z0-9_]|\-)+\.)+[a-z]{2,6}$/i',
+                       $mailaddress)) {
+            return true;
+        }
+        return false;
     }
 }
 

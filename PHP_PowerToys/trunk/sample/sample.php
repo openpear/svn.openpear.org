@@ -84,4 +84,18 @@ $pt = new PHP_Powertoys();
 //$str = "aaaaaaaaaa"
 //$data = $pt->numSplit($str, 5);
 //print_r_($data);
+
+//echo $pt->strip_tags_ex('<div<div>><script type="text/javascript">function test{alert(\'test\');}</script></div>&hearts;テスト');
+
+//if($pt->checkMailAddress('sample@sample.com')){
+//    echo '正しいメールアドレスです';
+//}else{
+//    echo '不正なメールアドレスです';
+//}
+
+//if($pt->checkMailAddress('sample.com')){
+//    echo '正しいメールアドレスです';
+//}else{
+//    echo '不正なメールアドレスです';
+//}
 ?>
