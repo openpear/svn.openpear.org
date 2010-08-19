@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.5
+ * @version   1.0.6
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 require_once 'HTTP/OAuthProvider/Request.php';
@@ -28,7 +28,7 @@ require_once 'HTTP/OAuthProvider/Store/Exception.php';
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.5
+ * @version  1.0.6
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 class HTTP_OAuthProvider
@@ -78,7 +78,7 @@ class HTTP_OAuthProvider
      */
     public function __construct()
     {
-        $this->request = new HTTP_OAuthProvider_Request();
+        $this->request = HTTP_OAuthProvider_Request::getInstance();
 
         // Set default handler
         $fetch_consumer = array('HTTP_OAuthProvider', 'fetchConsumerHandler');
@@ -347,6 +347,46 @@ class HTTP_OAuthProvider
             throw new HTTP_OAuthProvider_Exception($message, 404);
         }
         return true;
+    }
+
+
+    /* Social Application Provider */
+
+    /**
+     * verify
+     * 
+     * Verify request from opensocial provider.
+     * 
+     * @param String $consumer_key    OpenSocial provider's consumer key.
+     * @param String $consumer_secret OpenSocial provider's consumer secret.
+     * 
+     * @return Boolean
+     * 
+     * @throws HTTP_OAuthProvider_Exception If failing in the verification.
+     */
+    public static function verify($consumer_key, $consumer_secret)
+    {
+        $o = new HTTP_OAuthProvider();
+
+        // store
+        $row = array(
+            'token' => $o->getRequest()->getParameter('oauth_token'),
+            'secret' => $o->getRequest()->getParameter('oauth_token_secret')
+        );
+        $store = HTTP_OAuthProvider_Store::factory('Static', $row);
+        $o->setStore($store);
+
+        // consumer
+        $row = array(
+            'key' => $consumer_key,
+            'secret' => $consumer_secret
+        );
+        $o->consumer = new HTTP_OAuthProvider_Consumer($row);
+
+        // signature
+        include_once 'HTTP/OAuthProvider/Signature/HMAC_SHA1.php';
+        $sig = new HTTP_OAuthProvider_Signature_HMAC_SHA1($o);
+        return $sig->checkSignature();
     }
 
 

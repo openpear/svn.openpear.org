@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.5
+ * @version   1.0.6
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 require_once 'HTTP/OAuthProvider/Exception.php';
@@ -23,11 +23,12 @@ require_once 'HTTP/OAuthProvider/Exception.php';
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.5
+ * @version  1.0.6
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 class HTTP_OAuthProvider_Request
 {
+    protected static $instance = null;
     protected $method = null;
     protected $header = null;
     protected $params = null;
@@ -40,13 +41,28 @@ class HTTP_OAuthProvider_Request
     /**
      * __construct
      * 
-     * Generate the HTTP_OAuthProvider_Request instance
+     * Generate the HTTP_OAuthProvider_Request instance.
      * 
      * @return HTTP_OAuthProvider_Request
      */
-    public function __construct()
+    protected function __construct()
     {
         $this->initialize();
+    }
+
+    /**
+     * getInstance
+     * 
+     * Generate the HTTP_OAuthProvider_Request instance.
+     * 
+     * @return HTTP_OAuthProvider_Request
+     */
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new HTTP_OAuthProvider_Request();
+        }
+        return self::$instance;
     }
 
 
@@ -241,11 +257,6 @@ class HTTP_OAuthProvider_Request
      */
     protected function initialize()
     {
-        static $initialized = false;
-        if ($initialized) {
-            return;
-        }
-
         // Header
         $this->header = array_change_key_case(apache_request_headers(), CASE_UPPER);
 
@@ -260,8 +271,6 @@ class HTTP_OAuthProvider_Request
 
         // Body
         $this->body = file_get_contents('php://input');
-
-        $initialized = true;
     }
 
     /**

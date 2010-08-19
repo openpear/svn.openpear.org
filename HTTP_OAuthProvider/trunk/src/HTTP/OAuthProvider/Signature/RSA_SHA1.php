@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.5
+ * @version   1.0.6
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 
@@ -22,7 +22,7 @@
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.5
+ * @version  1.0.6
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 class HTTP_OAuthProvider_Signature_RSA_SHA1 extends HTTP_OAuthProvider_Signature
