@@ -14,7 +14,6 @@
  * @version   1.0.6
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
-require_once 'Cache/Lite.php';
 
 /**
  * OAuth token store class for service provider.
@@ -26,41 +25,22 @@ require_once 'Cache/Lite.php';
  * @version  1.0.6
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
-class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
+class HTTP_OAuthProvider_Store_Static extends HTTP_OAuthProvider_Store
 {
-    protected $options = array(
-        'cacheDir' => '/tmp/http_oauthprovider/',
-        'lifeTime' => 3600
-    );
-    protected $cache = null;
-
-
     /**
      * __construct
      * 
-     * Generate the HTTP_OAuthProvider_Store_CacheLite instance.
+     * Generate the HTTP_OAuthProvider_Store_Static instance.
      * 
      * @param Array $options Store options.
      * 
-     * @return HTTP_OAuthProvider_Store_CacheLite
+     * @return HTTP_OAuthProvider_Store_Static
      * 
      * @throws HTTP_OAuthProvider_Store_Exception If failing in the make directory.
      */
     public function __construct(array $options=array())
     {
-        $this->options = array_merge($this->options, $options);
-        $this->options['cacheDir'] = rtrim($this->options['cacheDir'], '/').'/';
-        $dir = $this->options['cacheDir'];
-        // make cache dir
-        if (!is_dir($dir)) {
-            $maked = @mkdir($dir, 0777, true);
-            if (!$maked) {
-                $message = sprintf("Can's make directory: %s", $dir);
-                throw new HTTP_OAuthProvider_Store_Exception($message, 500);
-            }
-        }
-        // make store instance
-        $this->cache = new Cache_Lite($this->options);
+        $this->row = $options;
     }
 
     /**
@@ -74,7 +54,7 @@ class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
      */
     public function get($token)
     {
-        return unserialize($this->cache->get($token));
+        return $this->row;
     }
 
     /**
@@ -86,7 +66,7 @@ class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
      */
     public function save()
     {
-        return $this->cache->save(serialize($this->row), $this->getToken());
+        return false;
     }
 
     /**
@@ -98,6 +78,6 @@ class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
      */
     public function remove()
     {
-        return $this->cache->remove($this->getToken());
+        return false;
     }
 }
