@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.6
+ * @version   1.0.7
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 
@@ -22,7 +22,7 @@
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.6
+ * @version  1.0.7
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 abstract class HTTP_OAuthProvider_Signature
@@ -44,6 +44,31 @@ abstract class HTTP_OAuthProvider_Signature
     public function __construct(HTTP_OAuthProvider $provider)
     {
         $this->provider = $provider;
+    }
+
+    /**
+     * factory
+     * 
+     * Generate the HTTP_OAuthProvider_Signature instance.
+     * 
+     * @param HTTP_OAuthProvider $provider A HTTP_OAuthProvider instance.
+     * 
+     * @return HTTP_OAuthProvider_Signature
+     */
+    public static function factory(HTTP_OAuthProvider $provider)
+    {
+        $method = $provider->getRequest()->getParameter('oauth_signature_method');
+        $method = str_replace('-', '_', $method);
+        $file = sprintf('%s/Signature/%s.php', dirname(__FILE__), $method);
+        if (!is_file($file)) {
+            throw new HTTP_OAuthProvider_Exception('400 Signature method is not implemented', 400);
+        }
+        include_once $file;
+        $class = sprintf('HTTP_OAuthProvider_Signature_%s', $method);
+        if (!class_exists($class) || !is_subclass_of($class, 'HTTP_OAuthProvider_Signature')) {
+            throw new HTTP_OAuthProvider_Exception('400 Signature method is not implemented', 400);
+        }
+        return new $class($provider);
     }
 
 

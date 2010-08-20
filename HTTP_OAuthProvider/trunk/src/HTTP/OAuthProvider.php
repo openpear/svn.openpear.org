@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.6
+ * @version   1.0.7
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 require_once 'HTTP/OAuthProvider/Request.php';
@@ -28,7 +28,7 @@ require_once 'HTTP/OAuthProvider/Store/Exception.php';
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.6
+ * @version  1.0.7
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 class HTTP_OAuthProvider
@@ -118,21 +118,8 @@ class HTTP_OAuthProvider
             throw new HTTP_OAuthProvider_Exception($message, 500);
         }
 
-        // Check signature method
-        $sig_method = $this->getRequest()->getParameter('oauth_signature_method');
-        $sig_method = str_replace('-', '_', $sig_method);
-        $sig_file = sprintf('%s/OAuthProvider/Signature/%s.php', dirname(__FILE__), $sig_method);
-        if (!is_file($sig_file)) {
-            throw new HTTP_OAuthProvider_Exception('400 Signature method is not implemented', 400);
-        }
-        include_once $sig_file;
-        $sig_class = sprintf('HTTP_OAuthProvider_Signature_%s', $sig_method);
-        if (!class_exists($sig_class) || !is_subclass_of($sig_class, 'HTTP_OAuthProvider_Signature')) {
-            throw new HTTP_OAuthProvider_Exception('400 Signature method is not implemented', 400);
-        }
-
         // Check signature
-        $sig = new $sig_class($this);
+        $sig = HTTP_OAuthProvider_Signature::factory($this);
         $sig->checkSignature();
 
         return true;
@@ -364,9 +351,12 @@ class HTTP_OAuthProvider
      * 
      * @throws HTTP_OAuthProvider_Exception If failing in the verification.
      */
-    public static function verify($consumer_key, $consumer_secret)
+    public static function verify(HTTP_OAuthProvider_Consumer $consumer)
     {
         $o = new HTTP_OAuthProvider();
+
+        // consumer
+        $o->consumer = $consumer;
 
         // store
         $row = array(
@@ -376,16 +366,8 @@ class HTTP_OAuthProvider
         $store = HTTP_OAuthProvider_Store::factory('Static', $row);
         $o->setStore($store);
 
-        // consumer
-        $row = array(
-            'key' => $consumer_key,
-            'secret' => $consumer_secret
-        );
-        $o->consumer = new HTTP_OAuthProvider_Consumer($row);
-
         // signature
-        include_once 'HTTP/OAuthProvider/Signature/HMAC_SHA1.php';
-        $sig = new HTTP_OAuthProvider_Signature_HMAC_SHA1($o);
+        $sig = HTTP_OAuthProvider_Signature::factory($o);
         return $sig->checkSignature();
     }
 
