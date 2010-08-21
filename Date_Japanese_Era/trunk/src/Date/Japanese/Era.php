@@ -76,7 +76,7 @@ class Date_Japanese_Era
     /**
      * Version
      */
-    const VERSION = '0.1.0';
+    const VERSION = '0.1.1';
 
     /**
      * Era name
@@ -234,6 +234,6 @@ class Date_Japanese_Era
     private function _ascii2ja($ascii)
     {
         $era = Date_Japanese_Era_Table::eraJa2Ascii();
-        return $era[$ascii][0];
+        return isset($era[$ascii][0]) ? $era[$ascii][0] : null;
     }
 }
