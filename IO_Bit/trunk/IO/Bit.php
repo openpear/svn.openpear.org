@@ -65,6 +65,18 @@ class IO_Bit {
         $this->_byte_offset += 1;
         return $value;
     }
+    function getUI16BE() {
+        $this->byteAlign();
+        $ret = unpack('n', substr($this->_data, $this->_byte_offset, 2));
+        $this->_byte_offset += 2;
+        return $ret[1];
+    }
+    function getUI32BE() {
+        $this->byteAlign();
+        $ret = unpack('N', substr($this->_data, $this->_byte_offset, 4));
+        $this->_byte_offset += 4;
+        return $ret[1];
+    }
     function getUI16LE() {
         $this->byteAlign();
         $ret = unpack('v', substr($this->_data, $this->_byte_offset, 2));
@@ -118,6 +130,18 @@ class IO_Bit {
         $this->byteAlign();
         $this->_data .= chr($value);
         $this->_byte_offset += 1;
+        return true;
+    }
+    function putUI16BE($value) {
+        $this->byteAlign();
+        $this->_data .= pack('n', $value);
+        $this->_byte_offset += 2;
+        return true;
+    }
+    function putUI32BE($value) {
+        $this->byteAlign();
+        $this->_data .= pack('N', $value);
+        $this->_byte_offset += 4;
         return true;
     }
     function putUI16LE($value) {
