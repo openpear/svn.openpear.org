@@ -20,7 +20,7 @@ class IO_Bit {
         $this->_byte_offset = 0;
         $this->_bit_offset = 0;
     }
-    function output() {
+    function output($offset = 0) {
         $output_len = $this->_byte_offset;
         if ($this->_bit_offset > 0) {
             $output_len++;
@@ -28,7 +28,7 @@ class IO_Bit {
         if (strlen($this->_data) == $output_len) {
             return $this->_data;
         }
-        return substr($this->_data, 0, $output_len);
+        return substr($this->_data, $offset, $output_len);
     }
 
     /*
