@@ -1,3 +1,7 @@
+2010-08-29 Heavens hell <sohyanagi@gmail.com>
+	* Change version number.
+	* Use spl_autoload_register and load() insted of __autload function.
+
 2010-08-08 Heavens hell <sohyanagi@gmail.com>
 	* Change version number.
 	* Add setControllerDirectoryName() enable to set controller directory name.

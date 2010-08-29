@@ -100,7 +100,7 @@ class Net_URL_Dispatcher
     /**
      * Params
      *
-     * @var mixed
+     * @var    mixed
      * @access private
      */
     private $_params = null;
@@ -114,9 +114,9 @@ class Net_URL_Dispatcher
     private $_controllerDirectryName = null;
 
     /**
-     * action directory name
+     * Action directory name
      *
-     * @var mixed
+     * @var    mixed
      * @access private
      */
     private $_actionDirectoryName = null;
@@ -130,6 +130,7 @@ class Net_URL_Dispatcher
      */
     public function __construct($id = '__default__')
     {
+        spl_autoload_register(array('Net_URL_Dispatcher', 'load'));
         $this->_mapperId = $id;
         $this->_setRouter();
         $this->setErrorReporting();
@@ -322,7 +323,7 @@ class Net_URL_Dispatcher
      *
      * @param  mixed $path
      * @access protected
-     * @return arraty or null Result of matching
+     * @return mixed Result of matching
      */
     protected function _match($path)
     {
@@ -332,7 +333,7 @@ class Net_URL_Dispatcher
     /**
      * Set directory
      *
-     * @param mixed $path
+     * @param  mixed $path
      * @access public
      * @return Net_URL_Dispatcher Fluent interface
      */
@@ -647,20 +648,20 @@ class Net_URL_Dispatcher
             throw new Net_URL_Dispatcher_Exception('Illegal chatacter in filename');
         }
     }
-}
 
-/**
- * Autoload class
- *
- * @param  mixed $className Class name
- * @access public
- * @return void
- */
-function __autoload($className)
-{
-    if (!class_exists($className, false)) {
-        $path = str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-        Net_URL_Dispatcher::securityCheck($path);
-        require_once $path;
+    /**
+     * Autoload class
+     *
+     * @param  mixed $className Class name
+     * @access public
+     * @return void
+     */
+    public static function load($className)
+    {
+        if (!class_exists($className, false)) {
+            $path = str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+            self::securityCheck($path);
+            require_once $path;
+        }
     }
 }
