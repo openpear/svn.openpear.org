@@ -92,7 +92,7 @@ class HTTP_OAuthProvider_Request
     public function getHeader($key=null)
     {
         if (isset($key)) {
-            $key = strtoupper($key);
+            $key = str_replace('-', '_', strtoupper($key));
             if (isset($this->header[$key])) {
                 return $this->header[$key];
             }
@@ -206,7 +206,7 @@ class HTTP_OAuthProvider_Request
      */
     public function checkBodyHash()
     {
-        if ($this->getHeader('CONTENT-TYPE')!='application/x-www-form-urlencoded') {
+        if ($this->getHeader('CONTENT_TYPE')!='application/x-www-form-urlencoded') {
             if (0<strlen($this->getBody())) {
                 if (is_null($this->getParameter('oauth_body_hash'))) {
                     $message = '400 OAuth parameter(s) does not exist: oauth_body_hash';
@@ -258,35 +258,69 @@ class HTTP_OAuthProvider_Request
     protected function initialize()
     {
         // Header
-        $this->header = array_change_key_case(apache_request_headers(), CASE_UPPER);
+        $this->header = $this->parseRequestHeaders();
 
         // HTTP Method
         $this->method = $_SERVER['REQUEST_METHOD'];
-        if (isset($this->header['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
-            $this->method = $this->header['HTTP_X_HTTP_METHOD_OVERRIDE'];
+        if (isset($this->header['X_HTTP_METHOD_OVERRIDE'])) {
+            $this->method = $this->header['X_HTTP_METHOD_OVERRIDE'];
         }
 
         // Parameters
-        $this->parseRequestParameters();
+        $this->parseOAuthParameters();
 
         // Body
         $this->body = file_get_contents('php://input');
     }
 
     /**
-     * parseRequestParameters
+     * parseRequestHeaders
      * 
-     * Parse request parameters.
+     * Parse request headers.
+     * 
+     * @return array
+     */
+    protected function parseRequestHeaders()
+    {
+        $header = array();
+        if (function_exists('apache_request_headers')) {
+            // for apache
+            $header_tmp = apache_request_headers();
+            foreach ($header_tmp as $key=>$value) {
+                $key = str_replace('-', '_', strtoupper($key));
+                if (strpos($key, 'HTTP_')===0) {
+                    $key = substr($key, 5);
+                }
+                $header[$key] = $value;
+            }
+        } else {
+            // for lighttpd
+            foreach ($_SERVER as $key=>$value) {
+                $key = str_replace('-', '_', $key);
+                if (strpos($key, 'HTTP_')===0) {
+                    $header[substr($key, 5)] = $value;
+                } else if ($key=='CONTENT_TYPE') {
+                    $header[$key] = $value;
+                }
+            }
+        }
+        return $header;
+    }
+
+    /**
+     * parseOAuthParameters
+     * 
+     * Parse request OAuth parameters.
      * 
      * @return void
      */
-    protected function parseRequestParameters()
+    protected function parseOAuthParameters()
     {
         // GET
         $params = $_GET;
 
         // POST
-        if ($this->getHeader('CONTENT-TYPE')=='application/x-www-form-urlencoded') {
+        if ($this->getHeader('CONTENT_TYPE')=='application/x-www-form-urlencoded') {
             $params = array_merge($params, $_POST);
         }
 
