@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.7
+ * @version   1.0.8
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 require_once 'Cache/Lite.php';
@@ -23,7 +23,7 @@ require_once 'Cache/Lite.php';
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.7
+ * @version  1.0.8
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
