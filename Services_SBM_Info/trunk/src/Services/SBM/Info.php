@@ -194,22 +194,21 @@ class Services_SBM_Info
      */
     public function toArray($getComments = false)
     {
-        $array = array();
+        $keys = array('count', 'unit', 'rank', 'entry_url', 'add_url');
+        $temp = array();
         foreach ($this->_services as $serviceName) {
             $serviceName = $this->camelize($serviceName);
             $Service = $this->factory($serviceName);
-            $array[$serviceName] = array(
-                'count'     => $Service->getCount(),
-                'unit'      => $Service->getUnit(),
-                'rank'      => $Service->getRank(),
-                'entry_url' => $Service->getEntryUrl(),
-                'add_url'   => $Service->getAddUrl()
-            );
+            $temp[$serviceName] = array();
+            foreach ($keys as $key) {
+                $method = 'get' . $this->camelize($key, '_');
+                $temp[$serviceName][$key] = $Service->$method();
+            }
             if ($getComments) {
-                $array[$serviceName]['comments'] = $Service->getComments();
+                $temp[$serviceName]['comments'] = $Service->getComments();
             }
         }
-        return $array;
+        return $temp;
     }
 
     /**
@@ -227,11 +226,12 @@ class Services_SBM_Info
      * String to Camel case
      *
      * @param  string $str
+     * @param  string $separator
      * @return string
      */
-    public function camelize($str)
+    public function camelize($str, $separator = ' ')
     {
-        return join('', array_map(array($this, '_camelize'), split(' ', $str)));
+        return join('', array_map(array($this, '_camelize'), split($separator, $str)));
     }
 
     /**
