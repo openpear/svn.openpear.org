@@ -43,9 +43,9 @@ $SBMInfo->setUrl('http://example.com/')
 /**
  * 有効サービスをセット
  */
-$SBMInfo->setServices(array('hatena', 'delicious', 'livedoor'));
+$SBMInfo->setServices(array('hatena', 'delicious', 'livedoor', 'buzzurl'));
 // or
-$SBMInfo->setServices('hatena,delicious,livedoor');
+$SBMInfo->setServices('hatena,delicious,livedoor,buzzurl');
 
 /**
  * URLまたは有効サービスをセットした場合はexecuteを呼ぶ
@@ -53,8 +53,8 @@ $SBMInfo->setServices('hatena,delicious,livedoor');
 $SBMInfo->execute();
 
 /**
- * 有効サービスにLivedoorを追加したので、
- * 全SBM情報にLivedoor clipの情報が追加される
+ * 有効サービスにLivedoorとBuzzurlを追加したので、
+ * 全SBM情報にLivedoor clipとBuzzurlの情報が追加される
  */
 //print_r($SBMInfo->toArray());
 

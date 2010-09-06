@@ -1,6 +1,6 @@
 <?php
 /**
- * Service class for Livedoor
+ * SBM Service class for Livedoor
  *
  * PHP version 5.2
  *
@@ -47,7 +47,7 @@
 require_once 'Services/SBM/Info/Abstract.php';
 
 /**
- * Service class for Livedoor
+ * SBM Service class for Livedoor
  *
  * @category   Services
  * @package    Services_SBM_Info

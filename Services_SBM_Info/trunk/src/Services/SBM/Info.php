@@ -83,7 +83,7 @@ class Services_SBM_Info
     protected $_services;
 
     /**
-     * Object pool for Service
+     * Object pool for SBM Service
      * @var array
      */
     protected $_objects;
@@ -93,7 +93,7 @@ class Services_SBM_Info
      *
      * @param string $url Target URL
      * @param string $title Page title
-     * @param string|array $services "," split Service name | Service name array
+     * @param string|array $services "," split SBM Service name | SBM Service name array
      */
     public function __construct($url = null, $title = null, $services = 'hatena,delicious')
     {
@@ -115,9 +115,9 @@ class Services_SBM_Info
     }
 
     /**
-     * Object factory for Service
+     * Object factory for SBM Service
      *
-     * @param  string $serviceName Service name
+     * @param  string $serviceName SBM Service name
      * @return object
      */
     public function factory($serviceName)
@@ -159,7 +159,7 @@ class Services_SBM_Info
     /**
      * Set services
      *
-     * @param  string|array $services "," split Service name | Service name array
+     * @param  string|array $services "," split SBM Service name | SBM Service name array
      * @return object $this Services_SBM_Info object
      */
     public function setServices($services)
@@ -230,6 +230,17 @@ class Services_SBM_Info
      * @return string
      */
     public function camelize($str)
+    {
+        return join('', array_map(array($this, '_camelize'), split(' ', $str)));
+    }
+
+    /**
+     * array_map callback for camelize
+     *
+     * @param  string $str
+     * @return string
+     */
+    protected function _camelize($str)
     {
         return ucfirst(strtolower($str));
     }

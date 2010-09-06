@@ -1,6 +1,6 @@
 <?php
 /**
- * Service class for Delicious
+ * SBM Service class for Delicious
  *
  * PHP version 5.2
  *
@@ -47,7 +47,7 @@
 require_once 'Services/SBM/Info/Abstract.php';
 
 /**
- * Service class for Delicious
+ * SBM Service class for Delicious
  *
  * @category   Services
  * @package    Services_SBM_Info

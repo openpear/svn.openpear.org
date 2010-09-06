@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract class for Service class
+ * Abstract class for SBM Service class
  *
  * PHP version 5.2
  *
@@ -47,7 +47,7 @@
 require_once 'Services/SBM/Info/Exception.php';
 
 /**
- * Abstract class for Service class
+ * Abstract class for SBM Service class
  *
  * @category   Services
  * @package    Services_SBM_Info
@@ -157,7 +157,7 @@ abstract class Services_SBM_Info_Abstract
     protected function fetch()
     {
         $className = get_class($this);
-        return file_get_contents(sprintf($className::API_URL, $this->_url));
+        return file_get_contents(sprintf(constant("$className::API_URL"), $this->_url));
     }
 
     /**
@@ -267,7 +267,7 @@ abstract class Services_SBM_Info_Abstract
     public function getEntryUrl()
     {
         $className = get_class($this);
-        return sprintf($className::ENTRY_URL, $this->_url);
+        return sprintf(constant("$className::ENTRY_URL"), $this->_url);
     }
 
     /**
@@ -278,6 +278,6 @@ abstract class Services_SBM_Info_Abstract
     public function getAddUrl()
     {
         $className = get_class($this);
-        return sprintf($className::ADD_URL, urlencode($this->_url), urlencode($this->_title));
+        return sprintf(constant("$className::ADD_URL"), urlencode($this->_url), urlencode($this->_title));
     }
 }

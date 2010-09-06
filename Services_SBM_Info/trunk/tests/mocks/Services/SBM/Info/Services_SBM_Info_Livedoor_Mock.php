@@ -26,11 +26,11 @@ class Services_SBM_Info_Livedoor_Mock extends Services_SBM_Info_Livedoor
 
     public function __set($name, $value)
     {
-         return $this->{$name} = $value;
+        return $this->{$name} = $value;
     }
 
     public function __get($name)
     {
-         return $this->{$name};
+        return $this->{$name};
     }
 }
