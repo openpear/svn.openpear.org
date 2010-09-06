@@ -79,8 +79,10 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
 
     public function testCamelize()
     {
-        $this->assertSame('Example', $this->object->camelize('example'));
-        $this->assertSame('Example', $this->object->camelize('EXAMPLE'));
-        $this->assertSame('Example', $this->object->camelize('examPLE'));
+        $this->assertSame('Example',  $this->object->camelize('example'));
+        $this->assertSame('Example',  $this->object->camelize('EXAMPLE'));
+        $this->assertSame('Example',  $this->object->camelize('examPLE'));
+        $this->assertSame('Example',  $this->object->camelize('    example    '));
+        $this->assertSame('HogeFuga', $this->object->camelize('hoge fuga'));
     }
 }
