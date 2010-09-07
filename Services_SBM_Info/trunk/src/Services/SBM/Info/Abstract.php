@@ -99,6 +99,18 @@ abstract class Services_SBM_Info_Abstract
     protected $_apiData;
 
     /**
+     * Fetch function
+     * @var sting|array
+     */
+    protected $_fetchFunction;
+
+    /**
+     * Convert object function
+     * @var string|array
+     */
+    protected $_toObjectFunction;
+
+    /**
      * Count
      * @var integer
      */
@@ -132,6 +144,8 @@ abstract class Services_SBM_Info_Abstract
     {
         $this->setUrl($url)
              ->setTitle($title);
+        $this->_fetchFunction = array($this, 'fetch');
+        $this->_toObjectFunction = array($this, 'toObject');
     }
 
     /**
@@ -142,7 +156,9 @@ abstract class Services_SBM_Info_Abstract
     public function execute()
     {
         if ($this->_executedUrl === $this->_url) return;
-        $this->_apiData = $this->toObject($this->fetch());
+        $url = constant(get_class($this) . '::API_URL');
+        $this->_apiData = call_user_func($this->_fetchFunction, sprintf($url, $this->_url));
+        $this->_apiData = call_user_func($this->_toObjectFunction, $this->_apiData);
         $this->_executedUrl = $this->_url;
         $this->_countExtracted = false;
         $this->_commentsExtracted = false;
@@ -151,24 +167,23 @@ abstract class Services_SBM_Info_Abstract
     /**
      * Fetch API data
      *
-     * @return string
+     * @return string $url API URL
      * @todo HTTP_Request2 or cURL
      */
-    protected function fetch()
+    protected function fetch($url)
     {
-        $className = get_class($this);
-        return file_get_contents(sprintf(constant("$className::API_URL"), $this->_url));
+        return file_get_contents($url);
     }
 
     /**
      * String to Object
      *
-     * @param  string $str
+     * @param  string $string
      * @return object
      */
-    protected function toObject($str)
+    protected function toObject($string)
     {
-        return json_decode($str);
+        return json_decode($string);
     }
 
     /**
@@ -208,6 +223,30 @@ abstract class Services_SBM_Info_Abstract
     public function setTitle($title)
     {
         $this->_title = $title;
+        return $this;
+    }
+
+    /**
+     * Set fetch callback
+     *
+     * @param  string|array $func User function
+     * @return $this Services_SBM_Info_{ServiceName} object
+     */
+    public function setFetchFunction($func)
+    {
+        $this->_fetchFunction = $func;
+        return $this;
+    }
+
+    /**
+     * Set convert object callback
+     *
+     * @param  string|array $func User function
+     * @return $this Services_SBM_Info_{ServiceName} object
+     */
+    public function setToObjectFunction($func)
+    {
+        $this->_toObjectFunction = $func;
         return $this;
     }
 
