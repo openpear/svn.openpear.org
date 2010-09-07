@@ -4,7 +4,7 @@ require_once 'Services/SBM/Info/Abstract.php';
 
 class Services_SBM_Info_Abstract_Mock extends Services_SBM_Info_Abstract
 {
-    public function fetch()
+    public function fetch($url)
     {
         return null;
     }

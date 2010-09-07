@@ -64,6 +64,20 @@ class Services_SBM_Info_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertSame($title, $this->object->_title);
     }
 
+    public function testSetFetchFunction()
+    {
+        $callback = create_function('$url', 'return $url;');
+        $this->object->setFetchFunction($callback);
+        $this->assertSame($callback, $this->object->_fetchFunction);
+    }
+
+    public function testSetToObjectFunction()
+    {
+        $callback = create_function('$data', 'return $data;');
+        $this->object->setToObjectFunction($callback);
+        $this->assertSame($callback, $this->object->_toObjectFunction);
+    }
+
     public function testGetCount()
     {
         // Before execute

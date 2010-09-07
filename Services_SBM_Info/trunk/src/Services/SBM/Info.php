@@ -62,7 +62,7 @@ class Services_SBM_Info
     /**
      * Services_SBM_Info version
      */
-    const VERSION = '0.1.1';
+    const VERSION = '0.2.0';
 
     /**
      * Target URL
@@ -111,7 +111,7 @@ class Services_SBM_Info
      */
     public function __call($method, $args)
     {
-        if (!empty($args)) {
+        if (!empty($args) && !empty($args[0])) {
             return call_user_func_array(array($this, 'factory'), $args)->{$method}();
         }
         $ret = array();
@@ -177,6 +177,34 @@ class Services_SBM_Info
             $services = split(',', $services);
         }
         $this->_services = $services;
+        return $this;
+    }
+
+    /**
+     * Set fetch callback
+     *
+     * @param  string|array $callback Callback
+     * @return object $this Services_SBM_Info object
+     */
+    public function setFetchCallback($callback)
+    {
+        foreach ($this->_services as $serviceName) {
+            $this->factory($serviceName)->setFetchCallback($callback);
+        }
+        return $this;
+    }
+
+    /**
+     * Set convert object callback
+     *
+     * @param  string|array $callback Callback
+     * @return object $this Services_SBM_Info object
+     */
+    public function setToObjectCallback($callback)
+    {
+        foreach ($this->_services as $serviceName) {
+            $this->factory($serviceName)->setToObjectCallback($callback);
+        }
         return $this;
     }
 
