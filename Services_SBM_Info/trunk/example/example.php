@@ -12,22 +12,12 @@ $SBMInfo->execute();
 /**
  * 有効サービスの全SBM情報を配列で取得 (コメントを除く)
  */
-//print_r($SBMInfo->toArray());
-
-/**
- * 有効サービスの全SBM情報をJSON文字列で取得 (コメントを除く)
- */
-//echo $SBMInfo->toJson();
+//print_r($SBMInfo->getAll());
 
 /**
  * 有効サービスのコメントを含む全SBM情報を配列で取得
  */
-//print_r($SBMInfo->toArray(true));
-
-/**
- * 有効サービスのコメントを含む全SBM情報をJSON文字列で取得
- */
-//echo $SBMInfo->toJson(true);
+//print_r($SBMInfo->getAll(true));
 
 /**
  * コンストラクタの引数は省略可能
@@ -56,7 +46,7 @@ $SBMInfo->execute();
  * 有効サービスにLivedoorとBuzzurlを追加したので、
  * 全SBM情報にLivedoor clipとBuzzurlの情報が追加される
  */
-//print_r($SBMInfo->toArray());
+//print_r($SBMInfo->getAll());
 
 /**
  * SBM情報を個別に取得する
