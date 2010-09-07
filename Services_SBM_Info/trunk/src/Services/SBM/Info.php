@@ -62,7 +62,7 @@ class Services_SBM_Info
     /**
      * Services_SBM_Info version
      */
-    const VERSION = '0.1';
+    const VERSION = '0.1.1';
 
     /**
      * Target URL
@@ -103,15 +103,24 @@ class Services_SBM_Info
     }
 
     /**
-     * Call Service class method
+     * Call SBM Service class method
      *
      * @param  string $method method
      * @param  mixed  $args arguments
      * @return mixed
      */
-    public function __call($method, $args = null)
+    public function __call($method, $args)
     {
-        return call_user_func_array(array($this, 'factory'), $args)->{$method}();
+        if (!empty($args)) {
+            return call_user_func_array(array($this, 'factory'), $args)->{$method}();
+        }
+        $ret = array();
+        foreach ($this->_services as $serviceName) {
+            $serviceName = $this->camelize($serviceName);
+            $Service = $this->factory($serviceName);
+            $ret[$serviceName] = $Service->$method();
+        }
+        return $ret;
     }
 
     /**
@@ -192,34 +201,23 @@ class Services_SBM_Info
      * @param  boolean $getComments Comments also get
      * @return array All SBM info
      */
-    public function toArray($getComments = false)
+    public function getAll($getComments = false)
     {
         $keys = array('count', 'unit', 'rank', 'entry_url', 'add_url');
-        $temp = array();
+        $ret = array();
         foreach ($this->_services as $serviceName) {
             $serviceName = $this->camelize($serviceName);
             $Service = $this->factory($serviceName);
-            $temp[$serviceName] = array();
+            $ret[$serviceName] = array();
             foreach ($keys as $key) {
                 $method = 'get' . $this->camelize($key, '_');
-                $temp[$serviceName][$key] = $Service->$method();
+                $ret[$serviceName][$key] = $Service->$method();
             }
             if ($getComments) {
-                $temp[$serviceName]['comments'] = $Service->getComments();
+                $ret[$serviceName]['comments'] = $Service->getComments();
             }
         }
-        return $temp;
-    }
-
-    /**
-     * All SBM info to JSON
-     *
-     * @param  boolean $getComments Comments also get
-     * @return string All SBM info (JSON)
-     */
-    public function toJson($getComments = false)
-    {
-        return json_encode($this->toArray($getComments));
+        return $ret;
     }
 
     /**

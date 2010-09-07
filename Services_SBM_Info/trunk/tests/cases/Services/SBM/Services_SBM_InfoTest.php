@@ -19,6 +19,18 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
         $this->assertType('array',  $this->object->getComments('hatena'));
         $this->assertType('string', $this->object->getEntryUrl('hatena'));
         $this->assertType('string', $this->object->getAddUrl('hatena'));
+
+        $services = array('Hatena', 'Delicious', 'Livedoor', 'Buzzurl');
+        $this->object->setServices($services);
+
+        foreach (array('Count', 'Unit', 'Rank', 'EntryUrl', 'AddUrl') as $key) {
+            $method = 'get' . $key;
+            $info = $this->object->$method();
+            foreach ($services as $serviceName) {
+                $this->assertArrayHasKey($serviceName, $info);
+                $this->assertSame($this->object->$method($serviceName), $info[$serviceName]);
+            }
+        }
     }
 
     public function testFactory()
@@ -49,9 +61,9 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
         $this->assertSame(split(',', $services), $this->object->_services);
     }
 
-    public function testToArray()
+    public function testGetAll()
     {
-        $array = $this->object->toArray();
+        $array = $this->object->getAll();
         foreach ($array as $serviceName => $data) {
             $this->assertArrayHasKey('count',     $data);
             $this->assertArrayHasKey('unit',      $data);
@@ -60,7 +72,8 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('add_url',   $data);
             $this->assertArrayNotHasKey('comments', $data);
         }
-        $array = $this->object->toArray(true);
+
+        $array = $this->object->getAll(true);
         foreach ($array as $serviceName => $data) {
             $this->assertArrayHasKey('count',     $data);
             $this->assertArrayHasKey('unit',      $data);
@@ -71,12 +84,6 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testToJson()
-    {
-        $this->assertSame(json_encode($this->object->toArray()),     $this->object->toJson());
-        $this->assertSame(json_encode($this->object->toArray(true)), $this->object->toJson(true));
-    }
-
     public function testCamelize()
     {
         $this->assertSame('Example',  $this->object->camelize('example'));
@@ -84,5 +91,6 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
         $this->assertSame('Example',  $this->object->camelize('examPLE'));
         $this->assertSame('Example',  $this->object->camelize('    example    '));
         $this->assertSame('HogeFuga', $this->object->camelize('hoge fuga'));
+        $this->assertSame('HogeFuga', $this->object->camelize('hoge_fuga', '_'));
     }
 }
