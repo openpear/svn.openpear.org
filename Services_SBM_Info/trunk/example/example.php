@@ -10,12 +10,12 @@ $SBMInfo = new Services_SBM_Info('http://example.net/', 'Example Web Page');
 $SBMInfo->execute();
 
 /**
- * 有効サービスの全SBM情報を配列で取得 (コメントを除く)
+ * 対象サービスの全SBM情報を配列で取得 (コメントを除く)
  */
 //print_r($SBMInfo->getAll());
 
 /**
- * 有効サービスのコメントを含む全SBM情報を配列で取得
+ * 対象サービスのコメントを含む全SBM情報を配列で取得
  */
 //print_r($SBMInfo->getAll(true));
 
@@ -31,20 +31,20 @@ $SBMInfo->setUrl('http://example.com/')
         ->setTitle('Example Web Page');
 
 /**
- * 有効サービスをセット
+ * 対象サービスをセット
  */
-$SBMInfo->setServices(array('hatena', 'delicious', 'livedoor', 'buzzurl'));
+$SBMInfo->setServices(array('hatena', 'delicious', 'livedoor', 'buzzurl', 'twitter'));
 // or
-$SBMInfo->setServices('hatena,delicious,livedoor,buzzurl');
+$SBMInfo->setServices('hatena,delicious,livedoor,buzzurl,twitter');
 
 /**
- * URLまたは有効サービスをセットした場合はexecuteを呼ぶ
+ * URLまたは対象サービスをセットした場合はexecuteを呼ぶ
  */
 $SBMInfo->execute();
 
 /**
- * 有効サービスにLivedoorとBuzzurlを追加したので、
- * 全SBM情報にLivedoor clipとBuzzurlの情報が追加される
+ * 対象サービスにLivedoor・Buzzurl・Twitterを追加したので、
+ * 全SBM情報にLivedoor clip・Buzzurl・Twitterの情報が追加される
  */
 //print_r($SBMInfo->getAll());
 
