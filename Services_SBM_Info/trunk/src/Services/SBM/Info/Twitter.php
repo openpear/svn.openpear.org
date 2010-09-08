@@ -1,6 +1,6 @@
 <?php
 /**
- * SBM Service class for Hatena
+ * SBM Service class for Twitter
  *
  * PHP version 5.2
  *
@@ -47,7 +47,7 @@
 require_once 'Services/SBM/Info/Abstract.php';
 
 /**
- * SBM Service class for Hatena
+ * SBM Service class for Twitter
  *
  * @category   Services
  * @package    Services_SBM_Info
@@ -57,22 +57,22 @@ require_once 'Services/SBM/Info/Abstract.php';
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://openpear.org/package/Services_SBM_Info
  */
-class Services_SBM_Info_Hatena extends Services_SBM_Info_Abstract
+class Services_SBM_Info_Twitter extends Services_SBM_Info_Abstract
 {
     /**
      * API URL
      */
-    const API_URL = 'http://b.hatena.ne.jp/entry/jsonlite/?url=%s';
+    const API_URL = 'http://otter.topsy.com/trackbacks.json?url=%s';
 
     /**
      * Entry URL
      */
-    const ENTRY_URL = 'http://b.hatena.ne.jp/entry/%s';
+    const ENTRY_URL = 'http://topsy.com/trackback?url=%s';
 
     /**
      * Add URL
      */
-    const ADD_URL = 'http://b.hatena.ne.jp/add?url=%s&amp;title=%s';
+    const ADD_URL = 'http://twitter.com/?status=%s %s';
 
     /**
      * Extract count from the API data
@@ -82,8 +82,8 @@ class Services_SBM_Info_Hatena extends Services_SBM_Info_Abstract
      */
     protected function extractCount($data)
     {
-        if (isset($data->count)) {
-            return (int)$data->count;
+        if (isset($data->response->total)) {
+            return (int)$data->response->total;
         }
         return $this->_count;
     }
@@ -97,29 +97,48 @@ class Services_SBM_Info_Hatena extends Services_SBM_Info_Abstract
     protected function extractComments($data)
     {
         $comments = array();
-        if (empty($data->bookmarks)) {
+        if (empty($data->response->list)) {
             return $comments;
         }
-        foreach ($data->bookmarks as $b) {
+        foreach ($data->response->list as $c) {
             $comments[] = array(
-                'user'    => (string) $b->user,
-                'tags'    => (array)  $b->tags,
-                'comment' => (string) $b->comment,
-                'time'    => strtotime($b->timestamp)
+                'user'    => (string) $c->author->nick,
+                'tags'    => array(),
+                'comment' => (string) $c->content,
+                'time'    => (int)    $c->date,
+                'url'     => (string) $c->permalink_url
             );
         }
         return $comments;
     }
 
     /**
-     * Get entry URL
+     * Get unit
      *
      * @return string
      */
-    public function getEntryUrl()
+    public function getUnit()
     {
-        $ssl = strpos($this->_url, 'https://') === 0 ? 's/' : '';
-        return sprintf(self::ENTRY_URL,
-            $ssl . preg_replace('/^https?:\/\//', '', $this->_url));
+        return $this->_count > 1 ? 'tweets' : 'tweet';
+    }
+
+    /**
+     * Get rank
+     *
+     * @return integer
+     */
+    public function getRank()
+    {
+        return 1;
+    }
+
+    /**
+     * Get add page URL
+     *
+     * @return string
+     */
+    public function getAddUrl()
+    {
+        return sprintf(self::ADD_URL, $this->_title, $this->_url);
     }
 }
