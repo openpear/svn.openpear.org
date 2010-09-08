@@ -42,6 +42,7 @@
  * @copyright  2010 Hiroshi Hoaki
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://openpear.org/package/Services_SBM_Info
+ * @since      Version 0.2.1
  */
 
 require_once 'Services/SBM/Info/Abstract.php';
@@ -56,6 +57,7 @@ require_once 'Services/SBM/Info/Abstract.php';
  * @copyright  2010 Hiroshi Hoaki
  * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://openpear.org/package/Services_SBM_Info
+ * @since      Version 0.2.1
  */
 class Services_SBM_Info_Twitter extends Services_SBM_Info_Abstract
 {
