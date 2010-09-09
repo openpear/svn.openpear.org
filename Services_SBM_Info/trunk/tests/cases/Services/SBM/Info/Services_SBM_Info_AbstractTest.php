@@ -78,6 +78,15 @@ class Services_SBM_Info_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertSame($callback, $this->object->_toObjectFunction);
     }
 
+    public function testSetProxy()
+    {
+        $host = 'localhost';
+        $port = 80;
+        $this->object->setProxy($host, $port);
+        $this->assertSame($host, $this->object->_proxyHost);
+        $this->assertSame($port, $this->object->_proxyPort);
+    }
+
     public function testGetCount()
     {
         // Before execute

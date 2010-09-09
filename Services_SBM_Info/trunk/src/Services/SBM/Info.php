@@ -62,7 +62,7 @@ class Services_SBM_Info
     /**
      * Services_SBM_Info version
      */
-    const VERSION = '0.2.1';
+    const VERSION = '0.2.2';
 
     /**
      * Target URL
@@ -204,6 +204,21 @@ class Services_SBM_Info
     {
         foreach ($this->_services as $serviceName) {
             $this->factory($serviceName)->setToObjectCallback($callback);
+        }
+        return $this;
+    }
+
+    /**
+     * Set proxy
+     *
+     * @param string  $host Host | IP
+     * @param integer $port Port
+     * @return $this Services_SBM_Info object
+     */
+    public function setProxy($host, $port)
+    {
+        foreach ($this->_services as $serviceName) {
+            $this->factory($serviceName)->setProxy($host, $port);
         }
         return $this;
     }

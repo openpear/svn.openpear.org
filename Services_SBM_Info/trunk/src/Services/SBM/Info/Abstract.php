@@ -135,6 +135,18 @@ abstract class Services_SBM_Info_Abstract
     protected $_commentsExtracted = false;
 
     /**
+     * Proxy host
+     * @var string
+     */
+    protected $_proxyHost;
+
+    /**
+     * Proxy port
+     * @var integer
+     */
+    protected $_proxyPort;
+
+    /**
      * Constructor
      *
      * @param  string $url Target URL
@@ -172,6 +184,14 @@ abstract class Services_SBM_Info_Abstract
      */
     protected function fetch($url)
     {
+        if ($this->_proxyHost && $this->_proxyPort) {
+            file_get_contents($url, false, stream_context_create(array(
+                'http' => array(
+                    'proxy' => "tcp://$this->_proxyHost:$this->_proxyPort",
+                    'request_fulluri' => true,
+                )
+            )));
+        }
         return file_get_contents($url);
     }
 
@@ -247,6 +267,20 @@ abstract class Services_SBM_Info_Abstract
     public function setToObjectFunction($func)
     {
         $this->_toObjectFunction = $func;
+        return $this;
+    }
+
+    /**
+     * Set proxy
+     *
+     * @param string  $host Host | IP
+     * @param integer $port Port
+     * @return $this Services_SBM_Info_{ServiceName} object
+     */
+    public function setProxy($host, $port)
+    {
+        $this->_proxyHost = $host;
+        $this->_proxyPort = $port;
         return $this;
     }
 

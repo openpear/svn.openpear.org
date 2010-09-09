@@ -62,7 +62,7 @@ class Services_SBM_Info_Delicious extends Services_SBM_Info_Abstract
     /**
      * API URL
      */
-    const API_URL = 'http://feeds.delicious.com/v2/json/url/blogbadge?url=%s';
+    const API_URL = 'http://feeds.delicious.com/v2/json/urlinfo/blogbadge?url=%s';
 
     /**
      * Entry URL
@@ -82,8 +82,8 @@ class Services_SBM_Info_Delicious extends Services_SBM_Info_Abstract
      */
     protected function extractCount($data)
     {
-        if (is_array($data)) {
-            return count($data);
+        if (!empty($data[0]->total_posts)) {
+            return $data[0]->total_posts;
         }
         return $this->_count;
     }
@@ -97,7 +97,7 @@ class Services_SBM_Info_Delicious extends Services_SBM_Info_Abstract
     protected function extractComments($data)
     {
         $comments = array();
-        if (empty($data)) {
+        if (true) {
             return $comments;
         }
         foreach ($data as $d) {
