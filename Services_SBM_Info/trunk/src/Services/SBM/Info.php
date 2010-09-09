@@ -251,6 +251,8 @@ class Services_SBM_Info
         foreach ($this->_services as $serviceName) {
             $serviceName = $this->camelize($serviceName);
             $Service = $this->factory($serviceName);
+            $Service->setUrl($this->_url)
+                    ->setTitle($this->_title);
             $ret[$serviceName] = array();
             foreach ($keys as $key) {
                 $method = 'get' . $this->camelize($key, '_');
