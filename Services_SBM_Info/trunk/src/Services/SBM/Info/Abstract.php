@@ -185,7 +185,7 @@ abstract class Services_SBM_Info_Abstract
     protected function fetch($url)
     {
         if ($this->_proxyHost && $this->_proxyPort) {
-            file_get_contents($url, false, stream_context_create(array(
+            return file_get_contents($url, false, stream_context_create(array(
                 'http' => array(
                     'proxy' => "tcp://$this->_proxyHost:$this->_proxyPort",
                     'request_fulluri' => true,
