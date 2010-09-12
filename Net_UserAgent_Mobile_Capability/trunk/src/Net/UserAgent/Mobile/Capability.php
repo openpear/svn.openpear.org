@@ -126,5 +126,5 @@ class Net_UserAgent_Mobile_Capability
    $cap->get('browser.css');            // CSS対応(true/false)
    $cap->get('browser.css.external');   // 外部CSS対応(true/false)
    $cap->get('device.flash');           // Flash対応(true/false)
-   $cap->get('device.gps);              // GPS対応(true/false)
+   $cap->get('device.gps');             // GPS対応(true/false)
  */
