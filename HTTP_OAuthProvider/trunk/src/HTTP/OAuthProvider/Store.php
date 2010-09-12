@@ -91,19 +91,28 @@ abstract class HTTP_OAuthProvider_Store
      * Load a token by store.
      * 
      * @param HTTP_OAuthProvider $provider A HTTP_OAuthProvider instance.
+     * @param String             $token    A token.
      * 
      * @return String
      * 
      * @throws HTTP_OAuthProvider_Exception If a token is not found.
      */
-    public function loadToken(HTTP_OAuthProvider $provider)
+    public function loadToken(HTTP_OAuthProvider $provider, $token=null)
     {
         $consumer = $provider->getConsumer();
         $request = $provider->getRequest();
-        $token = $request->getParameter('oauth_token');
+        if (is_null($token)) {
+            $token = $request->getParameter('oauth_token');
+        }
         $this->row = $this->get($token);
         if ($this->row) {
-            return $this->getType();
+            if ($this->getType()=='request') {
+                return $this->getType();
+            }
+            // check consumer
+            if ($this->getConsumerKey()==$provider->getConsumer()->getKey()) {
+                return $this->getType();
+            }
         }
         throw new HTTP_OAuthProvider_Exception('404 A token is not found', 404);
     }

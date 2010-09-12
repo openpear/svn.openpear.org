@@ -174,14 +174,16 @@ class HTTP_OAuthProvider
      * 
      * Checks if the request token exists.
      * 
+     * @param String $token A request token.
+     * 
      * @return Boolean
      */
-    public function existsRequestToken()
+    public function existsRequestToken($token=null)
     {
         $store = $this->getStore();
         try {
             // Load token
-            $type = $store->loadToken($this);
+            $type = $store->loadToken($this, $token);
 
             // Fetch consumer
             $this->consumer = $this->fetchConsumer($store->getConsumerKey());
@@ -203,17 +205,15 @@ class HTTP_OAuthProvider
      * 
      * @param String  $user_id User who authorizes access to protected resources.
      * @param Boolean $agree   Authorizes access to protected resources.
+     * @param String  $token   A request token.
      * 
      * @return String
      */
-    public function authorizeToken($user_id, $agree)
+    public function authorizeToken($user_id, $agree, $token=null)
     {
-        // Check parameter
-        $this->getRequest()->checkParameters(self::$PARAMS_3L_AUTHORIZE);
-
         // Load token
         $store = $this->getStore();
-        $type = $store->loadToken($this);
+        $type = $store->loadToken($this, $token);
         if ($type!='request') {
             $message = '404 Not found request token in store';
             throw new HTTP_OAuthProvider_Exception($message, 404);
