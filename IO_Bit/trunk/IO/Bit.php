@@ -80,7 +80,11 @@ class IO_Bit {
         $this->byteAlign();
         $ret = unpack('N', substr($this->_data, $this->_byte_offset, 4));
         $this->_byte_offset += 4;
-        return $ret[1];
+        $value = $ret[1];
+        if ($value < 0) { // php bugs
+            $value += 4294967296;
+        }
+        return $value;
     }
     function getUI16LE() {
         $this->byteAlign();
@@ -92,7 +96,11 @@ class IO_Bit {
         $this->byteAlign();
         $ret = unpack('V', substr($this->_data, $this->_byte_offset, 4));
         $this->_byte_offset += 4;
-        return $ret[1];
+        $value = $ret[1];
+        if ($value < 0) { // php bugs
+            $value += 4294967296;
+        }
+        return $value;
     }
     function getUIBit() {
         $value = ord($this->_data{$this->_byte_offset});
