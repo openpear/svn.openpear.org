@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.9
+ * @version   1.1.0
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 
@@ -22,7 +22,7 @@
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.9
+ * @version  1.1.0
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 abstract class HTTP_OAuthProvider_Signature
@@ -88,7 +88,6 @@ abstract class HTTP_OAuthProvider_Signature
         $path = preg_replace('/\?.*$/', '', $_SERVER['REQUEST_URI']);
         $url = sprintf('%s://%s%s', $schema, $_SERVER['HTTP_HOST'], $path);
         $params = $this->provider->getRequest()->getParameter();
-        ksort($params);
         $params_str = self::http_build_query_rfc3986($params);
 
         $base = array(
@@ -130,6 +129,7 @@ abstract class HTTP_OAuthProvider_Signature
      */
     public static function http_build_query_rfc3986($params)
     {
+        ksort($params);
         $tmp = array();
         foreach ($params as $key=>$value) {
             $key = self::urlencode_rfc3986($key);
