@@ -11,7 +11,7 @@
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
  * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version   1.0.9
+ * @version   1.1.0
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
 require_once 'Cache/Lite.php';
@@ -23,7 +23,7 @@ require_once 'Cache/Lite.php';
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
  * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version  1.0.9
+ * @version  1.1.0
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
 class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
@@ -58,6 +58,11 @@ class HTTP_OAuthProvider_Store_CacheLite extends HTTP_OAuthProvider_Store
                 $message = sprintf("Can's make directory: %s", $dir);
                 throw new HTTP_OAuthProvider_Store_Exception($message, 500);
             }
+        }
+        // check permission
+        if (!is_readable($dir) || !is_writable($dir)) {
+            $message = sprintf("Permission denied: %s", $dir);
+            throw new HTTP_OAuthProvider_Store_Exception($message, 500);
         }
         // make store instance
         $this->cache = new Cache_Lite($this->options);
