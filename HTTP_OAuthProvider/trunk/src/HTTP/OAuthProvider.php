@@ -337,7 +337,7 @@ class HTTP_OAuthProvider
     }
 
 
-    /* Social Application Provider */
+    /* Social Game Publisher */
 
     /**
      * verify
