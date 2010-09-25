@@ -65,7 +65,7 @@ class HTTP_OAuthProviderTest extends PHPUnit_Framework_TestCase
     /** 
      * testAuthenticate
      * 
-     * Check a authentication.
+     * Check an authentication.
      *
      * @return void
      *
