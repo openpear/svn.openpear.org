@@ -10,7 +10,7 @@
  * @package   OAuthProvider
  * @author    Tetsuya Yoshida <tetu@eth0.jp>
  * @copyright 2010 Tetsuya Yoshida
- * @license   http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @license   http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version   1.1.0
  * @link      http://openpear.org/package/HTTP_OAuthProvider
  */
@@ -31,7 +31,7 @@ require_once 'HTTP/OAuthProvider/Store/StaticTest.php';
  * @category HTTP
  * @package  OAuthProvider
  * @author   Tetsuya Yoshida <tetu@eth0.jp>
- * @license  http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version  1.1.0
  * @link     http://openpear.org/package/HTTP_OAuthProvider
  */
