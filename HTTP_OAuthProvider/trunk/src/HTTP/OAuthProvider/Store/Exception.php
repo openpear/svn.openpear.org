@@ -29,4 +29,3 @@ require_once 'HTTP/OAuthProvider/Exception.php';
 class HTTP_OAuthProvider_Store_Exception extends HTTP_OAuthProvider_Exception
 {
 }
-?>

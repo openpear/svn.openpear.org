@@ -342,10 +342,9 @@ class HTTP_OAuthProvider
     /**
      * verify
      * 
-     * Verify request from opensocial provider.
+     * Verify a request from opensocial provider.
      * 
-     * @param String $consumer_key    OpenSocial provider's consumer key.
-     * @param String $consumer_secret OpenSocial provider's consumer secret.
+     * @param HTTP_OAuthProvider_Consumer $consumer OpenSocial provider.
      * 
      * @return Boolean
      * 
