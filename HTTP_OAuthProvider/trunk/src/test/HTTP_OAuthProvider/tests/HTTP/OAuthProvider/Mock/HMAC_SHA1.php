@@ -32,9 +32,10 @@ class HTTP_OAuthProvider_Mock_HMAC_SHA1 extends HTTP_OAuthProvider
     /** 
      * __construct
      * 
-     * Generate the HTTP_OAuthProvider instance.
+     * Generate the HTTP_OAuthProvider_Mock_HMAC_SHA1 instance.
+     * This class emulates OAuth HMAC-SHA1 request.
      * 
-     * @return HTTP_OAuthProvider
+     * @return HTTP_OAuthProvider_Mock_HMAC_SHA1
      */
     public function __construct()
     {

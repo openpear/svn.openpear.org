@@ -45,7 +45,7 @@ class HTTP_OAuthProvider_SignatureTest extends PHPUnit_Framework_TestCase
     /** 
      * testUrlencode
      * 
-     * Check a url encoding.
+     * Check urlencode_rfc3986.
      *
      * @return void
      *
@@ -62,7 +62,7 @@ class HTTP_OAuthProvider_SignatureTest extends PHPUnit_Framework_TestCase
     /** 
      * testHttpBuildQuery
      * 
-     * Check a http build query.
+     * Check http_build_query_rfc3986.
      *
      * @return void
      *

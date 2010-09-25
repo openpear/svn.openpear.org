@@ -90,7 +90,7 @@ class HTTP_OAuthProvider_RequestTest extends PHPUnit_Framework_TestCase
     /** 
      * testGetSignature
      * 
-     * Check a OAuth signature.
+     * Check an OAuth signature.
      *
      * @return void
      *
@@ -119,7 +119,7 @@ class HTTP_OAuthProvider_RequestTest extends PHPUnit_Framework_TestCase
     /** 
      * testBodyHash
      * 
-     * Check a OAuth body hash.
+     * Check an OAuth body hash.
      *
      * @return void
      *
