@@ -522,13 +522,16 @@ class PHP_PowerToys {
 		    $f = str_replace($val, "", $f);
 		}
 
-		$cvt_from = array('<br />','<strong>','<\/strong>','<em>','</em>','<strike>','</strike>');
-		$cvt_to = array('<br>','<b>','</b>','<i>','</i>','<s>','</s>');
+
+		$cvt_from = array('<br />','<strong>','</strong>','<em>','</em>','<strike>','</strike>',
+		'！','”','＃','＄','％','＆','’','（','）','＝','－','＊','：','；','＋','？');
+		$cvt_to = array('<br>','<b>','</b>','<i>','</i>','<s>','</s>',
+		    '!','"','#','$','%','&','\'','(',')','=','-','*',':',';','+','?');
 		foreach($cvt_from as $key => $val){
 		    $f = str_replace($cvt_from[$key], $cvt_to[$key], $f);
 		}
 
-		$f = mb_convert_kana($f, 'as');
+		$f = mb_convert_kana($f, 'ask');
 		$per = (int) (strlen($f) / $before * 100);
 		if($option == 'debug'){
 			echo 'After:',strlen($f),'Bytes<br>Compressibility:',$per,'%';
@@ -678,6 +681,29 @@ class PHP_PowerToys {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Experiment
+     * 
+     * @param <type> $script
+     * @param <type> $user
+     * @return <type> 
+     */
+    function errorJa($script, $user=null){
+	$php = `php -v`;
+	if(!preg_match("/PHP Group/", $php)) return null;
+	$sudo_php = `sudo php -v`;
+	if(!preg_match("/PHP Group/", $sudo_php)) return null;
+	if(preg_match("/Parse error: syntax error, unexpected \$end in/", $php) ||
+	preg_match("/Parse error: syntax error, unexpected \$end in/", $sudo_php)){
+	    return 'パースエラー:文法エラー「{」が閉じられてません';
+	}
+	if(!preg_match("/PHP Group/", $sudo_php)) return null;
+	if(preg_match("/Parse error: syntax error, unexpected '}' in/", $php) ||
+	preg_match("/Parse error: syntax error, unexpected '}' in/", $sudo_php)){
+	    return 'パースエラー:文法エラー「{」が多く存在します';
+	}
     }
 }
 
