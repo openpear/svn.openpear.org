@@ -1,10 +1,55 @@
 <?php
+/**
+ * PHP_Obfuscator class
+ *
+ * PHP version 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt.  If you did not receive a copy
+ * the PHP License and are unable to obtain it through the web,
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category  PHP
+ * @package   PHP_Obfuscator
+ * @author    Hideyuki Shimooka <shimooka@doyouphp.jp>
+ * @copyright 2010 Hideyuki Shimooka
+ * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
+ * @version   CVS: $Id$
+ * @link      http://openpear.org/package/PHP_Obfuscator
+ * @see       References to other sections (if any)...
+ */
+
 require_once 'PHP/Obfuscator/Encoder/EncoderChain.php';
 require_once 'PHP/Obfuscator/Filter/FilterChain.php';
 require_once 'PHP/Obfuscator/Filter/ExpireRestrictionFilter.php';
 
+/**
+ * PHP_Obfuscator class
+ *
+ * @category  PHP
+ * @package   PHP_Obfuscator
+ * @author    Hideyuki Shimooka <shimooka@doyouphp.jp>
+ * @copyright 2010 Hideyuki Shimooka
+ * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
+ * @version   Release: @package_version@
+ * @link      http://openpear.org/package/PHP_Obfuscator
+ * @see       References to other sections (if any)...
+ */
 class PHP_Obfuscator
 {
+
+    /**
+     * execute obfuscation
+     *
+     * @param  string    $file_name assigned file name to obfuscate
+     * @param  array     $encoders  a list of encoders
+     * @param  array     $filters   a list of filters
+     * @param  boolean   $verbose   use verbose mode or not
+     * @return void
+     * @access public
+     * @throws Exception throw if errors occur
+     */
     public function execute($file_name, array $encoders, array $filters, $verbose = false) {
         $contents = null;
         if (is_null($file_name) || $file_name === '') {
@@ -52,9 +97,6 @@ class PHP_Obfuscator
         }
     }
 
-    /**
-     * @see PEAR/PackageFileManager2.php
-     */
     private function isIncludeable($file) {
         if (!defined('PATH_SEPARATOR')) {
             define('PATH_SEPARATOR', strtolower(substr(PHP_OS, 0, 3)) == 'win' ? ';' : ':');
