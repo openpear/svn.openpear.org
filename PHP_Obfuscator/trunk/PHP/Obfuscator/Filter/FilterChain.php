@@ -8,7 +8,10 @@ class PHP_Obfuscator_Filter_FilterChain
     private $next_length;
     public function __construct($code, PHP_Obfuscator_Encoder_EncoderChain $encoder_chain) {
         $this->encoder_chain = $encoder_chain;
-        $this->filters[] = new PHP_Obfuscator_Filter_ExecutionFilter($code);
+
+        $obj = new PHP_Obfuscator_Filter_ExecutionFilter();
+        $obj->setArgs(array($code));
+        $this->filters[] = $obj;
     }
     public function add(PHP_Obfuscator_Filter_Filter $filter) {
         if (!($filter instanceof PHP_Obfuscator_Filter_ExecutionFilter)) {
