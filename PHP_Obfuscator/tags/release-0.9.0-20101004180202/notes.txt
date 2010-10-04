@@ -1,0 +1,2 @@
+2010/07/02, PHP_Obfuscator 0.1.0
+-initial release
