@@ -20,7 +20,7 @@ class PHP_Obfuscator_CommandLineOptions
             'short_name'  => '-t',
             'long_name'   => '--filter',
             'action'      => 'StoreArray',
-            'description' => 'a list of filters. specify \'XXXX\' if use PHP_Obfuscator_Filter_XXXXFilter',
+            'description' => 'list of filters and parameters. specify \'XXXX:args\' if use PHP_Obfuscator_Filter_XXXXFilter',
         ));
 
         $parser->addOption('encoder', array(
@@ -31,8 +31,10 @@ class PHP_Obfuscator_CommandLineOptions
             'description' => 'encoder names. specify \'XXXX\' if use PHP_Obfuscator_Encoder_XXXXEncoder',
         ));
 
-        $parser->addArgument('file', array(
-            'description' => 'the script file name to obfuscate'
+        $parser->addOption('file', array(
+            'description' => 'the script file name to obfuscate. if not assigned, use stdin.',
+            'short_name'  => '-f',
+            'long_name'   => '--file',
         ));
 
         try {
@@ -45,7 +47,7 @@ class PHP_Obfuscator_CommandLineOptions
     }
 
     public function getFileName() {
-        return $this->filename['file'];
+        return isset($this->filename['file']) ? $this->filename['file'] : null;
     }
 
     public function isVerbose() {
@@ -53,7 +55,20 @@ class PHP_Obfuscator_CommandLineOptions
     }
 
     public function getFilters() {
-        return is_null($this->options['filter']) ? array() : $this->options['filter'];
+        $filters = array();
+        if (!is_null($this->options['filter'])) {
+            foreach ($this->options['filter'] as $filter) {
+                $param = explode(':', $filter);
+                if (count($param) === 0) {
+                    break;
+                }
+                $filter = array();
+                $filter['name'] = array_shift($param);
+                $filter['args'] = $param;
+                $filters[] = $filter;
+            }
+        }
+        return $filters;
     }
 
     public function getEncoders() {
