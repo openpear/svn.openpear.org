@@ -79,7 +79,6 @@ class PHP_Obfuscator_CommandLineOptions
         try {
             $result = $parser->parse();
             $this->options = $result->options;
-            $this->filename = $result->args;
         } catch (Exception $exc) {
             $parser->displayError($exc->getMessage());
         }
@@ -92,7 +91,7 @@ class PHP_Obfuscator_CommandLineOptions
      * @access public
      */
     public function getFileName() {
-        return isset($this->filename['file']) ? $this->filename['file'] : null;
+        return isset($this->options['file']) ? $this->options['file'] : null;
     }
 
     /**
