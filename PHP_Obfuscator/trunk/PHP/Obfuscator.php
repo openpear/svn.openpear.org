@@ -45,12 +45,13 @@ class PHP_Obfuscator
      * @param  string    $file_name assigned file name to obfuscate
      * @param  array     $encoders  a list of encoders
      * @param  array     $filters   a list of filters
-     * @param  boolean   $verbose   use verbose mode or not
+     * @param  boolean   $verbose   use verbose mode or not. default is false
+     * @param  string    $comment   comment string. default is null
      * @return void
      * @access public
      * @throws Exception throw if errors occur
      */
-    public function execute($file_name, array $encoders, array $filters, $verbose = false) {
+    public function execute($file_name, array $encoders, array $filters, $verbose = false, $comment = null) {
         $contents = null;
         if (is_null($file_name) || $file_name === '') {
             $fp = fopen('php://stdin', 'rb');
@@ -75,7 +76,7 @@ class PHP_Obfuscator
             $encoder_chain->add(new $class_name());
         }
 
-        $filter_chain = new PHP_Obfuscator_Filter_FilterChain('?>' . $contents, $encoder_chain);
+        $filter_chain = new PHP_Obfuscator_Filter_FilterChain('?>' . $contents, $encoder_chain, $comment);
         foreach ($filters as $filter) {
             $class_name = "PHP_Obfuscator_Filter_" . $filter['name'] . "Filter";
             $this->loadClass($class_name);

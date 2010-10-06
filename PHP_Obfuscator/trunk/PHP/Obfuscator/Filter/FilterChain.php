@@ -58,19 +58,29 @@ class PHP_Obfuscator_Filter_FilterChain
     private $next_length;
 
     /**
+     * the comment string
+     * @var    string
+     * @access private
+     */
+    private $comment;
+
+    /**
      * constructor
      *
      * @param  string $code                                              an initial code fragment
      * @param  object PHP_Obfuscator_Encoder_EncoderChain $encoder_chain PHP_Obfuscator_Encoder_EncoderChain object
+     * @param  string $comment                                           comment string. default is null
      * @return void
      * @access public
      */
-    public function __construct($code, PHP_Obfuscator_Encoder_EncoderChain $encoder_chain) {
+    public function __construct($code, PHP_Obfuscator_Encoder_EncoderChain $encoder_chain, $comment = null) {
         $this->encoder_chain = $encoder_chain;
 
         $obj = new PHP_Obfuscator_Filter_ExecutionFilter();
         $obj->setArgs(array($code));
         $this->filters[] = $obj;
+
+        $this->comment = $comment;
     }
 
     /**
@@ -96,12 +106,15 @@ class PHP_Obfuscator_Filter_FilterChain
     public function process() {
         $blocks = $this->buildBlocks();
         krsort($blocks);
-        return '<?php $__n = __FILE__; eval(base64_decode("' . str_replace('=', '', base64_encode($this->buildBootstrap($blocks))) . '")); return; ?>' . PHP_EOL . join($blocks, '');
+        if (!is_null($this->comment) && $this->comment !== '') {
+            $this->comment = "/* {$this->comment} */";
+        }
+        return '<?php ' . $this->comment . '$l1ll=count_chars("",4);$lll1=$l1ll[101].$l1ll[118].$l1ll[97].$l1ll[108];$ll1l=$l1ll[98].$l1ll[97].$l1ll[115].$l1ll[101].$l1ll[54].$l1ll[52].$l1ll[95].$l1ll[100].$l1ll[101].$l1ll[99].$l1ll[111].$l1ll[100].$l1ll[101];$l11l=__FILE__;eval($ll1l("' . str_replace('=', '', base64_encode($this->buildBootstrap($blocks))) . '"));return; ?>' . PHP_EOL . join($blocks, '');
     }
 
     private function buildBootstrap() {
         return sprintf(
-                   '$__f = fopen($__n, "rb"); fgets($__f); eval(%s);',
+                   '$__f=fopen($l11l,"rb");fgets($__f);eval(%s);',
                    $this->encoder_chain->decode(sprintf('fread($__f, %d)', $this->next_length)));
     }
 
