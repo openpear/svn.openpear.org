@@ -1,0 +1,9 @@
+2010/10/04, PHP_Obfuscator 1.0.1
+-fixed -f option
+
+2010/10/04, PHP_Obfuscator 1.0.0
+-support STDIN
+-support filter arguments
+
+2010/07/02, PHP_Obfuscator 0.1.0
+-initial release
