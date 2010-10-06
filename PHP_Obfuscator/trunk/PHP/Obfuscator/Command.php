@@ -54,6 +54,7 @@ class PHP_Obfuscator_Command
             $options->getFileName(),
             $options->getEncoders(),
             $options->getFilters(),
-            $options->isVerbose());
+            $options->isVerbose(),
+            $options->getComment());
     }
 }

@@ -70,6 +70,12 @@ class PHP_Obfuscator_CommandLineOptions
             'description' => 'encoder names. specify \'XXXX\' if use PHP_Obfuscator_Encoder_XXXXEncoder',
         ));
 
+        $parser->addOption('comment', array(
+            'short_name'  => '-c',
+            'long_name'   => '--comment',
+            'description' => 'comment string',
+        ));
+
         $parser->addOption('file', array(
             'description' => 'the script file name to obfuscate. if not assigned, use stdin.',
             'short_name'  => '-f',
@@ -136,4 +142,15 @@ class PHP_Obfuscator_CommandLineOptions
     public function getEncoders() {
         return is_null($this->options['encoder']) ? array() : $this->options['encoder'];
     }
+
+    /**
+     * Return a comment string
+     *
+     * @return string   Return a comment string
+     * @access public
+     */
+    public function getComment() {
+        return isset($this->options['comment']) ? $this->options['comment'] : null;
+    }
+
 }
