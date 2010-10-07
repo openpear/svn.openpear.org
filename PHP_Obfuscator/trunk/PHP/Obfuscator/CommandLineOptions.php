@@ -38,11 +38,11 @@ class PHP_Obfuscator_CommandLineOptions
     /**
      * constructor
      *
-     * @param  array    $argv an array of command-line options
+     * @param  array    $args an array of command-line options
      * @return void
      * @access public
      */
-    public function __construct(array $argv) {
+    public function __construct(array $args) {
         $parser = new Console_CommandLine(array(
             'description' => 'obfuscate php script.',
             'version'     => '0.1.0'
@@ -83,7 +83,7 @@ class PHP_Obfuscator_CommandLineOptions
         ));
 
         try {
-            $result = $parser->parse();
+            $result = $parser->parse(count($args), $args);
             $this->options = $result->options;
         } catch (Exception $exc) {
             $parser->displayError($exc->getMessage());
