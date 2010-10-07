@@ -1,5 +1,5 @@
 <?php
-ini_set("include_path", dirname(__FILE__)."/../" . PATH_SEPARATOR . ini_get("include_path"));
+ini_set("include_path", dirname(dirname(dirname(__FILE__))) . PATH_SEPARATOR . ini_get("include_path"));
 
 require_once "PHPUnit/Framework/TestCase.php";
 require_once 'PHP/Obfuscator/Encoder/EncoderChain.php';

@@ -42,13 +42,13 @@ class PHP_Obfuscator_Command
      *
      * This static method is called by 'php-obfuscator' command.
      *
-     * @param  array    $argv an array of command args
+     * @param  array    $args an array of command args
      * @return void
      * @access public
      * @static
      */
-    public static function main(array $argv) {
-        $options = new PHP_Obfuscator_CommandLineOptions($argv);
+    public static function main(array $args) {
+        $options = new PHP_Obfuscator_CommandLineOptions($args);
         $obfuscator = new PHP_Obfuscator();
         $obfuscator->execute(
             $options->getFileName(),
