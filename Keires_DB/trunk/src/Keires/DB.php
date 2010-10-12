@@ -675,6 +675,10 @@ class Keires_DB_Abstract {
         return self::getInstance()->_impl;
     }
 
+    static protected function getDB() {
+        return self::getImpl()->getDB();
+    }
+
     static public function __callStatic($name, $args) {
         $impl = self::getInstance()->_impl;
         if (!method_exists($impl, $name)) {
