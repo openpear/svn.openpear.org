@@ -41,7 +41,7 @@ class DB_hoge extends Keires_DB_Abstract {
         $sql =
             'SELECT * FROM ' . self::$table_name .
             ' WHERE col2=?';
-        $db = self::getImpl()->getDB();
+        $db = self::getDB();
         return $db->getRow($sql, array($col2));
     }
 }
