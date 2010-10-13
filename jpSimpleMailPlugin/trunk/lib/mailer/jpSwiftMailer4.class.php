@@ -11,6 +11,7 @@
  * @author     brt.river <brt.river@gmail.com>
  * @version    $Id: jpSwiftMailer4.class.php 1725 2010-03-22 13:32:49Z brtriver $
  */
+require_once dirname(dirname(__FILE__)) . "/kzl_Jp_Swift_Mime_Headers_UnstructredHeader.php";
 class jpSwiftMailer4 extends jpMailer
 {
   public

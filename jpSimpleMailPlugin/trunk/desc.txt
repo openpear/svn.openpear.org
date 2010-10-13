@@ -35,7 +35,8 @@ $rs = $mailer->send();
 まず、PHPMailer, Swift Mailer, Qdmailのどれかをダウンロードし、autoloadに登録するかincludeしておきます。
 symfony1.3以降ではSwiftMailer4がバンドルされているのでSwift Mailerをダウンロードする必要はありません。
 ただし、iso-2022-jpでエンコードするためにkzl_Jp_Swift_Mime_Headers_UnstructuredHeaderクラスが必要になります。
-以下のサイトを参考にし、プロジェクトでライブラリが利用できるようにしてください。
+最新版では[[http://www.kuzilla.co.jp/|kuzilla]]さんのご好意により本プラグインに最低限必要なクラスを同梱していますので別途ライブラリを用意する必要はありません。
+また、kuzillaさんのサイトで日本語対応のメール用デバッグパネルも用意されたプラグインもあるので活用してみてください。
 [[http://www.kuzilla.co.jp/article.php/20100301symfony]]
 
 あとは、jpMail::createメソッドの引数にメーラーを指定し、以下のように呼び出します。
