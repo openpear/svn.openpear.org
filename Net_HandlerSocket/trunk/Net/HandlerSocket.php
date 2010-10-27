@@ -71,7 +71,8 @@ class HandlerSocket{
         if($str==="\0")
             return null;
         else{
-            return strtr($str, array("\x01\x41" => "\x01",
+            return strtr($str, array("\x01\x40" => "\x00",
+                                     "\x01\x41" => "\x01",
                                      "\x01\x42" => "\x02",
                                      "\x01\x43" => "\x03",
                                      "\x01\x44" => "\x04",
@@ -79,12 +80,19 @@ class HandlerSocket{
                                      "\x01\x46" => "\x06",
                                      "\x01\x47" => "\x07",
                                      "\x01\x48" => "\x08",
-                                     "\x01\x49" => "\x09");
+                                     "\x01\x49" => "\x09",
+                                     "\x01\x4A" => "\x0A",
+                                     "\x01\x4B" => "\x0B",
+                                     "\x01\x4C" => "\x0C",
+                                     "\x01\x4D" => "\x0D",
+                                     "\x01\x4E" => "\x0E",
+                                     "\x01\x4F" => "\x0F");
         }
     }
     private function escape($str){
         if(!is_null($str)){
-            return strtr($str, array("\x01" => "\x01\x41",
+            return strtr($str, array("\x00" => "\x01\x40",
+                                     "\x01" => "\x01\x41",
                                      "\x02" => "\x01\x42",
                                      "\x03" => "\x01\x43",
                                      "\x04" => "\x01\x44",
@@ -92,7 +100,13 @@ class HandlerSocket{
                                      "\x06" => "\x01\x46",
                                      "\x07" => "\x01\x47",
                                      "\x08" => "\x01\x48",
-                                     "\x09" => "\x01\x49");
+                                     "\x09" => "\x01\x49",
+                                     "\x0A" => "\x01\x4A",
+                                     "\x0B" => "\x01\x4B",
+                                     "\x0C" => "\x01\x4C",
+                                     "\x0D" => "\x01\x4D",
+                                     "\x0E" => "\x01\x4E",
+                                     "\x0F" => "\x01\x4F");
         }else
             return "\0";
     }
