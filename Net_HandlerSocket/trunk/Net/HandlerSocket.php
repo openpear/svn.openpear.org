@@ -11,32 +11,28 @@ class HandlerSocket{
     }
     public function openIndex($indexid, $db, $table, $index, $fields){
         $flist = implode("\t", array_map(array($this, 'escape'), $fields));
-        $main = implode("\t", array_map(array($this, 'escape'), array($idx, $db, $table, $index));
+        $main = implode("\t", array_map(array($this, 'escape'), array($indexid, $db, $table, $index)));
         $line = "P\t$main\t$flist";
         if($this->send($line)){
-            return $this->response;
+            return $this->recv();
         }
         return array();
     }
     public function executeSingle($idx, $op, $fields, $limit=1, $offset=0, $modop=null, $values=null){
-        $flen = count($fields);
-        $flist = implode("\t", array_map(array($this, 'escape'), $fields));
-        $idx = $this->escape($idx);
-        if(is_null($modop)){
-            if($op=='+')
-                $line = "$idx\t+\t$flen\t$flist";
-            else
-                $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset";
-        }else if($modop=='U'){
-            if(is_null($values))
-                throw Exception();
-            $mks =implode("\t", array_map(array($this, 'escape'), $values));
-            $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tU\t$mks";
-        }else if($modop=='D'){
-            $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tD";
-        }
+        $line = $this->buildLine($idx, $op, $fields, $limit, $offset, $modop, $values);
         if($this->send($line)){
-            $r = $this->response;
+            return $this->recv();
+        }
+    }
+    public function executeMulti($requests){
+        foreach ($requests as $req) {
+            $line = call_user_func_array(array($this, 'buildLine'), $req);
+            if(!$this->send($line))
+                return array();
+        }
+        $r = array();
+        for($i=0, $l=count($requests);$i<$l;++$i){
+            $r[] = $this->recv();
             return $r;
         }
     }
@@ -54,6 +50,9 @@ class HandlerSocket{
             }
         }
         fflush($this->socket);
+        return true;
+    }
+    private function recv(){
         $rline = rtrim(stream_get_line($this->socket, 2048, "\n"));
         $res = array_map(array($this, 'unescape'), explode("\t", $rline));
         if(!isset($res[0]))
@@ -64,8 +63,26 @@ class HandlerSocket{
         }else{
             unset($this->errno); unset($this->errstr);
         }
-        $this->response = $res;
-        return true;
+        return $this->response = $res;
+    }
+    private function buildLine($idx, $op, $fields, $limit=1, $offset=0, $modop=null, $values=null){
+        $flen = count($fields);
+        $flist = implode("\t", array_map(array($this, 'escape'), $fields));
+        $idx = $this->escape($idx);
+        if(is_null($modop)){
+            if($op=='+')
+                $line = "$idx\t+\t$flen\t$flist";
+            else
+                $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset";
+        }else if($modop=='U'){
+            if(is_null($values))
+                throw Exception();
+            $mks =implode("\t", array_map(array($this, 'escape'), $values));
+            $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tU\t$mks";
+        }else if($modop=='D'){
+            $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tD";
+        }
+        return $line;
     }
     private function unescape($str){
         if($str==="\0")
@@ -86,7 +103,7 @@ class HandlerSocket{
                                      "\x01\x4C" => "\x0C",
                                      "\x01\x4D" => "\x0D",
                                      "\x01\x4E" => "\x0E",
-                                     "\x01\x4F" => "\x0F");
+                                     "\x01\x4F" => "\x0F"));
         }
     }
     private function escape($str){
@@ -106,7 +123,7 @@ class HandlerSocket{
                                      "\x0C" => "\x01\x4C",
                                      "\x0D" => "\x01\x4D",
                                      "\x0E" => "\x01\x4E",
-                                     "\x0F" => "\x01\x4F");
+                                     "\x0F" => "\x01\x4F"));
         }else
             return "\0";
     }
