@@ -10,9 +10,9 @@ class HandlerSocket{
         }
     }
     public function openIndex($indexid, $db, $table, $index, $fields){
-        $flist = implode(',', $fields);
-        $idx = $indexid;
-        $line = "P\t$idx\t$db\t$table\t$index\t$flist";
+        $flist = implode("\t", array_map(array($this, 'escape'), $fields));
+        $main = implode("\t", array_map(array($this, 'escape'), array($idx, $db, $table, $index));
+        $line = "P\t$main\t$flist";
         if($this->send($line)){
             return $this->response;
         }
@@ -20,7 +20,8 @@ class HandlerSocket{
     }
     public function executeSingle($idx, $op, $fields, $limit=1, $offset=0, $modop=null, $values=null){
         $flen = count($fields);
-        $flist = implode("\t", $fields);
+        $flist = implode("\t", array_map(array($this, 'escape'), $fields));
+        $idx = $this->escape($idx);
         if(is_null($modop)){
             if($op=='+')
                 $line = "$idx\t+\t$flen\t$flist";
@@ -29,7 +30,7 @@ class HandlerSocket{
         }else if($modop=='U'){
             if(is_null($values))
                 throw Exception();
-            $mks =implode("\t", $values);
+            $mks =implode("\t", array_map(array($this, 'escape'), $values));
             $line = "$idx\t+\t$flen\t$flist\t$limit\t$offset\tU\t$mks";
         }else if($modop=='D'){
             $line = "$idx\t+\t$flen\t$flist\t$limit\t$offset\tD";
@@ -54,7 +55,7 @@ class HandlerSocket{
         }
         fflush($this->socket);
         $rline = rtrim(stream_get_line($this->socket, 2048, "\n"));
-        $res = explode("\t", $rline);
+        $res = array_map(array($this, 'unescape'), explode("\t", $rline));
         if(!isset($res[0]))
             throw Exception('invalid respons');
         if($res[0]!=0){
@@ -65,5 +66,34 @@ class HandlerSocket{
         }
         $this->response = $res;
         return true;
+    }
+    private function unescape($str){
+        if($str==="\0")
+            return null;
+        else{
+            return strtr($str, array("\x01\x41" => "\x01",
+                                     "\x01\x42" => "\x02",
+                                     "\x01\x43" => "\x03",
+                                     "\x01\x44" => "\x04",
+                                     "\x01\x45" => "\x05",
+                                     "\x01\x46" => "\x06",
+                                     "\x01\x47" => "\x07",
+                                     "\x01\x48" => "\x08",
+                                     "\x01\x49" => "\x09");
+        }
+    }
+    private function escape($str){
+        if(!is_null($str)){
+            return strtr($str, array("\x01" => "\x01\x41",
+                                     "\x02" => "\x01\x42",
+                                     "\x03" => "\x01\x43",
+                                     "\x04" => "\x01\x44",
+                                     "\x05" => "\x01\x45",
+                                     "\x06" => "\x01\x46",
+                                     "\x07" => "\x01\x47",
+                                     "\x08" => "\x01\x48",
+                                     "\x09" => "\x01\x49");
+        }else
+            return "\0";
     }
 }
