@@ -31,9 +31,9 @@ class HandlerSocket{
             if(is_null($values))
                 throw Exception();
             $mks =implode("\t", array_map(array($this, 'escape'), $values));
-            $line = "$idx\t+\t$flen\t$flist\t$limit\t$offset\tU\t$mks";
+            $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tU\t$mks";
         }else if($modop=='D'){
-            $line = "$idx\t+\t$flen\t$flist\t$limit\t$offset\tD";
+            $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tD";
         }
         if($this->send($line)){
             $r = $this->response;
