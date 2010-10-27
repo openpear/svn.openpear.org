@@ -10,7 +10,7 @@ class HandlerSocket{
         }
     }
     public function openIndex($indexid, $db, $table, $index, $fields){
-        $flist = implode("\t", array_map(array($this, 'escape'), $fields));
+        $flist = implode(",", array_map(array($this, 'escape'), $fields));
         $main = implode("\t", array_map(array($this, 'escape'), array($indexid, $db, $table, $index)));
         $line = "P\t$main\t$flist";
         if($this->send($line)){
