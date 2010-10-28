@@ -25,26 +25,29 @@ class HandlerSocket{
         }
     }
     public function executeMulti($requests){
+        $r = array_fill(0, count($requests), -1);
         foreach ($requests as $req) {
             $line = call_user_func_array(array($this, 'buildLine'), $req);
             if(!$this->send($line))
-                return array();
+                return $r;
         }
-        $r = array();
         for($i=0, $l=count($requests);$i<$l;++$i){
-            $r[] = $this->recv();
-            return $r;
+            $r[$i] = $this->recv();
         }
+        return $r;
     }
     public function close(){
         fclose($this->socket);
+    }
+    public function getError(){
+        return sprintf("%s(%s)", $this->errstr, $this->errno);
     }
     private function send($line){
         unset($this->response);
         $line .= "\n";
         $max = strlen($line);
         for($done=0;$done<$max;$done+=$c){
-            $c = fwrite($this->socket, $line);
+            $c = fwrite($this->socket, substr($line, $done));
             if($c===false){
                 return false;
             }
@@ -85,7 +88,7 @@ class HandlerSocket{
         return $line;
     }
     private function unescape($str){
-        if($str==="\0")
+        if($str==="\x00")
             return null;
         else{
             return strtr($str, array("\x01\x40" => "\x00",
@@ -125,6 +128,6 @@ class HandlerSocket{
                                      "\x0E" => "\x01\x4E",
                                      "\x0F" => "\x01\x4F"));
         }else
-            return "\0";
+            return "\x00";
     }
 }
