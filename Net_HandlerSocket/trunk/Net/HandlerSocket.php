@@ -3,6 +3,12 @@
  * HandlerSocket Client
  * @author      takada-at
  * @create      2010/10/27
+ *
+ * sample:
+ *   $hs = new HandlerSocket('somehost', '9998');
+ *   $hs->openIndex(1, 'somedb', 'table1', 'PRIMARY', array('id', 'enable', 'body'));
+ *   $r = $hs->executeSingle(1, '=', array(1));
+ *
  */
 class HandlerSocket{
     protected $socket;
