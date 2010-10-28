@@ -1,4 +1,9 @@
 <?php
+/**
+ * HandlerSocket Client
+ * @author      takada-at
+ * @create      2010/10/27
+ */
 class HandlerSocket{
     protected $socket;
     public function __construct($host, $port){
@@ -9,6 +14,14 @@ class HandlerSocket{
             $this->socket = $soc;
         }
     }
+    /**
+     * open index
+     * @param   string  $indexid index's id
+     * @param   string  $db      db name
+     * @param   string  $table   table name
+     * @param   string  $index  index name
+     * @param   array   $fields target fields
+     */
     public function openIndex($indexid, $db, $table, $index, $fields){
         $flist = implode(",", array_map(array($this, 'escape'), $fields));
         $main = implode("\t", array_map(array($this, 'escape'), array($indexid, $db, $table, $index)));
@@ -18,12 +31,26 @@ class HandlerSocket{
         }
         return array();
     }
-    public function executeSingle($idx, $op, $fields, $limit=1, $offset=0, $modop=null, $values=null){
-        $line = $this->buildLine($idx, $op, $fields, $limit, $offset, $modop, $values);
+    /**
+     * execute single operation
+     * @param   string  $indexid
+     * @param   string  $op
+     * @param   array   $fields
+     * @param   int     $limit=1
+     * @param   int     $offset=0
+     * @param   string  $modop=null
+     * @param   array   $values=null
+     */
+    public function executeSingle($indexid, $op, $fields, $limit=1, $offset=0, $modop=null, $values=null){
+        $line = $this->buildLine($indexid, $op, $fields, $limit, $offset, $modop, $values);
         if($this->send($line)){
             return $this->recv();
         }
     }
+    /**
+     * execute multi operation
+     * @param   array   $requests       array of array in the format of args of executeSingle
+     */
     public function executeMulti($requests){
         $r = array_fill(0, count($requests), -1);
         foreach ($requests as $req) {
@@ -36,6 +63,9 @@ class HandlerSocket{
         }
         return $r;
     }
+    /**
+     * close connection
+     */
     public function close(){
         fclose($this->socket);
     }
@@ -59,7 +89,7 @@ class HandlerSocket{
         $rline = rtrim(stream_get_line($this->socket, 2048, "\n"));
         $res = array_map(array($this, 'unescape'), explode("\t", $rline));
         if(!isset($res[0]))
-            throw Exception('invalid respons');
+            throw HandlerSocketException('invalid response');
         if($res[0]!=0){
             $this->errno = $res[0];
             $this->errstr = $res[2];
@@ -72,6 +102,8 @@ class HandlerSocket{
         $flen = count($fields);
         $flist = implode("\t", array_map(array($this, 'escape'), $fields));
         $idx = $this->escape($idx);
+        if(!in_array($op, array('=', '<', '<=', '>', '>=', '+')))
+            throw HandlerSocketException('invalid op: '.$op);
         if(is_null($modop)){
             if($op=='+')
                 $line = "$idx\t+\t$flen\t$flist";
@@ -84,6 +116,8 @@ class HandlerSocket{
             $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tU\t$mks";
         }else if($modop=='D'){
             $line = "$idx\t$op\t$flen\t$flist\t$limit\t$offset\tD";
+        }else{
+            throw HandlerSocketException('invalid modop: '.$modop);
         }
         return $line;
     }
@@ -130,4 +164,7 @@ class HandlerSocket{
         }else
             return "\x00";
     }
+}
+
+class HandlerSocketException extends Exception{
 }
