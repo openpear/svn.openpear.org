@@ -113,7 +113,7 @@ class HandlerSocket{
         return $this->response = $res;
     }
     private function recv(){
-        $rline = rtrim(stream_get_line($this->socket, 2048, "\n"));
+        $rline = rtrim(fgets($this->socket));
         $res = array_map(array($this, 'unescape'), explode("\t", $rline));
         if(!isset($res[0]))
             throw HandlerSocketException('invalid response');
