@@ -3,6 +3,7 @@
  * HandlerSocket Client
  * @author      takada-at
  * @create      2010/10/27
+ * @version     0.0.1
  *
  * sample:
  *   $hs = new HandlerSocket('somehost', '9998');
@@ -15,7 +16,7 @@ class HandlerSocket{
     public function __construct($host, $port){
         $soc = fsockopen($host, $port, $errno, $errstr);
         if(!$soc){
-            throw Exception("$errstr($errno)");
+            throw HandlerSocketException("$errstr($errno)");
         }else{
             $this->socket = $soc;
         }
@@ -32,8 +33,8 @@ class HandlerSocket{
         $flist = implode(",", array_map(array($this, 'escape'), $fields));
         $main = implode("\t", array_map(array($this, 'escape'), array($indexid, $db, $table, $index)));
         $line = "P\t$main\t$flist";
-        if($this->send($line)){
-            return $this->recv();
+        if($this->sendSingle($line)){
+            return $this->recvSingle();
         }
         return array();
     }
@@ -49,8 +50,8 @@ class HandlerSocket{
      */
     public function executeSingle($indexid, $op, $fields, $limit=1, $offset=0, $modop=null, $values=null){
         $line = $this->buildLine($indexid, $op, $fields, $limit, $offset, $modop, $values);
-        if($this->send($line)){
-            return $this->recv();
+        if($this->sendSingle($line)){
+            return $this->recvSingle();
         }
     }
     /**
@@ -59,14 +60,17 @@ class HandlerSocket{
      */
     public function executeMulti($requests){
         $r = array_fill(0, count($requests), -1);
+        unset($this->response);
         foreach ($requests as $req) {
             $line = call_user_func_array(array($this, 'buildLine'), $req);
             if(!$this->send($line))
                 return $r;
         }
+        fflush($this->socket);
         for($i=0, $l=count($requests);$i<$l;++$i){
             $r[$i] = $this->recv();
         }
+        $this->response = $r;
         return $r;
     }
     /**
@@ -75,11 +79,25 @@ class HandlerSocket{
     public function close(){
         fclose($this->socket);
     }
+    /**
+     * get last error
+     */
     public function getError(){
         return sprintf("%s(%s)", $this->errstr, $this->errno);
     }
-    private function send($line){
+    /*
+     * get last response
+     */
+    public function getLastResponse(){
+        return $this->response;
+    }
+    private function sendSingle($line){
         unset($this->response);
+        $r = $this->send($line);
+        fflush($this->socket);
+        return $r;
+    }
+    private function send($line){
         $line .= "\n";
         $max = strlen($line);
         for($done=0;$done<$max;$done+=$c){
@@ -88,8 +106,11 @@ class HandlerSocket{
                 return false;
             }
         }
-        fflush($this->socket);
         return true;
+    }
+    private function recvSingle(){
+        $res = $this->recv();
+        return $this->response = $res;
     }
     private function recv(){
         $rline = rtrim(stream_get_line($this->socket, 2048, "\n"));
@@ -102,7 +123,7 @@ class HandlerSocket{
         }else{
             unset($this->errno); unset($this->errstr);
         }
-        return $this->response = $res;
+        return $res;
     }
     private function buildLine($idx, $op, $fields, $limit=1, $offset=0, $modop=null, $values=null){
         $flen = count($fields);
