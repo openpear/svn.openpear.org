@@ -62,7 +62,7 @@ class Services_SBM_Info
     /**
      * Services_SBM_Info version
      */
-    const VERSION = '0.3.0-beta';
+    const VERSION = '0.3.1-beta';
 
     /**
      * Target URL
