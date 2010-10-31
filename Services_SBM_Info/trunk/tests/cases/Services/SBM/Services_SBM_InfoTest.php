@@ -58,7 +58,7 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
     {
         $services = 'test1,test2,test3';
         $this->assertSame($this->object, $this->object->setServices($services));
-        $this->assertSame(split(',', $services), $this->object->_services);
+        $this->assertSame(explode(',', $services), $this->object->_services);
     }
 
     public function testGetAll()

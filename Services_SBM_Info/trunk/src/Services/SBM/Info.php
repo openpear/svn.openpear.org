@@ -135,7 +135,7 @@ class Services_SBM_Info
         if (isset($this->_objects[$serviceName])) {
             return $this->_objects[$serviceName];
         }
-        require_once join('/', split('_', __CLASS__)) . '/' . $serviceName . '.php';
+        require_once implode('/', explode('_', __CLASS__)) . '/' . $serviceName . '.php';
         $class = __CLASS__ . '_' . $serviceName;
         $this->_objects[$serviceName] = new $class($this->_url, $this->_title);
         return $this->_objects[$serviceName];
@@ -174,7 +174,7 @@ class Services_SBM_Info
     public function setServices($services)
     {
         if (is_string($services)) {
-            $services = split(',', $services);
+            $services = explode(',', $services);
         }
         $this->_services = $services;
         return $this;
@@ -274,7 +274,7 @@ class Services_SBM_Info
      */
     public function camelize($str, $separator = ' ')
     {
-        return join('', array_map(array($this, '_camelize'), split($separator, $str)));
+        return implode('', array_map(array($this, '_camelize'), explode($separator, $str)));
     }
 
     /**
