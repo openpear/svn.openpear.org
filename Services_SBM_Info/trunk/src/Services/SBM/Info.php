@@ -263,7 +263,7 @@ class Services_SBM_Info
                         ->execute();
             } catch(Services_SBM_Info_Exception $e) {
                 if ($this->_errorLog) {
-                    error_log($e->getMessage(), 3, $this->_errorLog);
+                    error_log($e->getMessage() . PHP_EOL, 3, $this->_errorLog);
                 }
                 $this->_failedServices[] = $this->camelize($serviceName);
             }

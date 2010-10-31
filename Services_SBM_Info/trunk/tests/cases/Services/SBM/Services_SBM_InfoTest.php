@@ -123,11 +123,15 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
 
     public function testGetFailedServices()
     {
+        $errorLog = dirname(__FILE__) . '/error.log';
+        $this->object->setErrorLog($errorLog);
         $this->object->setUrl('http://localhost/');
         $this->object->setProxy('_', 1234);
         $this->object->execute();
         $this->assertNotEmpty($this->object->getFailedServices());
         $this->assertSame($this->object->_failedServices, $this->object->getFailedServices());
+        $this->assertFileExists($errorLog);
+        unlink($errorLog);
     }
 
     public function testCamelize()
