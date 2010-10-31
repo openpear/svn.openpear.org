@@ -84,8 +84,8 @@ class Services_SBM_Info_Twitter extends Services_SBM_Info_Abstract
      */
     protected function extractCount($data)
     {
-        if (isset($data->response->total)) {
-            return (int)$data->response->total;
+        if (isset($data->response->trackback_total)) {
+            return (int)$data->response->trackback_total;
         }
         return $this->_count;
     }

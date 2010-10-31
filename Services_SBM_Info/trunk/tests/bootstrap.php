@@ -4,8 +4,8 @@ require_once 'PHPUnit/Framework.php';
 define('TEST_PATH_CACHE', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'caches');
 
 // Target
-define('TEST_SBM_INFO_URL',   'http://example.com/');
-define('TEST_SBM_INFO_TITLE', 'Example Web Page');
+define('TEST_SBM_INFO_URL',   'http://twitter.com/');
+define('TEST_SBM_INFO_TITLE', 'Twitter');
 
 // Set include path
 foreach (array(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'src',
