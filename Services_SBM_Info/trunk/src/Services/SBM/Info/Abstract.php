@@ -156,7 +156,7 @@ abstract class Services_SBM_Info_Abstract
     {
         $this->setUrl($url)
              ->setTitle($title);
-        $this->_fetchFunction = array($this, 'fetch');
+        $this->_fetchFunction    = array($this, 'fetch');
         $this->_toObjectFunction = array($this, 'toObject');
     }
 
@@ -171,8 +171,8 @@ abstract class Services_SBM_Info_Abstract
         $url = constant(get_class($this) . '::API_URL');
         $this->_apiData = call_user_func($this->_fetchFunction, sprintf($url, $this->_url));
         $this->_apiData = call_user_func($this->_toObjectFunction, $this->_apiData);
-        $this->_executedUrl = $this->_url;
-        $this->_countExtracted = false;
+        $this->_executedUrl       = $this->_url;
+        $this->_countExtracted    = false;
         $this->_commentsExtracted = false;
     }
 
@@ -180,19 +180,41 @@ abstract class Services_SBM_Info_Abstract
      * Fetch API data
      *
      * @return string $url API URL
-     * @todo HTTP_Request2 or cURL
+     * @throws Services_SBM_Info_Exception
      */
     protected function fetch($url)
     {
-        if ($this->_proxyHost && $this->_proxyPort) {
-            return file_get_contents($url, false, stream_context_create(array(
-                'http' => array(
-                    'proxy' => "tcp://$this->_proxyHost:$this->_proxyPort",
-                    'request_fulluri' => true,
-                )
-            )));
+        if (!class_exists('HTTP_Request2')) {
+            require_once 'HTTP/Request2.php';
         }
-        return file_get_contents($url);
+        $Request = new HTTP_Request2($url);
+        $Request->setConfig(array(
+            'connect_timeout'  => 5,
+            'timeout'          => 15
+        ));
+        if ($this->_proxyHost && $this->_proxyPort) {
+            $Request->setConfig(array(
+                'proxy_host' => $this->_proxyHost,
+                'proxy_port' => $this->_proxyPort,
+            ));
+        }
+        $Request->setHeader(array(
+            'User-Agent' => 'Services_SBM_Info',
+            'Connection' => 'close'
+        ));
+        try {
+            $response = $Request->send();
+            echo $response->getStatus() . PHP_EOL;
+            if (200 === $response->getStatus()) {
+                return $response->getBody();
+            }
+            throw new Services_SBM_Info_Exception('Unexpected HTTP status: '
+                                                . $response->getReasonPhrase()
+                                                . ' '
+                                                . $response->getStatus());
+        } catch(HTTP_Request2_Exception $e) {
+            throw new Services_SBM_Info_Exception($e->getMessage());
+        }
     }
 
     /**
@@ -200,9 +222,13 @@ abstract class Services_SBM_Info_Abstract
      *
      * @param  string $string
      * @return object
+     * @throws Services_SBM_Info_Exception
      */
     protected function toObject($string)
     {
+        if (empty($string)) {
+            throw new Services_SBM_Info_Exception('$string is empty.');
+        }
         return json_decode($string);
     }
 
@@ -247,7 +273,7 @@ abstract class Services_SBM_Info_Abstract
     }
 
     /**
-     * Set fetch callback
+     * Set fetch function
      *
      * @param  string|array $func User function
      * @return $this Services_SBM_Info_{ServiceName} object
@@ -259,7 +285,7 @@ abstract class Services_SBM_Info_Abstract
     }
 
     /**
-     * Set convert object callback
+     * Set convert object function
      *
      * @param  string|array $func User function
      * @return $this Services_SBM_Info_{ServiceName} object

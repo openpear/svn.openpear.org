@@ -1,7 +1,7 @@
 <?php
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/bootstrap.php';
+require_once dirname(__FILE__) . '/../../../../bootstrap.php';
 require_once 'Services/SBM/Info/Services_SBM_Info_AbstractTest.php';
-require_once 'Services/SBM/Info/Services_SBM_Info_Livedoor_Mock.php';
+require_once 'Services/SBM/Info/Livedoor_Mock.php';
 
 class Services_SBM_Info_LivedoorTest extends Services_SBM_Info_AbstractTest
 {

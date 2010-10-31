@@ -1,6 +1,6 @@
 <?php
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/bootstrap.php';
-require_once 'Services/SBM/Info/Services_SBM_Info_Abstract_Mock.php';
+require_once dirname(__FILE__) . '/../../../../bootstrap.php';
+require_once 'Services/SBM/Info/Abstract_Mock.php';
 
 class Services_SBM_Info_AbstractTest extends PHPUnit_Framework_TestCase
 {

@@ -13,4 +13,9 @@ class Services_SBM_Info_Mock extends Services_SBM_Info
     {
         return $this->{$name};
     }
+
+    public function factory($serviceName)
+    {
+        return parent::factory($serviceName . '_ mock');
+    }
 }

@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/bootstrap.php';
+require_once dirname(__FILE__) . '/../../../../bootstrap.php';
 require_once 'Services/SBM/Info/Delicious.php';
 
 class Services_SBM_Info_Delicious_Mock extends Services_SBM_Info_Delicious
