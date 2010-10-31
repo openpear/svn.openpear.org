@@ -1,7 +1,7 @@
 <?php
 if (PHP_SAPI !== 'cli') echo '<pre>';
 
-set_include_path(dirname(__FILE__) . '/../src'. PATH_SEPARATOR . get_include_path());
+set_include_path(dirname(__FILE__) . '/../src' . PATH_SEPARATOR . get_include_path());
 require_once 'Services/SBM/Info.php';
 
 $SBMInfo = new Services_SBM_Info('http://example.net/', 'Example Web Page');
@@ -10,6 +10,11 @@ $SBMInfo = new Services_SBM_Info('http://example.net/', 'Example Web Page');
  * 実行 (APIからデータを取得)
  */
 $SBMInfo->execute();
+
+/**
+ * executeに失敗したサービス名を配列で返す
+ */
+//print_r($SBMInfo->getFailedServices());
 
 /**
  * 対象サービスの全SBM情報を配列で取得 (コメントを除く)
@@ -40,9 +45,14 @@ $SBMInfo->setServices(array('hatena', 'delicious', 'livedoor', 'buzzurl', 'twitt
 $SBMInfo->setServices('hatena,delicious,livedoor,buzzurl,twitter');
 
 /**
+ * エラーを記録するファイルを指定
+ */
+//$SBMInfo->setErrorLog('./sbm_info_error.log');
+
+/**
  * URLまたは対象サービスをセットした場合はexecuteを呼ぶ
  */
-$SBMInfo->execute();
+//$SBMInfo->execute();
 
 /**
  * 対象サービスにLivedoor・Buzzurl・Twitterを追加したので、

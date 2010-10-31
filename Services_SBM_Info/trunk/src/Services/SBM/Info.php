@@ -62,7 +62,7 @@ class Services_SBM_Info
     /**
      * Services_SBM_Info version
      */
-    const VERSION = '0.2.2';
+    const VERSION = '0.3.0-beta';
 
     /**
      * Target URL
@@ -81,6 +81,18 @@ class Services_SBM_Info
      * @var array
      */
     protected $_services;
+
+    /**
+     * Error log file path
+     * @var string
+     */
+    protected $_errorLog = null;
+
+    /**
+     * Execute failed services
+     * @var array
+     */
+    protected $_failedServices;
 
     /**
      * Object pool for SBM Service
@@ -181,29 +193,29 @@ class Services_SBM_Info
     }
 
     /**
-     * Set fetch callback
+     * Set fetch function
      *
-     * @param  string|array $callback Callback
+     * @param  string|array $func User function
      * @return object $this Services_SBM_Info object
      */
-    public function setFetchCallback($callback)
+    public function setFetchFunction($func)
     {
         foreach ($this->_services as $serviceName) {
-            $this->factory($serviceName)->setFetchCallback($callback);
+            $this->factory($serviceName)->setFetchFunction($func);
         }
         return $this;
     }
 
     /**
-     * Set convert object callback
+     * Set convert object function
      *
-     * @param  string|array $callback Callback
+     * @param  string|array $func User function
      * @return object $this Services_SBM_Info object
      */
-    public function setToObjectCallback($callback)
+    public function setToObjectFunction($func)
     {
         foreach ($this->_services as $serviceName) {
-            $this->factory($serviceName)->setToObjectCallback($callback);
+            $this->factory($serviceName)->setToObjectFunction($func);
         }
         return $this;
     }
@@ -213,7 +225,7 @@ class Services_SBM_Info
      *
      * @param string  $host Host | IP
      * @param integer $port Port
-     * @return $this Services_SBM_Info object
+     * @return object Services_SBM_Info object
      */
     public function setProxy($host, $port)
     {
@@ -224,17 +236,37 @@ class Services_SBM_Info
     }
 
     /**
+     * Set error log
+     *
+     * @param string $errorLog Log file path
+     * @return object Services_SBM_Info object
+     */
+    public function setErrorLog($errorLog)
+    {
+        $this->_errorLog = $errorLog;
+        return $this;
+    }
+
+    /**
      * Execute
      *
      * @return void
      */
     public function execute()
     {
+        $this->_failedServices = array();
         foreach ($this->_services as $serviceName) {
             $Service = $this->factory($serviceName);
-            $Service->setUrl($this->_url)
-                    ->setTitle($this->_title)
-                    ->execute();
+            try {
+                $Service->setUrl($this->_url)
+                        ->setTitle($this->_title)
+                        ->execute();
+            } catch(Services_SBM_Info_Exception $e) {
+                if ($this->_errorLog) {
+                    error_log($e->getMessage(), 3, $this->_errorLog);
+                }
+                $this->_failedServices[] = $this->camelize($serviceName);
+            }
         }
     }
 
@@ -263,6 +295,16 @@ class Services_SBM_Info
             }
         }
         return $ret;
+    }
+
+    /**
+     * Get execute failed services
+     *
+     * @return array failed services
+     */
+    public function getFailedServices()
+    {
+        return $this->_failedServices;
     }
 
     /**

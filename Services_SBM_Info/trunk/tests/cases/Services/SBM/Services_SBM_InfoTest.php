@@ -1,6 +1,6 @@
 <?php
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/bootstrap.php';
-require_once 'Services/SBM/Services_SBM_Info_Mock.php';
+require_once dirname(__FILE__) . '/../../../bootstrap.php';
+require_once 'Services/SBM/Info_Mock.php';
 
 class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
 {
@@ -35,9 +35,9 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
 
     public function testFactory()
     {
-        $this->assertSame('Services_SBM_Info_Hatena',    get_class($this->object->factory('hatena')));
-        $this->assertSame('Services_SBM_Info_Delicious', get_class($this->object->factory('delicious')));
-        $this->assertSame('Services_SBM_Info_Livedoor',  get_class($this->object->factory('livedoor')));
+        $this->assertSame('Services_SBM_Info_Hatena_Mock',    get_class($this->object->factory('hatena')));
+        $this->assertSame('Services_SBM_Info_Delicious_Mock', get_class($this->object->factory('delicious')));
+        $this->assertSame('Services_SBM_Info_Livedoor_Mock',  get_class($this->object->factory('livedoor')));
     }
 
     public function testSetUrl()
@@ -61,6 +61,43 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
         $this->assertSame(explode(',', $services), $this->object->_services);
     }
 
+    public function testSetFetchFunction()
+    {
+        $callback = create_function('', '');
+        $this->assertSame($this->object, $this->object->setFetchFunction($callback));
+        foreach ($this->object->_services as $serviceName) {
+            $this->assertSame($callback, $this->object->factory($serviceName)->_fetchFunction);
+        }
+    }
+
+    public function testSetToObjectFunction()
+    {
+        $callback = create_function('', '');
+        $this->assertSame($this->object, $this->object->setToObjectFunction($callback));
+        foreach ($this->object->_services as $serviceName) {
+            $this->assertSame($callback, $this->object->factory($serviceName)->_toObjectFunction);
+        }
+    }
+
+    public function testSetProxy()
+    {
+        $host = 'localhost';
+        $port = '8080';
+        $this->assertSame($this->object, $this->object->setProxy($host, $port));
+        foreach ($this->object->_services as $serviceName) {
+            $Service = $this->object->factory($serviceName);
+            $this->assertSame($host, $Service->_proxyHost);
+            $this->assertSame($port, $Service->_proxyPort);
+        }
+    }
+
+    public function testSetErrorLog()
+    {
+        $errorLog = './error.log';
+        $this->assertSame($this->object, $this->object->setErrorLog($errorLog));
+        $this->assertSame($errorLog, $this->object->_errorLog);
+    }
+
     public function testGetAll()
     {
         $array = $this->object->getAll();
@@ -82,6 +119,15 @@ class Services_SBM_InfoTest extends PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('add_url',   $data);
             $this->assertArrayHasKey('comments' , $data);
         }
+    }
+
+    public function testGetFailedServices()
+    {
+        $this->object->setUrl('http://localhost/');
+        $this->object->setProxy('_', 1234);
+        $this->object->execute();
+        $this->assertNotEmpty($this->object->getFailedServices());
+        $this->assertSame($this->object->_failedServices, $this->object->getFailedServices());
     }
 
     public function testCamelize()
