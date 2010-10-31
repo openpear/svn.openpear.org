@@ -1,5 +1,7 @@
-<?php if (PHP_SAPI !== 'cli') echo '<pre>'; ?>
 <?php
+if (PHP_SAPI !== 'cli') echo '<pre>';
+
+set_include_path(dirname(__FILE__) . '/../src'. PATH_SEPARATOR . get_include_path());
 require_once 'Services/SBM/Info.php';
 
 $SBMInfo = new Services_SBM_Info('http://example.net/', 'Example Web Page');
@@ -58,5 +60,4 @@ $SBMInfo->execute();
 //echo 'Add URL: '   . $SBMInfo->getAddUrl('hatena')   . PHP_EOL;
 //echo 'Comments: '  . print_r($SBMInfo->getComments('hatena')) . PHP_EOL ;
 
-?>
-<?php if (PHP_SAPI !== 'cli') echo '</pre>'; ?>
+if (PHP_SAPI !== 'cli') echo '</pre>';
