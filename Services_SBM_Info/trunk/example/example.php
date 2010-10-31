@@ -4,7 +4,7 @@ if (PHP_SAPI !== 'cli') echo '<pre>';
 set_include_path(dirname(__FILE__) . '/../src' . PATH_SEPARATOR . get_include_path());
 require_once 'Services/SBM/Info.php';
 
-$SBMInfo = new Services_SBM_Info('http://example.net/', 'Example Web Page');
+$SBMInfo = new Services_SBM_Info('http://twitter.com/', 'Twitter');
 
 /**
  * 実行 (APIからデータを取得)
@@ -19,7 +19,7 @@ $SBMInfo->execute();
 /**
  * 対象サービスの全SBM情報を配列で取得 (コメントを除く)
  */
-//print_r($SBMInfo->getAll());
+print_r($SBMInfo->getAll());
 
 /**
  * 対象サービスのコメントを含む全SBM情報を配列で取得

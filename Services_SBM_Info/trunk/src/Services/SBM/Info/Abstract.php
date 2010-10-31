@@ -204,7 +204,6 @@ abstract class Services_SBM_Info_Abstract
         ));
         try {
             $response = $Request->send();
-            echo $response->getStatus() . PHP_EOL;
             if (200 === $response->getStatus()) {
                 return $response->getBody();
             }
