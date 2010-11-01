@@ -21,7 +21,6 @@
  */
 
 require_once 'Diggin/Http/Response/Charset/Front/ConvertInterface.php';
-require_once 'Diggin/Http/Response/Charset/Converter/ConverterInterface.php';
 
 class Diggin_Http_Response_Charset_Front_UrlRegex 
     implements Diggin_Http_Response_Charset_Front_ConvertInterface
@@ -63,7 +62,12 @@ class Diggin_Http_Response_Charset_Front_UrlRegex
             if (is_string($converter)) {
                 $converter = $this->_loadConverter($converter);
             }
-            return $converter->convert($content, $remains);
+            
+            if ($converter instanceof Diggin_Http_Response_Charset_Converter_ConverterInterface) {
+                return $converter->convert($content, $remains);
+            } else if (is_callable($converter)) {
+                return call_user_func_array($converter, array($content, $remains));
+            }
         }
 
         return $this->getDefaultConverter()->convert($content, $remains);
