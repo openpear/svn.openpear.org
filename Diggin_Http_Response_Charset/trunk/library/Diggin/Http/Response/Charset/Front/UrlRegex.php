@@ -83,7 +83,7 @@ class Diggin_Http_Response_Charset_Front_UrlRegex
         if (!is_callable($converter) and
             !($converter instanceof Diggin_Http_Response_Charset_Converter_ConverterInterface) and
             !(is_string($converter) 
-              and $this->_loadConverter($converter) instanceof Diggin_Http_Response_Charset_Converter_ConverterInterface)) {
+              and $this->_checkInterface($converter) === false)) {
             require_once 'Diggin/Http/Response/Charset/Front/Exception.php';
             throw new Diggin_Http_Response_Charset_Front_Exception('Invalid Argument');
         }
@@ -115,6 +115,17 @@ class Diggin_Http_Response_Charset_Front_UrlRegex
         }
 
         return new $converter;
+    }
+
+    private function _checkInterface($converter)
+    {
+        if (!class_exists($converter)) {
+            require_once 'Zend/Loader.php';
+            $converter = Zend_Loader::loadClass($converter);
+        }
+
+        $reflection = new ReflectionClass($converter);
+        return in_array('Diggin_Http_Response_Charset_Front_ConvertInterface', $reflection->getIntefaceNames());
     }
 
     final public function getDefaultConverter()
