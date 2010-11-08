@@ -83,7 +83,7 @@ class Util
         }
         $ktserver = exec('which ktserver');
         if ($ktserver === '') {
-            throw Exception('This test requires "ktserver".');
+            throw new \Exception('This test requires "ktserver".');
         }
         if (is_null($option)) {
             $command = sprintf(
@@ -96,7 +96,6 @@ class Util
                 $ktserver, $port, $option
             );
         }
-        usleep(100);
         exec($command, $op);
         $pid = intval($op[0]);
         self::$_pid = $pid;

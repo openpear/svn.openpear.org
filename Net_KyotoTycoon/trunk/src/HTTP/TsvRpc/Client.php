@@ -76,7 +76,7 @@ class Client
     /**
      * Version.
      */
-    const VERSION = '0.0.1';
+    const VERSION = '0.0.2';
 
     /**
      * Base url.
@@ -119,11 +119,12 @@ class Client
      */
     public function __construct(array $args)
     {
+        spl_autoload_register(array(__CLASS__, 'autoload'));
         $base = '';
         if (isset($args['base'])) {
             $base = $args['base'];
         } else {
-            throw Exception("Missing argument named 'base' for rpc base url.");
+            throw new Exception("Missing argument named 'base' for rpc base url.");
         }
         $base    = rtrim($base, '\//') . '/';
         $timeout = isset($args['timeout']) ? $args['timeout'] : 1;
