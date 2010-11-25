@@ -103,7 +103,7 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
 
     public function __toString()
     {
-        return http_build_query($this->_parsedVideoInfo);
+        return http_build_query($this->_parsedVideoInfo, null, '&');
     }
 
 }

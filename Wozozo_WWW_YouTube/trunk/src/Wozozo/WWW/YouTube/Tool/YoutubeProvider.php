@@ -46,6 +46,11 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
             }
         } else {
             $this->_youtube->setConfig(array('save' => $path));
+            $path = $this->_youtube->suggestSavePath($videoInfo);
+            if (file_exists($path)) {
+                throw new Exception($path.' already exists');
+            }
+
             return $this->_youtube->suggestSavePath($videoInfo);
         }
     }
@@ -116,10 +121,7 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
 
     protected function _out($string)
     {
-        //if ()
         $this->_registry->getResponse()->appendContent($string);
-
-        //echo $string, PHP_EOL;
     }
 }
 
