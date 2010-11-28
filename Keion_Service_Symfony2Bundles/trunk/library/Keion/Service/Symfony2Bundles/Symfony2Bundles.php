@@ -88,18 +88,16 @@ class Symfony2Bundles
     protected function makeRequest($path, $params)
     {
         $client = $this->getHttpClient();
-        $path = call_user_func_array('sprintf', $args = func_get_args());
+        $path = call_user_func_array('sprintf', func_get_args());
 
         $client->setUri(self::API_URL.$path);
-        $response = $client->request();
-
-        return $response;
+        return $client->request();
     }
 
     protected function handleResponse($response, $params, $point)
     {
         if (!is_callable($callback = $this->_handleResponse)) {
-            $callback = array($this, 'defaultHandelResponse');
+            $callback = array($this, 'defaultHandleResponse');
         }
 
         return call_user_func_array($callback, array($response, $params, $point));
@@ -110,7 +108,7 @@ class Symfony2Bundles
         $this->_handleResponse = $callback;
     }
 
-    protected function defaultHandelResponse($response, $params)
+    protected function defaultHandleResponse($response, $params)
     {
         if ('json' === $params['format']) {
             return Json::decode($response->getBody(), $this->getJsonDecodeType());
@@ -197,7 +195,7 @@ class Symfony2Bundles
     public function getDeveloperBundles($name, $format = null)
     {
         $response = $this->makeRequest(self::PATH_DEVELOPER_BUNDLES, $name, $format = $this->format($format));
-        return $this->handleResponse($response, compact('sort', 'format'), __METHOD__);
+        return $this->handleResponse($response, compact('name', 'format'), __METHOD__);
     }
 
     public function getDeveloperProjects($name, $format = null)
