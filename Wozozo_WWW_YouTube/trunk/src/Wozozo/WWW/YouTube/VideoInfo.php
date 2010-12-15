@@ -18,7 +18,7 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
         $this->_parsedVideoInfo = $parsedVideoInfo;
     }
 
-    public function makeDownloadUrl($fmt = 18)
+    public function makeDownloadUrl($preferFmt = null)
     {
         if ($this->_parsedVideoInfo['status'] !== 'ok') {
             if ($this->_parsedVideoInfo['status'] === 'fail') {
@@ -29,23 +29,29 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
         }
 
         // get detected high quality fmt
-        $fmt = (string) $this->_highFmt($fmt);
+        //$fmt = (string) $this->_highFmt($fmt);
+        
+        //$fmt = $this->_highFmt();
 
-        $videoId = $this->_parsedVideoInfo['video_id'];
-        $token = $this->_parsedVideoInfo['token'];
+        //$videoId = $this->_parsedVideoInfo['video_id'];
+        //$token = $this->_parsedVideoInfo['token'];
+        //return sprintf(Wozozo_WWW_YouTube::PATH_DOWNLOAD, $videoId, $token, $fmt);
+        $fmtUrlMap = $this->parseFmtUrlMap();
 
-        return sprintf(Wozozo_WWW_YouTube::PATH_DOWNLOAD, $videoId, $token, $fmt);
+        return current($fmtUrlMap);
     }
 
-    protected function _highFmt($fmt)
+    protected function _highFmt($preferFmt = null)
     {
         if (is_integer($fmt)) {
             return $fmt;
         }
 
-        //} elseif ($fmt === self::FORMAT_HIGH) {
-        $fmts  = $this->getFmts();
-        rsort($fmts);
+        //$fmts  = $this->getFmts();
+        $fmts = $this->parseFmtUrlMap();
+
+        return current($fmts);
+
         $mp4s = array(37, 22, 18, 17, 13);
         if (self::FORMAT_MP4 === $fmt) {
             $intersect = array_intersect($fmts, $mp4s);
@@ -57,6 +63,8 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
     }
 
     /**
+     * @deprecated
+     *
      * Get format list
      *  fmt_list or fmt_map
      *  eg. 22/2000000/9/0/115,35/640000/9/0/115,34/0/9/0/115,5/0/7/0/0"
@@ -106,4 +114,39 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
         return http_build_query($this->_parsedVideoInfo, null, '&');
     }
 
+    public function parseFmtUrlMap()
+    {
+        if (!($this->offsetExists('fmt_url_map'))) {
+            throw new RuntimeException('fmt_url_map not exists');
+        }
+
+        $fmtUrlMap = $this->offsetGet('fmt_url_map');
+        $maps = preg_split('#,#', $fmtUrlMap);
+
+        $ret = array();
+        foreach ($maps as $map){
+            list($key, $var) = preg_split('#\|#', $map);
+            $ret[$key] = $var;
+        }
+        
+        return $ret;
+    }
+
+    public function parseFmtMap()
+    {
+        if (!($this->offsetExists('fmt_map'))) {
+            throw new RuntimeException('fmt_map not exists');
+        }
+
+        $fmtMap = $this->offsetGet('fmt_map');
+        $maps = preg_split('#,#', $fmtMap);
+
+        $ret = array();
+        foreach ($maps as $map){
+            $m = preg_split('#/#', $map);
+            $ret[array_shift($m)] = $m;
+        }
+
+        return $ret;
+    }
 }
