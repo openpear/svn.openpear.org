@@ -4,7 +4,7 @@ require_once 'Wozozo/WWW/YouTube/VideoInfo.php';
 class Wozozo_WWW_YouTube
 {
     const PATH_INFO = 'http://www.youtube.com/get_video_info?video_id=%s';
-    const PATH_DOWNLOAD = 'http://www.youtube.com/get_video?asv=2&video_id=%s&t=%s&fmt=%s';
+    const BASE_URL = 'http://www.youtube.com/watch?v=';
 
     /**
      * @var Zend_Http_Client
