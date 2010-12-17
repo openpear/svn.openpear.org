@@ -70,16 +70,42 @@ class Keires_DB_Ext {
         self::applyLimitStmt($sql, $offset, $limit);
     }
 
+    protected function _execStatement($stmt, $params) {
+        $idx = 1;
+        foreach ($params as $param) {
+            $btype = PDO::PARAM_STR;
+            if (is_int($param)) {
+                $btype = PDO::PARAM_INT;
+            } else if (is_bool($param)) {
+                $btype = PDO::PARAM_BOOL;
+            } else if (is_null($param)) {
+                $btype = PDO::PARAM_NULL;
+            }
+            $bresult = $stmt->bindValue($idx, $param, $btype);
+            if (!$bresult) {
+                $errinfo = $stmt->errorInfo();
+                throw new Exception($errinfo[2], $errinfo[0]);
+            }
+            ++$idx;
+        }
+        $result = $stmt->execute();
+        if (!$result) {
+            $errinfo = $stmt->errorInfo();
+            throw new Exception($errinfo[2], $errinfo[0]);
+        }
+        return $result;
+    }
+
     // addition methods
     
     public function execute($sql, $params = array()) {
         $stmt = $this->_db->prepare($sql);
-        return $stmt->execute($params);
+        return $this->_execStatement($stmt, $params);
     }
 
     public function getOne($sql, $params = array()) {
         $stmt = $this->_db->prepare($sql);
-        if (!$stmt->execute($params)) {
+        if (!$this->_execStatement($stmt, $params)) {
             return null;
         }
         $row = $stmt->fetch(PDO::FETCH_NUM);
@@ -91,7 +117,7 @@ class Keires_DB_Ext {
 
     public function getRow($sql, $params = array()) {
         $stmt = $this->_db->prepare($sql);
-        if (!$stmt->execute($params)) {
+        if (!$this->_execStatement($stmt, $params)) {
             return null;
         }
         $stmt->setFetchMode($this->_fetchMode);
@@ -100,7 +126,7 @@ class Keires_DB_Ext {
 
     public function getAll($sql, $params = array()) {
         $stmt = $this->_db->prepare($sql);
-        if (!$stmt->execute($params)) {
+        if (!$this->_execStatement($stmt, $params)) {
             return null;
         }
         $stmt->setFetchMode($this->_fetchMode);
@@ -312,8 +338,6 @@ class Keires_DB {
                     $val = (bool)$val;
                 }
             }
-            // PDO required string 'true' or 'false'
-            $val = ($val)? 'true': 'false';
             break;
         case 'date':
         case 'timestamp':
