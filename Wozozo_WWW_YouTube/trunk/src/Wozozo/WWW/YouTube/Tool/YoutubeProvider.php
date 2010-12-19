@@ -20,17 +20,18 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
         $this->_out($url);
     }
 
-    public function download($id, $path = 'GETCWD')
+    public function download($id, $path = 'GETCWD', $format = 'DETECT')
     {
-        $this->_download($id, $path, false);
+        $format = ('DETECT' === $format) ? null : $format;
+        $this->_download($id, $format, $path, false);
     }
 
     public function downloadCouchdb($id)
     {
-        $this->_download($id, null, true);
+        $this->_download($id, $format, null, true);
     }
 
-    private function _setupSave($videoInfo, $path, $couch = false)
+    private function _setupSave($videoInfo, $path = null, $couch = false)
     {
         if ($couch) {
             $config = $this->_loadConfig('couchdb');
@@ -55,12 +56,14 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
         }
     }
 
-    protected function _download($id, $save, $couch = false)
+    //@todo format
+    protected function _download($id, $format, $save, $couch = false)
     {
         $videoId = Wozozo_WWW_YouTube::detectVideoId($id);
         $this->_out("Video ID :$videoId");
 
         $youtube = $this->_loadYoutube();
+        $youtube->setConfig(array('prefer_fmt' => $format));
         $videoInfo = $youtube->getVideoInfo($videoId);
         $this->_out("Status :". $videoInfo['status']);
 
