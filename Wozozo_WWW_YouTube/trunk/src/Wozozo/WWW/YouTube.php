@@ -14,7 +14,7 @@ class Wozozo_WWW_YouTube
     /**
      * @var array
      */
-    protected $_config = array('fmt' => 18,
+    protected $_config = array('prefer_fmt' => null,
                                'save' => 'GETCWD', //'GETCWD' will use getcwd();
                                'request_video_stream' => true, //output stream 
                                'response_video_cleanup' => true
@@ -103,7 +103,7 @@ class Wozozo_WWW_YouTube
     public function requestVideo(Wozozo_WWW_YouTube_VideoInfo $videoInfo)
     {   
         // retrive url & save-file-path
-        $url = $videoInfo->makeDownloadUrl($this->_config['fmt']);
+        $url = $videoInfo->makeDownloadUrl($this->_config['prefer_fmt']);
 
         $client = $this->getHttpClient();
         $client->setUri($url);
@@ -158,7 +158,7 @@ class Wozozo_WWW_YouTube
     public function suggestSavePath($videoInfo)
     {
         $dir = $this->_config['save'];
-        $fmt = $this->_config['fmt'];
+        $fmt = $this->_config['prefer_fmt'];
         if ('GETCWD' ===  $dir) {
             $dir = getcwd();
         } else {
@@ -166,11 +166,11 @@ class Wozozo_WWW_YouTube
                 throw new InvalidArgumentException('Invalid dir'.$dir);
             }
         }
-        $path = $dir . DIRECTORY_SEPARATOR . $videoInfo['video_id'] . self::detectSuffix($fmt);
+        $path = $dir . DIRECTORY_SEPARATOR . $videoInfo['video_id'] . self::detectSuffix($videoInfo->detectFmt($fmt));
         
         return $path;
     }
-
+    
     /**
      * borrowed from WWW::YouTube::Download
      *
@@ -186,10 +186,13 @@ class Wozozo_WWW_YouTube
             case '18' :
             case '22' :
             case '37' :
+            case '38' :
                 return '.mp4';
-            case '13' :
             case '17' :
                 return '.3gp';
+            case '43':
+            case '45':
+                return '.vp8';
             default :
                 return '.flv';
         }
@@ -222,16 +225,5 @@ class Wozozo_WWW_YouTube
         
         return false;
     }
-
-    /*
-    public function __destruct()
-    {
-        if (is_string($s = $this->_config['output_stream']) && $this->_config['download_response_cleanup']) {
-            if (file_exists($s)) {
-                unlink($s);
-            }
-        }
-    }
-    */
 }
 

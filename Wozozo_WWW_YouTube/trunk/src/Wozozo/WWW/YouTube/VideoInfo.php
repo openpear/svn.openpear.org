@@ -3,8 +3,10 @@
 class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
 {
 
-    const FORMAT_MP4 = 'mp4';
     const FORMAT_FLV = 'flv';
+    const FORMAT_MP4 = 'mp4';
+    const FORMAT_3GP = '3gp';
+    const FORMAT_VP8 = 'vp8';
 
     private $_parsedVideoInfo;
 
@@ -29,37 +31,57 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
         }
 
         // get detected high quality fmt
-        //$fmt = (string) $this->_highFmt($fmt);
-        
-        //$fmt = $this->_highFmt();
+        $fmt = $this->detectFmt($preferFmt);
 
-        //$videoId = $this->_parsedVideoInfo['video_id'];
-        //$token = $this->_parsedVideoInfo['token'];
-        //return sprintf(Wozozo_WWW_YouTube::PATH_DOWNLOAD, $videoId, $token, $fmt);
         $fmtUrlMap = $this->parseFmtUrlMap();
 
-        return current($fmtUrlMap);
+        return $fmtUrlMap[$fmt];
     }
 
-    protected function _highFmt($preferFmt = null)
+    /**
+     * detect format int (High)
+     *
+     * @see http://en.wikipedia.org/wiki/YouTube#Quality_and_codecs
+     *
+     * @param int|string|null
+     * @return int
+     */
+    public function detectFmt($preferFmt = null)
     {
-        if (is_integer($fmt)) {
-            return $fmt;
+        if (is_integer($preferFmt)) {
+            return $preferFmt;
         }
 
-        //$fmts  = $this->getFmts();
         $fmts = $this->parseFmtUrlMap();
 
-        return current($fmts);
-
-        $mp4s = array(37, 22, 18, 17, 13);
-        if (self::FORMAT_MP4 === $fmt) {
-            $intersect = array_intersect($fmts, $mp4s);
-            return current($intersect);
-        } else {
-            $diff = array_diff($fmts, $mp4s);
-            return current($diff);
+        if (null === $preferFmt) {
+            return key($fmts); //@todo calcurate high fmt
         }
+
+        $keys = array_keys($fmts);
+
+        switch (strtolower($preferFmt)) {
+            case self::FORMAT_MP4:
+                $fmt = current(array_intersect($keys, array(38, 37, 22, 18)));
+                break;
+            case self::FORMAT_VP8:
+                $fmt = current(array_intersect($keys, array(45, 43)));
+                break;
+            case self::FORMAT_FLV:
+                $fmt = current(array_intersect($keys, array(35, 34, 5)));
+                break;
+            case self::FORMAT_VP8:
+                $fmt = current(array_intersect($keys, array(17)));
+                break;
+            default:
+                throw new Exception('unknown format');
+        }
+
+        if (false === $fmt) {
+            throw new Exception("couldn't find format");
+        }
+
+        return $fmt;
     }
 
     /**
@@ -68,9 +90,6 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
      * Get format list
      *  fmt_list or fmt_map
      *  eg. 22/2000000/9/0/115,35/640000/9/0/115,34/0/9/0/115,5/0/7/0/0"
-     *
-     * @see http://kenz0.s201.xrea.com/weblog/2008/11/youtube_9.html
-     * @see http://creazy.net/2008/12/youtube_video_format_list.html
      *
      * @return array
      */
