@@ -10,6 +10,8 @@
  *  @id         $Id$
  */
 
+error_reporting(E_ALL ^ E_DEPRECATED);
+
 require_once 'phpman.php';
 
 phpman::run($argv);
