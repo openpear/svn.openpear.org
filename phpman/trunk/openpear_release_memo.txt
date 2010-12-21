@@ -1,0 +1,30 @@
+License
+========
+The MIT License
+http://www.opensource.org/licenses/mit-license.php
+
+
+depends
+========
+5.2.0
+1.8.2
+
+Archive_Tar
+pear.php.net
+
+
+Additional
+==========
+
+[file://bin/phpman]
+commandscript = phpman
+role = script
+
+[installer://downloadhtml]
+instructions ="Download Manual HTML"
+lang.prompt ="Your language? (choose from: http://php.net/download-docs.php)"
+lang.type =string
+lang.default =ja
+mirror.prompt ="Mirror site?"
+mirror.type = string
+mirror.default ="www.php.net"
