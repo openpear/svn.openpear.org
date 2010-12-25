@@ -1,0 +1,51 @@
+* What's Net_Clamd ?
+[http://www.clamav.net/:title=clamav] のデーモンである clamd と通信するためのライブラリです。libclamav をラップする PHP extension を入れなきゃいけないんじゃないかとか、system() で clamscan 呼び出そうかとか思ったときは、これを使うと幸せになれるはずです。
+
+
+* 基本
+clamd と Unixドメインソケットで通信する場合は、次のように [http://www.php.net/manual/transports.unix.php:title=unix://] を使って接続します。
+>||
+<?php
+require_once('Net/Clamd.php');
+$clamd = new Net_Clamd('unix:///tmp/clamd.socket');
+||<
+
+clamd.conf の設定で TCP 接続を有効にしている場合は、次のようにして接続できます。
+>||
+<?php
+require_once('Net/Clamd.php');
+$clamd = new Net_Clamd('127.0.0.1');
+||<
+
+
+* Virus チェック
+clamd の動作しているホストでのファイルの絶対パスを渡して検査する方法と、ファイルの内容を直接送って検査する方法の二通りの方法があります。
+>||
+<?php
+require_once('Net/Clamd.php');
+$clamd = new Net_Clamd('127.0.0.1');
+var_dump($clamd->scan('/path/to/file'));
+var_dump($clamd->instream(file_get_contents('/path/to/file')));
+||<
+
+
+* ちょっと脇道
+ステータス情報を取得することもできます。clamd をリモートから監視することもできるでしょう。
+>||
+<?php
+require_once('Net/Clamd.php');
+$clamd = new Net_Clamd('192.168.0.5');
+if($clamd->ping()){
+ var_dump($clamd->stats());
+}
+||<
+
+その他もろもろのこともできます。
+>||
+# パターンファイルの再読み込みをさせる
+$clamd->reload();
+# clamd のバージョン情報表示
+echo $clamd->version();
+# clamd を終了させる
+$clamd->shutdown();
+||<

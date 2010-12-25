@@ -1,0 +1,7 @@
+強欲にヘッダーやメタタグのContent-Typeや文字列から文字コードを推測し、レスポンスボディ(HTML)をUTF-8にエンコーディングします。
+
+説明：
+http://d.hatena.ne.jp/sasezaki/20100627/p2
+
+旧 Diggin_Http_Response_CharactorEncoding
+の強化版です。LGPL

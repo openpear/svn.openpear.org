@@ -1,0 +1,89 @@
+PHPを純粋なオブジェクト指向プログラミング言語っぽく書けるようにする。
+
+主にメソッドチェーンするためのライブラリ。
+
+
+*サンプル
+>||
+require_once 'PHP/Object.php';
+
+function p($data) {
+    return PHP_Object::factory($data);
+}
+
+$array = p(array('foo', 'bar')); // Arrayオブジェクトの作成
+$array->push('baz');             // array_pushのエイリアス
+$array->var_dump;                // 引数がない場合、括弧は省略できる
+/* 出力結果
+&array(3) {
+  [0]=>
+  string(3) "foo"
+  [1]=>
+  string(3) "bar"
+  [2]=>
+  string(3) "baz"
+}
+*/
+
+$array = p('Hello,World!')       // Stringオブジェクトを作成
+       ->replace('World', 'PHP') // WorldをPHPに置換、str_replaceのエイリアス
+       ->echo                    // Hello,PHP! を出力
+       ->explode(',')            // 「,」で分割しArrayオブジェクトにして返す
+       ->tap('rsort');           // rsortメソッドをコールし、自分自身を返す
+
+foreach ($array as $value) {
+    $value->echo; // PHP!、Helloの順に出力
+}
+||<
+
+
+*その他のサンプル
+[http://openpear.org/repository/PHP_Object/trunk/sample/parse_manual.php:title=PHPマニュアルをパースする]
+
+
+*特徴
+-全てのPHP関数をメソッドとして呼び出せる
+-引数をとらないメソッドの括弧は省略できる
+-メソッドが返す値は全てPHP_Objectオブジェクト（配列のキーや一部メソッドを除く）
+-echo、printなど、PHPの言語構造をメソッドとして呼び出せる
+-戻り値がない(void)関数を、メソッドとして呼び出した時は、代わりに自分自身を返す
+-メソッドの引数に、そのままPHP_Objectオブジェクトを渡すことができる
+-Arrayオブジェクトは通常の配列型のようにforeachでのループや、[]を使ったアクセスができる
+-Arrayオブジェクトからのメソッド呼び出し時にはメソッド名の「array_」を省略できる
+-Stringオブジェクトからのメソッド呼び出し時にはメソッド名の、「str」と「str_」を省略できる
+
+
+*リファレンス
+
+
+*PHP_Object : : val
+オブジェクトが持つ元の値を取得します（Stringオブジェクトから呼び出した場合、文字列など）。
+
+>||
+mixed PHP_Object::val()
+||<
+
+:返り値 :オブジェクトが保持する値
+
+
+*PHP_Object : : tap
+method で指定したコールバックメソッドをコールし、その戻り値ではなく自分自身を返します。
+
+>||
+PHP_Object PHP_Object::tap(callback $method [, mixed $param [, mixed $...]])
+||<
+
+:method :コールするメソッド
+:param :このメソッドに渡すパラメータ
+:返り値 :メソッドを呼び出したオブジェクト自身
+
+
+*PHP_Object : : argOffset
+引数の内容の関数を呼び出した際に、オブジェクトの保持する値が引数の何番目に渡されるかをオフセット値で返します。
+
+>||
+mixed PHP_Object::argOffset(string $func_name)
+||<
+
+:func_name :関数名の文字列
+:返り値 :ゼロからはじまる引数のオフセット値が返されます。引数に値が渡されない場合にはnullが返ります。

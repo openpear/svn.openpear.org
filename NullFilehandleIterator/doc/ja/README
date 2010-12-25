@@ -1,0 +1,46 @@
+Perlのnull filehandleオペレータ「<>」と同じ動作を行うイテレータです。
+
+
+* 動作例
+
+Perlでは、「<>」オペレータを使ってフィルタプログラムが簡単に記述できます。例えば、全ての英大文字を英小文字に書き換えるフィルタは下記のように書けます。
+
+>||
+#!/usr/bin/perl
+while (<>) {
+  tr/A-Z/a-z/;
+  print;
+}
+||<
+
+このスクリプトは、引数が無い場合は標準入力に対するフィルタとして動作します。引数がある場合は、与えられた引数をファイル名とみなし、全てのファイルに対して順にフィルタを適用します。
+
+この動作を真似たイテレータがNullFilehandleIteratorです。これを使うと、上記のPerlスクリプトと同じことがPHPでも比較的簡潔に記述できます。
+
+>||
+<?php
+require_once('NullFilehandleIterator.php');
+
+$it = new NullFilehandleIterator();
+foreach ($it as $line) {
+  print strtolower($line);
+}
+||<
+
+
+* 依存関係
+
+以下のクラスを利用しています。
+
+- [http://openpear.org/package/LazyFileIterator:title=LazyFileIterator]
+- [http://openpear.org/package/LoggerIterator:title=LoggerIterator]
+- [http://openpear.org/package/IgnoreExceptionIterator:title=IgnoreExceptionIterator]
+
+また、PHP5.1.0以降で利用できる、以下のSPLのイテレータクラスを利用しています。
+
+- [http://www.php.net/~helly/php/ext/spl/classAppendIterator.html:title=AppendIterator]
+
+
+* ソースコード
+
+[http://openpear.org/repository/NullFilehandleIterator/trunk/src/NullFilehandleIterator.php]

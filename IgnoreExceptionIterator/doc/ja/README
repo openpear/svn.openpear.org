@@ -1,0 +1,28 @@
+IgnoreExceptionIteratorは、SPLのイテレータで例外が発生しても無視するようなイテレータです。
+
+引数のイテレータ内の例外をcatchし、何もせずに破棄します。
+
+致命的な例外が発生しないとわかっている場合に、例外の破棄を簡潔に記述できます。
+
+とはいえ例外が発生したことに気づけなくなるのは危険なので、[http://openpear.org/package/LoggerIterator:title=LoggerIterator]などと組み合わせて使うのが良いと思います。
+
+一度例外が発生したイテレータはエラー状態にあるとみなし、その後のメソッド呼び出しについては、本来のイテレータのメソッド呼び出しをしません。単に、valid()はfalseを、他のメソッドはnullを返します。
+
+
+* 動作例
+
+>||
+<?php
+require_once('IgnoreExceptionIterator.php');
+
+$it = new IgnoreExceptionIterator(new EmptyIterator());
+$it->current(); // returns null
+
+$it = new EmptyIterator();
+$it->current(); // throws exception
+||<
+
+
+* ソースコード
+
+[http://openpear.org/repository/IgnoreExceptionIterator/trunk/src/IgnoreExceptionIterator.php]

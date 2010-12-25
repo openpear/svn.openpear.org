@@ -1,0 +1,38 @@
+command line interface to look up the PHP manual.
+
+To install:
+>||
+% pear install openpear/phpman-beta
+% pear run-scripts openpear/phpman
+||<
+
+
+Manual lookup (ex.):
+>||
+% phpman in_array
+// manual page found
+% phpman mysql_q
+// prefix match
+% phpman @
+// language reference alias
+% phpman mysql
+// module top page
+% phpman http
+// multiple pages found
+||<
+
+
+Help:
+>||
+% phpman -h
+||<
+
+
+To sync manual:
+>||
+% phpman -s
+||<
+
+
+zsh completion:
+- [http://twitter.com/rsky/status/4826659830]

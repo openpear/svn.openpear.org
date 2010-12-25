@@ -1,0 +1,4 @@
+Digginライブラリ((http://diggin.musicrider.com/))のスクレイパーでのアダプターの一つです。
+ライセンスの関係上、HTMLScrapingライブラリ((http://www.rcdtokyo.com/etc/htmlscraping/)))から改変したものをこのパッケージにてまとめています。
+
+Diggin_Http_Response_Charsetに依存します。

@@ -1,0 +1,57 @@
+ギターのタブ譜を画像で出力するライブラリです。
+画像生成には[http://www.php.net/manual/ja/book.image.php:title=GDライブラリ]を利用しています。
+このライブラリは[http://search.cpan.org/dist/GD-Tab-Guitar/:title=GD::Tab::Guitar]にインスパイアされています。
+それでは、簡単な使い方です。
+
+
+インスタンス生成
+>||
+$gtr = new GD_Tab_Guitar();
+||<
+
+
+コードを出力
+>||
+echo $gtr->chord('A7(#9)')->png();
+||<
+
+
+指板を指定して出力
+>||
+echo $gtr->generate('Bb/A', '5x333x')->png();
+||<
+
+
+JPEG、GIFの出力
+>||
+echo $gtr->chord('G')->jpeg();
+echo $gtr->chord('G')->gif();
+||<
+
+
+ファイルに出力
+>||
+$gtr->chord('G')->png('hoge.png');
+||<
+
+
+その他の設定
+>||
+// 文字（ライン）の色をRGBで設定
+$gtr->setColor(255, 0, 0);
+
+// 背景色をRGBで設定
+$gtr->setBgcolor(200, 200, 200);
+
+// 背景の透過色設定をOFFにする
+$gtr->setInterlaced(false);
+||<
+
+
+全てのコードをファイルに保存する
+>||
+foreach ($gtr->allChords() as $chord) {
+    $gtr->chord($chord)->png("$chord.png");
+}
+||<
+

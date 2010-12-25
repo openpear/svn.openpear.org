@@ -1,0 +1,15 @@
+Kyoto Tycoon client library for PHP.
+
+*System requirement.
+-PHP5.3 
+-HTTP_Request2
+-PHPUnit3.5
+
+*Usage
+>||
+<?php
+require_once 'Net/KyotoTycoon.php';
+$kt = new \Net\KyotoTycoon(array('port' => 19780));
+$kt->set('test_php', 'Hello KyotoTycoon!!');
+var_dump($kt->get('test_php')); // Hello KyotoTYcoon!!
+||<

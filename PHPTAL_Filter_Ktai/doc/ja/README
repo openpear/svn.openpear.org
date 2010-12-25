@@ -1,0 +1,3 @@
+ケータイ用出力を整えるためのPHPTALフィルタ
+
+現在はHTML_CSS_Mobileのみラップしていますが、将来的にはText_Pictogram_Mobileも取り込んでいくとよいのではないかと考えています。

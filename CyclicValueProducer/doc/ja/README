@@ -1,0 +1,51 @@
+CyclicValueProducerは、指定された配列の値を循環的に出力するようなSPLイテレータです。
+
+デフォルトではイテレータとして無限に動作し続けますが、上限値を設定することもできます。
+
+
+* 何の役に立つのか
+
+- あまり実用的ではないと思います
+- IteratorAggregateインターフェースの典型的な実装例として
+-- 複数のイテレータの組み合わせに対して名前をつけたくなった場合に
+
+
+* サンプル
+
+>||
+<?php
+
+require_once('CyclicValueProducer.php');
+
+$it = new CyclicValueProducer(array('びんぼう','だいじん','おおだいじん'), 7);
+
+foreach ($it as $value) {
+  echo $value, "\n";
+}
+
+/*
+Results:
+びんぼう
+だいじん
+おおだいじん
+びんぼう
+だいじん
+おおだいじん
+びんぼう
+*/
+||<
+
+
+* 依存関係
+
+PHP5.1.0以降で利用できる、以下のSPLのイテレータクラスを利用しています。
+
+
+- [http://www.php.net/~helly/php/ext/spl/classArrayIterator.html:title=ArrayIterator]
+- [http://www.php.net/~helly/php/ext/spl/classInfiniteIterator.html:title=InfiniteIterator]
+- [http://www.php.net/~helly/php/ext/spl/classLimitIterator.html:title=LimitIterator]
+
+
+* ソースコード
+
+[http://openpear.org/repository/CyclicValueProducer/trunk/src/CyclicValueProducer.php]

@@ -1,0 +1,11 @@
+皆で共通化するとうれしい部分をパッケージ化しましょう。誰でも変更可に設定してありますので、汎用的に使う関数やクラスがあったら、じゃんじゃん追加して下さい。
+
+* 共通化したライブラリのロード
+>|
+Openpear_Util::import("library_name");
+|<
+でライブラリをロードできます。上記の構文は、Openpear/Util/library_name.php を include します。
+
+* 現在有効なパッケージ
+** array_val
+** ExceptionWrapper

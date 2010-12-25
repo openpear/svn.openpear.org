@@ -1,0 +1,10 @@
+[http://yourfilehost.com/:title=YourFileHost]の動画情報を取得するパッケージです。
+夜のお供に役立てて下さい。
+
+>||
+<?php
+require_once 'Services/YourFileHost.php';
+$y = new Services_YourFileHost('http://www.yourfilehost.com/media.php?cat=video&file=pig_implodes_in_pressure_suit.flv');
+var_dump($y->video_id); // flvのURL
+var_dump($y->photo);    // サムネイルのURL
+||<

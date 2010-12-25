@@ -1,0 +1,14 @@
+HandlerSocket Plugin for MySQLのPHPクライアントです。
+
+
+http://github.com/ahiguti/HandlerSocket-Plugin-for-MySQL
+
+
+使い方は今のところ、perlクライアントに合わせてあります。
+http://github.com/ahiguti/HandlerSocket-Plugin-for-MySQL/blob/master/docs-ja/perl-client.ja.txt
+
+
+sample:
+  $hs = new HandlerSocket('somehost', '9998');
+  $hs->openIndex(1, 'somedb', 'table1', 'PRIMARY', array('id', 'enable', 'body'));
+  $r = $hs->executeSingle(1, '=', array(1));

@@ -1,0 +1,15 @@
+シーザー暗号をつくったり、はずしたりするライブラリ。
+
+>|
+<?php
+require_once 'Wozozo/CaesarCrypt.php';
+$word = 'hogeほげhugaふがzZ';
+
+$wozozo = new Wozozo_CaesarCrypt();
+$wozozo->setKeyNumber(22);
+$en_result = $wozozo->encrypt($word);
+$de_result = $wozozo->decrypt($en_result);
+
+var_dump($word, $en_result, $de_result);
+?>
+|<

@@ -1,0 +1,23 @@
+Download YouTube's video
+
+
+install:
+>||
+pear channel-discover openpear.org
+sudo pear install openpear/Wozozo_WWW_YouTube
+||<
+
+
+usage:
+>||
+<?php
+require_once 'Wozozo/WWW/YouTube.php';
+Wozozo_WWW_YouTube::download('gQf_QTsvXCU'); //YouTube's videoID
+Wozozo_WWW_YouTube::download('http://www.youtube.com/watch?v=gQf_QTsvXCU'); //
+||<
+
+
+zf tool's provider 
+>||
+zf enable config.provider Wozozo_WWW_YouTube_Tool_YoutubeProvider
+||<

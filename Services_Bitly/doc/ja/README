@@ -1,0 +1,55 @@
+*概要
+bit.ly APIを叩くライブラリです。
+j.mpにも対応しています。
+
+shortenとexpandを実装しています。
+
+-version0.3.0になりました。
+--bit.ly APIversion3.0に対応しました。
+--format=txtに対応しました。
+--format=xmlの場合の処理をsimplexml_load_stringに戻しました。これに伴い、PEAR::XML_Seriarizerの依存はなくなりました。
+
+
+*使い方
+
+>|php|
+<?php
+require_once 'Services/Bitly.php';
+
+$login = 'Bitlyのアカウント';
+$apikey = 'BitlyのAPI Key';
+
+try {
+    $bitly = new Services_Bitly($login,$apikey);
+    $shorten = $bitly->shorten("http://openpear.org/package/Services_Bitly");
+} catch (Services_Bitly_Exception $e) {
+    echo $e->getMessage();
+}
+
+try {
+    $bitly = new Services_Bitly($login,$apikey);
+    $expand = $bitly->expand($shorten);
+} catch (Services_Bitly_Exception $e) {
+    echo $e->getMessage();
+}
+
+
+// j.mp対応
+
+try {
+    $bitly = new Services_Bitly($login,$apikey);
+    $bitly->setBaseDomain('j.mp');
+    $shorten = $bitly->shorten("http://openpear.org");
+} catch (Services_Bitly_Exception $e) {
+    echo $e->getMessage();
+}
+
+try {
+    $bitly = new Services_Bitly($login,$apikey);
+    $bitly->setBaseDomain('j.mp');
+    $expand = $bitly->expand($shorten);
+} catch (Services_Bitly_Exception $e) {
+    echo $e->getMessage();
+}
+
+||<

@@ -1,0 +1,36 @@
+フォト蔵APIをPHPから割と簡単に操作するライブラリ．まだすべてのAPIを完全にサポートしているわけではありません．
+
+* 依存パッケージ
+[http://pear.php.net/package/HTTP_Request:title=HTTP_Request]が必要です。
+
+* trunk
+
+** 主な変更点
+
+* version 1.4.0 ( 2009-09-29 )
+
+** 主な変更点
+-photo_infoでview_numがとれてなかった問題を修正
+-photo_infoでvideo_urlがなくなっていたので削除
+-photo_infoでdescriptionがとれてなかった問題を修正
+-テスト追加(photo_info)
+-エラーメッセージが複数行の場合に対応
+-エラーメッセージの変更に追従
+
+* version 1.3.0 ( 2009-08-20 )
+
+** 主な変更点
+-user_infoメソッド実装
+-テストの追加
+-メソッドの定義順序をAPIドキュメントに準拠させた
+
+* version 1.2.0 ( 2008-02-27 )
+
+** 主な変更点
+-アップロード枚数が限界に到達した時のエラーコードを追加
+-PEAR::Errorのエラーメッセージにエラーコードを追加
+-CDATAのstrip
+
+* リポジトリについて
+リポジトリ自体はcodereposを利用しています。
+リンクの方法は、 ( [http://d.hatena.ne.jp/sotarok/20090129] ) を参考にしました。

@@ -1,0 +1,7 @@
+IPv4のネットワークをグルーピングして、IPアドレスからグループ名を高速に取得します。
+[http://openpear.org/package/sfMobileIPPlugin:title=sfMobileIPPlugin]をsymfonyから切り離して、汎用化したものです。
+
+Cache_Lite,Net_IPv4,Spycに依存しています。
+
+
+sfMobileIPPluginと同様の動作をさせる例が[http://openpear.org/repository/Net_IPv4_NetworkGroup/trunk/docs/examples/mobile_ip2carrier.php:title=こちら]にあります。

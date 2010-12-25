@@ -1,0 +1,31 @@
+PHPにマクロ機能を付加します。
+*マクロ未使用時
+include "hoge.php";
+
+*マクロ使用時
+$opts = array();
+$opts['debug'] = true;
+Stream_Macro::registByArray('macro', $opts);
+include "macro://hoge.php";
+
+*サポートする構文
+**インクルード
+ #include [ファイル名]
+**定義
+ #define 変数名　値
+ #define マクロ関数　式
+**条件
+ #ifdef  変数名
+ #if 条件式
+ #else
+ #endif
+**ループ
+ #for 式
+ #endfor
+ #foreach 式
+ #endforeach
+ #while 式
+ #endwhile
+
+
+

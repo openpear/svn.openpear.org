@@ -1,0 +1,17 @@
+※ 【注意】このパッケージは非推奨です。
+Digginパッケージに含まれている、Diggin_Service_Wedataをご利用ください。
+
+-
+AutoPagerizeのバックエンドに用いられることで知られる、WedataのAPIを利用するためのライブラリです。
+自作のZFベースのものを、PEARのHttp_Request使用に移植したパッケージです。
+かつては、アイドル情報を参照するにはAcme_○○というコンポーネントを用意する必要がありました。
+今は、idoldbを参照すればいいのです。
+
+
+使い方
+>||
+<?php
+require_once 'Services/Wedata.php';
+var_dump(Services_Wedata::getDatabase('AutoPagerize'));
+?>
+||<

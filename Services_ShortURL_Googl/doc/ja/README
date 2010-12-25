@@ -1,0 +1,4 @@
+goo.glによるURL短縮サービスのラッパーで、PEAR::Services_ShortURLのサブパッケージです。
+
+とりあえずのアナウンスは、はてダを参照してください。
+-http://d.hatena.ne.jp/shimooka/20091218/1261068079

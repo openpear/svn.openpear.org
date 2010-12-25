@@ -1,0 +1,25 @@
+SBM(ソーシャルブックマーク)の情報を取得するライブラリです。
+
+
+* SBMの情報:
+
+ - ブックマーク数
+ - ブックマーク数の単位 (user|users) (tweet|tweets)
+ - ブックマーク数のランク (色の変わるブックマーク数に応じたランク)
+ - ブックマークコメント
+ - エントリーページのURL
+ - 追加ページのURL
+
+
+* 対応しているSBMサービス:
+
+ - はてなブックマーク (Hatena)
+ - Delicious (Delicious)
+ - livedoorクリップ (Livedoor)
+ - Buzzurl (Buzzurl)
+ - Twitter (Twitter)
+
+
+* Example:
+
+[http://svn.openpear.org/Services_SBM_Info/trunk/example/example.php]

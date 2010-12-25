@@ -1,0 +1,24 @@
+twitterにポストするlog4phpのAppender。
+
+log4phpとZend_Service_Twitterに依存してます。
+
+log4phpは、http://phpcommons.sourceforge.jp/wiki/ からインストールしてください。
+
+>||
+<?php
+define('LOG4PHP_CONFIGURATION', './log4php.properties');
+define('LOG4PHP_TWITTER_ID', '********');
+define('LOG4PHP_TWITTER_PASSWORD', '*********');
+require_once 'log4php/LoggerManager.php';
+
+$logger = LoggerManager::getLogger('test');
+$logger->debug('test');
+||<
+
+- log4php.propertiesの例
+>||
+log4php.rootLogger=DEBUG, R
+log4php.appender.R=LoggerAppenderTweet
+log4php.appender.R.layout=LoggerPatternLayout
+log4php.appender.R.layout.ConversionPattern="%d [%p] %m %n"
+||<

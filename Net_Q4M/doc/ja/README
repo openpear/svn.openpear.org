@@ -1,0 +1,27 @@
+*Summary
+
+Provides interface to Q4M(Queue for MySQL).
+[http://q4m.31tools.com/]
+
+*License
+
+The MIT License
+[http://opensource.org/licenses/mit-license.html]
+
+*Usage
+
+>||
+$queue = new Net_Q4M();
+$queue->connect('mysql://user:pass@localhost:3306/database');                                                  
+
+$row = $queue->dequeue('my_queue');
+//$row = $queue->dequeue('my_queue', 5);   // set timeout to 5 seconds
+//$row = $queue->dequeue('my_queue', 'my_queue2', 'my_queue3', 10);
+if (process_row($row)) {
+  $queue->end();
+} else {
+  $queue->abort();
+}
+$queue->disconnect();
+
+||<

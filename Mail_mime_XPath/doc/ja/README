@@ -1,0 +1,28 @@
+メールのヘッダと本文をパースしてXMLの形で保有し、XPath式で検索できるようにします。
+
+使用例サンプルコード：
+>||
+<?php 
+require_once 'Mail/mime/XPath.php';
+ 
+$doc = file_get_contents('hoge.eml');
+ 
+$email = new Mail_mime_XPath($doc);
+$part = $email->xpath('//*[@ctype_primary="text"]');
+ 
+var_dump($part);
+||<
+こうすると、content-typeがtext/*なデータの配列が取得できます。multipartのメールで本文だけ抜き出す場合なんかに超便利！
+もうforeachして総当たりする必要ありません＞＜
+
+
+内部的には、PEARのMail_mimeDecodeでパースしたデータをもとに、SimpleXMLを使ってデータをXMLに直したうえで、XPathで検索、取得という処理をしています。
+
+XPathで検索できる対象ですが、検索対象のデータ自体がMail_mimeに依存している関係から、Mail_mimeで配列のキーになっているものがXPathのノード名として使えます。
+また、
+- content-type
+- ctype_primary
+- ctype_secondary
+- filename
+という４つのデータだけは、各パートのプロパティとしても保持されているので、上記の例のようにこれらのプロパティで検索することによって、textパートの一覧とそのデータを抜き出すことが可能です。
+PerlのEmail::MIME::XPathと違って正規表現的な方法は使えませんが、元々content-typeが分割されているので必要な処理はわりと柔軟に行うことができます。
