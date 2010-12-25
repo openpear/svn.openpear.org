@@ -1,0 +1,23 @@
+簡単に日本語(iso-2022-jp)メールを送信するためのsymfonyプラグイン
+
+*インストール方法
+
+  * svnでチェックアウト
+>|
+$ svn checkout http://svn.openpear.org/jpSimpleMailPlugin/tags/0.3.0-beta ./plugins/jpSimpleMailPlugin
+|<
+
+
+  * pearでインストール
+>|
+$ ./symfony plugin:add-channel openpear.org
+$ ./symfony plugin:install --force-license --release=0.3.0 openpear.org/jpSimpleMailPlugin
+|<
+
+* アンインストール方法
+>|
+$ ./symfony plugin:uninstall openpear/jpSimpleMailPlugin
+|<
+
+* 利用方法
+http://develop.ddo.jp/new-tech/php/framework/symfony/plugin/jpsimplemailpluginを参照してください。

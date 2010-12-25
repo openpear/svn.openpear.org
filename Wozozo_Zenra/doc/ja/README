@@ -1,0 +1,32 @@
+Zenrize in PHP
+
+>||
+<?php
+require_once 'Wozozo/Zenra.php';
+$appid  = getenv('YAHOO_APPID');
+$params = array('appid' => $appid);
+$zenra  = new \Wozozo\Zenra($params);
+echo $zenra->zenrize('お腹が空きました'); // お腹が全裸で空きました
+||<
+
+Nightize
+>||
+<?php
+require_once 'Wozozo/Zenra.php';
+$appid  = getenv('YAHOO_APPID');
+$params = array(
+    'appid'    => $appid,
+    'position' => '名詞',
+    'text'     => '夜の'
+);
+$zenra = new \Wozozo\Zenra($params);
+echo $zenra->zenrize('お腹が空いたのでスパゲッティが食べたい');
+// 夜のお腹が空いたので夜のスパゲッティが食べたい
+||<
+
+*Requirement
+PHP5.3
+HTTP_Request2
+PHPUnit
+Yahoo! Japan Developer's application id
+Yahoo!デベロッパーネットワーク - テキスト解析 - 日本語形態素解析

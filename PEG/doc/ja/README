@@ -1,0 +1,7 @@
+PEGパーサコンビネータ。
+正規表現では難しい再帰を含む文法規則を解釈できる。
+メモ化もできるのでPackrat Parserとも同等。
+また、文字列だけではなく配列も解釈できる。
+[http://openpear.org/package/HatenaSyntax:title=HatenaSyntaxパッケージ]はこれを用いて構築されている。
+
+[http://nimpad.jp/phppeg/:title=ドキュメント]

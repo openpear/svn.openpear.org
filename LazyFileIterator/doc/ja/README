@@ -1,0 +1,57 @@
+LazyFileIteratorは、ファイルの内容を1行づつ取得するようなイテレータです。
+
+LazyFileIteratorはSplFileObjectと異なり、必要になってからファイルをオープンし、不要になるとファイルをクローズします。
+
+SplFileObjectはオブジェクト生成のタイミングでファイルをオープンし、オブジェクトが存在する間はファイルもクローズしないため、大量のファイルに対して同数のイテレータを生成してしまうと、同数のファイルオープン数を消費してしまいます。LazyFileIteratorを利用すれば、この問題を回避することができます。
+
+LazyFileIteratorは内部的にSplFileObjectを生成して利用しています。
+
+
+* 機能
+
+- 初めてのメソッド呼びだしのタイミングでSplFileObjectを生成し、ファイルをオープンします。
+- ファイル終端まで読み込むと、SplFileObjectを解放し、ファイルをクローズします。
+- 一旦ファイルがクローズされた後でrewind()するとSplFileObjectを再度生成し、ファイルを再度オープンします。
+- 実ファイルが存在しないファイル（URLや標準入力など）をオープンする場合にはNoRewindIteratorを利用しますので、イテレータとして特に苦労せずに使えます。
+
+
+* 動作例
+
+catのように、引数のファイルを全て連結して表示するようなプログラムを示します。
+
+AppendIteratorに、複数のLazyFileIteratorを与えています。SplFileObjectで同じことをすると、ファイルオープン数をファイル数と同数消費してしまいます。
+
+>||
+<?php
+require_once('LazyFileIterator.php');
+
+$inputs = new AppendIterator();
+
+$files = $_SERVER['argv'];
+array_shift($files); // remove filename of myself
+
+if ($files === array()) {
+  $files[] = 'php://stdin';
+}
+foreach($files as $filename) {
+  $inputs->append(new LazyFileIterator($filename, 'r'));
+}
+
+foreach($inputs as $line) {
+  print $line;
+}
+||<
+
+
+* 依存関係
+
+PHP5.1.0以降で利用できる、以下のSPLのイテレータクラスを利用しています。
+
+
+- [http://www.php.net/~helly/php/ext/spl/classSplFileObject.html:title=SplFileObject]
+- [http://www.php.net/~helly/php/ext/spl/classNoRewindIterator.html:title=NoRewindIterator]
+
+
+* ソースコード
+
+[http://openpear.org/repository/LazyFileIterator/trunk/src/LazyFileIterator.php]

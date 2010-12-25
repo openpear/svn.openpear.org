@@ -1,0 +1,54 @@
+LoggerIteratorは、SPLのイテレータにログを取る機能を追加するようなイテレータです。
+
+例外の内容を標準出力または標準エラー出力に表示して再スローすること、getInnerIterator()で元のイテレータを返すこと、この2点以外は元のイテレータと同じ挙動です。
+
+元のイテレータの全呼び出しを標準出力または標準エラー出力にログとして出力する機能もあります。
+
+
+* 何の役に立つのか？
+
+- 例外の把握
+- イテレータの挙動の把握
+- イテレータ関連のデバッグ
+- SPLの[http://www.php.net/~helly/php/ext/spl/interfaceOuterIterator.html:title=OuterIteratorインターフェース]の実装の参考
+
+
+* 利用例
+
+>||
+<?php
+
+require_once('LoggerIterator.php');
+
+$it = new LoggerIterator(new ArrayIterator(array(1,2)), LoggerIterator::VERBOSE);
+foreach ($it as $value) {
+  var_dump($value);
+}
+||<
+
+結果は次のようになります。
+
+>||
+LoggerIterator: ArrayIterator::rewind() = NULL
+LoggerIterator: ArrayIterator::valid() = bool(true)
+LoggerIterator: ArrayIterator::current() = int(1)
+int(1)
+LoggerIterator: ArrayIterator::next() = NULL
+LoggerIterator: ArrayIterator::valid() = bool(true)
+LoggerIterator: ArrayIterator::current() = int(2)
+int(2)
+LoggerIterator: ArrayIterator::next() = NULL
+LoggerIterator: ArrayIterator::valid() = bool(false)
+||<
+
+この形式のforeachだとkey()は呼び出されないことがわかります。
+
+
+* TODO
+
+様々なログの出力形式に対応する。
+
+
+* ソースコード
+
+[http://openpear.org/repository/LoggerIterator/trunk/src/LoggerIterator.php]

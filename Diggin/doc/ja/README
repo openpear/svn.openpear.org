@@ -1,0 +1,47 @@
+[http://diggin.musicrider.com/:title=Diggin]はスクレイピング＆スパイダリングライブラリ群です。
+
+[http://diggin.googlecode.com/svn/standard/trunk/:title=最新のソース(Google Code)]
+[http://code.google.com/p/diggin/source/list:title=更新履歴]
+[http://diggin.musicrider.com/manual/diggin.index.html:title=リファレンス]
+
+現在のコンポーネントは以下のとおりです。
+*Diggin_Scraper
+Web::Scraperライクなスクレイピングを可能にします。
+* Diggin_Service_Wedata
+WedataのAPI操作
+* Diggin_Service_Tumblr
+TumblrのAPI操作
+* Diggin_Tool
+Zend_Toolの拡張
+* Diggin_Http_CookieJar_Loader
+CookieJarローダー
+* others
+Diggin_Http_Client_Adapter_SocketProgressBar, Diggin_Felica_Adapter_Sfcpeep, Diggin_CDDB_Application_CDex, Diggin_Console_Wizard
+...
+
+* Coming soon..
+-- Diggin_RobotRules([https://github.com/sasezaki/Diggin_RobotRules:title=https://github.com/sasezaki/Diggin_RobotRules])
+-- Diggin_WWW_Download(Download Framework kit)
+
+
+* Integration(他のライブラリとの統合について)
+- spizer(Zend Frameworkを用いたスパイダリングKit)
+[https://github.com/sasezaki/spizer:title=https://github.com/sasezaki/spizer]
+- Goute(Symfony2)
+[https://github.com/sasezaki/Goutte:title=https://github.com/sasezaki/Goutte]
+
+
+
+デモやテストコードは
+[http://diggin.googlecode.com/svn/standard/trunk/:title=http://diggin.googlecode.com/svn/standard/trunk]
+を参照ください。
+
+
+Http通信を行うものについてはZend Framework(1.6以上)が必要です。
+また、Diggin_Scraperを使うにはtidyモジュール・Net_Url2が動作することも望ましいです。
+
+
+*不具合報告
+[http://code.google.com/p/diggin/wiki/JapaneseComment:title=http://code.google.com/p/diggin/wiki/JapaneseComment]
+[http://code.google.com/p/diggin/issues/list:title=http://code.google.com/p/diggin/issues/list]
+まで

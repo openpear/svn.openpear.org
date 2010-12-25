@@ -1,0 +1,8 @@
+OAuthリクエストの認証を行うサービスプロバイダ側のライブラリ。
+2Legged OAuthと3Legged OAuthの両方に対応。
+対応しているシグネチャ方式は、HMAC-SHA1とRSA-SHA1。
+トークンの保持に、Cache_Lite/Memcached/Memcacheのいずれかを使用。
+Social Game Publisher用のSignature検証も可能。
+
+サンプルはここから。
+http://openpear.org/repository/HTTP_OAuthProvider/trunk/example

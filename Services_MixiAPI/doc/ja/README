@@ -1,0 +1,13 @@
+*概要
+mixiステーションが利用するAPIを叩くServicesパッケージです。[http://ido.nu/kuma/2007/06/29/mixi%E3%81%AE%E3%81%82%E3%81%97%E3%81%82%E3%81%A8api%E7%99%BA%E6%8E%98/:title=mixiのあしあとAPI発掘]を参考にしています。
+
+*関連URL
+-[http://d.hatena.ne.jp/shimooka/20080804/1217780008]
+-[http://d.hatena.ne.jp/shimooka/20080801/1217525203]
+-[http://d.hatena.ne.jp/shimooka/20080318/1205813764]
+-[http://d.hatena.ne.jp/shimooka/20080129/1201536348]
+-[http://d.hatena.ne.jp/shimooka/20070917/1189959168]
+
+*リリース
+-0.2.2
+--Services_MixiAPI 0.2.1をcodereposからopenpearに移動

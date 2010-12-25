@@ -1,0 +1,8 @@
+PEARパッケージを簡単に作成するためのスクリプトです。
+使い方は、新ドキュメント
+http://servlet.sakura.ne.jp/PEAR_PackageProjector/doc/
+を参照してくださいな。
+
+openpearからインストールできるようになりました。
+以降、管理はopenpear移ろうかと思います。
+

@@ -1,0 +1,17 @@
+* 概要
+gif画像から色違いのgif画像を素早く生成する。
+ピュアPHPで書かれており、拡張ライブラリに依存していない。
+gifのカラーテーブルを書き換えるだけなので軽い(はず)。
+
+* サンプル
+[http://openpear.org/repository/Image_GifColorConverter/trunk/sample/sample.php:title=sample.php]
+>||
+<?php
+$converter = new Image_GifColorConverter;
+$converter->put('0.gif', '0_converted.gif', array(0x000000 => 0xff0000, 0xffffff => 0xcccccc)); 
+$converter->put('1.gif', '1_converted.gif', array(0x000000 => 0x0099ff));
+||<
+[http://svn.openpear.org/Image_GifColorConverter/trunk/sample/0.gif:title=0.gif] -> [http://svn.openpear.org/Image_GifColorConverter/trunk/sample/0_converted.gif:title=0_converted.gif]
+[http://svn.openpear.org/Image_GifColorConverter/trunk/sample/1.gif:title=1.gif] -> [http://svn.openpear.org/Image_GifColorConverter/trunk/sample/1_converted.gif:title=1_converted.gif]
+
+[http://d.hatena.ne.jp/anatoo/20091227/1261841091:title=ブログの紹介記事]

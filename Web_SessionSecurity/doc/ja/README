@@ -1,0 +1,11 @@
+SessionAdoptionやSessionハイジャックをブロックする為のライブラリです。
+これは、SessionAdoptionをブロックする為、一度、セッションの値を初期化します。
+
+Sessionハイジャックを検知したい場合は、
+Web_SessionSecurity::getAlert()で知ることができます。
+知った後の処理は、Webアプリへ委譲します。
+
+また、アラートを取り消したい場合は、Web_SessionSecurity::clearAlert()を呼び出してください。
+
+**サンプル
+http://openpear.org/repository/Web_SessionSecurity/trunk/sample.php

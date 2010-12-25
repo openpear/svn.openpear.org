@@ -1,0 +1,17 @@
+simple_html_domの改編です。
+
+OriginalName: simple_html_dom
+Website: http://sourceforge.net/projects/simplehtmldom/
+Author: S.C. Chen <me578022@gmail.com>
+Acknowledge: Jose Solorzano (https://sourceforge.net/projects/php-html/)
+Contributions by:
+    Yousuke Kumakura (Attribute filters)
+    Vadim Voituk (Negative indexes supports of "find" method)
+    Antcs (Constructor with automatically load contents either text or file/url)
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.
+
+
+自分用にappendChildしたりするために行っていた改変が元ですが、
+オリジナルで対応されてしまったので現状では定数使わない、関数おかないという
+インターフェースの修正がメインです。

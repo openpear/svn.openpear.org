@@ -1,0 +1,13 @@
+10進数の数値を任意（HOGE）進数に変換します。
+
+
+
+用途は下記を想定しております。
+・連番のユーザーIDをそのまま表示したくない
+・AUTO_INCREMENT番号をURIなどで使用する
+・ユーザーごとに連番でないユニークなIDがほしい
+
+
+
+使用法・詳細等は下記より
+http://wiki.dinoz.jp/PHP%B4%D8%CF%A2/function/Code_HogeNumber.php/

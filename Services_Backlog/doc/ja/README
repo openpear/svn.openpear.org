@@ -1,0 +1,40 @@
+プロジェクト管理ツールBacklog(http://backlog.jp/)のAPIを操作します。
+
+*使い方
+>||
+<?php
+require_once 'Services/Backlog.php';
+
+// ホスト・ユーザ・パスワードを指定
+$backlog = new Services_Backlog('demo.backlog.jp', 'demo', 'demo');
+
+// 参加プロジェクトの取得
+$result = $backlog->getProjects();
+
+/**
+ * Array
+ * (
+ *     [0] => Array
+ *         (
+ *             [id] => 2
+ *             [name] => StruWork
+ *             [url] => https://demo.backlog.jp/projects/STWK
+ *             [key] => STWK
+ *         )
+ *
+ *     [1] => Array
+ *         (
+ *             [id] => 1
+ *             [name] => ネコ型ロボット製造計画
+ *             [url] => https://demo.backlog.jp/projects/DORA
+ *             [key] => DORA
+ *         )
+ *
+ * )
+ */
+echo '<pre>';
+print_r($result);
+echo '</pre>';
+||<
+*依存パッケージ
+:XML_RPC:http://pear.php.net/package/XML_RPC

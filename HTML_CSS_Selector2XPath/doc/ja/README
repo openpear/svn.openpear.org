@@ -1,0 +1,5 @@
+CSSセレクタをXPathに変換します
+このライブラリは[http://search.cpan.org/dist/HTML-Selector-XPath/lib/HTML/Selector/XPath.pm:title=HTML::Selector::XPath]のPHP移殖版となります。
+
+This library converts css selector to XPath.
+This is the PHP port of [http://search.cpan.org/dist/HTML-Selector-XPath/lib/HTML/Selector/XPath.pm:title=HTML::Selector::XPath]

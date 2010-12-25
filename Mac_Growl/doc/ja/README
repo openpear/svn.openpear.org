@@ -1,0 +1,4 @@
+AppleScript経由で[http://growl.info/:title=Growl]通知する。
+ネットワーク越しの通知をしたい場合や[http://www.growlforwindows.com/gfw/:title=Growl for Windows]に通知したい場合は[http://pear.php.net/package/Net_Growl/:title= Net_Growl]で。
+
+[http://openpear.org/package/Mac_AppleScript:title= Mac_AppleScript]に依存します。

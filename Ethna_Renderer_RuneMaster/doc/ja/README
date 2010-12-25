@@ -1,0 +1,11 @@
+Ethnaで[http://hatotech.org/runemaster/:title=RuneMaster]テンプレートエンジンを使用するためのプラグインです。
+RuneMaster自体は同梱されていないので上記サイトからダウンロードしてください。
+
+*インストール方法
+-RuneMaster本体をEthnaプロジェクトのlib以下に入れます。（lib/Rune/Master.phpという感じ）
+-[プロジェクト名]_Controller.phpのrequire_onceが沢山あるところに以下を追加してください
+>||
+require_once 'Rune/Master.php';
+require_once ETHNA_BASE.'/class/Renderer/Ethna_Renderer_RuneMaster.php';
+||<
+-テンプレートをRuneMasterのフォーマットで書いてください。

@@ -1,0 +1,14 @@
+あなたのZend FrameworkによるRADを猛烈に後退させる
+zfコマンドようプロパイダーです。
+
+つかいかた
+>||
+ $ zf download yourfilehost "http://www.yourfilehost.com/media.php?cat=video&file=hogehoge.wmv"
+||<
+
+
+
+＊あらかじめ[http://openpear.org/package/Diggin:title=Diggin]をインストールしておく必要があります。
+>||
+sudo pear install openpear/Diggin-alpha
+||<

@@ -1,0 +1,114 @@
+*DocTest
+
+クラスやメソッドの Doc コメントにテストを記述することで自動的に UnitTest を作成し実行することができるようになります。
+
+
+**ポインタ
+-TOM先生のテスト講座
+--http://www.phppro.jp/school/test/
+-PHPUnitポケットガイド
+--http://www.phpunit.de/pocket_guide/3.2/ja/index.html
+-kunitさんの日記
+--http://d.hatena.ne.jp/kunit/20080205#1202142580
+
+
+**Docコメント
+クラス定義の上、またはメソッド定義の上にあり、「/**」で始まり「*/」で終わる形式のコメント
+>||
+<?php
+/**
+ * サンプルクラス
+ */
+class Sample
+{
+    /**
+     * メソッドサンプル
+     *
+     * @param string $arg
+     * @return string
+     */
+    public function method($arg)
+    {
+        return 'sample';
+    }
+}
+?>
+||<
+
+
+**テストの記述
+- Docコメントに<code>~</code>で囲まれた内容がテストクラスに出力されます。
+- <code>の直前に「#test <テストメソッド名>」を記述することでテストメソッド名を指定できます。省略した場合は、コメントの対象となるメソッド名が使用されます。
+- <code>ブロックは複数の場所に記述可能です。
+- # を使用した省略形があります（詳細は以下参照）
+>||
+<?php
+/**
+ * サンプルクラス
+ */
+class Sample
+{
+    /**
+     * メソッドサンプル
+     *
+     * #test
+     * <code>
+     * #eq('sample', #f('arg'));
+     * </code>
+     *
+     * #test method_has_name
+     * <code>
+     * #ne('sample', #f('arg'));
+     * </code>
+     *
+     * @param string $arg
+     * @return string
+     */
+    public function method($arg)
+    {
+        return 'sample';
+    }
+}
+?>
+||<
+>||
+<?php
+class SampleTest extends PHPUnit_Framework_TestCase
+{
+    private $obj;
+
+    public function setUp()
+    {
+        $this->obj = new Sample;
+    }
+
+    public function tearDown()
+    {
+        $this->obj = null;
+    }
+
+    public function testMethod()
+    {
+        $this->assertEquals('sample', $this->obj->method('arg'));
+    }
+
+    public function testMethod_has_name()
+    {
+        $this->assertNotEquals('sample', $this->obj->method('arg'));
+    }
+}
+?>
+||<
+
+
+**省略形一覧
+- #eq(); => $this->assertEquals();
+- #ne(); => $this->assertNotEquals();
+- #true(); => $this->assertTrue();
+- #false(); => $this->assertFalse();
+- #null(); => $this->assertNull();
+- #notnull(); => $this->assertNotNull();
+- #class => クラス名
+- #f => $this->obj-><メソッド名>();
+
+

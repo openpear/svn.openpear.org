@@ -1,0 +1,14 @@
+* 概要
+OpenPNE3用のフリーページ プラグインです。
+
+- OpenPNE2系の互換を意識
+-- PC・mobile 両対応
+-- 認証あり・なし 両対応
+- ルーティング拡張済み(/freepage/idでアクセス可能)
+
+試験的にopenpearに置いてみます。
+
+* インストール
+./symfony opPlugin:install -c openpear.org -r 0.9.0 -s beta --force-license opFreepagePlugin
+
+※もしかしたらプラグイン内にpackage.xml入れ忘れたかもです。なかったらお手数ですがリポジトリブラウザからDLお願いします。

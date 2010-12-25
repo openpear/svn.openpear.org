@@ -1,0 +1,7 @@
+symfonyでの携帯サイト制作を支援するプラグイン
+
+symfonyはPEARチャンネルを用いてプラグインをインストールできるので、openpearは配布用です。
+
+開発は http://github.com/vectorxenon/sfJpMobilePlugin/tree/master で行ってます。
+
+気に入らなかったら、ドンドンforkしてください。

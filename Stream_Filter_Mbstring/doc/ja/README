@@ -1,0 +1,103 @@
+Stream_Filter_Mbstringは、PHPストリームに対するカスタムフィルタです。あらゆるストリームに対し、文字エンコーディングの変換および英数字/記号/カタカナの正規化を提供します。
+
+
+*機能一覧
+
+以下のストリームフィルタを提供します。詳細は後述します。
+
+-convert.mbstring.encoding.*
+-convert.mbstring.kana.*
+
+
+*メリット
+
+-巨大なファイルに対しても、メモリを無駄に消費せず文字エンコーディングを変換できます
+-標準入力や標準出力に対しても適用可能です
+-利用が容易です
+-文字エンコーディング関連の攻撃に対する防御に利用できます
+-不正な文字を含んでいる場合でも可能な限り情報を残します
+-他のストリームフィルタを作成する際に、実装の参考にできます
+
+
+*ストリームについて
+
+PHPのストリームはPHP4.3.0で導入された機構で、シーケンシャルに読み書き可能なリソース（ファイル、URL、標準入出力、ソケットなど）を統一的に扱うための概念です。
+
+さらに、ストリームフィルタという仕組みがあり、ストリーム上に流れる文字列を加工（変換・整形・圧縮など）することができます。フィルタは同時に複数利用できますので、フィルタを組み合わせて複雑な加工をすることも可能です。
+
+詳しくは「[http://docs.php.net/manual/ja/intro.stream.php:title=PHPマニュアル - ストリーム関数 - 導入]」や、「[http://docs.php.net/manual/ja/function.stream-filter-register.php:title=PHP: stream_filter_register - Manual]」などを参照してください。
+
+
+*提供するストリームフィルタの詳細
+
+**convert.mbstring.encoding.[FROM_ENCODING]:[TO_ENCODING]
+
+ストリームに[http://docs.php.net/manual/ja/function.mb-convert-encoding.php:title=mb_convert_encoding関数]を適用します。FROM_ENCODINGおよびTO_ENCODINGはmb_convert_encoding()の第2引数および第1引数として利用されます。これらは正しいエンコーディング名である必要があります。エンコーディング名が不正な場合はストリームフィルタ登録時にエラーを返します。
+
+引数の順序が逆になっている理由は作者にもわかりません。おそらくconvert.iconv.*ストリームフィルタに合わせたためでしょう。
+
+
+**convert.mbstring.kana.[OPTION]:[ENCODING]
+
+ストリームに[http://docs.php.net/manual/ja/function.mb-convert-kana.php:title=mb_convert_kana関数]を適用します。OPTIONおよびENCODINGはmb_convert_kana()の第1引数および第2引数として利用されます。それぞれ、mb_convert_kana()が解釈できる文字列を渡す必要があります。
+
+
+*iconvフィルタに対する利点
+
+PHP5には、「convert.iconv.*」で呼び出せるiconvのフィルタが標準で付属しています。しかし、これには次のような問題点があります。
+
+-不正な文字を読み飛ばすことができない。不正な文字が含まれていると変換結果が0バイトになる
+--例えば、MacOSで作ったSJISファイルに含まれる丸数字を解釈できない（回避方法があるのかもしれませんが、わかりませんでした）
+-libiconvの挙動が環境ごとに異なる可能性がある
+--例えば、SJISの「〜」をUTF-8に変換するときにWAVE DASHとFULLWIDTH TILDEのどちらにマッピングするかが、マシンごとに変わる可能性がある
+
+mbstringはPHPの一部ですので、環境依存の問題は起こりません。また、理解できない文字を適宜読み飛ばしますので、変換結果が0バイトになるような問題も起こりません。MacOSXの丸数字の例であれば、「?」に変換されます。
+
+*Stream_Filter_MBStringに対する利点・欠点
+
+本パッケージに非常によく似たパッケージとして、[http://page2.xrea.jp/#Stream_Filter_MBString:title=Stream_Filter_MBString]というパッケージがあります。名前や機能が似ているのは偶然です。（リリースしてから存在に気づきました。他に適当な名前も思いつかないですし…）
+
+両者を比較すると、Stream_Filter_MBStringの方がフィルタごとにクラスが分かれていて、クラス構成がカッコいいです。また、mb_convert_caseを使うフィルタが用意されています。（これは僕も作れば作れるわけですが、僕は使った事がない関数なのでフィルタも作っていません）
+
+一方、Stream_Filter_MBStringの現行バージョン（1.0.0RC2）はbucketにマルチバイト文字が途中でちぎれて入ってくることを想定していません。巨大なファイルを処理するときなどに文字化けしたり欠けたりするのではないでしょうか。
+
+*利用例
+
+nkfコマンドの機能限定版のようなツールを下記に示します。
+
+これは、標準入力または第一引数で指定されたファイル/URLの内容をSJIS-win→UTF-8変換し、さらに半角カナ→全角カナおよび全角英数記号→半角英数記号変換を行った上で、標準出力に出力するものです。
+
+
+>||
+<?php
+
+require_once 'Stream/Filter/Mbstring.php';
+
+$ret = stream_filter_register("convert.mbstring.*", "Stream_Filter_Mbstring");
+
+if (isset($argv[1])) {
+  $file = $argv[1];
+} else {
+  $file = 'php://stdin';
+}
+$fp = fopen ($file, 'r');
+if ($fp === false) {
+    die("Could not open file: $file".PHP_EOL);
+}
+$filter_name = 'convert.mbstring.encoding.SJIS-win:UTF-8';
+$filter = stream_filter_append($fp, $filter_name, STREAM_FILTER_READ);
+if ($filter === false) {
+    fclose ($fp);
+    die("Counld not apply stream filter: $filter_name".PHP_EOL);
+}
+$filter_name = 'convert.mbstring.kana.KVa:UTF-8';
+$filter = stream_filter_append($fp, $filter_name, STREAM_FILTER_READ);
+if ($filter === false) {
+    fclose ($fp);
+    die("Counld not apply stream filter: $filter_name".PHP_EOL);
+}
+while (($line = fgets($fp)) !== false) {
+    echo $line;
+}
+fclose ($fp);
+||<

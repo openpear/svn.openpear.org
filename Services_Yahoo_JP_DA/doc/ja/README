@@ -1,0 +1,33 @@
+*概要
+Service_Yahooのサブパッケージで、[http://developer.yahoo.co.jp/webapi/jlp/da/v1/parse.html:title=日本語係り受け解析API]へのアクセスを容易にします。
+
+*インストール
+>||
+$ sudo pear install -a Services_Yahoo_JP_DA
+||<
+
+*サンプルコード
+>||
+<?php
+/**
+ * @link http://phpize.net/
+ */
+require_once 'Services/Yahoo/JP/DA.php';
+
+try {
+    $yahoo = Services_Yahoo_JP_DA::factory('parse');
+    $yahoo->withAppID(getenv('YAHOO_APP_ID'));
+    $yahoo->setSentence('うちの庭には鶏がいます。');
+    $result = $yahoo->submit();
+
+    foreach ($result as $morphem) {
+        printf("%s -> %d\n", $morphem['Id'], $morphem['Dependency']);
+    }
+} catch (Services_Yahoo_Exception $e) {
+    echo('Error.');
+}
+||<
+
+*その他
+-Services_Yahoo_JP_Textから名称変更
+-Services_Yahoo_JPに取り込まれたい

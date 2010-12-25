@@ -1,0 +1,31 @@
+@depricate
+このパッケージは非推奨です。(2010/06/08)
+
+Diggin_Http_Response_Charsetに移行中です。
+http://openpear.org/package/Diggin_Http_Response_Charset
+
+なお、Diggin 0.6ブランチではDiggin_Http_Response_Encodingを使っているため、Digginパッケージをお使いの方は、この非推奨以降への影響はありません。
+
+
+
+
+----
+HttpレスポンスからUTF-8へ自動変換を行うのを目的としたものです。
+
+
+エンコードの取得はHttpレスポンスヘッダ、metaタグ、(mbstringが利用可能な場合)レスポンスボディの順に行います。
+
+各レスポンスインスタンスから、getBodyされたときにUTF-8に自動変換するためのラッパーを用意しています。(現在はZend_Http_Responseのみ)
+
+＊HTMLScraping Classをベースにしております。
+
+
+参考コード：
+>||
+$client = new Zend_Http_Client($url);
+$response = $client->request();
+ 
+$wrapper = Diggin_Http_Response_CharactorEncoding::createWrapper($response);
+var_dump($wrapper instanceof Zend_Http_Response); //true
+var_dump($wrapper->getBody()); //UTF-8
+||<

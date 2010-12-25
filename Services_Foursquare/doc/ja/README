@@ -1,0 +1,7 @@
+Services_Foursquare
+
+Implementation of foursquare API
+
+main repository is [https://github.com/isamu/php-foursquare]
+
+FoursquareのAPIのライブラリです。

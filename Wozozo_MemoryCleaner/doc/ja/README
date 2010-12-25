@@ -1,0 +1,21 @@
+実行すると、メモリ使用量を減らす事ができる画期的なパッケージ。
+
+バッチ処理とか実行するとmemory_limitにひっかかったりして困るやろ？そういう時に$wozozo = new Wozozo_MemoryCleaner();って書けばメモリ使用量激減でmemory_limitもだんまりやわ。
+
+>||
+<?php
+require_once 'Wozozo/MemoryCleaner.php';
+
+// example
+$data = array();
+foreach (range(0, strlen(__FILE__)) as $no_use) {
+    $data[] = file_get_contents(__FILE__);
+}
+
+echo 'before memory usage:' . memory_get_usage() . 'byte' . PHP_EOL;
+
+$wozozo = new Wozozo_MemoryCleaner();
+
+echo 'after memory usage:' . memory_get_usage() . 'byte' . PHP_EOL;
+?>
+||<

@@ -1,0 +1,23 @@
+カラフルな画像が簡単に作成出来るパッケージです。
+
+http://imagecolorful.com/
+
+-履歴
+-3/13 0.1.4-stableリリース
+--エラー処理の追加・修正
+-3/10 0.1.3-stableリリース
+--Colorfulという親クラスを作成
+--Image_Colorful_Wordという子クラスを作成
+-3/8 0.1.2-stableリリース
+--addTextsメソッドの修正
+-3/7 0.1.1-stableリリース
+--setColorsメソッドの追加
+--setRedメソッドの追加
+--setGreenメソッドの追加
+--setBlueメソッドの追加
+--addColorsメソッドの追加
+-3/6 0.1.0-stableリリース
+
+TODO
+-ストライプ機能
+-揺らぎ機能

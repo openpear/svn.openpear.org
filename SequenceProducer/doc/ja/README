@@ -1,0 +1,18 @@
+連続した整数を順に返すイテレータ。コンストラクタ第二引数を省略すると無限に動作します。
+
+>||
+<?php
+
+require_once('SequenceProducer.php');
+
+$it = new SequenceProducer(1, 5);
+foreach ($it as $value) {
+  echo $value;
+}
+// output:"12345"
+||<
+
+
+* ソースコード
+
+[http://openpear.org/repository/SequenceProducer/trunk/src/SequenceProducer.php]

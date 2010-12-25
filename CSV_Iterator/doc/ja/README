@@ -1,0 +1,7 @@
+CSVファイル(ref:[http://www.ietf.org/rfc/rfc4180.txt:title=RFC4180])をイテレートするためのクラスです。
+外国産の同様のクラスでは、fgetcsvを利用しているため文字エンコード周りで不具合があるのでその点を考慮したものを目指しています。
+UTF-16でエンコードされたファイルにも対応しています。
+
+
+CSV_Iterator allows to iterate CSV format(ref:[http://www.ietf.org/rfc/rfc4180.txt:title=RFC4180]) file.
+Using fgetcsv, some other similar packages has bugs related on character encoding. On the other hand, this package uses original code regarding multibyte encodings and UTF-16.

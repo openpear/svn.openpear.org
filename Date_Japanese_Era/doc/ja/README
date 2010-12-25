@@ -1,0 +1,14 @@
+和暦変換をするライブラリです。
+Peal の Date::Japanese::Era をポーティングしたもの。
+
+>||
+<?php
+$era = new Date_Japanese_Era(array(2009, 7, 11));
+echo $era->name; // 平成
+echo $era->gengou; // name のエイリアス
+echo $era->year;   // 21
+echo $era->nameAscii; // heisei
+
+$era = new Date_Japanese_Era(array('平成', 21));
+echo $era->gregorianYear; // 2009
+||<

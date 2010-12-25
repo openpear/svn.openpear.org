@@ -1,0 +1,75 @@
+* description
+
+Buzzurl(http://buzzurl.jp)のAPIをPHPから利用するためのライブラリです。
+
+
+** Buzzurl API
+ http://labs.ecnavi.jp/developer/buzzurl/api/
+
+
+* version 
+
+>||
+0.0.7-alpha
+||<
+
+
+* dependencies
+
+** cURL
+  http://php.net/manual/ja/book.curl.php
+
+
+* example
+
+>||
+<?php
+
+$id = 'tell-k' //<= your buzzurl id
+
+$api = Services_Buzzurl::getInstance();
+$result = $api->getReaders($id);
+
+foreach($result as $user)  {
+      print $user . "<br />\n";
+}
+
+$api->setFormat('json');
+$result = $api->getReaders($id);
+
+print $result . " <br />\n"; //print json data
+
+//add bookmark
+$api = Services_Buzzurl::getInstance();
+$email  = ''; //<= your buzzurl login id(email)  
+$passwd = ''; //<= your buzzurl password
+$args   = array('url' => 'http://buzzurl.jp');
+$result = $api->add($email, $passwd, $args);
+ 
+if ($result) {
+    print 'add bookmark success' . "<br />\n";
+} else {
+    print 'add bookmark failed' . "<br />\n" ;
+}
+
+
+
+||<
+
+
+* test
+
+pearのtestディレクトリに移動して、テストコードが実行できます。
+
+limeを利用しています。
+
+>||
+cd /usr/share/pear/test/Services_Buzzurl/
+php test_all.php 
+||<
+
+
+* todo 
+
+ (2010/06/15 fixed)　投稿APIが未対応 http://labs.ecnavi.jp/developer/2007/03/api_2.html
+

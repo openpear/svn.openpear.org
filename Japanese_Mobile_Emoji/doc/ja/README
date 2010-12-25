@@ -1,0 +1,20 @@
+日本の絵文字をUserAgentに合わせて変換してくれるライブラリ
+
+*概要
+文字列中の絵文字用変換タグを絵文字コードもしくはimgタグに変換します。
+
+例） [emosji:1]
+
+-docomoでアクセスした場合 > &#xE63E;
+-auでアクセスした場合 > &#xE488;
+-softbankでアクセスした場合 > &#xE04A;
+-上記３キャリア以外、PC等 > <img src="/openper_JapaneseMobileEmoji/img/emoji/sun.gif" class="emoji emoji_1" />
+
+
+*使い方
+
+[http://blog.asial.co.jp/330:「絵文字データベースと相互変換マッピングデータベースのJSONファイル」](pictogram-1.1.tar.gz)をアシアルブログからDLして解凍してできたjsonファイルを以下の場所に置きます。
+
+[http://start.typepad.jp/typecast/:タイプキャストプロジェクト]から絵文字画像のデータをDLし、任意の場所（httpでアクセスできる場所）に置きます。
+
+

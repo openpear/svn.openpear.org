@@ -1,0 +1,26 @@
+[http://hyperestraier.sourceforge.net/:title=HyperEstraier] で使われるファイルフォーマットをパースします。
+
+現在サポートされているファイルフォーマットは次の通り：
+- 文書ドラフト
+- estmaster から得られる検索結果
+
+* 文書ドラフトをパースする例
+>||
+require_once('File/HyperEstraier/Draft.php');
+$txt=file_get_contents('hoge.est');
+$doc = new File_HyperEstraier_Draft($txt);
+echo $doc->getAttribute('@uri');
+||<
+
+* 検索結果をパースする例
+>||
+require_once('File/HyperEstraier/SearchResult.php');
+$txt=file_get_contents('http://192.168.2.1:1978/node/test/search?phrase=hogehoge');
+$res = new File_HyperEstraier_SearchResult($txt);
+foreach($res as $r){
+  echo $r->getAttribute('@uri');
+}
+||<
+
+* 背景
+HTTP通信部分はcurl_multi_execなどによる並列化や冗長化が可能なので、その部分をライブラリに含めないことが重要でした。本ライブラリはファイルフォーマットに特化することで分離しています。

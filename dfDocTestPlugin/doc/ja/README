@@ -1,0 +1,6 @@
+dfDocTestPluginはsymfony 1.0用のDocTestプラグインです。
+以前は
+
+sfDocTestPluginとして開発をしていました。
+
+http://tracfort.jp/projects/dino-symfony/wiki/sfDocTestPlugin

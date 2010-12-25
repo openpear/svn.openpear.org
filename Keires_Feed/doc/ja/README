@@ -1,0 +1,11 @@
+* パッケージ概要
+Rasmus Leodorf氏のsimple_rss.phpをベースにしたフィードパーザです。サポートしている形式は
+- RSS 0.91
+- RSS 1.0
+- RSS 2.0
+- ATOM 1.0
+- ATOM 2.0
+です。
+
+* 依存しているパッケージ
+Keires_Feedを利用するにはHTTP_RequestとOpenpear_Utilが必要です．
