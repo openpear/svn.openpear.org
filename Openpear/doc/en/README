@@ -1,0 +1,40 @@
+* Openpear
+
+Openpear ([http://openpear.org/]):
+- A developers' platform easy to publish PHP library as PEAR package format,
+- Sharing source code (with Subversion),
+- Provides PEAR channel server,
+- Generate PEAR package format and register to channel server (openpear.org) easily.
+
+
+** How to use openpear's package
+
+First, channel discover
+>||
+$ sudo pear channel-discover openpear.org
+||<
+
+** How to login and release PEAR package on Openpear
+
+You can login or sign up an account with your OpenID.
+- [http://openpear.org/account/login]
+
+Create:
+- [http://openpear.org/packages/create]
+
+Go to package manage page and release.
+- You can release with uploading tar-ball if you want.
+- Using External repository to release from other hosting service (e.g. github.com).
+- Package setting on the manage page and submit it, then generate package.xml, packaging and register to channel server (openpear.org) automatically.
+- If you use subversion repository on the Openpear, generate release tag automatically.
+
+** Documentation
+
+Preparing following documentation ...
+- [[Create_and_release_package_flow]]
+- [[How_to_contribute_openpear]]
+- [[Tags_and_categories]]
+
+** Credit
+
+We are nequal.
