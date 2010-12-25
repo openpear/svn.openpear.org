@@ -6,12 +6,12 @@
 
 class Wozozo
 {
-    function __construct()
+    public function __construct()
     {
         print "wozozo is hello";
     }
 
-    function __destruct()
+    public function __destruct()
     {
     	echo 'ヽ( ・∀・)ﾉ ｳﾝｺｰー！'
     }
