@@ -1,0 +1,30 @@
+* Create and release package flow
+
+Here is a work flow on the Openpear.
+# Create a new package (on openpear.org)
+# Check-out it, edit files and commit that (on your local)
+# Release setting on the administration page and release it (on openpear.org)
+
+How Openpear works on each work flow?  Openpear works so many jobs automatically.
+
+** Create package
+
+After you create new package, Openpear will:
+- Create svn repository (if you do not use external repository).
+-- trunk : development code
+-- tags : release tags
+-- branches : branches directory (
+
+** On commit
+
+- Create changeset permalink
+- Timeline update
+
+** Release
+
+Once you release the pacakage, Openpear will:
+- Build PEAR pacakage in accordance with your settings,
+- Register the package archive to the channel server of Openpear,
+- Create svn tag to the repository,
+- Timeline update.
+
