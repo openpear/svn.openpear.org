@@ -13,7 +13,9 @@ After you create new package, Openpear will:
 - Create svn repository (if you do not use external repository).
 -- trunk : development code
 -- tags : release tags
--- branches : branches directory (
+-- branches : branches directory (you can use it as you want)
+-- doc : documentation
+--- ja, en : default documentation repository (for Japanese, for English)
 
 ** On commit
 
