@@ -1,0 +1,28 @@
+* Tags and Categories
+
+You can tagging packages freely.
+
+** Tags
+
+Tags indicates classifications of the package.
+You can tag the package with a number of tags.
+
+** Categories
+
+Package administrator also able to add, remove package tags.
+And set one tag as "Primary Tag".
+
+Primary tag indicates the category of the package.
+
+For example:
+- Services_Foursquare :
+-- Category : Services
+-- Tags : API, Web Services, etc.
+- HTML_CSS_Mobile:
+-- Category : HTML
+-- Tags : HTML, CSS, etc.
+
+** Tag List
+
+- [http://openpear.org/packages/tags]
+
