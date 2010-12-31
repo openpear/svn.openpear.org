@@ -43,7 +43,7 @@ class jpSimpleMail
   public static function mb_encode_mimeheader($value)
   {
     $value = self::filter($value);
-    return mb_encode_mimeheader($value, 'iso-2022-jp', 'B', "\n");
+    return mb_encode_mimeheader($value, 'iso-2022-jp', 'B', "\r\n");
   }
   /**
    * Divide an address into the name part and the address part.
