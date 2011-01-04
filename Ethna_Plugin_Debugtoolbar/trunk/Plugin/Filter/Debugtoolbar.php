@@ -16,7 +16,7 @@
  */
 class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 {
-    var $version = '0.9.2 - $Id$';
+    var $version = '0.9.1 - $Id$';
 
     var $type_mapping = array(
         VAR_TYPE_INT      => 'VAR_TYPE_INT',
@@ -47,7 +47,7 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
      */
     function postFilter()
     {
-        if (is_null($this->ctl->view) || !$this->ctl->view->has_default_header) {
+        if (!$this->ctl->view->has_default_header) {
             return null;
         }
 
@@ -73,7 +73,7 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 <link rel="stylesheet" href="{$url}Debugtoolbar/css/ether.css" type="text/css" />
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
-    google.load("jquery", "1.3");
+    google.load("jquery", "1.2");
 </script>
 <script type="text/javascript" src="{$url}Debugtoolbar/js/jquery.cookie.js"></script>
 EOL;
@@ -117,7 +117,7 @@ jQuery(function()
             jQuery('.ethna-debug').each(function()
             {
                 jQuery(this).hide();
-                var local_name = jQuery(this).children('div.ethna-debug-title').attr('id');
+                var local_name = jQuery(this).children('div.ethna-debug-title').text();
 
                 if (name != local_name) {
                     state[local_name] = false;
@@ -183,7 +183,7 @@ jQuery(function()
 </script>
 EOL;
         echo '<div class="ethna-debug" id="ethna-debug-evwindow">';
-        echo '<div class="ethna-debug-title">' . ETHNA_VERSION . ' : Action(' . $this->controller->action_name . ')</div>';
+        echo '<div class="ethna-debug-title">' . ETHNA_VERSION . ' : ' . $this->controller->action_name . '</div>';
         echo "<div class=\"ethna-debug-log\">";
         echo ETHNA_VERSION;
         echo "</div> \n";
@@ -310,38 +310,63 @@ EOF;
             return null;
         }
 
-        require_once SMARTY_CORE_DIR . 'core.display_debug_console.php';
+        require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_debug.php';
 
         // get template directory
-        $r =& $c->getRenderer();
-        $smarty =& $r->engine;
+        $r = $c->getRenderer();
+        $smarty = $r->engine;
 
-        $smarty_original_debugging = $smarty->debugging;
-        $smarty_original_debugtpl = $smarty->debug_tpl;
+        $vars = Smarty_Internal_Debug::get_debug_vars($smarty);
 
-        $smarty->debugging = true;
-        $smarty->debug_tpl = $debug_tpl;
-        $smarty->assign('_smarty_debug_output', 'html');
+        //$smarty_original_debugging = $smarty->debugging;
+        //$smarty_original_debugtpl = $smarty->debug_tpl;
 
-        //var_dump($smarty);
+        //$smarty->debugging = true;
+        //$smarty->debug_tpl = $debug_tpl;
+        //$smarty->assign('_smarty_debug_output', 'html');
 
         echo '<div class="ethna-debug" id="ethna-debug-smartydebugwindow">';
         echo '<div class="ethna-debug-title">SmartyDebug</div>';
-        echo "<div class=\"ethna-debug-log\">";
 
-        echo smarty_core_display_debug_console(array() , $smarty);
+        echo '<div class="ethna-debug-subtitle">Smarty template vars</div>';
+        echo "<div class=\"ethna-debug-log\">";
+        foreach ($vars->tpl_vars as $k => $v) {
+            echo "$k<br />";
+            self::dumpArray($v->value);
+        }
+        echo "</div> \n";
+
+        echo '<div class="ethna-debug-subtitle">Smarty config vars</div>';
+        echo "<div class=\"ethna-debug-log\">";
+        foreach ($vars->config_vars as $k => $v) {
+            echo "$k<br />";
+            self::dumpArray($v->value);
+        }
+        echo "</div> \n";
 
         echo "</div> \n";
         echo '</div>';
 
-        $smarty->debugging = $smarty_original_debugging;
-        $smarty->debug_tpl = $smarty_original_debugtpl;
+        //$smarty->debugging = $smarty_original_debugging;
+        //$smarty->debug_tpl = $smarty_original_debugtpl;
     }
 
     function dumpArray(&$array)
     {
         echo "<table class=\"ethna-debug-table\">";
-        foreach ($array as $k => $v) {
+        if (is_scalar($array)) {
+            echo "<tr>\n";
+            echo "<th>Scalar</th>";
+            echo "<td>{$array}</td>";
+            echo "</tr>\n";
+        }
+        elseif (is_object($array)) {
+            echo "<tr>\n";
+            echo "<th>Object</th>";
+            echo "<td>" . get_class($array) . "</td>";
+            echo "</tr>\n";
+        }
+        else foreach ($array as $k => $v) {
             echo "<tr>\n";
             echo "<th>{$k}</th>";
             if (is_array($v)) {
