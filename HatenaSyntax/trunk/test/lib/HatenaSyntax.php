@@ -13,6 +13,9 @@ $t->is($hs->getSectionName($node), '');
 $node = $hs->parse('**hoge*header');
 $t->is($hs->getSectionName($node), '');
 
+$node = $hs->parse('');
+$t->pass();
+
 $nodes = $hs->parseAsSections("\n*hoge\n*fuga\n*piyo");
 $t->is(count($nodes), 3);
 
@@ -39,4 +42,3 @@ $t->ok($hasSeparator);
 
 $node = $hs->separate($hs->parse("* hoge\n====\nhahaha"));
 $t->is(count($node->getData()), 2);
-
