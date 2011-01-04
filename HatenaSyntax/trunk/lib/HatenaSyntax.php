@@ -113,7 +113,7 @@ class HatenaSyntax
     static protected function context($str)
     {
         $str = str_replace(array("\r\n", "\r"), "\n", $str);
-        $str = strpos('<!--', $str) === false ? $str : HatenaSyntax_CommentRemover::remove($str);
+        $str = HatenaSyntax_CommentRemover::remove($str);
 
         return PEG::context(preg_split("/\n/", $str));
     }
