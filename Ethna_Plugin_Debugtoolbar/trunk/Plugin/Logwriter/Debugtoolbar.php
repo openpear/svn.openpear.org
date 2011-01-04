@@ -19,7 +19,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
      */
     function log($level, $message)
     {
-        $c =& Ethna_Controller::getInstance();
+        $c = Ethna_Controller::getInstance();
 
         $prefix = $this->ident;
         if (array_key_exists("pid", $this->option)) {
@@ -30,6 +30,29 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
             $this->_getLogLevelName($level)
         );
         $post_prefix = '</div>';
+
+        $tracer = '';
+        if ($this->_getLogLevelName($level) != 'DEBUG'
+            && preg_match('/in (\/.+\.php) on line (\d+)$/', $message, $match)) {
+            list(, $file, $line) = $match;
+            $line = intval($line);
+            if (file_exists($file)) {
+                $tracer .= ($c->getGateway() != GATEWAY_WWW ? "" : '<pre class="ethna-debug-pre">');
+                $f = new SplFileObject($file);
+                $i = $line - 4;
+                foreach (new LimitIterator($f, $line - 4, 7) as $line_str) {
+                    $l = ++$i;
+                    if ($l == $line) {
+                        $tracer .= '<span class="ethna-debug-pre-blink">';
+                    }
+                    $tracer .= $l . ': ' . htmlspecialchars($line_str) . ($c->getGateway() != GATEWAY_WWW ? "" : '<br />');
+                    if ($l == $line) {
+                        $tracer .= '</span>';
+                    }
+                }
+                $tracer .= ($c->getGateway() != GATEWAY_WWW ? "" : '</pre>');
+            }
+        }
 
         if (array_key_exists("function", $this->option) ||
             array_key_exists("pos", $this->option)) {
@@ -48,7 +71,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
 
         $br = $c->getGateway() != GATEWAY_WWW ? "" : "<br />";
 
-        $log_content = ($pre_prefix . $prefix . $message . $post_prefix . "\n");
+        $log_content = ($pre_prefix . $prefix . $message . $tracer . $post_prefix . "\n");
         $this->log_array[] = $log_content;
 
         return $log_content;
@@ -57,7 +80,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
     function end()
     {
         $ctl = Ethna_Controller::getInstance();
-        if (is_null($ctl->view) || !$ctl->view->has_default_header) {
+        if (!$ctl->view->has_default_header) {
             return null;
         }
         echo '<div class="ethna-debug" id="ethna-debug-logwindow">';
@@ -126,7 +149,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
         }
 
 
-        $c =& Ethna_Controller::getInstance();
+        $c = Ethna_Controller::getInstance();
         $basedir = $c->getBasedir();
 
         $function = sprintf("%s.%s", isset($bt[$i]['class']) ? $bt[$i]['class'] : 'global', $bt[$i]['function']);
@@ -137,6 +160,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
         else {
             $file = $bt[$i]['file'];
         }
+        $orig_file = $file;
         if (strncmp($file, $basedir, strlen($basedir)) == 0) {
             $file = substr($file, strlen($basedir));
         }
@@ -144,7 +168,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
             $file = preg_replace('#^/+#', '', substr($file, strlen(ETHNA_BASE)));
         }
         $line = $bt[$i]['line'];
-        return array('function' => $function, 'pos' => sprintf('%s:%s', $file, $line));
+        return array('function' => $function, 'pos' => sprintf('%s:%s', $file, $line), 'file' => $orig_file);
     }
 }
 
