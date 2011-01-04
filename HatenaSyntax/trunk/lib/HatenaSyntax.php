@@ -6,7 +6,9 @@
  * @version $Id$
  */
 
-include_once 'PEG.php';
+if (!class_exists('PEG')) {
+    include_once 'PEG.php';
+}
 include_once dirname(__FILE__) . '/HatenaSyntax/Node.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Regex.php';
 include_once dirname(__FILE__) . '/HatenaSyntax/Locator.php';
