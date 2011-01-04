@@ -32,7 +32,6 @@ class HatenaSyntax_NodeCreater implements PEG_IParser
             $data = $result;
         }
 
-        return new HatenaSyntax_Node(
-            $this->type, $data, $offset, spl_object_hash($context));
+        return new HatenaSyntax_Node($this->type, $data, $offset);
     }
 }

@@ -8,18 +8,12 @@
 
 class HatenaSyntax_Node
 {
-    protected $type, $offset, $data, $contextHash;
-    function __construct($type, $data = array(), $offset = null, $contextHash = null)
+    protected $type, $offset, $data;
+    function __construct($type, $data = array(), $offset = null)
     {
         $this->type = $type;
         $this->data = $data;
         $this->offset = $offset;
-        $this->contextHash = $contextHash;
-    }
-
-    function getContextHash()
-    {
-        return $this->contextHash;
     }
 
     function getOffset()
