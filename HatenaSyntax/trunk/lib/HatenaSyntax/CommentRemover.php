@@ -8,17 +8,21 @@
 
 class HatenaSyntax_CommentRemover
 {
-	static function remove($str)
-	{
-		$str = preg_replace_callback(
-			'/<!--.*?-->|\n>\|[^|]*\|\n.*?\|\|<\n/s', 
-			array(__CLASS__, 'replace'), 
-			"\n" . $str . "\n");
-		return substr($str, 1, -1);
-	}
+    static function remove($str)
+    {
+        if (strpos($str, '<!--') === false) {
+            return $str;
+        }
 
-	static function replace($matches)
-	{
-		return substr($matches[0], 0, 1) === '<' ? '' : $matches[0];
-	}
+        $str = preg_replace_callback(
+            '/<!--.*?-->|\n>\|[^|]*\|\n.*?\|\|<\n/s', 
+            array(__CLASS__, 'replace'), 
+            "\n" . $str . "\n");
+        return substr($str, 1, -1);
+    }
+
+    static function replace($matches)
+    {
+        return substr($matches[0], 0, 1) === '<' ? '' : $matches[0];
+    }
 }
