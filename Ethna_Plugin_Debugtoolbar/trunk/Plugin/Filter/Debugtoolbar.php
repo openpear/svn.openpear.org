@@ -273,7 +273,7 @@ EOF;
         echo '<div class="ethna-debug-subtitle">Definition</div>';
         echo "<div class=\"ethna-debug-log\">";
         //var_dump($this->controller->action_form->getArray());
-        self::dumpArray($this->controller->action_form->form);
+        self::dumpArray($this->controller->action_form->getDef());
         echo "</div> \n";
         echo '<div class="ethna-debug-subtitle">$_GET</div>';
         echo "<div class=\"ethna-debug-log\">";
@@ -305,10 +305,11 @@ EOF;
         $c =& Ethna_Controller::getInstance();
         $debug_tpl = $c->getDirectory('template') . "/smarty_debug.tpl";
 
-        if (!file_exists($debug_tpl)) {
-            Ethna::raiseWarning(sprintf("Smarty debug template not found, please set %s.", $debug_tpl), E_USER_WARNING);
-            return null;
-        }
+        //if smarty2
+        //if (!file_exists($debug_tpl)) {
+        //    Ethna::raiseWarning(sprintf("Smarty debug template not found, please set %s.", $debug_tpl), E_USER_WARNING);
+        //    return null;
+        //}
 
         require_once SMARTY_SYSPLUGINS_DIR . 'smarty_internal_debug.php';
 
