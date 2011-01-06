@@ -1,5 +1,10 @@
 <?php
 include(dirname(__FILE__) . '/../bootstrap/functional.php');
+
+// for include library
+// change the path to your library.
+require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/lib/vendor/phpMailer_v2.3/class.phpmailer.php');
+
 $t = new lime_test(2, new lime_output_color());
 $t->diag('send mail by PHPMailer');
 // success to send a mail

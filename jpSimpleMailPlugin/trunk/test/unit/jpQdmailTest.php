@@ -1,5 +1,10 @@
 <?php
 include(dirname(__FILE__) . '/../bootstrap/unit.php');
+
+// for include library
+// change the path to your library.
+require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/lib/vendor/qdmail.1.2.6b/qdmail.php');
+
 $t = new lime_test(23, new lime_output_color());
 // send mail
 $t->diag('check method');
@@ -19,7 +24,7 @@ $mailer->setPriority($old);
 $old = $mailer->getEncoding();
 $mailer->setEncoding('7bit');
 $t->is($mailer->getEncoding(), '7bit', 'test Encoding');
-$mailer->setPriority($old);
+$mailer->setEncoding($old);
 // return path
 $old = $mailer->getReturnPath();
 $mailer->setReturnPath($params['from']);
@@ -32,7 +37,7 @@ $t->is($mailer->addTo($_SERVER['SF_TEST_TO_ADDRESS'], $params['to_name']), null,
 $old = $mailer->getFrom();
 $mailer->setFrom($params['from'], $params['from_name']);
 $t->is($mailer->getFrom(), $params['from'], 'test From');
-$mailer->setFrom($old);
+//$mailer->setFrom($old);
 //addCc
 $t->is($mailer->addCc($_SERVER['SF_TEST_TO_ADDRESS']), null, 'test to call addCc method');
 $t->is($mailer->addCc($_SERVER['SF_TEST_TO_ADDRESS'], $params['to_name']), null, 'test to call addCc method with name');
@@ -40,10 +45,11 @@ $t->is($mailer->addCc($_SERVER['SF_TEST_TO_ADDRESS'], $params['to_name']), null,
 $t->is($mailer->addBcc($_SERVER['SF_TEST_TO_ADDRESS']), null, 'test to call addBcc method');
 $t->is($mailer->addBcc($_SERVER['SF_TEST_TO_ADDRESS'], $params['to_name']), null, 'test to call addBcc method with name');
 // Subject
-$old = $mailer->getSubject();
+// if subject is null, qdmail occurs an error, so the previous value is not checked.
+//$old = $mailer->getSubject();
 $mailer->setSubject($params['subject']);
 $t->is($mailer->getSubject(), $params['subject'], 'test encoded Subject');
-$mailer->setSubject($old);
+//$mailer->setSubject($old);
 // body
 $old = $mailer->getBody();
 $mailer->setBody($params['body']);

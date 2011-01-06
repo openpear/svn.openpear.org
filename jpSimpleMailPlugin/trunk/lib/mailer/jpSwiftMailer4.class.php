@@ -3,7 +3,7 @@
  * jpSwiftMailer4 class
  * 
  *  this class is for SwiftMailer ver4
- *  require kzl_Jp_Swift_Mime_Headers_UnstructuredHeader
+ *  require Jp_Swift_Mime_Headers_UnstructuredHeader
  *    ref: http://www.kuzilla.co.jp/article.php/20100301symfony
  *
  * @package    jpSimpleMailPlugin
@@ -11,7 +11,6 @@
  * @author     brt.river <brt.river@gmail.com>
  * @version    $Id: jpSwiftMailer4.class.php 1725 2010-03-22 13:32:49Z brtriver $
  */
-require_once dirname(dirname(__FILE__)) . "/kzl_Jp_Swift_Mime_Headers_UnstructredHeader.php";
 class jpSwiftMailer4 extends jpMailer
 {
   public
@@ -24,7 +23,7 @@ class jpSwiftMailer4 extends jpMailer
     mb_language('Ja');
     $this->message = Swift_Message::newInstance();
     $this->message->getHeaders()->remove('Subject');
-    $subjectHeader = new kzl_Jp_Swift_Mime_Headers_UnstructuredHeader('Subject',
+    $subjectHeader = new jp_Swift_Mime_Headers_UnstructuredHeader('Subject',
       new Swift_Mime_HeaderEncoder_Base64HeaderEncoder());
     $this->message->getHeaders()->set($subjectHeader);
     $this->message->setContentType('text/plain');
@@ -49,11 +48,11 @@ class jpSwiftMailer4 extends jpMailer
   }
   public function setEncoding($encoding)
   {
-    $this->message->setEncoding($encoding);
+    $this->message->getHeaders()->get('Content-Transfer-Encoding')->setValue($encoding);
   }
   public function getEncoding()
   {
-    return $this->message->getEncoding();
+    return $this->message->getHeaders()->get('Content-Transfer-Encoding')->getValue();
   }
   public function setSender($address, $name = null)
   {
@@ -144,7 +143,8 @@ class jpSwiftMailer4 extends jpMailer
   }
   public function getFrom()
   {
-    return $this->from->getAddress();
+    $from = $this->message->getFrom();
+    return key($from);
   }
   public function getSubject()
   {
@@ -173,10 +173,41 @@ class jpSwiftMailer4 extends jpMailer
   public function send()
   {
     try {
-      $this->mailer->send($this->message);
+      $result = $this->mailer->send($this->message);
+      if (!$result) throw new Exception('Failures: Cannot send E-mail');
       return true;
     } catch ( Exception $e) {
       throw new jpSendMailException($e);
     }
   }
+}
+
+//@require 'Swift/Mime/Headers/AbstractHeader.php';
+//@require 'Swift/Mime/HeaderEncoder.php';
+
+/**
+ * 日本語(ISO-2022-JP)用メールヘッダクラス
+ * @package jpSimpleMailPlugin
+ * @subpackage Mime
+ * @author kawaguchi
+ * @url http://www.kuzilla.co.jp/
+ */
+class Jp_Swift_Mime_Headers_UnstructuredHeader
+  extends Swift_Mime_Headers_UnstructuredHeader
+{
+  // override
+  public function getFieldBody()
+  {
+    if (!$this->getCachedValue())
+    {
+      // ISO-2022-JP対応
+      if (strcasecmp($this->getCharset(), 'iso-2022-jp') === 0)
+      {
+        $this->setCachedValue(jpSimpleMail::mb_encode_mimeheader(( $this->getValue())));
+      } else {
+        parent::getFieldBody();
+      }
+    }
+    return $this->getCachedValue();
+  }  
 }

@@ -3,16 +3,17 @@ include(dirname(__FILE__) . '/../bootstrap/unit.php');
 
 // for include library
 // change the path to your library.
-$dir = dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/data/swift';
-$sfSimpleAutoload = sfSimpleAutoload::getInstance();
-$sfSimpleAutoload->addDirectory($dir);
-$sfSimpleAutoload->register();
+// SwiftMailer4 depends on sfMailer with sfContext, so you have to create sample application 'frontend' for test 
+// and require ProjectConfiguration.class.php like below.
+require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/config/ProjectConfiguration.class.php';
+$app_configuration = ProjectConfiguration::getApplicationConfiguration('frontend', 'prod', false);
+sfContext::createInstance($app_configuration);
 
 $t = new lime_test(23, new lime_output_color());
 // send mail
 $t->diag('check method');
-$mailer = jpSimpleMail::create('SwiftMailer');
-$t->isa_ok($mailer, 'jpSwiftMailer', 'created instance is correct');
+$mailer = jpSimpleMail::create('SwiftMailer4');
+$t->isa_ok($mailer, 'jpSwiftMailer4', 'created instance is correct');
 // charset
 $old = $mailer->getCharset();
 $mailer->setCharset('utf-8');

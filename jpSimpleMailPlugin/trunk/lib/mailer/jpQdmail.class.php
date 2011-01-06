@@ -16,11 +16,12 @@ class jpQdmail extends jpMailer
   }
   public function setCharset($charset)
   {
-    $this->mailer->setCharset($charset);
+    $this->mailer->charset($charset);
   }
   public function getCharset()
   {
-    return $this->mailer->getCharset();
+    $ret = $this->mailer->charset();
+    return $ret['HEADER'];
   }
   public function setPriority($priority)
   {
@@ -60,18 +61,30 @@ class jpQdmail extends jpMailer
   }
   public function addTo($address, $name = null)
   {
+    if ($name == null) {
+      list($address, $name) = jpSimpleMail::splitAddress($address);
+    }
     $this->mailer->addAddress($address, $name);
   }
   public function setFrom($address, $name = null)
   {
+    if ($name == null) {
+      list($address, $name) = jpSimpleMail::splitAddress($address);
+    }
     $this->mailer->setFrom($address, $name);
   }
   public function addCc($address, $name = null)
   {
+    if ($name == null) {
+      list($address, $name) = jpSimpleMail::splitAddress($address);
+    }
     $this->mailer->AddCc($address, $name);
   }
   public function addBcc($address, $name = null)
   {
+    if ($name == null) {
+      list($address, $name) = jpSimpleMail::splitAddress($address);
+    }
     $this->mailer->AddBcc($address, $name);
   }
   public function setSubject($subject)
@@ -88,6 +101,9 @@ class jpQdmail extends jpMailer
   }
   public function addReplyTo($address, $name = null)
   {
+    if ($name == null) {
+      list($address, $name) = jpSimpleMail::splitAddress($address);
+    }
     $this->mailer->AddReplyTo($address, $name);
   }
   public function getTo()
@@ -97,7 +113,8 @@ class jpQdmail extends jpMailer
   public function getFrom()
   {
     // if not set, email validation erro is occured.
-    return $this->mailer->from[0]['mail'];
+    $from = $this->mailer->from();
+    return (isset($from[0]['mail']))? $from[0]['mail']: "";
   }
   public function getSubject()
   {

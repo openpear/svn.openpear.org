@@ -1,5 +1,10 @@
 <?php
 include(dirname(__FILE__) . '/../bootstrap/unit.php');
+
+// for include library
+// change the path to your library.
+require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/lib/vendor/phpMailer_v2.3/class.phpmailer.php');
+
 $t = new lime_test(23, new lime_output_color());
 // send mail
 $t->diag('check method');
@@ -19,7 +24,7 @@ $mailer->setPriority($old);
 $old = $mailer->getEncoding();
 $mailer->setEncoding('7bit');
 $t->is($mailer->getEncoding(), '7bit', 'test Encoding');
-$mailer->setPriority($old);
+$mailer->setEncoding($old);
 // return path
 $old = $mailer->getReturnPath();
 $mailer->setReturnPath($params['from']);
