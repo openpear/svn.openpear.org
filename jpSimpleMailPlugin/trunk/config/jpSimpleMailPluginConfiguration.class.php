@@ -5,7 +5,7 @@
  * 
  * @package     jpSimpleMailPlugin
  * @subpackage  config
- * @author      Your name here
+ * @author      brt.river <brt.river@gmail.com>
  * @version     SVN: $Id$
  */
 class jpSimpleMailPluginConfiguration extends sfPluginConfiguration

@@ -13,7 +13,7 @@ class jpSimpleMail
    * Factory method
    *
    * @param string $mailer: the name of the instance
-   *                        'PHPMailer', 'SwiftMailer', 'Qdmail' for default
+   *                        'SwiftMailer4','PHPMailer', 'SwiftMailer', 'Qdmail' for default
    * 
    * @return object $class: the created instance
    */
