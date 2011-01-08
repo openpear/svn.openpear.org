@@ -19,9 +19,17 @@ class jpSwiftMailer4 extends jpMailer
     $from = "";
   public function initialize()
   {
-    $this->setMailer(sfContext::getInstance()->getMailer());
+    if (sfContext::hasInstance() and sfContext::getInstance()->getMailer()) {
+      $mailer = sfContext::getInstance()->getMailer();
+    } else {
+      require_once sfConfig::get('sf_symfony_lib_dir') .'/vendor/swiftmailer/swift_required.php';
+      $transport = Swift_MailTransport::newInstance();
+      $mailer = Swift_Mailer::newInstance($transport);
+    }
+
+    $this->setMailer($mailer);
     mb_language('Ja');
-    mb_internal_encoding(sfConfig::('app_jpSimpleMailer_encoding', 'utf-8'));
+    mb_internal_encoding(sfConfig::get('app_jpSimpleMail_encoding', 'utf-8'));
     $this->message = Swift_Message::newInstance();
     $this->message->getHeaders()->remove('Subject');
     $subjectHeader = new jp_Swift_Mime_Headers_UnstructuredHeader('Subject',
