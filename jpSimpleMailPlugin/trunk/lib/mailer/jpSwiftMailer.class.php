@@ -17,6 +17,7 @@ class jpSwiftMailer extends jpMailer
   {
     $this->setMailer(new Swift(new Swift_Connection_NativeMail()));
     mb_language('Ja');
+    mb_internal_encoding(sfConfig::get('app_jpSimpleMail_encoding', 'utf-8'));
     $this->message = new Swift_Message();
     $this->message->setHeaders(new Swift_Message_jpHeaders());
     $this->message->setContentType('text/plain');

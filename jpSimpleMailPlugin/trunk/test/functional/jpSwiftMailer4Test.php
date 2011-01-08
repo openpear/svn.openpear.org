@@ -1,14 +1,6 @@
 <?php
 include(dirname(__FILE__) . '/../bootstrap/functional.php');
 
-// for include library
-// change the path to your library.
-// SwiftMailer4 depends on sfMailer with sfContext, so you have to create sample application 'frontend' for test 
-// and require ProjectConfiguration.class.php like below.
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/config/ProjectConfiguration.class.php';
-$app_configuration = ProjectConfiguration::getApplicationConfiguration('frontend', 'prod', false);
-sfContext::createInstance($app_configuration);
-
 $t = new lime_test(2, new lime_output_color());
 $t->diag('send mail by Swift Mailer ver.4');
 // success to send a mail
@@ -35,6 +27,7 @@ try{
     $mailer->setFrom(sprintf('%s <%s>', $params['from_name'], $params['from']));
     $mailer->setBody($params['body']);
     $mailer->send();
+    // When the To addr is empty, fatal error has occurred without Exception, so we cannot catche this error.
 } catch (jpSendMailException $e) {
   $proccess = false;
 }
