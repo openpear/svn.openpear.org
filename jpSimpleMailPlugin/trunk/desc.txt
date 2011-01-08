@@ -40,7 +40,7 @@ $rs = $mailer->send();
 ==== subversionからチェックアウト ====
 svnをインストールしている環境であれば下記のようにしてopenpear.orgからチェックアウトします。
 <code>
-$ svn checkout http://svn.openpear.org/jpSimpleMailPlugin/tags/0.4.1-beta ./plugins/jpSimpleMailPlugin
+$ svn checkout http://svn.openpear.org/jpSimpleMailPlugin/tags/1.0.0 ./plugins/jpSimpleMailPlugin
 </code>
 
 
@@ -50,7 +50,7 @@ openpear.orgにて公開させていただいています。そのため、openp
 
 <code>
 $ ./symfony plugin:add-channel openpear.org
-$ ./symfony plugin:install --force-license --release=0.4.1 openpear.org/jpSimpleMailPlugin
+$ ./symfony plugin:install --force-license --release=1.0.0 openpear.org/jpSimpleMailPlugin
 </code>
 
 plugin:listで表示されていれば無事インストールが完了です。
@@ -73,7 +73,7 @@ openpear.org
 
 そして、openpear.orgを指定してプラグインをインストールします。
 <code>
-$ ./symfony plugin-install openpear.org/jpSimpleMailPlugin-0.4.1
+$ ./symfony plugin-install openpear.org/jpSimpleMailPlugin-1.0.0
 </code>
 
 plugin-listで表示されていれば完了です。
@@ -190,9 +190,34 @@ $Mailer = $mailer->mailer;
 Zend_Mailなどのその他のメール送信ライブラリにも対応させることも簡単です。
 jpSimpleMailPlugin/lib/mailer/jpXXX.class.phpという名前でjpMailerクラスを基に実装すれば良いだけです。
 
-===== 送信に失敗したとき =====
-各々のメールライブラリで送信した結果がエラーだった場合は、jpSendMailExceptionを投げるようになっています。
-なので以下のようなtry,catchが利用できます。
+===== 送信に失敗したとき(SwiftMailer4) =====
+SwiftMailer4は送信結果として0が返ってきたときは「送信しなかった」か「送信に失敗した」かのどちらかになります。
+また、ccやbccに宛先を指定した場合はその数を返します。
+
+
+symfonyのdev環境の標準ではメールを送信しない設定になっています。(delivery_strategy: none)
+送信に失敗したかどうかをプラグイン内では判断しませんので、戻り値をチェックする処理をアプリケーション側で制御を記述してください。
+
+
+もし、SwiftMailer4が例外を投げた場合は、jpSendMailExceptionを投げるようになっています。
+なので以下のようにtry,catchが利用できます。
+<code php>
+try {
+  $mailer = jpSimpleMail::create('SwiftMailer4');
+  ....
+  $result = $mailer->send();
+} catch (jpSendMailException $e) {
+  // エラーの場合の処理
+}
+if (!$result) {
+ // 「送信しなかった」か「送信に失敗した」場合の処理
+ ....
+}
+</code>
+
+===== 送信に失敗したとき(SwiftMailer4以外) =====
+各々のメールライブラリで例外が投げられた場合は、jpSendMailExceptionを投げるようになっています。
+なので以下のようにtry,catchが利用できます。
 <code php>
 try {
   $mailer = jpSimpleMail::create('Qdmail');
@@ -228,5 +253,3 @@ $ php /path-to-plugin/test/bin/prove.php
 このライブラリはテストするためにsymfonyを活用していますが、ライブラリ自体は最後のメール送信時(sendメソッド)で失敗したときに投げる例外sfExceptionのみsymfonyに依存しています。
 
 なので、フレームワークとは関係なくても各ファイルを読み込みさえできれば移植も簡単（なはず）。
-
-(追記) symfony 1.3以降で標準となったSwiftMailer4対応したため、sfContextインスタンスに依存する部分があります。
