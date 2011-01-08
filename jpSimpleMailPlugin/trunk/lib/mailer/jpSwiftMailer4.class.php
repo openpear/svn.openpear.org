@@ -21,6 +21,7 @@ class jpSwiftMailer4 extends jpMailer
   {
     $this->setMailer(sfContext::getInstance()->getMailer());
     mb_language('Ja');
+    mb_internal_encoding(sfConfig::('app_jpSimpleMailer_encoding', 'utf-8'));
     $this->message = Swift_Message::newInstance();
     $this->message->getHeaders()->remove('Subject');
     $subjectHeader = new jp_Swift_Mime_Headers_UnstructuredHeader('Subject',
