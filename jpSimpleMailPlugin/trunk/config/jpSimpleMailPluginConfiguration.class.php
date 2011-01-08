@@ -15,5 +15,10 @@ class jpSimpleMailPluginConfiguration extends sfPluginConfiguration
    */
   public function initialize()
   {
+    if (sfConfig::get('app_jpSimpleMail_swift_debug', false)) {
+      $this->dispatcher->connect('debug.web.load_panels', array(
+        'JpSwiftWebDebugPanelMailer', 'listenToLoadDebugWebPanelEvent'
+      ));
+    }
   }
 }

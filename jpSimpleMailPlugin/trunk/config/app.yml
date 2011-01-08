@@ -1,3 +1,4 @@
 all:
   jpSimpleMail:
     encoding: utf-8
+    swift_debug: true
