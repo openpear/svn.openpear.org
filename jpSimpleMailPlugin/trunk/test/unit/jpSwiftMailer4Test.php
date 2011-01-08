@@ -1,14 +1,6 @@
 <?php
 include(dirname(__FILE__) . '/../bootstrap/unit.php');
 
-// for include library
-// change the path to your library.
-// SwiftMailer4 depends on sfMailer with sfContext, so you have to create sample application 'frontend' for test 
-// and require ProjectConfiguration.class.php like below.
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/config/ProjectConfiguration.class.php';
-$app_configuration = ProjectConfiguration::getApplicationConfiguration('frontend', 'prod', false);
-sfContext::createInstance($app_configuration);
-
 $t = new lime_test(23, new lime_output_color());
 // send mail
 $t->diag('check method');
