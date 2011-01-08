@@ -182,9 +182,7 @@ class jpSwiftMailer4 extends jpMailer
   public function send()
   {
     try {
-      $result = $this->mailer->send($this->message);
-      if (!$result) throw new Exception('Failures: Cannot send E-mail');
-      return true;
+      return $this->mailer->send($this->message);
     } catch ( Exception $e) {
       throw new jpSendMailException($e);
     }
@@ -219,4 +217,37 @@ class Jp_Swift_Mime_Headers_UnstructuredHeader
     }
     return $this->getCachedValue();
   }  
+}
+class JpSwiftWebDebugPanelMailer extends sfWebDebugPanelMailer{
+  protected function renderMessageInformation(Swift_Message $message)
+  {
+    $internalEncoding = sfConfig::get('app_jpSimpleMail_encoding', 'utf-8');
+    static $i = 0;
+
+    $i++;
+
+    $to = null === $message->getTo() ? '' : implode(', ', array_keys($message->getTo()));
+
+    $html = array();
+    if ($message->getCharset() == 'iso-2022-jp') {
+      $html[] = sprintf('<h3>%s (to: %s) %s</h3>', $message->getSubject(), $to, $this->getToggler('sfWebDebugMailTemplate'.$i));
+      $html[] = '<div id="sfWebDebugMailTemplate'.$i.'" style="display:'.(1 == $i ? 'block' : 'none').'">';
+      $html[] = '<pre>'. htmlspecialchars(mb_convert_encoding($message->toString(), $internalEncoding, $message->getCharset()) , ENT_QUOTES, $internalEncoding).'</pre>';
+    } else {
+      // same as default
+      $html[] = sprintf('<h3>%s (to: %s) %s</h3>', $message->getSubject(), $to, $this->getToggler('sfWebDebugMailTemplate'.$i));
+      $html[] = '<div id="sfWebDebugMailTemplate'.$i.'" style="display:'.(1 == $i ? 'block' : 'none').'">';
+      $html[] = '<pre>'.htmlentities($message->toString(), ENT_QUOTES, $message->getCharset()).'</pre>';
+    }
+    $html[] = '</div>';
+
+    return implode("\n", $html);
+  }
+
+  public static function listenToLoadDebugWebPanelEvent(sfEvent $event)
+  {
+    // override mailer panel
+    $event->getSubject()->setPanel('mailer', new self($event->getSubject()));
+  }
+
 }
