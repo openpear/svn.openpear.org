@@ -33,14 +33,15 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
 
         $tracer = '';
         if ($this->_getLogLevelName($level) != 'DEBUG'
-            && preg_match('/in (\/.+\.php) on line (\d+)$/', $message, $match)) {
-            list(, $file, $line) = $match;
+            && preg_match('/in (template ")?(\/.+\.(php|tpl))"?\s+on line (\d+)/', $message, $match)) {
+            list(, , $file, ,$line) = $match;
             $line = intval($line);
             if (file_exists($file)) {
                 $tracer .= ($c->getGateway() != GATEWAY_WWW ? "" : '<pre class="ethna-debug-pre">');
                 $f = new SplFileObject($file);
-                $i = $line - 4;
-                foreach (new LimitIterator($f, $line - 4, 7) as $line_str) {
+                $min = ($line - 4 < 0) ? 0 : $line - 4;
+                $i = $min;
+                foreach (new LimitIterator($f, $min, 7) as $line_str) {
                     $l = ++$i;
                     if ($l == $line) {
                         $tracer .= '<span class="ethna-debug-pre-blink">';
@@ -80,7 +81,7 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
     function end()
     {
         $ctl = Ethna_Controller::getInstance();
-        if (!$ctl->view->has_default_header) {
+        if (!is_null($view = $ctl->getView()) && !$view->has_default_header) {
             return null;
         }
         echo '<div class="ethna-debug" id="ethna-debug-logwindow">';
@@ -89,6 +90,18 @@ class Ethna_Plugin_Logwriter_Debugtoolbar extends Ethna_Plugin_Logwriter
             echo $log;
         }
         echo '</div>';
+
+        $this->log_array = array();
+    }
+
+    public function __destruct()
+    {
+        if (!empty($this->log_array)) {
+            echo "<h1>Script shutdown unexpectedly</h1>";
+            if (is_array($this->log_array)) foreach ($this->log_array as $log) {
+                echo $log;
+            }
+        }
     }
 
     /**

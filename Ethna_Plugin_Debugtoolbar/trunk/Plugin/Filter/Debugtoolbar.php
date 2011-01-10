@@ -40,6 +40,8 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
         FORM_TYPE_HIDDEN   => 'FORM_TYPE_HIDDEN',
     );
 
+    public function __destruct() {
+    }
     /**
      *  filter which will be executed at the end.
      *
@@ -47,7 +49,7 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
      */
     function postFilter()
     {
-        if (!$this->ctl->view->has_default_header) {
+        if (!is_null($view = $this->ctl->getView()) && !$view->has_default_header) {
             return null;
         }
 
@@ -73,7 +75,7 @@ class Ethna_Plugin_Filter_Debugtoolbar extends Ethna_Plugin_Filter
 <link rel="stylesheet" href="{$url}Debugtoolbar/css/ether.css" type="text/css" />
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
-    google.load("jquery", "1.2");
+    google.load("jquery", "1.3");
 </script>
 <script type="text/javascript" src="{$url}Debugtoolbar/js/jquery.cookie.js"></script>
 EOL;
@@ -183,12 +185,23 @@ jQuery(function()
 </script>
 EOL;
         echo '<div class="ethna-debug" id="ethna-debug-evwindow">';
-        echo '<div class="ethna-debug-title">' . ETHNA_VERSION . ' : ' . $this->controller->action_name . '</div>';
+        echo '<div class="ethna-debug-title">' . ETHNA_VERSION . ' : ' . $this->controller->getCurrentActionName() . '</div>';
         echo "<div class=\"ethna-debug-log\">";
         echo ETHNA_VERSION;
         echo "</div> \n";
         echo "<div class=\"ethna-debug-log\">";
         echo "Ethna_Plugin_Debugtoolbar Version" . $this->version;
+        echo "</div> \n";
+        echo '<div class="ethna-debug-subtitle">Action/View/Forward</div>';
+        echo '<div id="ethna-debug-info-env" style="">';
+        $info = array(
+            'action' => $this->ctl->getCurrentActionName(),
+            'action_form' => get_class($this->ctl->getActionForm()),
+            'view' => get_class($this->ctl->getView()),
+            'forward' => (is_null($view = $this->ctl->getView())) ? "" : $view->getCurrentForwardName(),
+            'encoding' => $this->controller->getClientEncoding(),
+        );
+        self::dumpArray($info);
         echo "</div> \n";
         echo '</div>';
     }
@@ -263,17 +276,20 @@ EOF;
      */
     function dumpActionForm()
     {
+        $af = $this->ctl->getActionForm();
+        if ($af === null) {
+            return ;
+        }
         echo '<div class="ethna-debug" id="ethna-debug-afwindow">';
         echo '<div class="ethna-debug-title">ActionForm</div>';
         echo '<div class="ethna-debug-subtitle">Posted Value</div>';
         echo "<div class=\"ethna-debug-log\">";
-        //var_dump($this->controller->action_form->getArray());
-        self::dumpArray($this->controller->action_form->getArray());
+        self::dumpArray($this->ctl->getActionForm()->getArray());
         echo "</div> \n";
         echo '<div class="ethna-debug-subtitle">Definition</div>';
         echo "<div class=\"ethna-debug-log\">";
         //var_dump($this->controller->action_form->getArray());
-        self::dumpArray($this->controller->action_form->getDef());
+        self::dumpArray($this->controller->getActionForm()->getDef());
         echo "</div> \n";
         echo '<div class="ethna-debug-subtitle">$_GET</div>';
         echo "<div class=\"ethna-debug-log\">";
@@ -302,6 +318,9 @@ EOF;
 
     function smartyDebug()
     {
+        if (!defined('SMARTY_VERSION')) {
+            return ;
+        }
         $c =& Ethna_Controller::getInstance();
         $debug_tpl = $c->getDirectory('template') . "/smarty_debug.tpl";
 
