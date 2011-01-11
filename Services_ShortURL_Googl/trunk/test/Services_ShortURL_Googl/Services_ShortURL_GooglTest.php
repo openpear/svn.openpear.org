@@ -1,8 +1,8 @@
 <?php
-ini_set("include_path", dirname(__FILE__)."/../" . PATH_SEPARATOR . ini_get("include_path"));
+ini_set("include_path", dirname(__FILE__) . "/../../" . PATH_SEPARATOR . ini_get("include_path"));
 
 require_once "PHPUnit/Framework/TestCase.php";
-require_once "Mock.php";
+require_once 'Services/ShortURL/Googl.php';
 
 /**
  * testcase for Services_ShortURL_Google
@@ -14,42 +14,7 @@ class Services_ShortURL_GoogleTest extends PHPUnit_Framework_TestCase
     private $obj;
 
     public function setup() {
-        $this->obj = new Services_ShortURL_Googl_Mock();
-    }
-
-    public function _testC() {
-        $this->assertEquals(177692, $obj->getC(5381 << 5, 5381, ord('w')));
-        $this->assertEquals(5863955, $obj->getC(177692 << 5, 177692, ord('w')));
-        $this->assertEquals(119, $obj->getC(ord('w'), 0 << 6, 0 << 16, 0));
-        $this->assertEquals(7806400, $obj->getC(ord('w'), 119 << 6, 119 << 16, -119));
-    }
-
-    public function testD() {
-        $this->assertEquals('04294967296', $this->obj->getD('http://www.google.com/'));
-        $this->assertEquals('04294967296', $this->obj->getD('http://www.php.net/'));
-        $this->assertEquals('04294967296', $this->obj->getD('http://pear.php.net/'));
-        $this->assertEquals('04294967296', $this->obj->getD('http://d.hatena.ne.jp/shimooka/'));
-    }
-
-    public function testE() {
-        $this->assertEquals(687043177, $this->obj->getE('http://www.google.com/'));
-        $this->assertEquals(2070840540, $this->obj->getE('http://www.php.net/'));
-        $this->assertEquals(1895495391, $this->obj->getE('http://pear.php.net/'));
-        $this->assertEquals(-265894462, $this->obj->getE('http://d.hatena.ne.jp/shimooka/'));
-    }
-
-    public function testF() {
-        $this->assertEquals(1338220122, $this->obj->getF('http://www.google.com/'));
-        $this->assertEquals(-339628655, $this->obj->getF('http://www.php.net/'));
-        $this->assertEquals(-888702754, $this->obj->getF('http://pear.php.net/'));
-        $this->assertEquals(1514055545, $this->obj->getF('http://d.hatena.ne.jp/shimooka/'));
-    }
-
-    public function testGetToken() {
-        $this->assertEquals('78804486762', $this->obj->getToken('http://www.google.com/'));
-        $this->assertEquals('702069990865', $this->obj->getToken('http://www.php.net/'));
-        $this->assertEquals('732079848670', $this->obj->getToken('http://pear.php.net/'));
-        $this->assertEquals('754197369801', $this->obj->getToken('http://d.hatena.ne.jp/shimooka/'));
+        $this->obj = new Services_ShortURL_Googl();
     }
 
     public function testShorten() {
