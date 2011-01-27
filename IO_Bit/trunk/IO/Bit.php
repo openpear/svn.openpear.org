@@ -42,6 +42,14 @@ class IO_Bit {
     function incrementOffset($byte_offset, $bit_offset) {
         $this->_byte_offset += $byte_offset;
         $this->_bit_offset  += $bit_offset;
+	while ($this->_bit_offset >= 8) {
+	        $this->_byte_offset += 1;
+		$this->_bit_offset  -= 8;
+	}
+	while ($this->_bit_offset < 0) {
+	        $this->_byte_offset -= 1;
+		$this->_bit_offset  += 8;
+	}
         return true;
     }
     function getOffset() {
