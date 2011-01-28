@@ -231,4 +231,27 @@ class IO_Bit {
         $this->_data{$byte_offset + 3} = $data{3};
         return true;
     }
+    /*
+     * need bits
+     */
+    function need_bits_unsigned($n) {
+        for ($i = 0 ; $n ; $i++) {
+            $n >>= 1;
+	}
+        return $i;
+    }
+    function need_bits_signed($n) {
+        if ($n < -1) {
+            $n = -1 - $n;
+        }
+	if ($n >= 0) {
+            for ($i = 0 ; $n ; $i++) {
+                $n >>= $1;
+	    }
+            $ret = 1 + $i;
+	} else { // $n == -1
+	    $ret = 1;
+	}
+    	return $ret;
+    }
 }
