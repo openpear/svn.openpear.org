@@ -1,0 +1,23 @@
+Version 1.0.0
+--------------------------------------------------
+completed: SwiftMailer4 with symfony 1.4
+
+fixed debug panel for swiftmail4.
+added an option to activate debug panel for jpSimpleMail with swiftmail4.
+fixed return value of send method in jpSwiftMailer4 class.
+
+Version 0.4.1
+--------------------------------------------------
+fixed: check mb_internal_encoding with app.yml
+
+Version 0.2.0
+--------------------------------------------------
+
+add: a new mailer class for SwiftMailer ver4.
+     This class requires kzl_Jp_Swift_Mime_Headers_UnstructuredHeader class.
+     ref: http://www.kuzilla.co.jp/article.php/20100301symfony
+
+Version 0.1.0
+--------------------------------------------------
+
+First Release.
