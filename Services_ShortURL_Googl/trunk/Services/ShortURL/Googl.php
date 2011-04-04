@@ -5,20 +5,20 @@
  *
  * PHP version 5.2.0+
  *
- * LICENSE: This source file is subject to version 3.01 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_01.txt.  If you did not receive a copy
- * the PHP License and are unable to obtain it through the web,
- * send a note to license@php.net so we can mail you a copy immediately.
+ * LICENSE: This source file is subject to the New BSD license that is
+ * available through the world-wide-web at the following URI:
+ * http://www.opensource.org/licenses/bsd-license.php. If you did not receive
+ * a copy of the New BSD License and are unable to obtain it through the web,
+ * please send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category  CategoryName
  * @package   Services_ShortURL
  * @author    Hideyuki Shimooka <shimooka@doyouphp.jp>
  * @copyright 2011 Hideyuki Shimooka <shimooka@doyouphp.jp>
- * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
+ * @license   http://tinyurl.com/new-bsd New BSD License
  * @version   SVN: $Id$
  * @link      http://pear.php.net/package/Services_ShortURL
- * @see       http://d.hatena.ne.jp/shimooka/
+ * @see       http://d.hatena.ne.jp/shimooka/20110112/1294796415
  */
 
 require_once 'Services/ShortURL/Common.php';
@@ -34,10 +34,10 @@ require_once 'Services/ShortURL/Exception.php';
  * @package   Services_ShortURL
  * @author    Hideyuki Shimooka <shimooka@doyouphp.jp>
  * @copyright 2011 Hideyuki Shimooka <shimooka@doyouphp.jp>
- * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
+ * @license   http://tinyurl.com/new-bsd New BSD License
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/Services_ShortURL
- * @see       http://d.hatena.ne.jp/shimooka/
+ * @see       http://d.hatena.ne.jp/shimooka/20110112/1294796415
  */
 class Services_ShortURL_Googl
     extends Services_ShortURL_Common
