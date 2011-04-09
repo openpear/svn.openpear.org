@@ -143,18 +143,14 @@ class HTML_ExtractContent
     /**
      *
      */
-    private function bdSort($a,$b) {
+    protected function bdSort($a,$b) {
         if ($a[1] == $b[1]) {
             return 0;
         }
         return $a[1] < $b[1] ? 1 : -1;
     }
 
-
-    /**
-     *
-     */
-    private function eliminateUselessTags($html)
+    protected function eliminateUselessTags($html)
     {
         $html = preg_replace('/\342(?:\200[\230-\235]|\206[\220-\223]|\226[\240-\275]|\227[\206-\257]|\230[\205\206])/', '', $html);
         $html = preg_replace('/<(script|style|select|noscript)[^>]*>.*?<\/\1\s*>/ims', '', $html);
@@ -167,7 +163,7 @@ class HTML_ExtractContent
     
     }
 
-    private function hasOnlyTags($text)
+    protected function hasOnlyTags($text)
     {
         $str = preg_replace('/<[^>]*>/ims', '', $text);
         $str = str_replace('&nbsp;', '', $str);
@@ -175,7 +171,7 @@ class HTML_ExtractContent
     
     } 
 
-    private function eliminateLink($html)
+    protected function eliminateLink($html)
     {
         $count = 0;
         $notlinked = preg_replace('/<a\s[^>]*>.*?<\/a\s*>/ims', '', $html, -1, $count);
@@ -188,7 +184,7 @@ class HTML_ExtractContent
         }
     }
 
-    private function isLinkList($text)
+    protected function isLinkList($text)
     {
         if (preg_match('/<(?:ul|dl|ol)(.+?)<\/(?:ul|dl|ol)>/ims', $text, $matches)) {
             $listpart = $matches[1];
@@ -205,8 +201,7 @@ class HTML_ExtractContent
       return 0;
     }
 
-
-    private function evaluateList($list)
+    protected function evaluateList($list)
     {
         if (count($list) <= 0) return 1;
         $h = 0;
@@ -217,8 +212,7 @@ class HTML_ExtractContent
         return 9 * pow((1.0 * $h / count($list)), 2) + 1;
     } 
 
-
-    private function stripTags($html)
+    protected function stripTags($html)
     {
         $str = preg_replace('/<.+?>/', '', $html);
         $str = mb_convert_kana($str, 'asK');
@@ -239,14 +233,3 @@ class HTML_ExtractContent
     }
 }
 
-if (debug_backtrace()) {return;}
-
-$extract = new HTML_ExtractContent();
-$extract->setOpt(array('debug' => true));
-$url = (isset($argv[1])) ? $argv[1] : 'http://www.systemfriend.co.jp/node/312';
-$html = file_get_contents($url);
-var_dump($extract->analyze($html));
-
-//my notes
-//http://labs.cybozu.co.jp/blog/nakatani/downloads/extractcontent.rb  
-//http://cpansearch.perl.org/src/TARAO/HTML-ExtractContent-0.06/lib/HTML/ExtractContent.pm
