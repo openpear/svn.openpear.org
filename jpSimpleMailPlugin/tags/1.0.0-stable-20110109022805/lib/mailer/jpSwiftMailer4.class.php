@@ -35,11 +35,6 @@ class jpSwiftMailer4 extends jpMailer
     $subjectHeader = new jp_Swift_Mime_Headers_UnstructuredHeader('Subject',
       new Swift_Mime_HeaderEncoder_Base64HeaderEncoder());
     $this->message->getHeaders()->set($subjectHeader);
-
-    $toHeader = new jp_Swift_Mime_Headers_MailboxHeader('To',
-      new Swift_Mime_HeaderEncoder_Base64HeaderEncoder());
-    $this->message->getHeaders()->set($toHeader);
-
     $this->message->setContentType('text/plain');
     $this->setCharset('iso-2022-jp');
     $this->message->setEncoder(Swift_Encoding::get7BitEncoding());
@@ -204,7 +199,7 @@ class jpSwiftMailer4 extends jpMailer
  * @author kawaguchi
  * @url http://www.kuzilla.co.jp/
  */
-class jp_Swift_Mime_Headers_UnstructuredHeader
+class Jp_Swift_Mime_Headers_UnstructuredHeader
   extends Swift_Mime_Headers_UnstructuredHeader
 {
   // override
@@ -221,49 +216,8 @@ class jp_Swift_Mime_Headers_UnstructuredHeader
       }
     }
     return $this->getCachedValue();
-  }
+  }  
 }
-
-class jp_Swift_Mime_Headers_MailboxHeader extends Swift_Mime_Headers_MailboxHeader
-{
-  protected function normalizeMailboxes(array $mailboxes)
-  {
-    $actualMailboxes = array();
-    foreach ($mailboxes as $key => $value)
-    {
-      if (is_string($key)) {
-        $address = $key;
-        $name = $value;
-      } else {
-        $address = $value;
-        $name = null;
-      }
-      try {
-        // docomoとezwebでは、ここでExceptionが投げられるので、そのまま受け取る。
-        $this->_assertValidAddress($address);
-      } catch(Swift_RfcComplianceException $e) {
-        if (!preg_match('/(docomo|ezweb)\.ne\.jp$/', $address)) {
-          throw $e;
-        }
-      }
-      $actualMailboxes[$address] = $name;
-    }
-    return $actualMailboxes;
-  }
-
-  private function _assertValidAddress($address)
-  {
-    if (!preg_match('/^' . $this->getGrammar('addr-spec') . '$/D',
-      $address))
-    {
-      throw new Swift_RfcComplianceException(
-        'Address in mailbox given [' . $address .
-        '] does not comply with RFC 2822, 3.6.2.'
-        );
-    }
-  }
-}
-
 class JpSwiftWebDebugPanelMailer extends sfWebDebugPanelMailer{
   protected function renderMessageInformation(Swift_Message $message)
   {
