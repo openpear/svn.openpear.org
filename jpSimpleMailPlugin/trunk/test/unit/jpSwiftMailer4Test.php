@@ -1,7 +1,7 @@
 <?php
 include(dirname(__FILE__) . '/../bootstrap/unit.php');
 
-$t = new lime_test(23, new lime_output_color());
+$t = new lime_test(26, new lime_output_color());
 // send mail
 $t->diag('check method');
 $mailer = jpSimpleMail::create('SwiftMailer4');
@@ -69,3 +69,14 @@ $mailer->setSender($old);
 // addAddress (only this class)
 $t->is($mailer->addAddress($_SERVER['SF_TEST_TO_ADDRESS']), null, 'test to call addAddress method');
 $t->is($mailer->addAddress($_SERVER['SF_TEST_TO_ADDRESS'], $params['to_name']), null, 'test to call addAddress method with name');
+// check RFC Compliance mail throw exception
+try {
+  $mailer->setFrom('testtesttest.@gmail.com', 'test user for gmail');
+} catch (Exception $e) {
+  $t->isa_ok($e, 'Swift_RfcComplianceException', 'RFC incompiance mail throws Exception.');
+}
+$t->is($mailer->clearTo(), null, 'test to call clearTo method');
+$mailer->addTo('testtesttest.@docomo.ne.jp', null, 'test user for docomo');
+$t->is($mailer->message->getTo(), array('testtesttest.@docomo.ne.jp' => ''), 'RFC incompianct mail address has to pass here.');
+$mailer->setFrom('testtes..ttest@ezweb.ne.jp', 'test user for docomo');
+$t->is($mailer->getFrom(), 'testtes..ttest@ezweb.ne.jp', 'RFC incompianct mail address has to pass here.');

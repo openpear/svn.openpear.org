@@ -11,6 +11,7 @@
  * @author     brt.river <brt.river@gmail.com>
  * @version    $Id: jpSwiftMailer4.class.php 1725 2010-03-22 13:32:49Z brtriver $
  */
+require_once sfConfig::get('sf_symfony_lib_dir') .'/vendor/swiftmailer/swift_required.php';
 class jpSwiftMailer4 extends jpMailer
 {
   public
@@ -30,16 +31,23 @@ class jpSwiftMailer4 extends jpMailer
     $this->setMailer($mailer);
     mb_language('Ja');
     mb_internal_encoding(sfConfig::get('app_jpSimpleMail_encoding', 'utf-8'));
+
+    // fix dependency
+    Swift_DependencyContainer::getInstance()
+      // Specify how instances of Base64HeaderEncoder are made
+      ->register('mime.base64headerencoder')
+      ->asSharedInstanceOf('Swift_Mime_HeaderEncoder_Base64HeaderEncoder')
+
+      ->register('mime.headerfactory')
+      ->asNewInstanceOf('jp_Swift_Mime_SimpleHeaderFactory')
+      ->withDependencies(array(
+        'mime.base64headerencoder',
+        'mime.rfc2231encoder',
+        'properties.charset'
+      ))
+      ;
+
     $this->message = Swift_Message::newInstance();
-    $this->message->getHeaders()->remove('Subject');
-    $subjectHeader = new jp_Swift_Mime_Headers_UnstructuredHeader('Subject',
-      new Swift_Mime_HeaderEncoder_Base64HeaderEncoder());
-    $this->message->getHeaders()->set($subjectHeader);
-
-    $toHeader = new jp_Swift_Mime_Headers_MailboxHeader('To',
-      new Swift_Mime_HeaderEncoder_Base64HeaderEncoder());
-    $this->message->getHeaders()->set($toHeader);
-
     $this->message->setContentType('text/plain');
     $this->setCharset('iso-2022-jp');
     $this->message->setEncoder(Swift_Encoding::get7BitEncoding());
@@ -222,6 +230,50 @@ class jp_Swift_Mime_Headers_UnstructuredHeader
     }
     return $this->getCachedValue();
   }
+}
+
+class jp_Swift_Mime_SimpleHeaderFactory extends Swift_Mime_SimpleHeaderFactory
+{
+  private $_encoder;
+  private $_charset;
+
+  public function __construct(Swift_Mime_HeaderEncoder $encoder,
+    Swift_Encoder $paramEncoder, $charset = null)
+  {
+    $this->_encoder = $encoder;
+    $this->_charset = $charset;
+    parent::__construct($encoder, $paramEncoder, $charset);
+  }
+  public function createTextHeader($name, $value = null)
+  {
+    $header = new jp_Swift_Mime_Headers_UnstructuredHeader($name, $this->_encoder);
+    if (isset($value))
+    {
+      $header->setFieldBodyModel($value);
+    }
+    $this->_setHeaderCharset($header);
+    return $header;
+  }
+
+
+  public function createMailboxHeader($name, $addresses = null)
+  {
+    $header = new jp_Swift_Mime_Headers_MailboxHeader($name, $this->_encoder);
+    if (isset($addresses))
+    {
+      $header->setFieldBodyModel($addresses);
+    }
+    $this->_setHeaderCharset($header);
+    return $header;
+  }
+  private function _setHeaderCharset(Swift_Mime_Header $header)
+  {
+    if (isset($this->_charset))
+    {
+      $header->setCharset($this->_charset);
+    }
+  }
+
 }
 
 class jp_Swift_Mime_Headers_MailboxHeader extends Swift_Mime_Headers_MailboxHeader
