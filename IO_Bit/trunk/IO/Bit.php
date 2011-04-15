@@ -1,4 +1,4 @@
-[<?php
+<?php
 
   /*
    * 2010/07/28- (c) yoya@awm.jp
@@ -42,14 +42,14 @@ class IO_Bit {
     function incrementOffset($byte_offset, $bit_offset) {
         $this->_byte_offset += $byte_offset;
         $this->_bit_offset  += $bit_offset;
-	while ($this->_bit_offset >= 8) {
-	        $this->_byte_offset += 1;
-		$this->_bit_offset  -= 8;
-	}
-	while ($this->_bit_offset < 0) {
-	        $this->_byte_offset -= 1;
-		$this->_bit_offset  += 8;
-	}
+        while ($this->_bit_offset >= 8) {
+            $this->_byte_offset += 1;
+             $this->_bit_offset  -= 8;
+        }
+        while ($this->_bit_offset < 0) {
+            $this->_byte_offset -= 1;
+            $this->_bit_offset  += 8;
+        }
         return true;
     }
     function getOffset() {
@@ -237,22 +237,22 @@ class IO_Bit {
     function need_bits_unsigned($n) {
         for ($i = 0 ; $n ; $i++) {
             $n >>= 1;
-	}
+        }
         return $i;
     }
     function need_bits_signed($n) {
         if ($n < -1) {
             $n = -1 - $n;
         }
-	if ($n >= 0) {
+        if ($n >= 0) {
             for ($i = 0 ; $n ; $i++) {
                 $n >>= 1;
-	    }
+            }
             $ret = 1 + $i;
-	} else { // $n == -1
-	    $ret = 1;
-	}
-    	return $ret;
+        } else { // $n == -1
+            $ret = 1;
+        }
+        return $ret;
     }
 
     /*
