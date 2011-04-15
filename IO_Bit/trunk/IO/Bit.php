@@ -4,6 +4,8 @@
    * 2010/07/28- (c) yoya@awm.jp
    */
 
+require_once dirname(__FILE__).'/Bit/Exception.php';
+
 class IO_Bit {
     /*
      * instance variable
@@ -67,6 +69,11 @@ class IO_Bit {
      */
     function getData($length) {
         $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + $length) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getData: $data_len < $offset + $length");
+        }
         $data = substr($this->_data, $this->_byte_offset, $length);
         $data_len = strlen($data);
         $this->_byte_offset += $data_len;
@@ -74,18 +81,33 @@ class IO_Bit {
     }
     function getUI8() {
         $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 1) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUI8: $data_len < $offset + 1");
+        }
         $value = ord($this->_data{$this->_byte_offset});
         $this->_byte_offset += 1;
         return $value;
     }
     function getUI16BE() {
         $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 2) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUI16BE: $data_len < $offset + 2");
+        }
         $ret = unpack('n', substr($this->_data, $this->_byte_offset, 2));
         $this->_byte_offset += 2;
         return $ret[1];
     }
     function getUI32BE() {
         $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 4) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUI32BE: $data_len < $offset + 4");
+        }
         $ret = unpack('N', substr($this->_data, $this->_byte_offset, 4));
         $this->_byte_offset += 4;
         $value = $ret[1];
@@ -96,12 +118,22 @@ class IO_Bit {
     }
     function getUI16LE() {
         $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 2) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUI16LE: $data_len < $offset + 2");
+        }
         $ret = unpack('v', substr($this->_data, $this->_byte_offset, 2));
         $this->_byte_offset += 2;
         return $ret[1];
     }
     function getUI32LE() {
         $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 4) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUI32LE: $data_len < $offset + 4");
+        }
         $ret = unpack('V', substr($this->_data, $this->_byte_offset, 4));
         $this->_byte_offset += 4;
         $value = $ret[1];
@@ -111,6 +143,11 @@ class IO_Bit {
         return $value;
     }
     function getUIBit() {
+        if (strlen($this->_data) <= $this->_byte_offset) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUIBit: $data_len <= $offset");
+        }
         $value = ord($this->_data{$this->_byte_offset});
         $value = 1 & ($value >> (7 - $this->_bit_offset));
         $this->_bit_offset ++;
