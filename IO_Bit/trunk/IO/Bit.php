@@ -1,4 +1,4 @@
-<?php
+[<?php
 
   /*
    * 2010/07/28- (c) yoya@awm.jp
@@ -253,5 +253,68 @@ class IO_Bit {
 	    $ret = 1;
 	}
     	return $ret;
+    }
+
+    /*
+     * general purpose hexdump routine
+     */
+    function hexdump($offset, $length, $limit = null) {
+        printf("             0  1  2  3  4  5  6  7   8  9  a  b  c  d  e  f  0123456789abcdef\n");
+        $dump_str = '';
+        if ($offset % 0x10) {
+            printf("0x%08x ", $offset - ($offset % 0x10));
+            $dump_str = str_pad(' ', $offset % 0x10);
+        }
+        for ($i = 0; $i < $offset % 0x10; $i++) {
+            if ($i == 0) {
+                echo(' ');
+            }
+            if ($i == 8) {
+                echo(' ');
+            }
+            echo('   ');
+        }
+        for ($i = $offset ; $i < $offset + $length; $i++) {
+            if ((! is_null($limit)) && ($i >= $offset + $limit)) {
+                break;
+            }
+            if (($i % 0x10) == 0) {
+                printf("0x%08x  ", $i);
+            }
+            if ($i%0x10 == 8) {
+                echo(' ');
+            }
+            if ($i < strlen($this->_data)) {
+                $chr = $this->_data{$i};
+                $value = ord($chr);
+                if ((0x20 < $value) && ($value < 0x7f)) { // XXX: printable
+                    $dump_str .= $chr;
+                } else {
+                    $dump_str .= ' ';
+                }
+                printf("%02x ", $value);
+            } else {
+                $dump_str .= ' ';
+                echo '   ';
+            }
+            if (($i % 0x10) == 0x0f) {
+                echo " ";
+                echo $dump_str;
+                echo PHP_EOL;
+                $dump_str = '';
+            }
+        }
+        if (($i % 0x10) != 0) {
+            echo str_pad(' ', 3 * (0x10 - ($i % 0x10)));
+            if ($i < 8) {
+                echo ' ';
+            }
+            echo " ";
+            echo $dump_str;
+            echo PHP_EOL;
+        }
+        if ((! is_null($limit)) && ($i >= $offset + $limit)) {
+            echo "...(truncated)...".PHP_EOL;
+        }
     }
 }
