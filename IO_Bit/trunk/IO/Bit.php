@@ -36,6 +36,12 @@ class IO_Bit {
     /*
      * offset method
      */
+    function hasNextData($length = 1) {
+        if (strlen($this->_data) < $this->_byte_offset + $length) {
+            return false;
+        }
+        return true;
+    }
     function setOffset($byte_offset, $bit_offset) {
         $this->_byte_offset = $byte_offset;
         $this->_bit_offset  = $bit_offset;
