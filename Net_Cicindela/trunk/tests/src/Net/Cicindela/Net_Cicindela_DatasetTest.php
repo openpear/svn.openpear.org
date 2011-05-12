@@ -1,8 +1,8 @@
 <?php
-ini_set("include_path", "../src/Net/Cicindela".PATH_SEPARATOR. dirname(__FILE__) . "/../../../../src".PATH_SEPARATOR.ini_get("include_path"));
+ini_set("include_path", realpath(dirname(__FILE__) . "/../../../../src").PATH_SEPARATOR.ini_get("include_path"));
 require_once 'PHPUnit/Framework.php';
 
-require_once 'Dataset.php';
+require_once 'Net/Cicindela/Dataset.php';
 
 /**
  * Test class for Net_Cicindela_Dataset.
