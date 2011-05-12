@@ -1,9 +1,9 @@
 <?php
-ini_set("include_path", "../src/Net".PATH_SEPARATOR."../../../src/Net".PATH_SEPARATOR.ini_get("include_path"));
+ini_set("include_path", realpath(dirname(__FILE__) . "/../../../src").PATH_SEPARATOR.ini_get("include_path"));
 require_once 'PHPUnit/Framework.php';
 
 PHPUnit_Util_Filter::addDirectoryToFilter('C:\php\pear');
-require_once 'Cicindela.php';
+require_once 'Net/Cicindela.php';
 
 /**
  * Test class for Net_Cicindela.
