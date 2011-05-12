@@ -74,8 +74,10 @@ class Net_Cicindela
      */
     public function record(array $param)
     {
-        $url = new Net_URL2($this->getBaseUrl() . 'record');
-        $url->setOption(Net_URL2::OPTION_SEPARATOR_OUTPUT, '&'); // arg_separator.outputに左右されては困る。
+        $url = new Net_URL2($this->getBaseUrl() . 'record', 
+            array(Net_URL2::OPTION_SEPARATOR_OUTPUT=>'&')// arg_separator.outputに左右されては困る。
+            );
+        
         $url->setQueryVariables($param);
         $request = $this->request;
         $request->setURL($url);
@@ -98,8 +100,9 @@ class Net_Cicindela
      */
     public function getRecommend(array $param)
     {
-        $url = new Net_URL2($this->getBaseUrl() . 'recommend');
-        $url->setOption(Net_URL2::OPTION_SEPARATOR_OUTPUT, '&'); // arg_separator.outputに左右されては困る。
+        $url = new Net_URL2($this->getBaseUrl() . 'recommend',
+            array(Net_URL2::OPTION_SEPARATOR_OUTPUT=>'&')// arg_separator.outputに左右されては困る。
+            );
         $url->setQueryVariables($param);
         $request = $this->request;
         $request->setURL($url);
