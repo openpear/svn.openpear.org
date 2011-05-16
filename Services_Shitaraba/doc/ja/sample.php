@@ -3,10 +3,10 @@
 	//OpenPear/Services/Shitaraba
 		require_once('Services/Shitaraba.php');
 	//引数はジャンル、掲示板番号、管理画面パスワード
-		$shitaraba=new Services_Shitaraba('gerne','123456789','password');
+		$shitaraba=Services_Shitaraba::factory('genre','123456789','password');
 	
 	//各パラメータを個別にセット
-		$shitaraba->setGerne('gerne');
+		$shitaraba->setGerne('genre');
 		$shitaraba->setBbsnum('123456789');
 		$shitaraba->setPw('password');
 	
@@ -42,4 +42,10 @@
 		$ret=$shitaraba->datThread(
 			array(123456,234567)
 		);
-		
+	
+	/*管理画面からスレッドの中身を取得
+	* @param  int    スレッドID
+	* @param  string NGワード、入っていれば該当の発言「のみ」取り出す
+	* @param  string NGホスト、入っていれば該当の発言「のみ」取り出す
+	**/
+		$ret=$shitaraba->getThreadAdmin($threadId, $ngWord, $ngHost);
