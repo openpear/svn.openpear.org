@@ -9,6 +9,7 @@
 
 ・Zend_Http_Client
 ・Zend_Http_Cookie
+・ホスト名で削除機能を使用する場合はtidy
 
 その他
 ・Pearコーディング規約に沿ってないので修正必須
@@ -22,7 +23,7 @@
 //OpenPear/Services/Shitaraba
     require_once('Services/Shitaraba.php');
 //引数はジャンル、掲示板番号、管理画面パスワード
-    $shitaraba=new Services_Shitaraba('gerne','123456789','password');
+    $shitaraba=Services_Shitaraba::factory('gerne','123456789','password');
 
 //各パラメータを個別にセット
     $shitaraba->setGerne('gerne');
@@ -62,7 +63,20 @@
         array(123456,234567)
     );
 
+/*管理画面からスレッドの中身を取得
+* @param  int    スレッドID
+* @param  string NGワード、入っていれば該当の発言「のみ」取り出す
+* @param  string NGホスト、入っていれば該当の発言「のみ」取り出す
+**/
+	$ret=$shitaraba->getThreadAdmin($threadId, $ngWord, $ngHost);
+
 
 2010/04/20頃
 dat落ち機能が効かなくなってたのを修正。
 つーかいいかげんAPI作れと
+
+2011/05/16
+ソースをPearっぽく修正
+メソッド名とか中身とかも整理したかったんだけどめんどいのでまたいつか
+コンストラクタは使えなくなったのでfactoryにしてください
+あとホスト名で削除機能を追加
