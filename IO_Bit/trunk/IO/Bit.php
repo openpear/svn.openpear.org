@@ -96,6 +96,13 @@ class IO_Bit {
         $this->_byte_offset += 1;
         return $value;
     }
+    function getSI8() {
+        $value = $this->getUI8();
+        if ($value < 0x80) {
+            return $value;
+        }
+        return $value - 0x100; // 2-negative
+    }
     function getUI16BE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 2) {
@@ -133,7 +140,21 @@ class IO_Bit {
         $this->_byte_offset += 2;
         return $ret[1];
     }
+    function getSI16LE() {
+        $value = $this->getUI16LE();
+        if ($value < 0x8000) {
+            return $value;
+        }
+        return $value - 0x10000; // 2-negative
+    }
     function getUI32LE() {
+        $value = $this->getSI32LE();
+        if ($value < 0) { // PHP bugs
+            $value += 4294967296;
+        }
+        return $value;
+    }
+    function getSI32LE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 4) {
             $data_len = strlen($this->_data);
@@ -143,10 +164,7 @@ class IO_Bit {
         $ret = unpack('V', substr($this->_data, $this->_byte_offset, 4));
         $this->_byte_offset += 4;
         $value = $ret[1];
-        if ($value < 0) { // php bugs
-            $value += 4294967296;
-        }
-        return $value;
+        return $value; // PHP bug
     }
     function getUIBit() {
         if (strlen($this->_data) <= $this->_byte_offset) {
@@ -196,6 +214,12 @@ class IO_Bit {
         $this->_byte_offset += 1;
         return true;
     }
+    function putSI8($value) {
+        if ($value < 0) {
+            $value = $value + 0x100; // 2-negative reverse
+        }
+        return $this->putUI8($value);
+    }
     function putUI16BE($value) {
         $this->byteAlign();
         $this->_data .= pack('n', $value);
@@ -214,11 +238,20 @@ class IO_Bit {
         $this->_byte_offset += 2;
         return true;
     }
+    function putSI16LE($value) {
+        if ($value < 0) {
+            $value = $value + 0x10000; // 2-negative reverse
+        }
+        return $this->putUI16LE($value);
+    }
     function putUI32LE($value) {
         $this->byteAlign();
-        $this->_data .= pack('V', $value);
+        $this->_data .= pack('V', $value); // XXX
         $this->_byte_offset += 4;
         return true;
+    }
+    function putSI32LE($value) {
+        return $this->putUI32LE($value); // XXX
     }
     function _allocData($need_data_len = null) {
         if (is_null($need_data_len)) {
