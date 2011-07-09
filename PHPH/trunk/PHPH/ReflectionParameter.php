@@ -89,7 +89,7 @@ class PHPH_ReflectionParameter extends ReflectionParameter
 			if (!$gen->getClass($class) && !$gen->getInterface($class)) {
 				$class_lower = strtolower($class);
 				$esc_class = PHPH_Util::escape($class);
-				$result[] = sprintf("zend_class_entry *%s_ce = zend_fetch_class(%s, sizeof(%s)-1, ZEND_FETCH_CLASS_AUTO TSRMLS_CC);", $class_lower, $esc_class, $esc_class);
+				$result[] = sprintf("zend_class_entry *ce_%s = zend_fetch_class(%s, sizeof(%s)-1, ZEND_FETCH_CLASS_AUTO TSRMLS_CC);", $class_lower, $esc_class, $esc_class);
 			}
 			break;
 		case self::TYPE_CLASS_NAME:
@@ -141,7 +141,7 @@ class PHPH_ReflectionParameter extends ReflectionParameter
 			break;
 		case self::TYPE_CLASS_SPECIFIED_OBJECT:
 			$class_lower = strtolower($this->getClass()->getName());
-			$result = sprintf("&%s, %s_ce", $name, $class_lower);
+			$result = sprintf("&%s, ce_%s", $name, $class_lower);
 			break;
 		case self::TYPE_CALLBACK:
 			$result = sprintf("&%s, &%s_cache", $name, $name);

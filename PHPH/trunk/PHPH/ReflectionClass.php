@@ -106,10 +106,13 @@ class PHPH_ReflectionClass extends ReflectionClass
 		$class = $this->getName();
 		$class_lower = strtolower(str_replace("\\", "_", $class));
 		$methods = $this->getMethods();
-		
-		$result = sprintf("// %s arginfo\n", $class);
-		foreach ($methods as $method) {
-			$result .= $method->getArgInfo()."\n";
+
+		$result = "";
+		if (0<count($methods)) {
+			$result = sprintf("// %s arginfo\n", $class);
+			foreach ($methods as $method) {
+				$result .= $method->getArgInfo()."\n";
+			}
 		}
 		return $result;
 	}
@@ -157,19 +160,24 @@ class PHPH_ReflectionClass extends ReflectionClass
 			// regist
 			$parent = $this->getParentClass();
 			if (isset($parent)) {
+				// extends
 				// todo php5.3 namespace
 				if ($gen->getClass($parent->getName())) {
-					$result .= sprintf("pce = ce_%s;\n", strtolower($parent->getName()));
+					// parent class is managed
+					$pclass_lower = strtolower($parent->getName());
+					$result .= sprintf("ce_%s = zend_register_internal_class_ex(&ce, ce_%s, NULL TSRMLS_CC);\n", $class_lower, $pclass_lower);
 				} else {
+					// parent class is not managed
 					$esc_parent = PHPH_Util::escape($parent->getName());
 					$result .= sprintf("pce = zend_fetch_class(%s, sizeof(%s)-1, ZEND_FETCH_CLASS_AUTO TSRMLS_CC);\n", $esc_parent, $esc_parent);
+					$result .= "if (pce) {\n";
+					$result .= sprintf("\tce_%s = zend_register_internal_class_ex(&ce, pce, NULL TSRMLS_CC);\n", $class_lower);
+					$result .= "} else {\n";
+					$result .= sprintf("\tce_%s = zend_register_internal_class(&ce TSRMLS_CC);\n", $class_lower);
+					$result .= "}\n";
 				}
-				$result .= "if (pce) {\n";
-				$result .= sprintf("\tce_%s = zend_register_internal_class_ex(&ce, pce, NULL TSRMLS_CC);\n", $class_lower);
-				$result .= "} else {\n";
-				$result .= sprintf("\tce_%s = zend_register_internal_class(&ce TSRMLS_CC);\n", $class_lower);
-				$result .= "}\n";
 			} else {
+				// not extends
 				$result .= sprintf("ce_%s = zend_register_internal_class(&ce TSRMLS_CC);\n", $class_lower);
 			}
 
