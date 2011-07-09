@@ -57,14 +57,26 @@ class PHPH_ReflectionGlobal
 		foreach ($functions as $function) {
 			$ns = $function->getNamespaceName();
 			$fname = $function->getShortName();
+			$arg_info = sprintf("arginfo_%s", $fname);
 			if (isset($ns)) {
 				$ns = PHPH_Util::escape($ns);
-				$result .= sprintf("ZEND_NS_FE(%s, %s, NULL)\n", $ns, $fname);
+				$result .= sprintf("ZEND_NS_FE(%s, %s, %s)\n", $ns, $fname, $arg_info);
 			} else {
-				$result .= sprintf("PHP_FE(%s, NULL)\n", $fname);
+				$result .= sprintf("PHP_FE(%s, %s)\n", $fname, $arg_info);
 			}
 		}
 		return PHPH_Util::indent($result, 1);
+	}
+
+	public function getArgInfo()
+	{
+		$functions = $this->getFunctions();
+		
+		$result = "// global function arginfo\n";
+		foreach ($functions as $function) {
+			$result .= $function->getArgInfo()."\n";
+		}
+		return $result;
 	}
 
 	public function getModuleInit()
@@ -98,8 +110,7 @@ class PHPH_ReflectionGlobal
 		if (0<count($functions)) {
 			$result = "/* global function\n */\n";
 			foreach ($functions as $function) {
-				$fname = $function->getShortName();
-				$result .= sprintf("PHP_FUNCTION(%s)\n{\n}\n\n", $fname);
+				$result .= $function->getPHPFunction()."\n";
 			}
 			$result .= "\n";
 		}

@@ -95,7 +95,8 @@ class PHPH
 			)
 		);
 
-		$template_cmd->addArgument(
+		// subcommand template method
+		$template_cmd->addCommand(
 			'method_name',
 			array(
 				'description' => 'target method name'
@@ -200,6 +201,7 @@ class PHPH
 		self::putFile('php_'.$extname.'.h', $gen->generateH());
 		self::putFile('php_'.$extname.'.c', $gen->generateC());
 		self::putFile($extname.'.c', $gen->generateMain(), $overwrite);
+		self::putFile('definetest.php', $gen->generateDefineTest());
 	}
 
 	private function _doMake(Console_CommandLine_Result $arg)
@@ -246,26 +248,34 @@ class PHPH
 		$gen->finish();
 
 		// template
-		$class_name = null;
-		$method_name = $arg->command->args["method_name"];
-		if (strpos($method_name, "::")) {
-			// method
-			list($class_name, $method_name) = explode("::", $method_name, 2);
-			$class = null;
-			if ($class = $gen->getClass($class_name)) {
-			} else if ($class = $gen->getInterface($class_name)) {
+		$method_name = $arg->command->command_name;
+		if ($method_name!==false) {
+			$class_name = null;
+			if (strpos($method_name, "::")) {
+				// method
+				list($class_name, $method_name) = explode("::", $method_name, 2);
+				$class = null;
+				if ($class = $gen->getClass($class_name)) {
+				} else if ($class = $gen->getInterface($class_name)) {
+				}
+				if (!$class) {
+					throw new Exception(sprintf("Class not found: %s", $class_name));
+				}
+				$method = $class->getMethod($method_name);
+				if (!$method) {
+					throw new Exception(sprintf("Method not found: %s", $method_name));
+				}
+				echo $method->getPHPMethod();
+			} else {
+				// function
+				$function = $gen->getFunction($method_name);
+				if (!$function) {
+					throw new Exception(sprintf("Function not found: %s", $method_name));
+				}
+				echo $function->getPHPFunction();
 			}
-			if (!$class) {
-				throw new Exception(sprintf("Class not found: %s", $class_name));
-			}
-			$method = $class->getMethod($method_name);
-			if (!$method) {
-				throw new Exception(sprintf("Method not found: %s", $method_name));
-			}
-			echo $method->getPHPMethod();
 		} else {
-			// function
-			// todo
+			echo $gen->generateMain();
 		}
 	}
 

@@ -13,6 +13,10 @@
  */
 %%PHPH_CLASS_ENTRY%%
 
+/* arg_info
+ */
+%%PHPH_ARG_INFO%%
+
 /* extname_functions[]
  *
  * Every user visible function must have an entry in extname_functions[].
@@ -21,10 +25,6 @@ zend_function_entry extname_functions[] = {
 %%PHPH_FUNCTION_ENTRY%%
 	{NULL, NULL, NULL}	/* Must be the last line in extname_functions[] */
 };
-
-/* arg_info
- */
-%%PHPH_ARG_INFO%%
 
 /* xxx_methods[]
  *

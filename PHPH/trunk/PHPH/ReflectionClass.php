@@ -1,8 +1,6 @@
 <?php
 
 require_once 'PHPH/ReflectionMethod.php';
-//require_once 'PHPH/ReflectionArguments.php';
-//require_once 'PHPH/ReflectionArgument.php';
 require_once 'PHPH/TopologicalSort.php';
 require_once 'PHPH/Util.php';
 
@@ -129,7 +127,7 @@ class PHPH_ReflectionClass extends ReflectionClass
 			$result .= sprintf("\tPHP_ME(%s, %s, arginfo_%s_%s, %s)\n", $class_lower, $method->name, $class_lower, $method->name, $flag);
 		}
 		$result .= "\t{ NULL, NULL, NULL }\n";
-		$result .= "};\n";
+		$result .= "};\n\n";
 		return $result;
 	}
 
