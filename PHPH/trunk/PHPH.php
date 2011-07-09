@@ -255,9 +255,8 @@ class PHPH
 				// method
 				list($class_name, $method_name) = explode("::", $method_name, 2);
 				$class = null;
-				if ($class = $gen->getClass($class_name)) {
-				} else if ($class = $gen->getInterface($class_name)) {
-				}
+				if (!$class) $class = $gen->getClass($class_name);
+				if (!$class) $class = $gen->getInterface($class_name);
 				if (!$class) {
 					throw new Exception(sprintf("Class not found: %s", $class_name));
 				}
