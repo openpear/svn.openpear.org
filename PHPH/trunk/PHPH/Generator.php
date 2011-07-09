@@ -120,6 +120,16 @@ class PHPH_Generator
 		return null;
 	}
 
+	public function getFunction($function_name)
+	{
+		foreach ($this->global->getFunctions() as $function) {
+			if ($function->getName()==$function_name) {
+				return $function;
+			}
+		}
+		return null;
+	}
+
 
 	// generator
 
@@ -193,12 +203,13 @@ class PHPH_Generator
 	public function generateC()
 	{
 		$class_entry = "";
-		$function_entry = "";
 		$arg_info = "";
+		$function_entry = "";
 		$method_entry = "";
 		$module_init = "";
 
 		// global
+		$arg_info .= $this->global->getArgInfo();
 		$function_entry = $this->global->getFunctionEntry();
 		$module_init .= $this->global->getModuleInit();
 

@@ -43,11 +43,37 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 		return $result;
 	}
 
+	public function getPrototype()
+	{
+		$class = $this->class;
+		$operator = $this->isStatic() ? "::" : "->";
+		$method = $this->getName();
+
+		$params = $this->getParameters();
+		$args = array();
+		foreach ($params as $param) {
+			$arg = array();
+			$arg_class = $param->getClass();
+			if ($arg_class) {
+				$arg[] = $arg_class->getName();
+			}
+			$arg[] = sprintf('$%s', $param->getName());
+			if ($param->isOptional()) {
+				$arg[] = "=";
+				$arg[] = $param->getDefaultValue();
+			}
+			$args[] = implode(" ", $arg);
+		}
+		$arg_str = implode(", ", $args);
+		return sprintf("%s%s%s(%s)", $class, $operator, $method, $arg_str);
+	}
+
 	public function getPHPMethod()
 	{
 		$class_lower = strtolower($this->class);
 
-		$result = sprintf("PHP_METHOD(%s, %s)\n{\n", $class_lower, $this->getName());
+		$result = sprintf("// %s;\n", $this->getPrototype());
+		$result .= sprintf("PHP_METHOD(%s, %s)\n{\n", $class_lower, $this->getName());
 		if (PHPH_Generator::getInstance()->getClass($this->class) && !$this->isAbstract()) {
 			$body = "";
 			$params = $this->getParameters();
@@ -80,7 +106,7 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 			$body .= "// ...\n";
 			$result .= PHPH_Util::indent($body, 1);
 		}
-		$result .= "}\n\n";
+		$result .= "}\n";
 		return $result;
 	}
 }
