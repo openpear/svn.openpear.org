@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPH/Generator.php';
+require_once 'PHPH.php';
 require_once 'PHPH/Util.php';
 
 class PHPH_ReflectionParameter extends ReflectionParameter
@@ -85,8 +85,8 @@ class PHPH_ReflectionParameter extends ReflectionParameter
 		case self::TYPE_CLASS_SPECIFIED_OBJECT:
 			$class = $this->getClass()->getName();
 			$result[] = sprintf("zval *%s;", $name);
-			$gen = PHPH_Generator::getInstance();
-			if (!$gen->getClass($class) && !$gen->getInterface($class)) {
+			$phph = PHPH::getInstance();
+			if (!$phph->getClass($class) && !$phph->getInterface($class)) {
 				$class_lower = strtolower($class);
 				$esc_class = PHPH_Util::escape($class);
 				$result[] = sprintf("zend_class_entry *ce_%s = zend_fetch_class(%s, sizeof(%s)-1, ZEND_FETCH_CLASS_AUTO TSRMLS_CC);", $class_lower, $esc_class, $esc_class);

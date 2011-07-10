@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPH/Generator.php';
+require_once 'PHPH.php';
 require_once 'PHPH/ReflectionParameter.php';
 require_once 'PHPH/Util.php';
 
@@ -74,7 +74,7 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 
 		$result = sprintf("// %s;\n", $this->getPrototype());
 		$result .= sprintf("PHP_METHOD(%s, %s)\n{\n", $class_lower, $this->getName());
-		if (PHPH_Generator::getInstance()->getClass($this->class) && !$this->isAbstract()) {
+		if (PHPH::getInstance()->getClass($this->class) && !$this->isAbstract()) {
 			$body = "";
 			$params = $this->getParameters();
 			if (0<count($params)) {
