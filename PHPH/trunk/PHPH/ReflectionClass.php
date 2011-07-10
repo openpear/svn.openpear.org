@@ -1,5 +1,6 @@
 <?php
 
+require_once 'PHPH.php';
 require_once 'PHPH/ReflectionMethod.php';
 require_once 'PHPH/TopologicalSort.php';
 require_once 'PHPH/Util.php';
@@ -156,13 +157,13 @@ class PHPH_ReflectionClass extends ReflectionClass
 
 		if (!$this->isInterface()) {
 			// class
-			$gen = PHPH_Generator::getInstance();
+			$phph = PHPH::getInstance();
 			// regist
 			$parent = $this->getParentClass();
 			if (isset($parent)) {
 				// extends
 				// todo php5.3 namespace
-				if ($gen->getClass($parent->getName())) {
+				if ($phph->getClass($parent->getName())) {
 					// parent class is managed
 					$pclass_lower = strtolower($parent->getName());
 					$result .= sprintf("ce_%s = zend_register_internal_class_ex(&ce, ce_%s, NULL TSRMLS_CC);\n", $class_lower, $pclass_lower);
@@ -185,7 +186,7 @@ class PHPH_ReflectionClass extends ReflectionClass
 			$interfaces = $this->getInterfaceNames();
 			foreach ($interfaces as $interface) {
 				// todo php5.3 namespace
-				if ($gen->getInterface($interface)) {
+				if ($phph->getInterface($interface)) {
 					$result .= sprintf("ice = ce_%s;\n", strtolower($interface));
 				} else {
 					$esc_interface = PHPH_Util::escape($interface);

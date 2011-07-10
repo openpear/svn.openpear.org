@@ -1,6 +1,5 @@
 <?php
 
-require_once 'PHPH/Generator.php';
 require_once 'PHPH/ReflectionParameter.php';
 require_once 'PHPH/Util.php';
 
