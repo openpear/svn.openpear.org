@@ -9,7 +9,7 @@ phph make
 phph make install
 phph make clean
 
-*解説
+*コマンド解説
 **init
 プロジェクトを作成します。
 Extension名は、[a-z0-9_]+です。
@@ -18,11 +18,12 @@ Extension名は、[a-z0-9_]+です。
 
 **update
 プロトタイプファイルからCヘッダファイルとCソースファイルを更新します。
+prototype_files内のファイルを更新した際に実行してください。
 phphプロジェクトのルートディレクトリで実行します。
 
 **template
 Cファイルの内容を出力します。
-オプション--methodの指定があった場合、--methodに合ったPHP_METHOD/PHP_FUNCTIONの雛形を出力します。
+method_nameの指定があった場合、method_nameに合ったPHP_METHOD/PHP_FUNCTIONの雛形のみを出力します。
 クラスとメソッドの区切りは::です。
 phphプロジェクトのルートディレクトリで実行します。
 
@@ -34,6 +35,21 @@ Extensionをmake installします。
 
 **make clean
 makeしたファイルを削除します。
+
+*ディレクトリ構造
+>||
+ext_name/               プロジェクトのルートディレクトリ
+|-- config.m4           Unix用のビルド設定ファイル
+|-- config.w32          Windows用のビルド設定ファイル
+|-- ext_name.c          Cスタブファイル
+|-- ext_name.dsp        Visual C++のプロジェクトファイル
+|-- ext_name.php        インストール後のExtension読み込み/定義確認スクリプト
+|-- php_ext_name.c      Cソースファイル
+|-- php_ext_name.h      Cヘッダファイル
+|-- prototype_files     PHPで記述されたプロトタイプファイル
+`-- tests               テストスクリプト
+    `-- 001.phpt
+||<
 
 *プロトタイプファイルの書き方
 PHP Extensionとして実装したいClass/Interface/Function/Defineを定義したPHPファイルを作成します。
@@ -71,7 +87,9 @@ identifier: expected type       required argument number and types
 （http://d.hatena.ne.jp/rsky/20071104/1194164491より転載/改変）
 
 *インストール
+>||
 # pear install openpear/PHPH-alpha
+||<
 
 *作成の流れ
 $ vi prototype.php
