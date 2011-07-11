@@ -8,5 +8,6 @@
 // ARG_ENABLE("extname", "enable extname support", "no");
 
 if (PHP_EXTNAME != "no") {
-	EXTENSION("extname", "extname.c");
+	EXTENSION("extname", "php_extname.c");
+	ADD_SOURCES("example.c");
 }
