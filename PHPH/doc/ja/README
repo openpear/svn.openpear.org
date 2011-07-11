@@ -17,12 +17,12 @@ Extension名は、[a-z0-9_]+です。
 プロトタイプファイルを指定した場合、ext_name/prototype_filesディレクトリにコピーされます。
 
 **update
-プロトタイプファイルからCヘッダファイルとCソースファイルを更新します。
+プロトタイプファイルからCヘッダファイル/Cソースファイル/Cスタブファイルを更新します。
 prototype_files内のファイルを更新した際に実行してください。
 phphプロジェクトのルートディレクトリで実行します。
 
 **template
-Cファイルの内容を出力します。
+Cスタブファイルの内容を出力します。
 method_nameの指定があった場合、method_nameに合ったPHP_METHOD/PHP_FUNCTIONの雛形のみを出力します。
 クラスとメソッドの区切りは::です。
 phphプロジェクトのルートディレクトリで実行します。
@@ -52,10 +52,37 @@ ext_name/               プロジェクトのルートディレクトリ
 ||<
 
 *プロトタイプファイルの書き方
-PHP Extensionとして実装したいClass/Interface/Function/Defineを定義したPHPファイルを作成します。
+PHP Extensionとして実装するクラスやメソッドを定義したPHPファイルを、prototype_filesディレクトリ内に作成します。
+
+**プロトタイプ定義で対応している修飾子やキーワード
+***Class
+abstract
+final
+extends
+implements
+
+***Method
+public
+protected
+private
+static
+abstract
+final
+Type Hinting
+Default Value
+
+***Const
+ -
+
+***Function
+Type Hinting
+Default Value
+
+***Define
+ -
 
 **引数の型指定
-PHPでは（ネイティブの）型の指定が出来ないので、引数名で表現します。
+PHPでは（ネイティブの）型の指定が出来ない為、引数名で表現します。
 型を指定して引数を取るには、$[型表現文字]_[引数名]とします。
 型表現文字がない場合、zが適用されます。
 プロトタイプで参照渡し指定があり、オブジェクト以外の型表現文字が指定されていた場合、zが適用されます。
@@ -125,4 +152,4 @@ $ vi testext1.c
 ||<
 $ phph make
 $ sudo phph make install
-$ php definetest.php
+$ php testext1.php
