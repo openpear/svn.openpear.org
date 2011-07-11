@@ -33,7 +33,7 @@ function check_const($class, $const)
 function check_method($class, $method)
 {
 	$exists = method_exists($class, $method);
-	printf("  method %s: %s\n", $class, $exists ? "OK" : "ERROR");
+	printf("  method %s: %s\n", $method, $exists ? "OK" : "ERROR");
 }
 
 function check_function($function)
@@ -45,7 +45,7 @@ function check_function($function)
 function check_define($define)
 {
 	$exists = defined($define);
-	printf("function %s: %s\n", $define, $exists ? "OK" : "ERROR");
+	printf("define %s: %s\n", $define, $exists ? "OK" : "ERROR");
 }
 
 %%CHECK%%

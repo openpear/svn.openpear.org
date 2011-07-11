@@ -287,27 +287,39 @@ class PHPH
 				$method_name = $method->getName();
 				$check .= sprintf("check_method('%s', '%s');\n", $interface_name, $method_name);
 			}
+			$check .= "echo \"\\n\";\n\n";
 		}
 
 		// class
 		foreach ($this->classes as $class) {
 			$class_name = $class->getName();
 			$check .= sprintf("check_class('%s');\n", $class->getName());
-			foreach ($class->getConstants() as $constant) {
+			foreach ($class->getConstants() as $constant=>$value) {
 				$check .= sprintf("check_const('%s', '%s');\n", $class_name, $constant);
 			}
 			foreach ($class->getMethods() as $method) {
 				$method_name = $method->getName();
 				$check .= sprintf("check_method('%s', '%s');\n", $class_name, $method_name);
 			}
+			$check .= "echo \"\\n\";\n\n";
 		}
 
-		// global
-		foreach ($this->global->getFunctions() as $function) {
-			$check .= sprintf("check_function('%s');\n", $function->getName());
+		// global function
+		$functions = $this->global->getFunctions();
+		if (0<count($functions)) {
+			foreach ($functions as $function) {
+				$check .= sprintf("check_function('%s');\n", $function->getName());
+			}
+			$check .= "echo \"\\n\";\n\n";
 		}
-		foreach ($this->global->getDefines() as $define) {
-			$check .= sprintf("check_define('%s');\n", $define);
+
+		// global define
+		$defines = $this->global->getDefines();
+		if (0<count($defines)) {
+			foreach ($defines as $define=>$value) {
+				$check .= sprintf("check_define('%s');\n", $define);
+			}
+			$check .= "echo \"\\n\";\n\n";
 		}
 
 		$txt = PHPH_Skeleton::loadPHP();
