@@ -47,7 +47,7 @@ class PHPH_Skeleton
 
 	public static function loadPHPT()
 	{
-		$path = dirname(__FILE__)."/Skeleton/tests/001.phpt";
+		$path = dirname(__FILE__)."/Skeleton/tests/001.phpt.php";
 		return file_get_contents($path);
 	}
 
