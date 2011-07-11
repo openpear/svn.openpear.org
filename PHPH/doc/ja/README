@@ -66,14 +66,36 @@ PHPでは（ネイティブの）型の指定が出来ないので、引数名�
 
 *作成の流れ
 $ vi prototype.php
+>||
 <?php
 class testext1
 {
 	public function helloworld() {}
 	public function sum($l__a, $l__b) {}
 }
+||<
 $ phph init testext1 prototype.php
 $ cd testext1/
+$ vi testext1.c
+>||
+@@ -89,7 +89,8 @@
+ 		return;
+ 	}
+ 
+-	// ...
++	printf("HelloWorld!\n");
++	return;
+ }
+ 
+ // testext1->sum($a, $b);
+@@ -102,7 +103,7 @@
+ 		return;
+ 	}
+ 
+-	// ...
++	RETURN_LONG(a + b);
+ }
+||<
 $ phph make
 $ sudo phph make install
 $ php definetest.php
