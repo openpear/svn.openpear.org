@@ -1,2 +1,79 @@
-* Documentation
-このパッケージにはまだドキュメントが存在しません
+*PHPH - Cヘッダとスタブファイルジェネレータ
+phphは、PHPファイルからPHP Extension用のCヘッダファイルとCソースファイルを作成します。
+
+*形式
+phph init ext_name [prototype_file ..]
+phph [options] update
+phph [options] template [method_name]
+phph make
+phph make install
+phph make clean
+
+*解説
+**init
+プロジェクトを作成します。
+Extension名は、[a-z0-9_]+です。
+プロトタイプファイルを指定する場合、ext_name/prototype_filesディレクトリにコピーされます。
+
+**update
+プロトタイプファイルからCヘッダファイルとCソースファイルを更新します。
+phphプロジェクトのルートディレクトリで実行します。
+
+**template
+Cファイルの内容を出力します。
+method_nameの指定があった場合、method_nameに合ったPHP_METHOD()の雛形を出力します。
+
+**make
+Extensionをmakeします。
+
+**make install
+Extensionをmake installします。
+
+**make clean
+makeしたファイルを削除します。
+
+*プロトタイプファイルの書き方
+PHP Extensionとして実装したいClass/Interface/Function/Defineを定義したPHPファイルを作成します。
+
+**引数の型指定
+PHPでは（ネイティブの）型の指定が出来ないので、引数名で表現します。
+型を指定して引数を取るには、$[型表現文字]__[引数名]とします。
+型表現文字は以下の通りです。
+>||
+'l': integer                    1: long *
+'d': float                      1: double *
+'s': binary string              2: char **, int *
+'S': binary string (strict)     2: char **, int *
+'u': Unicode string             2: UChar **, int *
+'U': Unicode string (strict)    2: UChar **, int *
+'t': string (by semantics)      3: zstr *, int *, zend_uchar *
+'T': string (no conversion)     3: zstr *, int *, zend_uchar *
+'b': boolean                    1: zend_bool *
+'r': resource                   1: zval **
+'a': array                      1: zval **
+'h': array                      1: HashTable **
+'o': object                     1: zval **
+'O': object (class specified)   2: zval **, zend_class_entry *
+'C': string (class name)        1: zend_class_entry **
+'f': callback                   2: zend_fcall_info *, zend_fcall_info_cache *
+'z': any                        1: zval **
+'Z': any                        1: zval ***
+||<
+（http://d.hatena.ne.jp/rsky/20071104/1194164491より転載）
+
+*インストール
+# pear install openpear/PHPH-alpha
+
+*作成の流れ
+$ vi prototype.php
+<?php
+class testext1
+{
+	public function helloworld() {}
+	public function sum($l__a, $l__b) {}
+}
+$ phph init testext1 prototype.php
+$ cd testext1/
+$ phph make
+$ sudo phph make install
+$ php definetest.php
