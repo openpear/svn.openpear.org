@@ -168,7 +168,6 @@ class PHPH_Command
 		self::putFile(array($extname, $extname.'.php'), $phph->generatePHP());
 		self::createDir(array($extname, 'tests'));
 		self::putFile(array($extname, 'tests', '001.phpt'), $phph->generatePHPT());
-		self::putFile(array($extname, 'definetest.php'), $phph->generateDefineTest());
 		self::createDir(array($extname, 'prototype_files'));
 		foreach ($prototype_files as $prototype_file) {
 			self::copyFile($prototype_file, array($extname, 'prototype_files'));
@@ -210,7 +209,7 @@ class PHPH_Command
 		self::putFile('php_'.$extname.'.h', $phph->generateH());
 		self::putFile('php_'.$extname.'.c', $phph->generateC());
 		self::putFile($extname.'.c', $phph->generateMain(), $overwrite);
-		self::putFile('definetest.php', $phph->generateDefineTest());
+		self::putFile($extname.'.php', $phph->generatePHP());
 	}
 
 	private function _doMake(Console_CommandLine_Result $arg)
