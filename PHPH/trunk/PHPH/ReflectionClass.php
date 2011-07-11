@@ -127,7 +127,7 @@ class PHPH_ReflectionClass extends ReflectionClass
 		$result = sprintf("// %s method\n", $class);
 		$result .= sprintf("zend_function_entry %s_methods[] = {\n", $class_lower);
 		foreach ($methods as $method) {
-			$flag = PHPH_Util::getAccFlag($method);
+			$flag = $method->getAccessFlag();
 			$result .= sprintf("\tPHP_ME(%s, %s, arginfo_%s_%s, %s)\n", $class_lower, $method->name, $class_lower, $method->name, $flag);
 		}
 		$result .= "\t{ NULL, NULL, NULL }\n";
@@ -182,19 +182,24 @@ class PHPH_ReflectionClass extends ReflectionClass
 				$result .= sprintf("ce_%s = zend_register_internal_class(&ce TSRMLS_CC);\n", $class_lower);
 			}
 
+			// access flag
+			$result .= sprintf("ce_%s->ce_flags |= %s;\n", $class_lower, $this->getAccessFlag());
+
 			// interface
 			$interfaces = $this->getInterfaceNames();
 			foreach ($interfaces as $interface) {
 				// todo php5.3 namespace
 				if ($phph->getInterface($interface)) {
-					$result .= sprintf("ice = ce_%s;\n", strtolower($interface));
+					// interface is managed
+					$result .= sprintf("phph_register_implement(ce_%s, ce_%s TSRMLS_CC);\n", $class_lower, strtolower($interface));
 				} else {
+					// interface is not managed
 					$esc_interface = PHPH_Util::escape($interface);
 					$result .= sprintf("ice = zend_fetch_class(%s, sizeof(%s)-1, ZEND_FETCH_CLASS_AUTO TSRMLS_CC);\n", $esc_interface, $esc_interface);
+					$result .= "if (ice) {\n";
+					$result .= sprintf("\tphph_register_implement(ce_%s, ice TSRMLS_CC);\n", $class_lower);
+					$result .= "}\n";
 				}
-				$result .= "if (ice) {\n";
-				$result .= sprintf("\tphph_register_implement(ce_%s, ice TSRMLS_CC);\n", $class_lower);
-				$result .= "}\n";
 			}
 			$result .= "\n";
 		} else {
@@ -221,13 +226,28 @@ class PHPH_ReflectionClass extends ReflectionClass
 			foreach ($properties as $property) {
 				$key = $property->name;
 				$value = $values[$key];
-				$flag = PHPH_Util::getAccFlag($property);
+				$flag = $property->getAccessFlag();
 				$result .= PHPH_Util::getZendDeclareProperty($class_lower, $key, $value, $flag);
 			}
 			$result .= "\n";
 		}
 
 		return PHPH_Util::indent($result, 1);
+	}
+
+	public function getAccessFlag()
+	{
+		$flag = array();
+		if ($this->isAbstract()) {
+			$flag[] = "ZEND_ACC_ABSTRACT";
+		}
+		if ($this->isFinal()) {
+			$flag[] = "ZEND_ACC_FINAL";
+		}
+		if (count($flag)==0) {
+			$flag[] = "0";
+		}
+		return implode(" | ", $flag);
 	}
 
 

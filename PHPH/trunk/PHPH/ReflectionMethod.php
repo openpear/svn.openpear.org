@@ -17,6 +17,9 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 		return $result;
 	}
 
+
+	// php_xxx.c
+
 	public function getArgInfo()
 	{
 		$class_lower = strtolower($this->class);
@@ -42,6 +45,9 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 		$result .= "ZEND_END_ARG_INFO()\n";
 		return $result;
 	}
+
+
+	// xxx.c
 
 	public function getPrototype()
 	{
@@ -108,5 +114,33 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 		}
 		$result .= "}\n";
 		return $result;
+	}
+
+	public function getAccessFlag()
+	{
+		$flag = array();
+		if ($this->isPublic()) {
+			$flag[] = "ZEND_ACC_PUBLIC";
+		}
+		if ($this->isProtected()) {
+			$flag[] = "ZEND_ACC_PROTECTED";
+		}
+		if ($this->isPrivate()) {
+			$flag[] = "ZEND_ACC_PRIVATE";
+		}
+		if ($this->isStatic()) {
+			$flag[] = "ZEND_ACC_STATIC";
+			//$flag[] = "ZEND_ACC_ALLOW_STATIC";
+		}
+		if ($this->isAbstract()) {
+			$flag[] = "ZEND_ACC_ABSTRACT";
+		}
+		if ($this->isFinal()) {
+			$flag[] = "ZEND_ACC_FINAL";
+		}
+		if (count($flag)==0) {
+			$flag[] = "0";
+		}
+		return implode(" | ", $flag);
 	}
 }
