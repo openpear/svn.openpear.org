@@ -50,10 +50,4 @@ class PHPH_Skeleton
 		$path = dirname(__FILE__)."/Skeleton/tests/001.phpt.php";
 		return file_get_contents($path);
 	}
-
-	public static function loadDefineTest()
-	{
-		$path = dirname(__FILE__)."/Skeleton/definetest.php";
-		return file_get_contents($path);
-	}
 }

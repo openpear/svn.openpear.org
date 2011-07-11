@@ -274,9 +274,46 @@ class PHPH
 
 	public function generatePHP()
 	{
+		$check = "";
+
+		// interface
+		foreach ($this->interfaces as $interface) {
+			$interface_name = $interface->getName();
+			$check .= sprintf("check_interface('%s');\n", $interface_name);
+			foreach ($interface->getConstants() as $constant) {
+				$check .= sprintf("check_const('%s', '%s');\n", $interface_name, $constant);
+			}
+			foreach ($interface->getMethods() as $method) {
+				$method_name = $method->getName();
+				$check .= sprintf("check_method('%s', '%s');\n", $interface_name, $method_name);
+			}
+		}
+
+		// class
+		foreach ($this->classes as $class) {
+			$class_name = $class->getName();
+			$check .= sprintf("check_class('%s');\n", $class->getName());
+			foreach ($class->getConstants() as $constant) {
+				$check .= sprintf("check_const('%s', '%s');\n", $class_name, $constant);
+			}
+			foreach ($class->getMethods() as $method) {
+				$method_name = $method->getName();
+				$check .= sprintf("check_method('%s', '%s');\n", $class_name, $method_name);
+			}
+		}
+
+		// global
+		foreach ($this->global->getFunctions() as $function) {
+			$check .= sprintf("check_function('%s');\n", $function->getName());
+		}
+		foreach ($this->global->getDefines() as $define) {
+			$check .= sprintf("check_define('%s');\n", $define);
+		}
+
 		$txt = PHPH_Skeleton::loadPHP();
 		$txt = str_replace("extname", $this->_extname_lower, $txt);
 		$txt = str_replace("EXTNAME", $this->_extname_upper, $txt);
+		$txt = str_replace("%%CHECK%%", $check, $txt);
 		return $txt;
 	}
 
@@ -285,32 +322,6 @@ class PHPH
 		$txt = PHPH_Skeleton::loadPHPT();
 		$txt = str_replace("extname", $this->_extname_lower, $txt);
 		$txt = str_replace("EXTNAME", $this->_extname_upper, $txt);
-		return $txt;
-	}
-
-	public function generateDefineTest()
-	{
-		$check = "";
-
-		// interface
-		foreach ($this->interfaces as $interface) {
-			$check .= sprintf("check('interface', '%s');\n", $interface->getName());
-		}
-
-		// class
-		foreach ($this->classes as $class) {
-			$check .= sprintf("check('class', '%s');\n", $class->getName());
-		}
-
-		// global
-		foreach ($this->global->getFunctions() as $function) {
-			$check .= sprintf("check('function', '%s');\n", $function->getName());
-		}
-
-		$txt = PHPH_Skeleton::loadDefineTest();
-		$txt = str_replace("extname", $this->_extname_lower, $txt);
-		$txt = str_replace("EXTNAME", $this->_extname_upper, $txt);
-		$txt = str_replace("%%CHECK%%", $check, $txt);
 		return $txt;
 	}
 }
