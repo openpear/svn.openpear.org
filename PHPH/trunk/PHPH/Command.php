@@ -12,8 +12,7 @@ class PHPH_Command
 		// parser
 		$parser = new Console_CommandLine(
 			array(
-				'description' => 'PHP Extension source generator',
-				'version'     => '1.0.0'
+				'description' => 'PHP Extension source generator'
 			)
 		);
 
@@ -87,6 +86,14 @@ class PHPH_Command
 			)
 		);
 
+		// subcommand make clean
+		$make_clean_cmd = $make_cmd->addCommand(
+			'clean',
+			array(
+				'description' => 'clean'
+			)
+		);
+
 		// subcommand template
 		$template_cmd = $parser->addCommand(
 			'template',
@@ -95,13 +102,15 @@ class PHPH_Command
 			)
 		);
 
-		// subcommand template method
-		$template_cmd->addCommand(
-			'method_name',
+		$template_cmd->addArgument(
+			'method_names',
 			array(
-				'description' => 'target method name'
+				'multiple'    => true,
+				'description' => 'target method names',
+				'optional'    => true
 			)
 		);
+
 
 		$this->_parser = $parser;
 	}
@@ -206,8 +215,8 @@ class PHPH_Command
 
 	private function _doMake(Console_CommandLine_Result $arg)
 	{
-		// arg
-		$install = $arg->command->command_name=="install";
+		// subcommand
+		$subcommand = $arg->command->command_name;
 
 		// check 
 		$ini = @parse_ini_file(".phph");
@@ -215,13 +224,19 @@ class PHPH_Command
 			throw new Exception("Current directory is not phph directory");
 		}
 
-		// phpize configure make
-		$configure = self::normalizePath(".", "configure ").@$ini["configure"];
-		$res = self::cmd("phpize") && self::cmd($configure) && self::cmd("make");
-
-		// install
-		if ($install && $res) {
+		if ($subcommand===false) {
+			// phpize, configure, make
+			$configure = self::normalizePath(".", "configure ").@$ini["configure"];
+			$res = self::cmd("phpize") && self::cmd($configure) && self::cmd("make");
+		} else if ($subcommand=="install") {
+			// make install
 			self::cmd("make install");
+		} else if ($subcommand=="clean") {
+			// make clean
+			self::cmd("make clean");
+		} else {
+			// other
+			throw new Exception("no such subcommand: ".$subcommand);
 		}
 	}
 
@@ -248,30 +263,40 @@ class PHPH_Command
 		$phph->finish();
 
 		// template
-		$method_name = $arg->command->command_name;
-		if ($method_name!==false) {
-			$class_name = null;
-			if (strpos($method_name, "::")) {
-				// method
-				list($class_name, $method_name) = explode("::", $method_name, 2);
-				$class = null;
-				if (!$class) $class = $phph->getClass($class_name);
-				if (!$class) $class = $phph->getInterface($class_name);
-				if (!$class) {
-					throw new Exception(sprintf("Class not found: %s", $class_name));
+		$method_names = $arg->command->args["method_names"];
+		if (0<count($method_names)) {
+			$exceptions = array();
+			foreach ($method_names as $method_name) {
+				try {
+					$class_name = null;
+					if (strpos($method_name, "::")) {
+						// method
+						list($class_name, $method_name) = explode("::", $method_name, 2);
+						$class = null;
+						if (!$class) $class = $phph->getClass($class_name);
+						if (!$class) $class = $phph->getInterface($class_name);
+						if (!$class) {
+							throw new Exception(sprintf("Class not found: %s", $class_name));
+						}
+						$method = $class->getMethod($method_name);
+						if (!$method) {
+							throw new Exception(sprintf("Method not found: %s", $method_name));
+						}
+						echo $method->getPHPMethod();
+					} else {
+						// function
+						$function = $phph->getFunction($method_name);
+						if (!$function) {
+							throw new Exception(sprintf("Function not found: %s", $method_name));
+						}
+						echo $function->getPHPFunction()."\n";
+					}
+				} catch (Exception $e) {
+					$exceptions[] = $e;
 				}
-				$method = $class->getMethod($method_name);
-				if (!$method) {
-					throw new Exception(sprintf("Method not found: %s", $method_name));
-				}
-				echo $method->getPHPMethod();
-			} else {
-				// function
-				$function = $phph->getFunction($method_name);
-				if (!$function) {
-					throw new Exception(sprintf("Function not found: %s", $method_name));
-				}
-				echo $function->getPHPFunction();
+			}
+			foreach ($exceptions as $e) {
+				echo $e->getMessage()."\n";
 			}
 		} else {
 			echo $phph->generateMain();

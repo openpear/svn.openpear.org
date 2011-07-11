@@ -26,7 +26,7 @@ class PHPH
 	private function __construct($extname)
 	{
 		// check extname
-		if (!preg_match('/^[a-zA-Z0-9]+$/', $extname)) {
+		if (!preg_match('/^[a-z0-9_]+$/', $extname)) {
 			throw new Exception("extname is not valid");
 		}
 		$this->_extname_upper = strtoupper($extname);

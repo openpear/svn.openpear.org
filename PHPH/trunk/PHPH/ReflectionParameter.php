@@ -23,21 +23,47 @@ class PHPH_ReflectionParameter extends ReflectionParameter
 	const TYPE_CALLBACK					= "f";
 	const TYPE_ZVAL						= "z";
 	const TYPE_ZVAL_PTR					= "Z";
-	const TYPE_OPTIONAL_VARS			= "*";
-	const TYPE_REQUIRED_VARS			= "+";
+	const TYPE_OPTIONAL_VARS			= "*";	// v
+	const TYPE_REQUIRED_VARS			= "+";	// V
 
 	public function getName()
 	{
-		return preg_replace("/^[ldsSuUtTbrahoOCfzZ\*\+]__/", "", parent::getName());
+		return preg_replace("/^[ldsSuUtTbrahoOCfzZvV]_/", "", parent::getName());
 	}
 
 	public function getTypeSpec()
 	{
+		$code = self::TYPE_ZVAL;
+		if (preg_match("/^([ldsSuUtTbrahoOCfzZvV])_/", parent::getName(), $m)) {
+			$code = $m[1];
+			switch ($code) {
+			case "v":
+				$code = self::TYPE_OPTIONAL_VARS;
+				break;
+			case "V":
+				$code = self::TYPE_REQUIRED_VARS;
+				break;
+			}
+		}
+
 		$type = self::TYPE_ZVAL;
 		if ($this->getClass()) {
+			// class specified
 			$type = self::TYPE_CLASS_SPECIFIED_OBJECT;
-		} else if (preg_match("/^([ldsSuUtTbrahoOCfzZ\*\+])__/", parent::getName(), $m)) {
-			$type = $m[1];
+		} else if ($this->isArray()) {
+			// array
+			if ($code==self::TYPE_HASH) {
+				// hash
+				$type = self::TYPE_HASH;
+			} else {
+				// array
+				$type = self::TYPE_ARRAY;
+			}
+		} else if ($this->isPassedByReference()) {
+			// reference, must zval
+			$type = self::TYPE_ZVAL;
+		} else {
+			$type = $code;
 		}
 		return $type;
 	}
