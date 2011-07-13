@@ -1,6 +1,7 @@
 <?php
 
 require_once 'PHPH.php';
+require_once 'PHPH/Ini.php';
 require_once 'Console/CommandLine.php';
 
 class PHPH_Command
@@ -176,15 +177,11 @@ class PHPH_Command
 
 	private function _doUpdate(Console_CommandLine_Result $arg)
 	{
-		// check 
-		$ini = @parse_ini_file(".phph");
-		if (!$ini || !$ini["extname"]) {
-			throw new Exception("Current directory is not phph directory");
-		}
+		// ini
+		$extname = PHPH_Ini::get("extname");
+		$prototype = PHPH_Ini::get("prototype");
 
 		// arg
-		$extname = @$ini["extname"];
-		$prototype = @$ini["prototype"];
 		$overwrite = null;
 		if (isset($arg->command->options["yes"])) {
 			$overwrite = true;
@@ -217,15 +214,12 @@ class PHPH_Command
 		// subcommand
 		$subcommand = $arg->command->command_name;
 
-		// check 
-		$ini = @parse_ini_file(".phph");
-		if (!$ini || !@$ini["extname"]) {
-			throw new Exception("Current directory is not phph directory");
-		}
+		// ini
+		$configure = PHPH_Ini::get("configure", "");
 
 		if ($subcommand===false) {
 			// phpize, configure, make
-			$configure = self::normalizePath(".", "configure ").@$ini["configure"];
+			$configure = self::normalizePath(".", "configure ").$configure;
 			$res = self::cmd("phpize") && self::cmd($configure) && self::cmd("make");
 		} else if ($subcommand=="install") {
 			// make install
@@ -241,13 +235,9 @@ class PHPH_Command
 
 	private function _doTemplate(Console_CommandLine_Result $arg)
 	{
-		// check 
-		$ini = @parse_ini_file(".phph");
-		if (!$ini || !$ini["extname"]) {
-			throw new Exception("Current directory is not phph directory");
-		}
-		$extname = @$ini["extname"];
-		$prototype = @$ini["prototype"];
+		// ini
+		$extname = PHPH_Ini::get("extname");
+		$prototype = PHPH_Ini::get("prototype");
 
 		// prototype files
 		if (!is_dir($prototype)) {
