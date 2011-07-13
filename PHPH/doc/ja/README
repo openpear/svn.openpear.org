@@ -17,28 +17,45 @@ Extension名は、[a-z0-9_]+です。
 プロトタイプファイルを指定した場合、ext_name/prototype_filesディレクトリにコピーされます。
 
 **update
-プロトタイプファイルからCヘッダファイル/Cソースファイル/Cスタブファイルを更新します。
+プロトタイプファイルからファイルを更新します。
 prototype_files内のファイルを更新した際に実行してください。
-phphプロジェクトのルートディレクトリで実行します。
+Cヘッダファイル/Cソースファイル/確認スクリプトは常に上書きされ、Cスタブファイルは上書きするか否かを対話で決定します。
+Cスタブファイルを上書きした場合、backup_filesディレクトリにバックアップファイルが作成されます。
+このコマンドは、phphプロジェクトのルートディレクトリで実行します。
 
 **template
 Cスタブファイルの内容を出力します。
 method_nameの指定があった場合、method_nameに合ったPHP_METHOD/PHP_FUNCTIONの雛形のみを出力します。
 クラスとメソッドの区切りは::です。
-phphプロジェクトのルートディレクトリで実行します。
+このコマンドは、phphプロジェクトのルートディレクトリで実行します。
 
 **make
 Extensionをmakeします。
+このコマンドは、以下と同等です。
+>||
+$ phpize && ./configure && make
+||<
 
 **make install
 Extensionをmake installします。
+このコマンドは、以下と同等です。
+>||
+$ make install
+||<
+通常、root権限が必要になります。
 
 **make clean
 makeしたファイルを削除します。
+このコマンドは、以下と同等です。
+>||
+$ make clean
+||<
 
 *ディレクトリ構造
 >||
 ext_name/               プロジェクトのルートディレクトリ
+|-- .phph               PHPHプロジェクトの設定ファイル
+|-- backup_files        updateを実行した際に生成されるCスタブファイルのバックアップファイル
 |-- config.m4           Unix用のビルド設定ファイル
 |-- config.w32          Windows用のビルド設定ファイル
 |-- ext_name.c          Cスタブファイル
