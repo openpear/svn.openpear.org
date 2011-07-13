@@ -149,7 +149,7 @@ class PHPH_Command
 
 		// check dir
 		if (is_dir($extname)) {
-			throw new Exception("ext already exists: ".$extname);
+			throw new PHPH_Exception("ext already exists: ".$extname);
 		}
 
 		// init phph
@@ -173,13 +173,14 @@ class PHPH_Command
 		foreach ($prototype_files as $prototype_file) {
 			self::copyFile($prototype_file, array($extname, 'prototype_files'));
 		}
+		self::createDir(array($extname, 'backup_files'));
 	}
 
 	private function _doUpdate(Console_CommandLine_Result $arg)
 	{
 		// ini
 		$extname = PHPH_Ini::get("extname");
-		$prototype = PHPH_Ini::get("prototype");
+		$prototype = PHPH_Ini::get("prototype_dir");
 
 		// arg
 		$overwrite = null;
@@ -192,7 +193,7 @@ class PHPH_Command
 
 		// prototype files
 		if (!is_dir($prototype)) {
-			throw new Exception("protytype directory is not found: ".$prototype);
+			throw new PHPH_Exception("protytype directory is not found: ".$prototype);
 		}
 		ini_set('include_path', $prototype.PATH_SEPARATOR.ini_get('include_path'));
 		$prototype_files = self::fileList($prototype);
@@ -205,7 +206,7 @@ class PHPH_Command
 		// update file
 		self::putFile('php_'.$extname.'.h', $phph->generateH());
 		self::putFile('php_'.$extname.'.c', $phph->generateC());
-		self::putFile($extname.'.c', $phph->generateMain(), $overwrite);
+		self::putFile($extname.'.c', $phph->generateMain(), $overwrite, true);
 		self::putFile($extname.'.php', $phph->generatePHP());
 	}
 
@@ -229,7 +230,7 @@ class PHPH_Command
 			self::cmd("make clean");
 		} else {
 			// other
-			throw new Exception("no such subcommand: ".$subcommand);
+			throw new PHPH_Exception("no such subcommand: ".$subcommand);
 		}
 	}
 
@@ -237,11 +238,11 @@ class PHPH_Command
 	{
 		// ini
 		$extname = PHPH_Ini::get("extname");
-		$prototype = PHPH_Ini::get("prototype");
+		$prototype = PHPH_Ini::get("prototype_dir");
 
 		// prototype files
 		if (!is_dir($prototype)) {
-			throw new Exception("protytype directory is not found: ".$prototype);
+			throw new PHPH_Exception("protytype directory is not found: ".$prototype);
 		}
 		ini_set('include_path', $prototype.PATH_SEPARATOR.ini_get('include_path'));
 		$prototype_files = self::fileList($prototype);
@@ -264,11 +265,11 @@ class PHPH_Command
 						if (!$class) $class = $phph->getClass($class_name);
 						if (!$class) $class = $phph->getInterface($class_name);
 						if (!$class) {
-							throw new Exception(sprintf("Class not found: %s", $class_name));
+							throw new PHPH_Exception(sprintf("Class not found: %s", $class_name));
 						}
 						$method = $class->getMethod($method_name);
 						if (!$method) {
-							throw new Exception(sprintf("Method not found: %s", $method_name));
+							throw new PHPH_Exception(sprintf("Method not found: %s", $method_name));
 						}
 						echo $method->getPHPMethod();
 					} else {
@@ -284,12 +285,12 @@ class PHPH_Command
 							// function
 							$function = $phph->getFunction($method_name);
 							if (!$function) {
-								throw new Exception(sprintf("Function not found: %s", $method_name));
+								throw new PHPH_Exception(sprintf("Function not found: %s", $method_name));
 							}
 							echo $function->getPHPFunction()."\n";
 						}
 					}
-				} catch (Exception $e) {
+				} catch (PHPH_Exception $e) {
 					$exceptions[] = $e;
 				}
 			}
@@ -312,13 +313,16 @@ class PHPH_Command
 		}
 	}
 
-	public static function putFile($path, $txt, $overwrite=true)
+	public static function putFile($path, $txt, $overwrite=true, $backup=false)
 	{
 		$path = self::normalizePath($path);
 		if (is_file($path)) {
 			if (isset($overwrite)) {
 				if ($overwrite) {
 					// yes
+					if ($backup) {
+						self::backupFile($path);
+					}
 					file_put_contents($path, $txt);
 					printf("overwrite file: %s\n", $path);
 				} else {
@@ -330,6 +334,9 @@ class PHPH_Command
 				printf("overwrite %s? [y/N]: ", $path);
 				$in = strtolower(trim(fgets(STDIN)));
 				if ($in=="y" || $in=="yes") {
+					if ($backup) {
+						self::backupFile($path);
+					}
 					file_put_contents($path, $txt);
 					printf("overwrite file: %s\n", $path);
 				} else {
@@ -354,6 +361,21 @@ class PHPH_Command
 			printf("copy file: %s\n", $dest);
 		}
 		copy($path, $dest);
+	}
+
+	public static function backupFile($path)
+	{
+		$backup = PHPH_Ini::get("backup_dir");
+		if (strlen($backup)) {
+			if (!is_dir($backup)) {
+				mkdir($backup);
+				printf("create dir: %s\n", $backup);
+			}
+			$dest = basename($path).".".date("Ymd_His");
+			$dest = self::normalizePath($backup, $dest);
+			printf("backup file: %s => %s\n", $path, $dest);
+			copy($path, $dest);
+		}
 	}
 
 	public static function normalizePath()
