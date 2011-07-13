@@ -47,7 +47,7 @@ class PHPH_Util
 			return $zval.sprintf("%s(ce_%s, %s, sizeof(%s)-1, %s, %s);\n", $prefix, $class, $key, $key, $zkey, $flag);
 		case "null":
 			$key = self::escape($key);
-			return sprintf("%s_null(ce_%s, %s, sizeof(%s)-1, %s);\n", $prefix, $type, $class, $key, $key, $flag);
+			return sprintf("%s_null(ce_%s, %s, sizeof(%s)-1, %s);\n", $prefix, $class, $key, $key, $flag);
 		}
 		return null;
 	}

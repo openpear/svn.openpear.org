@@ -33,6 +33,12 @@ class PHPH_Skeleton
 		return file_get_contents($path);
 	}
 
+	public static function loadPHPObject()
+	{
+		$path = dirname(__FILE__)."/Skeleton/php_object.c.php";
+		return file_get_contents($path);
+	}
+
 	public static function loadDSP()
 	{
 		$path = dirname(__FILE__)."/Skeleton/skeleton.dsp.php";
