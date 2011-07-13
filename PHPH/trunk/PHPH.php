@@ -4,6 +4,7 @@ require_once 'PHPH/Skeleton.php';
 require_once 'PHPH/ReflectionClass.php';
 require_once 'PHPH/ReflectionGlobal.php';
 require_once 'PHPH/ReflectionFunction.php';
+require_once 'PHPH/Exception.php';
 
 // PHP Extension source generator
 class PHPH
@@ -27,7 +28,7 @@ class PHPH
 	{
 		// check extname
 		if (!preg_match('/^[a-z0-9_]+$/', $extname)) {
-			throw new Exception("extname is not valid");
+			throw new PHPH_Exception("extname is not valid");
 		}
 		$this->_extname_upper = strtoupper($extname);
 		$this->_extname_lower = strtolower($extname);
@@ -58,7 +59,7 @@ class PHPH
 
 		// include
 		if (!is_file($realpath)) {
-			throw new Exception("file is not found: ".$path);
+			throw new PHPH_Exception("file is not found: ".$path);
 		}
 		include_once $realpath;
 	}
@@ -137,7 +138,8 @@ class PHPH
 	{
 		$data = array(
 			"extname" => $this->_extname_lower,
-			"prototype" => "prototype_files",
+			"prototype_dir" => "prototype_files",
+			"backup_dir" => "backup_files",
 			"configure" => ""
 		);
 		$ini = "";

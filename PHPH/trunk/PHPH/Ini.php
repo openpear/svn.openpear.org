@@ -1,5 +1,7 @@
 <?php
 
+require_once 'PHPH/Exception.php';
+
 class PHPH_Ini
 {
 	private static $_instance = null;
@@ -10,7 +12,7 @@ class PHPH_Ini
 	{
 		$this->_ini = @parse_ini_file(".phph");
 		if (!$this->_ini || !isset($this->_ini["extname"])) {
-			throw new Exception("Current directory is not phph project directory");
+			throw new PHPH_Exception("Current directory is not phph project directory");
 		}
 	}
 
@@ -27,6 +29,13 @@ class PHPH_Ini
 		$ini = self::getInstance();
 		if (isset($ini->_ini[$key])) {
 			return $ini->_ini[$key];
+		}
+		// The element name of ini was changed. This source will be removed in a future version of PHPH.
+		if (preg_match('/_dir$/', $key)) {
+			$key = substr($key, 0, strlen($key)-4);
+			if (isset($ini->_ini[$key])) {
+				return $ini->_ini[$key];
+			}
 		}
 		return $default_value;
 	}
