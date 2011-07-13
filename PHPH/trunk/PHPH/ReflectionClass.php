@@ -2,6 +2,7 @@
 
 require_once 'PHPH.php';
 require_once 'PHPH/ReflectionMethod.php';
+require_once 'PHPH/ReflectionProperty.php';
 require_once 'PHPH/TopologicalSort.php';
 require_once 'PHPH/Util.php';
 
@@ -67,6 +68,16 @@ class PHPH_ReflectionClass extends ReflectionClass
 		return $result;
 	}
 
+	public function getProperties($filter=0xFFFFFFFF)
+	{
+		$properties = parent::getProperties($filter);
+		$result = array();
+		foreach ($properties as $property) {
+			$result[] = new PHPH_ReflectionProperty($this->name, $property->getName());
+		}
+		return $result;
+	}
+
 
 	// build php_xxx.h
 
@@ -82,13 +93,12 @@ class PHPH_ReflectionClass extends ReflectionClass
 		$methods = $this->getMethods();
 
 		$result = "";
-		if (0<count($methods)) {
-			$result = sprintf("// %s method\n", $class);
-			foreach ($methods as $method) {
-				$result .= sprintf("extern PHP_METHOD(%s, %s);\n", $class_lower, $method->name);
-			}
-			$result .= "\n";
+		$result = sprintf("// %s\n", $class);
+		$result .= sprintf("extern zend_object_value php_%s_new(zend_class_entry *ce TSRMLS_DC);\n", $class_lower);
+		foreach ($methods as $method) {
+			$result .= sprintf("extern PHP_METHOD(%s, %s);\n", $class_lower, $method->name);
 		}
+		$result .= "\n";
 		return $result;
 	}
 
@@ -182,6 +192,9 @@ class PHPH_ReflectionClass extends ReflectionClass
 				$result .= sprintf("ce_%s = zend_register_internal_class(&ce TSRMLS_CC);\n", $class_lower);
 			}
 
+			// object new
+			$result .= sprintf("ce_%s->create_object = php_%s_new;\n", $class_lower, $class_lower);
+
 			// access flag
 			$result .= sprintf("ce_%s->ce_flags |= %s;\n", $class_lower, $this->getAccessFlag());
 
@@ -221,7 +234,7 @@ class PHPH_ReflectionClass extends ReflectionClass
 
 		// property
 		if (0<count($properties)) {
-			$values = get_class_vars($class);
+			$values = $this->getDefaultProperties();
 			$result .= sprintf("// %s property\n", $class);
 			foreach ($properties as $property) {
 				$key = $property->name;
@@ -252,6 +265,20 @@ class PHPH_ReflectionClass extends ReflectionClass
 
 
 	// xxx.c
+
+	public function getPHPObject()
+	{
+		if (!$this->isInterface()) {
+			$class = $this->getName();
+			$class_lower = strtolower(str_replace("\\", "_", $class));
+
+			$result = sprintf("/* %s object\n */\n", $class);
+			$txt = PHPH_Skeleton::loadPHPObject();
+			$txt = str_replace("%%CLASS%%", $class_lower, $txt);
+			return $result.$txt;
+		}
+		return "";
+	}
 
 	public function getPHPMethod()
 	{

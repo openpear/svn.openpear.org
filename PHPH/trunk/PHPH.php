@@ -251,6 +251,7 @@ class PHPH
 
 		// class
 		foreach ($this->classes as $class) {
+			$php_function .= $class->getPHPObject();
 			$php_function .= $class->getPHPMethod();
 		}
 

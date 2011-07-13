@@ -267,7 +267,6 @@ class PHPH_Command
 			$exceptions = array();
 			foreach ($method_names as $method_name) {
 				try {
-					$class_name = null;
 					if (strpos($method_name, "::")) {
 						// method
 						list($class_name, $method_name) = explode("::", $method_name, 2);
@@ -283,12 +282,22 @@ class PHPH_Command
 						}
 						echo $method->getPHPMethod();
 					} else {
-						// function
-						$function = $phph->getFunction($method_name);
-						if (!$function) {
-							throw new Exception(sprintf("Function not found: %s", $method_name));
+						$class_name = $method_name;
+						$class = null;
+						if (!$class) $class = $phph->getClass($class_name);
+						if (!$class) $class = $phph->getInterface($class_name);
+						if ($class) {
+							// class
+							echo $class->getPHPObject();
+							echo $class->getPHPMethod();
+						} else {
+							// function
+							$function = $phph->getFunction($method_name);
+							if (!$function) {
+								throw new Exception(sprintf("Function not found: %s", $method_name));
+							}
+							echo $function->getPHPFunction()."\n";
 						}
-						echo $function->getPHPFunction()."\n";
 					}
 				} catch (Exception $e) {
 					$exceptions[] = $e;
