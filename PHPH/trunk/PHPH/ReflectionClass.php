@@ -57,9 +57,9 @@ class PHPH_ReflectionClass extends ReflectionClass
 		return null;
 	}
 
-	public function getMethods()
+	public function getMethods($filter=0xFFFFFFFF)
 	{
-		$methods = parent::getMethods();
+		$methods = parent::getMethods($filter);
 		$result = array();
 		foreach ($methods as $method) {
 			$result[] = new PHPH_ReflectionMethod($this->getName(), $method->getName());
