@@ -85,6 +85,22 @@ class IO_Bit {
         $this->_byte_offset += $data_len;
         return $data;
     }
+    function getDataUntil($delimiter) {
+        $this->byteAlign();
+        $pos = strpos($this->_data, $delimiter, $this->_byte_offset);
+        if ($pos === false) {
+            $length = strlen($this->_data) - $this->_byte_offset;
+            $delim_len = 0;
+        } else {
+            $length = $pos - $this->_byte_offset;
+            $delim_len = strlen($delimiter);
+        }
+        $data = $this->getData($length);
+        if ($delim_len > 0) {
+            $this->_byte_offset += $delim_len;
+        }
+        return $data;
+    }
     function getUI8() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 1) {
