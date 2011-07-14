@@ -66,6 +66,33 @@ class HTTP_OAuthConsumerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('OAuth realm="", oauth_consumer_key="key", oauth_nonce="8de41c132c43bc81", oauth_signature="p1HdbcLPhGzCiDYCP6Gd2ih9uvY%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1310679194", oauth_token="accesskey", oauth_version="1.0"', $header['authorization']);
 	}
 
+	/**
+	 *
+	 * @expectedException HTTP_OAuthConsumer_Exception
+	 * @dataProvider httpNot200StatusCodeProvider 
+	 */
+	public function testResponseStatusCheck($status)
+	{
+		$oauth = $this->object;
+		$oauth->setURL('http://example.com/?format=json');
+		$oauth->setTimestamp(1310679194);
+		$oauth->setNonce('8de41c132c43bc81');
+
+		$oauth->setConsumer('key', 'secret');
+		$oauth->setToken('accesskey', 'accesssecret');
+		$response = $this->sendRequest($status);
+	}
+
+	public function httpNot200StatusCodeProvider()
+	{
+		return array(
+			array(201),
+			array(301),
+			array(401),
+			array(503),
+		);
+	}
+	
 	public function testSetNonceAndSetTimestamp()
 	{
 		$oauth = $this->object;
@@ -80,7 +107,7 @@ class HTTP_OAuthConsumerTest extends PHPUnit_Framework_TestCase
 		$header1 = $oauth->getHeaders();
 		
 		sleep(1);
-		$this->sendRequest();
+		$this->sendRequest(200);
 		
 		$this->assertEquals($header1, $oauth->getHeaders());
 	}
@@ -98,7 +125,7 @@ class HTTP_OAuthConsumerTest extends PHPUnit_Framework_TestCase
 		
 		$header1 = $oauth->getHeaders();
 		
-		$this->sendRequest();
+		$this->sendRequest(200);
 		
 		$this->assertNotEquals($header1, $oauth->getHeaders());
 	}
@@ -112,13 +139,13 @@ class HTTP_OAuthConsumerTest extends PHPUnit_Framework_TestCase
 		
 		$oauth->setURL('http://example.com/');
 		$oauth->setConsumer('testuser', 'testpass');
-		$this->sendRequest();
+		$this->sendRequest(200);
 		
 		$header1 = $oauth->getHeaders();
 		
 		sleep(1);
 		
-		$this->sendRequest();
+		$this->sendRequest(200);
 		
 		$this->assertNotEquals($header1, $oauth->getHeaders());
 	}
