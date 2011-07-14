@@ -17,13 +17,14 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	// oauth parameters
 	protected $_oauth = array();
 	protected $_realm = '';
+	protected $_nonce = null;
+	protected $_timestamp = null;
 
 	// http options
 	protected $getParams = array();
 
 	// last response
 	protected $_last_response = null;
-
 
 	/* construct */
 
@@ -73,6 +74,15 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$this->_realm = $realm;
 	}
 
+	public function setTimestamp($timestamp)
+	{
+		$this->_timestamp = $timestamp;
+	}
+	
+	public function setNonce($nonce)
+	{
+		$this->_nonce = $nonce;
+	}
 
 	/* 3Legged OAuth */
 
@@ -167,12 +177,12 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 
 	protected function getTimestamp()
 	{
-		return time();
+		return $this->_timestamp ? $this->_timestamp : time();
 	}
 
 	protected function getNonce()
 	{
-		return md5(microtime().mt_rand());
+		return $this->_nonce ? $this->_nonce : md5(microtime().mt_rand());
 	}
 
 	protected function getVersion()
