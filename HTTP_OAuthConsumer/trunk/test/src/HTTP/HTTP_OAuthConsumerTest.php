@@ -63,9 +63,27 @@ class HTTP_OAuthConsumerTest extends PHPUnit_Framework_TestCase
 		
 		$header = $oauth->getHeaders();
 		$this->assertEquals('200', $response->getStatus());
-		$this->assertEquals('OAuth realm="", oauth_consumer_key="key", oauth_nonce="8de41c132c43bc81", oauth_signature="p1HdbcLPhGzCiDYCP6Gd2ih9uvY%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1310679194", oauth_token="accesskey", oauth_version="1.0"', $header['authorization']);
+		$this->assertEquals('OAuth oauth_consumer_key="key", oauth_nonce="8de41c132c43bc81", oauth_signature="p1HdbcLPhGzCiDYCP6Gd2ih9uvY%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1310679194", oauth_token="accesskey", oauth_version="1.0"', $header['authorization']);
 	}
 
+	public function testSetRealm()
+	{
+		$oauth = $this->object;
+		$oauth->setURL('http://example.com/?format=json');
+		$oauth->setTimestamp(1310679194);
+		$oauth->setNonce('8de41c132c43bc81');
+
+		$oauth->addGetParameter('foo', 'bar');
+		$oauth->setConsumer('key', 'secret');
+		$oauth->setToken('accesskey', 'accesssecret');
+		$oauth->setRealm('test-realm');
+		$response = $this->sendRequest();
+		
+		$header = $oauth->getHeaders();
+		$this->assertEquals('200', $response->getStatus());
+		$this->assertEquals('OAuth realm="test-realm", oauth_consumer_key="key", oauth_nonce="8de41c132c43bc81", oauth_signature="p1HdbcLPhGzCiDYCP6Gd2ih9uvY%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1310679194", oauth_token="accesskey", oauth_version="1.0"', $header['authorization']);
+	}
+	
 	public function testExtraOAuthParam()
 	{
 		$oauth = $this->object;
@@ -80,7 +98,7 @@ class HTTP_OAuthConsumerTest extends PHPUnit_Framework_TestCase
 		
 		$header = $oauth->getHeaders();
 		$this->assertEquals('200', $response->getStatus());
-		$this->assertEquals('OAuth realm="", foo="bar", oauth_consumer_key="key", oauth_nonce="8de41c132c43bc81", oauth_signature="p1HdbcLPhGzCiDYCP6Gd2ih9uvY%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1310679194", oauth_token="accesskey", oauth_version="1.0"', $header['authorization']);
+		$this->assertEquals('OAuth foo="bar", oauth_consumer_key="key", oauth_nonce="8de41c132c43bc81", oauth_signature="p1HdbcLPhGzCiDYCP6Gd2ih9uvY%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1310679194", oauth_token="accesskey", oauth_version="1.0"', $header['authorization']);
 
 	}
 	
