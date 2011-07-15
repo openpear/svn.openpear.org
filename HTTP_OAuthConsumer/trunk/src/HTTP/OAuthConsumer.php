@@ -27,6 +27,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	protected $_last_response = null;
 
 	// configuration
+	protected $_nonce_length = 16;
 	protected $_enable_response_status_check = true;
 	
 	/* construct */
@@ -88,6 +89,11 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	}
 
 	/* configurations setter */
+	
+	public function setNonceLength($length)
+	{
+		$this->_nonce_length = $length;
+	}
 	
 	public function enableResponseStatusCheck($enable = true)
 	{
@@ -192,7 +198,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 
 	protected function getNonce()
 	{
-		return $this->_nonce ? $this->_nonce : md5(microtime().mt_rand());
+		return $this->_nonce ? $this->_nonce : substr(md5(microtime().mt_rand()), 0, $this->_nonce_length);
 	}
 
 	protected function getVersion()
