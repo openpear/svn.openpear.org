@@ -26,6 +26,9 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	// last response
 	protected $_last_response = null;
 
+	// configuration
+	protected $_enable_response_status_check = true;
+	
 	/* construct */
 
 	public function __construct($url = null, $method = self::METHOD_GET, array $config = array())
@@ -84,6 +87,13 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$this->_nonce = $nonce;
 	}
 
+	/* configurations setter */
+	
+	public function enableResponseStatusCheck($enable = true)
+	{
+		$this->_enable_response_status_check = $enable;
+	}
+	
 	/* 3Legged OAuth */
 
 	public function getRequestToken($callback)
@@ -275,7 +285,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$this->_last_response = $res;
 
 		// check response status
-		if ($res->getStatus()!=200) {
+		if ($this->_enable_response_status_check && $res->getStatus()!=200) {
 			$message = sprintf('Response status error: %s', $res->getBody());
 			throw new HTTP_OAuthConsumer_Exception($message);
 		}
