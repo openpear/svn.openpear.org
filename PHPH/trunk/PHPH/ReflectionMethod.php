@@ -3,6 +3,7 @@
 require_once 'PHPH.php';
 require_once 'PHPH/ReflectionParameter.php';
 require_once 'PHPH/Util.php';
+require_once 'PHPH/Exception.php';
 
 class PHPH_ReflectionMethod extends ReflectionMethod
 {
@@ -82,6 +83,7 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 		$result .= sprintf("PHP_METHOD(%s, %s)\n{\n", $class_lower, $this->getName());
 		if (PHPH::getInstance()->getClass($this->class) && !$this->isAbstract()) {
 			$body = "";
+			$efree = "";
 			$params = $this->getParameters();
 			if (0<count($params)) {
 				$is_required = true;
@@ -96,6 +98,7 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 					$type_spec .= $param->getTypeSpec();
 					$args[] = $param->getArgument();
 					$declare = array_merge($declare, $param->getDeclare());
+					$efree .= $param->getEfree();
 				}
 				$declare = implode("\n", array_unique($declare))."\n\n";
 				$args = implode(", ", $args);
@@ -110,6 +113,9 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 			}
 			$body .= "\n";
 			$body .= "// ...\n";
+			if (0<strlen($efree)) {
+				$body .= "\n".$efree;
+			}
 			$result .= PHPH_Util::indent($body, 1);
 		}
 		$result .= "}\n";
