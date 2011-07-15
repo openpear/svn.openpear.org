@@ -35,7 +35,7 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	public function __construct($url = null, $method = self::METHOD_GET, array $config = array())
 	{
 		parent::__construct($url, $method, $config);
-		$agent = 'HTTP_OAuthConsumer/1.0.6 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
+		$agent = 'HTTP_OAuthConsumer/1.1.0 (http://openpear.org/package/HTTP_OAuthConsumer) PHP/'.phpversion();
 		$this->setHeader('user-agent', $agent);
 	}
 
@@ -86,6 +86,11 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 	public function setNonce($nonce)
 	{
 		$this->_nonce = $nonce;
+	}
+	
+	public function addOAuthParameter($key, $value)
+	{
+		$this->_oauth[$key] = $value;
 	}
 
 	/* configurations setter */
@@ -239,21 +244,27 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 			'oauth_timestamp'		=> $this->getTimestamp(),
 			'oauth_nonce'			=> $this->getNonce(),
 			'oauth_version'			=> $this->getVersion()
-		);
+		) + $this->_oauth;
 
 		// add oauth token
 		if (strlen($this->_oauth_token)) {
 			$this->_oauth['oauth_token'] = $this->_oauth_token;
+		} else {
+			unset($this->_oauth['oauth_token']);
 		}
 
 		// add oauth callback
 		if (strlen($this->_oauth_callback)) {
 			$this->_oauth['oauth_callback'] = $this->_oauth_callback;
+		} else {
+			unset($this->_oauth['oauth_callback']);
 		}
 
 		// add oauth verifier
 		if (strlen($this->_oauth_verifier)) {
 			$this->_oauth['oauth_verifier'] = $this->_oauth_verifier;
+		} else {
+			unset($this->_oauth['oauth_verifier']);
 		}
 
 		// set default content type
