@@ -1,5 +1,7 @@
 <?php
 
+require_once 'PHPH/Exception.php';
+
 class PHPH_Util
 {
 	private static $native_types = array(
@@ -216,5 +218,28 @@ class PHPH_Util
 			$line = rtrim($indent.$line, "\t");
 		}
 		return implode("\n", $lines);
+	}
+
+	public static function checkParameterName(array $classes)
+	{
+		foreach ($classes as $class) {
+			$methods = $class->getMethods();
+			foreach ($methods as $method) {
+				$params = $method->getParameters();
+				$param_names = array();
+				foreach ($params as $param) {
+					$param_name = $param->getName();
+					if (strlen($param_name)==0) {
+						$message = sprintf("invalid parameter name: \$%s (%s::%s)", $param->name, $class->getName(), $method->getName());
+						throw new PHPH_Exception($message);
+					}
+					if (in_array($param_name, $param_names)) {
+						$message = sprintf("duplicate parameter name: \$%s (%s::%s)", $param_name, $class->getName(), $method->getName());
+						throw new PHPH_Exception($message);
+					}
+					$param_names[] = $param_name;
+				}
+			}
+		}
 	}
 }

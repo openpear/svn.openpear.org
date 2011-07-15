@@ -86,6 +86,7 @@ class PHPH
 			$this->classes[] = new PHPH_ReflectionClass($class);
 		}
 		$this->classes = PHPH_ReflectionClass::sortClasses($this->classes);
+		PHPH_Util::checkParameterName($this->classes);
 
 		// interface
 		$this->interfaces = array();

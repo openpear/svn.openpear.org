@@ -180,6 +180,22 @@ class PHPH_ReflectionParameter extends ReflectionParameter
 		return $result;
 	}
 
+	public function getEfree()
+	{
+		$type_spec = $this->getTypeSpec();
+		switch ($this->getTypeSpec()) {
+		case self::TYPE_OPTIONAL_VARS:
+		case self::TYPE_REQUIRED_VARS:
+			$name = $this->getName();
+			$efree = sprintf("if (%s) {\n", $name);
+			$efree .= sprintf("\tefree(%s);\n", $name);
+			$efree .= "}\n";
+			return $efree;
+			break;
+		}
+		return "";
+	}
+
 	public function getAccessFlag()
 	{
 		$flag = array();
