@@ -83,6 +83,27 @@ class HTTP_OAuthConsumerTest extends PHPUnit_Framework_TestCase
 		$response = $this->sendRequest($status);
 	}
 
+	/**
+	 *
+	 * @dataProvider httpNot200StatusCodeProvider 
+	 */
+	public function testDisableResponseStatusCheck($status)
+	{
+		$oauth = $this->object;
+		$oauth->setURL('http://example.com/?format=json');
+		$oauth->setTimestamp(1310679194);
+		$oauth->setNonce('8de41c132c43bc81');
+
+		$oauth->setConsumer('key', 'secret');
+		$oauth->setToken('accesskey', 'accesssecret');
+		
+		$oauth->enableResponseStatusCheck(false);
+		
+		$response = $this->sendRequest($status);
+		
+		$this->assertEquals($status, $response->getStatus());
+	}
+	
 	public function httpNot200StatusCodeProvider()
 	{
 		return array(
