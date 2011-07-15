@@ -309,7 +309,11 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		$url = sprintf('%s://%s%s', $net_url->getScheme(), $net_url->getHost(), $net_url->getPath());
 
 		// param
-		$params = array_merge($this->getParams, $this->postParams, $this->_oauth);
+		$oauthParams = $this->_oauth;
+		unset($oauthParams['realm']);
+		$params = array_merge($this->getParams, $this->postParams, $oauthParams);
+		unset($params['oauth_signature']);
+		
 		ksort($params);
 		$params_str = self::http_build_query_rfc3986($params);
 
