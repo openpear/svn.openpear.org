@@ -291,11 +291,17 @@ abstract class HTTP_OAuthConsumer extends HTTP_Request2
 		ksort($this->_oauth);
 
 		// make auth header
-		$auth = sprintf('OAuth realm="%s"', self::urlencode_rfc3986($this->_realm));
-		foreach ($this->_oauth as $k=>$v) {
-			$auth .= sprintf(', %s="%s"', self::urlencode_rfc3986($k), self::urlencode_rfc3986($v));
+		$auth = array();
+		
+		if($this->_realm) {
+			$auth[] =  sprintf('realm="%s"', self::urlencode_rfc3986($this->_realm));
 		}
-		$this->setHeader('authorization', $auth);
+		
+		foreach ($this->_oauth as $k=>$v) {
+			$auth[] = sprintf('%s="%s"', self::urlencode_rfc3986($k), self::urlencode_rfc3986($v));
+		}
+		
+		$this->setHeader('authorization', 'OAuth ' . implode(', ', $auth));
 
 		// send
 		$res = parent::send();
