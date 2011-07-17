@@ -182,6 +182,8 @@ class IO_Bit {
         $value = $ret[1];
         return $value; // PHP bug
     }
+    
+    // start with the MSB(most-significant bit)
     function getUIBit() {
         if (strlen($this->_data) <= $this->_byte_offset) {
             $data_len = strlen($this->_data);
@@ -189,7 +191,7 @@ class IO_Bit {
             throw new IO_Bit_Exception("getUIBit: $data_len <= $offset");
         }
         $value = ord($this->_data{$this->_byte_offset});
-        $value = 1 & ($value >> (7 - $this->_bit_offset));
+        $value = 1 & ($value >> (7 - $this->_bit_offset)); // MSB(Bit) first
         $this->_bit_offset ++;
         if (8 <= $this->_bit_offset) {
             $this->_byte_offset++;
@@ -214,7 +216,40 @@ class IO_Bit {
         }
         return $value;
     }
-    
+
+    // start with the LSB(least significant bit)
+    function getUIBitLSB() {
+        if (strlen($this->_data) <= $this->_byte_offset) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUIBitLSB: $data_len <= $offset");
+        }
+        $value = ord($this->_data{$this->_byte_offset});
+        $value = 1 & ($value >> $this->_bit_offset); // LSB(Bit) first
+        $this->_bit_offset ++;
+        if (8 <= $this->_bit_offset) {
+            $this->_byte_offset++;
+            $this->_bit_offset = 0;
+        }
+        return $value;
+    }
+    function getUIBitsLSB($width) {
+        $value = 0;
+        for ($i = 0 ; $i < $width ; $i++) {
+            $value |= $this->getUIBitLSB() << $i; // LSB(Bit) order
+        }
+        return $value;
+    }
+    function getSIBitsLSB($width) {
+        $value = $this->getUIBitsLSB($width);
+        $msb = $value & (1 << ($width - 1));
+        if ($msb) {
+            $bitmask = (2 * $msb) - 1;
+            $value = - ($value ^ $bitmask) - 1;
+        }
+        return $value;
+    }
+
     /*
      * put method
      */
