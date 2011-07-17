@@ -12,37 +12,37 @@ if (!extension_loaded("extname")) {
 	}
 }
 
-function check_interface($interface)
+function phph_check_interface($interface)
 {
 	$exists = interface_exists($interface);
 	printf("interface %s: %s\n", $interface, $exists ? "OK" : "ERROR");
 }
 
-function check_class($class)
+function phph_check_class($class)
 {
 	$exists = class_exists($class);
 	printf("class %s: %s\n", $class, $exists ? "OK" : "ERROR");
 }
 
-function check_const($class, $const)
+function phph_check_const($class, $const)
 {
 	$exists = @defined("$class::$const");
 	printf("  const %s: %s\n", $const, $exists ? "OK" : "ERROR");
 }
 
-function check_method($class, $method)
+function phph_check_method($class, $method)
 {
 	$exists = method_exists($class, $method);
 	printf("  method %s: %s\n", $method, $exists ? "OK" : "ERROR");
 }
 
-function check_function($function)
+function phph_check_function($function)
 {
 	$exists = function_exists($function);
 	printf("function %s: %s\n", $function, $exists ? "OK" : "ERROR");
 }
 
-function check_define($define)
+function phph_check_define($define)
 {
 	$exists = defined($define);
 	printf("define %s: %s\n", $define, $exists ? "OK" : "ERROR");
