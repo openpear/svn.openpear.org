@@ -63,7 +63,9 @@ class PHPH_ReflectionClass extends ReflectionClass
 		$methods = parent::getMethods($filter);
 		$result = array();
 		foreach ($methods as $method) {
-			$result[] = new PHPH_ReflectionMethod($this->getName(), $method->getName());
+			if ($method->class==$this->getName()) {
+				$result[] = new PHPH_ReflectionMethod($this->getName(), $method->getName());
+			}
 		}
 		return $result;
 	}
@@ -177,6 +179,9 @@ class PHPH_ReflectionClass extends ReflectionClass
 					// parent class is managed
 					$pclass_lower = strtolower($parent->getName());
 					$result .= sprintf("ce_%s = zend_register_internal_class_ex(&ce, ce_%s, NULL TSRMLS_CC);\n", $class_lower, $pclass_lower);
+				} else if ($parent->getname()=="Exception") {
+					// parent class is Exception
+					$result .= sprintf("ce_%s = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);\n", $class_lower);
 				} else {
 					// parent class is not managed
 					$esc_parent = PHPH_Util::escape($parent->getName());

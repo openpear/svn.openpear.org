@@ -19,6 +19,8 @@ extern zend_module_entry extname_module_entry;
 #define zend_parse_parameters_none() \
 	zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "")
 #endif
+#define PHP_METHOD_PASSTHRU(classname, name) \
+	ZEND_MN(classname##_##name)(INTERNAL_FUNCTION_PARAM_PASSTHRU)
 
 extern PHP_MINIT_FUNCTION(extname);
 extern PHP_MSHUTDOWN_FUNCTION(extname);
