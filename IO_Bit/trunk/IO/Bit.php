@@ -314,11 +314,13 @@ class IO_Bit {
         }
         return true;
     }
+
+    // start with the MSB(most-significant bit)
     function putUIBit($bit) {
         $this->_allocData($this->_byte_offset + 1);
         if ($bit > 0) {
             $value = ord($this->_data{$this->_byte_offset});
-            $value |= 1 << (7 - $this->_bit_offset);
+            $value |= 1 << (7 - $this->_bit_offset);  // MSB(Bit) first
             $this->_data{$this->_byte_offset} = chr($value);
         }
         $this->_bit_offset += 1;
@@ -339,6 +341,40 @@ class IO_Bit {
         return true;
     }
     function putSIBits($value, $width) {
+        if ($value < 0) {
+            $msb = 1 << ($width - 1);
+            $bitmask = (2 * $msb) - 1;
+            $value = (-$value  - 1) ^ $bitmask;
+        }
+        return $this->putUIBits($value, $width);
+    }
+
+    // start with the LSB(least significant bit)
+    function putUIBitLSB($bit) {
+        $this->_allocData($this->_byte_offset + 1);
+        if ($bit > 0) {
+            $value = ord($this->_data{$this->_byte_offset});
+            $value |= 1 << $this->_bit_offset;  // LSB(Bit) first
+            $this->_data{$this->_byte_offset} = chr($value);
+        }
+        $this->_bit_offset += 1;
+        if (8 <= $this->_bit_offset) {
+            $this->_byte_offset += 1;
+            $this->_bit_offset  = 0;
+        }
+        return true;
+    }
+    function putUIBitsLSB($value, $width) {
+        for ($i = 0 ;  $i < $width ; $i--) { // LSB(Bit) order
+            $bit = ($value >> $i) & 1;
+            $ret = $this->putUIBit($bit);
+            if ($ret !== true) {
+                return $ret;
+            }
+        }
+        return true;
+    }
+    function putSIBitsLSB($value, $width) {
         if ($value < 0) {
             $msb = 1 << ($width - 1);
             $bitmask = (2 * $msb) - 1;
