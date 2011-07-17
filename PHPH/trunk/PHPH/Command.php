@@ -407,7 +407,7 @@ class PHPH_Command
 					$file = self::normalizePath($dir, $file);
 					if (is_dir($file)) {
 						$result += self::fileList($file);
-					} else {
+					} else if (strtolower(substr(strrchr($file, '.'), 1))=="php") {
 						$result[] = $file;
 					}
 				}

@@ -66,8 +66,12 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 			}
 			$arg[] = sprintf('$%s', $param->getName());
 			if ($param->isOptional()) {
-				$arg[] = "=";
-				$arg[] = $param->getDefaultValue();
+				try {
+					$default_value = $param->getDefaultValue();
+					$arg[] = "=";
+					$arg[] = $default_value;
+				} catch (ReflectionException $e) {
+				}
 			}
 			$args[] = implode(" ", $arg);
 		}
@@ -116,6 +120,16 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 			if (0<strlen($efree)) {
 				$body .= "\n".$efree;
 			}
+			// override
+			if ($this->hasParentMethod()) {
+				$class = new PHPH_ReflectionClass($this->class);
+				$parent = strtolower($class->getParentName());
+				$pbody = "/*\n";
+				$pbody .= sprintf("PHP_METHOD_PASSTHRU(%s, %s)\n", $parent, $this->getName());
+				$pbody .= "return;\n";
+				$pbody .= "/*\n";
+				$body = $pbody.$body;
+			}
 			$result .= PHPH_Util::indent($body, 1);
 		}
 		$result .= "}\n";
@@ -148,5 +162,15 @@ class PHPH_ReflectionMethod extends ReflectionMethod
 			$flag[] = "0";
 		}
 		return implode(" | ", $flag);
+	}
+
+	public function hasParentMethod()
+	{
+		$class = new PHPH_ReflectionClass($this->class);
+		$parent = $class->getParentClass();
+		if (isset($parent)) {
+			return $parent->hasMethod($this->getName());
+		}
+		return false;
 	}
 }

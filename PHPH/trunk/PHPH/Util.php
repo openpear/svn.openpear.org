@@ -215,7 +215,9 @@ class PHPH_Util
 		$lines = explode("\n", $str);
 		$indent = str_repeat("\t", $n);
 		foreach ($lines as &$line) {
-			$line = rtrim($indent.$line, "\t");
+			if ($line!='/*' && $line!='*/') {
+				$line = rtrim($indent.$line, "\t");
+			}
 		}
 		return implode("\n", $lines);
 	}
