@@ -403,11 +403,11 @@ class PHPH_Command
 		$result = array();
 		if ($handle = opendir($dir)) {
 			while (false !== ($file = readdir($handle))) {
-				if ($file !== "." && $file !== "..") {
+				if (strpos($file, ".")!==0) {
 					$file = self::normalizePath($dir, $file);
 					if (is_dir($file)) {
 						$result += self::fileList($file);
-					} else if (strtolower(substr(strrchr($file, '.'), 1))=="php") {
+					} else {
 						$result[] = $file;
 					}
 				}
