@@ -65,27 +65,27 @@ class IO_Zlib {
                     } else if ($value <= 0x17) {
                         $length = self::$length_table1[$value - 1];
                         if ($value < 9) {
-                            $extend_bits = 0;
+                            $length_extend_bits = 0;
                         } else {
-                            $extend_bits = floor(($value - 5) / 4);
+                            $length_extend_bits = floor(($value - 5) / 4);
                         }
-                        $extend_value = $reader->getUIBitsLSB($extend_bits);
+                        $length_extend = $reader->getUIBitsLSB($length_extend_bits);
                         //
-                        $value2 = $reader->getUIBitsLSB(5);
-                        $distance = self::$distance_table[$value2];
-                        if ($value2 < 4) {
-                            $extend_bits2 = 0;
+                        $distance_value = $reader->getUIBitsLSB(5);
+                        $distance = self::$distance_table[$distance_value];
+                        if ($distance_value < 4) {
+                            $distance_extend_bits = 0;
                         } else {
-                            $extend_bits2 = floor(($value2 - 3) / 2);
+                            $distance_extend_bits = floor(($distance_value - 3) / 2);
                         }
-                        $extend_value2 = $reader->getUIBitsLSB($extend_bits2);
-                        
+                        $distance_extend = $reader->getUIBitsLSB($distance_extend_bits);
                         $data []= array('Value' => $value,
-                                        'ExtendValue' => $extend_value,
-                                        'Length' => $length + $extend_value,
-                                        'Value2' => $value2,
-                                        'ExtendValue2' => $extend_value2,
-                                        'Distance' => $distance + $extend_value2);
+                                        'Length' => $length,
+                                        'LengthExtend' => $length_extend,
+                                        'Value2' => $distance_value,
+                                        'Distance' => $distance,
+                                        'DistanceExtend' => $distance_extend);
+
                     } else {
                         $value = ($value << 1) | $reader->getUIBitLSB();
                         if ($value <= 0xBF) {
@@ -101,22 +101,22 @@ class IO_Zlib {
                             } else {
                                 $extend_bits = 0;
                             }
-                            $extend_value = $reader->getUIBitsLSB($extend_bits);
+                            $length_extend_value = $reader->getUIBitsLSB($extend_bits);
                             //
-                            $value2 = $reader->getUIBitsLSB(5);
-                            $distance = self::$distance_table[$value2];
+                            $distance_value = $reader->getUIBitsLSB(5);
+                            $distance = self::$distance_table[$distance_value];
                             if ($value2 < 4) {
-                                $extend_bits2 = 0;
+                                $distance_extend_bits = 0;
                             } else {
-                                $extend_bits2 = floor(($value2 - 3) / 2);
+                                $distance_extend_bits = floor(($distance_value - 3) / 2);
                             }
-                            $extend_value2 = $reader->getUIBitsLSB($extend_bits2);
-                            $data []= array('Value' => $value,
-                                            'ExtendValue' => $extend_value,
-                                            'Length' => $length + $extend_value,
-                                            'Value2' => $value2,
-                                            'ExtendValue2' => $extend_value2,
-                                            'Distance' => $distance + $extend_value2);
+                            $distance_extend = $reader->getUIBitsLSB($distance_extend_bits);
+                            $data []= array('LengthValue' => $value,
+                                            'Length' => $length,
+                                            'LengthExtend' => $length_extend,
+                                            'DistanceValue' => $distance_value,
+                                            'Distance' => $distance,
+                                            'DistanceExtend' => $distance_extend);
                         } else {
                             $value = ($value << 1) | $reader->getUIBitLSB();
                             $real_value = $value - 0x190 + 144;
@@ -128,7 +128,21 @@ class IO_Zlib {
                 $block['Data'] = $data;
                 break;
             case 2: // compressed with dynamic Huffman codes
-                throw new Exception("dynamic Huffman codes is not implemented yet. ");
+                // while (true) {
+                $hlit = $reader->getUIBitsLSB(5);
+                $hdist  = $reader->getUIBitsLSB(5);
+                $hclen  = $reader->getUIBitsLSB(5);
+                $block['HLIT'] = $hlit;
+                $block['HDIST'] = $hdist;
+                $block['HCLEN'] = $hclen;
+                $length_list = array();
+                for ($i = 0 ; $i < $hclen + 4; $i++) {
+                    $length = $reader->getUIBitsLSB(3);
+                    $length_list []= $length;
+                }
+//                print_r($length_list);
+//                $block['LengthList'] = $length_list;
+                // } // while end
                 break;
             default: // = 3
                 throw new Exception("Error BTYPE($btype)");
@@ -160,20 +174,27 @@ class IO_Zlib {
          *  compression data block
          */
         foreach ($this->compressed_data as $block) {
-            foreach ($block as $key => $value) {
-                if (! is_array($value)) {
-                    echo "$key:$value ";
-                } else {
-                    foreach ($value as $data) {
-                        echo "\n";
-                        echo "\t";
-                        foreach ($data as $k => $v) {
-                            echo "$k:$v ";
-                        }
+            $btype = $block['BTYPE'];
+            echo "(BFINAL)={$block['(BFINAL)']} BTYPE:$btype\n";
+            switch ($btype)  {
+            case 0:
+                echo "LEN:{$block['LEN']} NLEN:{$block['NLEN']} Data:{$block['Data']}\n";
+                break;
+            case 1:
+                foreach ($block['Data'] as $value) {
+                    if (isset($value['RealValue'])) {
+                        printf("%02X=>%02X(%c) ", $value['Value'], $value['RealValue'], $value['RealValue']);
+                    } else if (isset($value['Length'])) {
+                        echo "Length:{$value['Length']}+{$value['LengthExtend']} Distance:{$value['Distance']}+{$value['DistanceExtend']} ";
+                    } else { // Maybe Terminate Value
+                        printf("%d(Terminate)", $value['Value']);
                     }
                 }
+                echo "\n";
+            break;
+            case 2:
+                break;
             }
-            echo "\n";
         }
         echo "ADLER32:{$this->adler32}\n";
     }
