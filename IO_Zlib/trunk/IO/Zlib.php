@@ -64,12 +64,28 @@ class IO_Zlib {
                         break;
                     } else if ($value <= 0x17) {
                         $length = self::$length_table1[$value - 1];
+                        if ($value < 9) {
+                            $extend_bits = 0;
+                        } else {
+                            $extend_bits = floor(($value - 5) / 4);
+                        }
+                        $extend_value = $reader->getUIBitsLSB($extend_bits);
+                        //
                         $value2 = $reader->getUIBitsLSB(5);
                         $distance = self::$distance_table[$value2];
+                        if ($value2 < 4) {
+                            $extend_bits2 = 0;
+                        } else {
+                            $extend_bits2 = floor(($value2 - 3) / 2);
+                        }
+                        $extend_value2 = $reader->getUIBitsLSB($extend_bits2);
+                        
                         $data []= array('Value' => $value,
-                                        'Length' => $length,
+                                        'ExtendValue' => $extend_value,
+                                        'Length' => $length + $extend_value,
                                         'Value2' => $value2,
-                                        'Distance' => $distance);
+                                        'ExtendValue2' => $extend_value2,
+                                        'Distance' => $distance + $extend_value2);
                     } else {
                         $value = ($value << 1) | $reader->getUIBitLSB();
                         if ($value <= 0xBF) {
@@ -78,12 +94,29 @@ class IO_Zlib {
                                             'RealValue' => $real_value);
                         } else if ($value <= 0xC7) {
                             $length = self::$length_table2[$value - 0xC0];
+                            if ($value ==  0xC0) {
+                                $extend_bits = 4;
+                            } elseif ($value <  0xC0 + 4) {
+                                $extend_bits = 5;
+                            } else {
+                                $extend_bits = 0;
+                            }
+                            $extend_value = $reader->getUIBitsLSB($extend_bits);
+                            //
                             $value2 = $reader->getUIBitsLSB(5);
                             $distance = self::$distance_table[$value2];
+                            if ($value2 < 4) {
+                                $extend_bits2 = 0;
+                            } else {
+                                $extend_bits2 = floor(($value2 - 3) / 2);
+                            }
+                            $extend_value2 = $reader->getUIBitsLSB($extend_bits2);
                             $data []= array('Value' => $value,
-                                            'Length' => $length,
+                                            'ExtendValue' => $extend_value,
+                                            'Length' => $length + $extend_value,
                                             'Value2' => $value2,
-                                            'Distance' => $distance);
+                                            'ExtendValue2' => $extend_value2,
+                                            'Distance' => $distance + $extend_value2);
                         } else {
                             $value = ($value << 1) | $reader->getUIBitLSB();
                             $real_value = $value - 0x190 + 144;
@@ -91,7 +124,6 @@ class IO_Zlib {
                                             'RealValue' => $real_value);
                         }
                     }
-//                    var_dump($data);
                 } // while end
                 $block['Data'] = $data;
                 break;
