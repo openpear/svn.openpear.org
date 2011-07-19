@@ -96,7 +96,7 @@ class IO_Zlib {
                             $length = self::$length_table2[$value - 0xC0];
                             if ($value ==  0xC0) {
                                 $extend_bits = 4;
-                            } elseif ($value <  0xC0 + 4) {
+                            } elseif ($value <  0xC0 + 5) {
                                 $extend_bits = 5;
                             } else {
                                 $extend_bits = 0;
