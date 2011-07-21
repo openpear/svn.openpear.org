@@ -2,6 +2,10 @@
 
 require_once('IO/Bit.php');
 
+class IO_Zlib_HuffmanDecompress {
+    
+}
+
 class IO_Zlib {
     var $cmf;
     var $flg;
@@ -128,20 +132,62 @@ class IO_Zlib {
                 $block['Data'] = $data;
                 break;
             case 2: // compressed with dynamic Huffman codes
-                // while (true) {
                 $hlit = $reader->getUIBitsLSB(5);
                 $hdist  = $reader->getUIBitsLSB(5);
-                $hclen  = $reader->getUIBitsLSB(5);
+                $hclen  = $reader->getUIBitsLSB(4);
                 $block['HLIT'] = $hlit;
                 $block['HDIST'] = $hdist;
                 $block['HCLEN'] = $hclen;
-                $length_list = array();
+                $hclen_order = array(16, 17, 18, 0, 8,
+                                     7, 9,
+                                     6, 10,
+                                     5, 11,
+                                     4, 12,
+                                     3, 13,
+                                     2, 14,
+                                     1, 15);
+                $hclen_table = array_fill(0, 19, 0);
                 for ($i = 0 ; $i < $hclen + 4; $i++) {
-                    $length = $reader->getUIBitsLSB(3);
-                    $length_list []= $length;
+                    $hclen_table[$hclen_order[$i]] = $reader->getUIBitsLSB(3);
                 }
-//                print_r($length_list);
-//                $block['LengthList'] = $length_list;
+                for ( ; $i < 18 ; $i++) {
+                    $hclen_table[$hclen_order[$i]] = 0;
+                }
+                $block['HCLEN_TABLE'] = $hclen_table;
+                // GENERATE HUFFMAN CODE TABLE FROM HCLEN TABLE
+                $hclen_min = 15;
+                $hclen_max = 0;
+                for ($i = 0 ; $i < 19; $i++) {
+                    $value = $hclen_table[$i];
+                    if ($value != 0) {
+                        if ($value < $hclen_min) {
+                            $hclen_min = $value;
+                        }
+                        if ($value > $hclen_max) {
+                            $hclen_max = $value;
+                        }
+                    }
+                }
+                $hclen_lists = array_fill($hclen_min, $hclen_max, array());
+                echo "hclen_min:$hclen_min hclen_max:$hclen_max\n";
+                $hccode_table = array_fill(0, 19, null);
+                $hccode_table_rev = array();
+                $value = 0;
+                for ($i = $hclen_min ; $i <= $hclen_max ; $i++) {
+                    $hccode_table_rev[$i] = array();
+                    for ($j = 0 ; $j < 19; $j++) {
+                        if ($hclen_table[$j] == $i) {
+                            $hccode_table[$j] = $value;
+                            $hccode_table_rev[$i][$value] = $j;
+                            $value ++;
+                        }
+                    }
+                    $value *= 2;
+                }
+                $block['HCCODE_TABLE'] = $hccode_table;
+                
+                // while (true) {
+                
                 // } // while end
                 break;
             default: // = 3
@@ -193,6 +239,7 @@ class IO_Zlib {
                 echo "\n";
             break;
             case 2:
+                print_r($block);
                 break;
             }
         }
