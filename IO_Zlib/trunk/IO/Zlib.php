@@ -369,44 +369,4 @@ class IO_Zlib {
     function deflate() {
         ;
     }
-    /*
-     * 符号長テーブルを元にハフマンテーブルを復元
-     */
-    function huffman_table_from_hclen($hclen_table) {
-        if (! is_array($hclen_table)) {
-            throw new Exception("huffman_table_from_hclen(hclen_table=$hclen_table)");
-        }
-        $hclen_table_len = count($hclen_table);
-        $hclen_min = 128; // XXX
-        $hclen_max = 0;
-        for ($i = 0 ; $i < $hclen_table_len; $i++) {
-            $value = $hclen_table[$i];
-            if ($value != 0) {
-                if ($value < $hclen_min) {
-                    $hclen_min = $value;
-                }
-                if ($value > $hclen_max) {
-                    $hclen_max = $value;
-                }
-            }
-        }
-        //         echo "hclen_min:$hclen_min hclen_max:$hclen_max\n";
-        if ($hclen_min > $hclen_max) {
-            throw new Exception("huffman_table_from_hclen: hclen_min($hclen_min) > hclen_max($hclen_max)");
-        }
-        $hclen_lists = array_fill($hclen_min, $hclen_max - $hclen_min, array());
-        $hccode_table_rev = array();
-        $value = 0;
-        for ($i = $hclen_min ; $i <= $hclen_max ; $i++) {
-            $hccode_table_rev[$i] = array();
-            for ($j = 0 ; $j < $hclen_table_len; $j++) {
-                if ($hclen_table[$j] == $i) {
-                    $hccode_table_rev[$i][$value] = $j;
-                    $value ++;
-                }
-            }
-            $value *= 2;
-        }
-        return $hccode_table_rev;
-    }
 }
