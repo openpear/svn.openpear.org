@@ -154,6 +154,9 @@ class IO_Zlib {
                         }
                         $distance_value = $reader->getUIBitsLSB(5);
                         $distance = self::$distance_table[$distance_value];
+
+// echo "YYY: distance=$distance distance_value:$distance_value\n";
+                        
                         if ($distance_value < 4) {
                             $distance_extend_bits = 0;
                         } else {
@@ -265,6 +268,7 @@ class IO_Zlib {
                         }
                         $distance_value = $huffman_reader_custom_dist->getValue($reader);
                         $distance = self::$distance_table[$distance_value];
+// echo "ZZZ: distance=$distance distance_value:$distance_value\n";
                         if ($distance_value < 4) {
                             $distance_extend_bits = 0;
                         } else {
@@ -323,11 +327,11 @@ class IO_Zlib {
             $btype = $block['BTYPE'];
             echo "(BFINAL)={$block['(BFINAL)']} BTYPE:$btype\n";
             switch ($btype)  {
-            case 0:
+            case 0: // uncomress
                 echo "LEN:{$block['LEN']} NLEN:{$block['NLEN']} Data:{$block['Data']}\n";
                 break;
-            case 1:
-            case 2:
+            case 1: // fixed huffman
+            case 2: // dynamic huffman
                 foreach ($block['Data'] as $value) {
                     if (isset($value['Value'])) {
                         printf("%02X(%c) ", $value['Value'], $value['Value']);
@@ -349,6 +353,35 @@ class IO_Zlib {
      */
     function inflate($zipdata) {
         $this->parse($zipdata);
+        $data = '';
+        foreach ($this->compressed_data as $block) {
+            switch ($block['BTYPE']) {
+            case 0: // uncompress
+                $data .= $block['Data'];
+                break;
+            case 1: // fixed huffman
+            case 2: // dynamic huffman
+                foreach ($block['Data'] as $value) {
+                    if (isset($value['Value'])) {
+                        $data .= chr($value['Value']);
+                    } else {
+                        $length = $value['Length'] + $value['LengthExtend'];
+                        $distance = $value['Distance'] + $value['DistanceExtend'];
+                        $data_len = strlen($data);
+                        if ($data_len < $distance) {
+                            throw new Exception("data_len:$data_len < distance:$distance({$value['Distance']}+{$value['DistanceExtend']})");
+                        }
+                        $start_pos = $data_len - $distance;
+                        $end_pos = $start_pos  + $length;
+                        for ($i = $start_pos ; $i <= $end_pos ; $i++) { 
+                            $data .= $data[$i];
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        return $data;
     }
 
     /*
