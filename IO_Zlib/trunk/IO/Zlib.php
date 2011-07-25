@@ -21,19 +21,8 @@ class IO_Zlib_HuffmanReader_Custom extends IO_Zlib_HuffmanReader {
             throw new Exception("huffman_table_from_hclen(hclen_list=$hclen_list)");
         }
         $hclen_list_len = count($hclen_list);
-        $hclen_min = 128; // XXX
-        $hclen_max = 0;
-        for ($i = 0 ; $i < $hclen_list_len; $i++) {
-            $value = $hclen_list[$i];
-            if ($value != 0) {
-                if ($value < $hclen_min) {
-                    $hclen_min = $value;
-                }
-                if ($value > $hclen_max) {
-                    $hclen_max = $value;
-                }
-            }
-        }
+        $hclen_min = min(array_diff($hclen_list, array(0)));
+        $hclen_max = max($hclen_list);
         //         echo "hclen_min:$hclen_min hclen_max:$hclen_max\n";
         if ($hclen_min > $hclen_max) {
             throw new Exception("huffman_table_from_hclen: hclen_min($hclen_min) > hclen_max($hclen_max)");
@@ -54,8 +43,8 @@ class IO_Zlib_HuffmanReader_Custom extends IO_Zlib_HuffmanReader {
         }
         $this->_huffman_table_rev = $huffman_table_rev;
         $huffman_table_rev_keys = array_keys($huffman_table_rev);
-        $this->_hclen_min = min($huffman_table_rev_keys);
-        $this->_hclen_max = max($huffman_table_rev_keys);
+        $this->_hclen_min = $hclen_min;
+        $this->_hclen_max = $hclen_max;
     }
     /*
      * 逆引きテーブルを参照して符号に対応する元データ(literal/length)を返す
