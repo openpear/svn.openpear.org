@@ -37,12 +37,10 @@ class IO_Zlib {
     var $dictid = null;
     var $compressed_data = null;
     // fixed huffman table (length, distance)
-    static $length_table1 = array(
+    static $length_table = array(
         3, 4, 5, 6, 7, 8, 9, 10, 11, 13,
         15, 17, 19, 23, 27, 31, 35, 43, 51, 59,
-        67, 83, 99
-        );
-    static $length_table2 = array(
+        67, 83, 99,
         115, 131, 163, 195, 227, 258
         );
     static $distance_table = array(
@@ -94,7 +92,7 @@ class IO_Zlib {
                         $data []= array('Value' => $value);
                         break;
                     } else if ($value <= 0x17) {
-                        $length = self::$length_table1[$value - 1];
+                        $length = self::$length_table[$value - 1];
                         if ($value < 9) {
                             $length_extend_bits = 0;
                         } else {
@@ -124,7 +122,7 @@ class IO_Zlib {
                             $data []= array('Value' => $value,
                                             'RealValue' => $real_value);
                         } else if ($value <= 0xC7) {
-                            $length = self::$length_table2[$value - 0xC0];
+                            $length = self::$length_table[$value - 0xC0 + 23];
                             if ($value ==  0xC0) {
                                 $extend_bits = 4;
                             } elseif ($value <  0xC0 + 5) {
@@ -265,15 +263,7 @@ class IO_Zlib {
                  * ここからが、実際のデータのデコード処理
                  */
                 $data = array();
-                $lit_and_dist_huffman_table_rev_keys = array_keys($lit_and_dist_huffman_table_rev);- ハフマン符号長からテーブルを復元する処理を function にまとめた
-                                                                                                       - 符号の割り当て処理を修正 (余計な事してたので)
-                                                                                                       - 16～18 の処理を追加 (ハフマンテーブル復元用ハフマンテーブルの repeat 処理)
-                                                                                                       - リテラルと距離のハフマンテーブルを別なので、処理を分ける
-
-                                                                                                       - 後でクラスにまとめる予定 >IO_Zlib_Huffman
-                                                                                                       - 最後に実装する > inflate, deflate
-                                                                                                       TODO: Custom Huffman の長さ/距離の処理
-                                                                                                       
+                $lit_and_dist_huffman_table_rev_keys = array_keys($lit_and_dist_huffman_table_rev);
                 $hlen_min = min($lit_and_dist_huffman_table_rev_keys);
                 $hlen_max = max($lit_and_dist_huffman_table_rev_keys);
                 while (true) {
