@@ -2,16 +2,11 @@
 
 require_once('IO/Bit.php');
 
-
 /*
  * BTYPE:2 Custom Huffma 用 クラス (BTYPE:1 は今の所ベタに処理)
  */
 
-abstract class IO_Zlib_HuffmanReader {
-    abstract function getValue(&$reader);
-}
-
-class IO_Zlib_HuffmanReader_Custom extends IO_Zlib_HuffmanReader {
+class IO_Zlib_HuffmanReader_Custom {
     var $_huffman_table_rev;
     var $_hclen_min;
     var $_hclen_max;
@@ -68,13 +63,13 @@ class IO_Zlib {
     var $dictid = null;
     var $compressed_data = null;
     // fixed huffman table (length, distance)
-    static $length_table = array(
+    static $lzss_length_table = array(
         3, 4, 5, 6, 7, 8, 9, 10, 11, 13,
         15, 17, 19, 23, 27, 31, 35, 43, 51, 59,
         67, 83, 99,
         115, 131, 163, 195, 227, 258
         );
-    static $distance_table = array(
+    static $lzss_distance_table = array(
         1, 2, 3, 4, 5, 7, 9, 13 ,17 ,25,
         33, 49, 65, 97, 129, 193, 257, 385, 513, 769,
         1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577
@@ -136,41 +131,41 @@ class IO_Zlib {
                     if ($lit_or_len < 256) {
                         $data []= array('Value' => $lit_or_len);
                     } else if ($lit_or_len > 256) {
-                        $length = self::$length_table[$lit_or_len - 257];
+                        $lzss_length = self::$lzss_length_table[$lit_or_len - 257];
                         if ($lit_or_len < 265) { // 257-264 => 0
-                            $length_extend_bits = 0;
+                            $lzss_length_extend_bits = 0;
                         } else if ($lit_or_len < 285) {
-                            $length_extend_bits = floor(($lit_or_len  - 261) / 4);
+                            $lzss_length_extend_bits = floor(($lit_or_len  - 261) / 4);
                         } else { // 285 => 0
-                            $length_extend_bits = 0;
+                            $lzss_length_extend_bits = 0;
                         }
-                        if ($length_extend_bits == 0) {
-                            $length_extend = 0;
+                        if ($lzss_length_extend_bits == 0) {
+                            $lzss_length_extend = 0;
                         } else {
-                            $length_extend = $reader->getUIBitsLSB($length_extend_bits);
+                            $lzss_length_extend = $reader->getUIBitsLSB($lzss_length_extend_bits);
                         }
-                        $distance_value = 0;
+                        $lzss_distance_value = 0;
                         for ($i = 0 ; $i < 5 ; $i++) {
-                            $distance_value =  ($distance_value << 1) | $reader->getUIBitLSB();
+                            $lzss_distance_value =  ($lzss_distance_value << 1) | $reader->getUIBitLSB();
                         }
-                        if ($distance_value >= 30) {
-                            throw new Exception("distance_value=$distance_value");
+                        if ($lzss_distance_value >= 30) {
+                            throw new Exception("distance_value=$lzss_distance_value");
                         }
-                        $distance = self::$distance_table[$distance_value];
-                        if ($distance_value < 4) {
-                            $distance_extend_bits = 0;
+                        $lzss_distance = self::$lzss_distance_table[$lzss_distance_value];
+                        if ($lzss_distance_value < 4) {
+                            $lzss_distance_extend_bits = 0;
                         } else {
-                            $distance_extend_bits = floor(($distance_value - 2) / 2);
+                            $lzss_distance_extend_bits = floor(($lzss_distance_value - 2) / 2);
                         }
-                        if ($distance_extend_bits == 0) {
-                            $distance_extend = 0;
+                        if ($lzss_distance_extend_bits == 0) {
+                            $lzss_distance_extend = 0;
                         } else {
-                            $distance_extend = $reader->getUIBitsLSB($distance_extend_bits);
+                            $lzss_distance_extend = $reader->getUIBitsLSB($lzss_distance_extend_bits);
                         }
-                        $data []= array('Length' => $length,
-                                        'LengthExtend' => $length_extend,
-                                        'Distance' => $distance,
-                                        'DistanceExtend' => $distance_extend);
+                        $data []= array('Length' => $lzss_length,
+                                        'LengthExtend' => $lzss_length_extend,
+                                        'Distance' => $lzss_distance,
+                                        'DistanceExtend' => $lzss_distance_extend);
                     } else { // 256: End of Code
                         break;
                     }
@@ -254,35 +249,35 @@ class IO_Zlib {
                     if ($lit_or_len < 256) { // literal
                         $data []= array('Value' => $lit_or_len);
                     } else if ($lit_or_len > 256) { // length
-                        $length = self::$length_table[$lit_or_len - 257];                        
+                        $lzss_length = self::$lzss_length_table[$lit_or_len - 257];                        
                         if ($lit_or_len < 265) { // 257-264 => 0
-                            $length_extend_bits = 0;
+                            $lzss_length_extend_bits = 0;
                         } else if ($lit_or_len < 285) {
-                            $length_extend_bits = floor(($lit_or_len - 261) / 4);
+                            $lzss_length_extend_bits = floor(($lit_or_len - 261) / 4);
                         } else { // 285 => 0
-                            $length_extend_bits = 0;
+                            $lzss_length_extend_bits = 0;
                         }
-                        if ($length_extend_bits == 0) {
-                            $length_extend = 0;
+                        if ($lzss_length_extend_bits == 0) {
+                            $lzss_length_extend = 0;
                         } else {
-                            $length_extend = $reader->getUIBitsLSB($length_extend_bits);
+                            $lzss_length_extend = $reader->getUIBitsLSB($lzss_length_extend_bits);
                         }
-                        $distance_value = $huffman_reader_custom_dist->getValue($reader);
-                        $distance = self::$distance_table[$distance_value];
-                        if ($distance_value < 4) {
-                            $distance_extend_bits = 0;
+                        $lzss_distance_value = $huffman_reader_custom_dist->getValue($reader);
+                        $lzss_distance = self::$lzss_distance_table[$lzss_distance_value];
+                        if ($lzss_distance_value < 4) {
+                            $lzss_distance_extend_bits = 0;
                         } else {
-                            $distance_extend_bits = floor(($distance_value - 2) / 2);
+                            $lzss_distance_extend_bits = floor(($lzss_distance_value - 2) / 2);
                         }
-                        if ($distance_extend_bits == 0) {
-                            $distance_extend = 0;
+                        if ($lzss_distance_extend_bits == 0) {
+                            $lzss_distance_extend = 0;
                         } else {
-                            $distance_extend = $reader->getUIBitsLSB($distance_extend_bits);
+                            $lzss_distance_extend = $reader->getUIBitsLSB($lzss_distance_extend_bits);
                         }
-                        $data []= array('Length' => $length,
-                                        'LengthExtend' => $length_extend,
-                                        'Distance' => $distance,
-                                        'DistanceExtend' => $distance_extend);
+                        $data []= array('Length' => $lzss_length,
+                                        'LengthExtend' => $lzss_length_extend,
+                                        'Distance' => $lzss_distance,
+                                        'DistanceExtend' => $lzss_distance_extend);
                     } else { // 256:End
 //                        $data []= array('Value' => $value);
                         break;
@@ -365,14 +360,14 @@ class IO_Zlib {
                     if (isset($value['Value'])) {
                         $data .= chr($value['Value']);
                     } else {
-                        $length = $value['Length'] + $value['LengthExtend'];
-                        $distance = $value['Distance'] + $value['DistanceExtend'];
+                        $lzss_length = $value['Length'] + $value['LengthExtend'];
+                        $lzss_distance = $value['Distance'] + $value['DistanceExtend'];
                         $data_len = strlen($data);
-                        if ($data_len < $distance) {
-                            throw new Exception("data_len:$data_len < distance:$distance({$value['Distance']}+{$value['DistanceExtend']})");
+                        if ($data_len < $lzss_distance) {
+                            throw new Exception("data_len:$data_len < distance:$lzss_distance({$value['Distance']}+{$value['DistanceExtend']})");
                         }
-                        $start_pos = $data_len - $distance;
-                        $end_pos = $start_pos  + $length - 1;
+                        $start_pos = $data_len - $lzss_distance;
+                        $end_pos = $start_pos  + $lzss_length - 1;
                         for ($i = $start_pos ; $i <= $end_pos ; $i++) { 
                             $data .= $data[$i];
                         }
