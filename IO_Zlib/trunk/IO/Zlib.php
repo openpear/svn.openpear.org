@@ -23,7 +23,6 @@ class IO_Zlib_HuffmanReader_Custom extends IO_Zlib_HuffmanReader {
         $hclen_list_len = count($hclen_list);
         $hclen_min = min(array_diff($hclen_list, array(0)));
         $hclen_max = max($hclen_list);
-// echo "hclen_min:$hclen_min hclen_max:$hclen_max\n";
         if ($hclen_min > $hclen_max) {
             throw new Exception("huffman_table_from_hclen: hclen_min($hclen_min) > hclen_max($hclen_max)");
         }
@@ -163,7 +162,7 @@ class IO_Zlib {
                         if ($distance_value < 4) {
                             $distance_extend_bits = 0;
                         } else {
-                            $distance_extend_bits = floor(($distance_value - 3) / 2);
+                            $distance_extend_bits = floor(($distance_value - 2) / 2);
                         }
                         if ($distance_extend_bits == 0) {
                             $distance_extend = 0;
@@ -275,7 +274,7 @@ class IO_Zlib {
                         if ($distance_value < 4) {
                             $distance_extend_bits = 0;
                         } else {
-                            $distance_extend_bits = floor(($distance_value - 3) / 2);
+                            $distance_extend_bits = floor(($distance_value - 2) / 2);
                         }
                         if ($distance_extend_bits == 0) {
                             $distance_extend = 0;
