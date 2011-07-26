@@ -373,7 +373,7 @@ class IO_Zlib {
                             throw new Exception("data_len:$data_len < distance:$distance({$value['Distance']}+{$value['DistanceExtend']})");
                         }
                         $start_pos = $data_len - $distance;
-                        $end_pos = $start_pos  + $length;
+                        $end_pos = $start_pos  + $length - 1;
                         for ($i = $start_pos ; $i <= $end_pos ; $i++) { 
                             $data .= $data[$i];
                         }
