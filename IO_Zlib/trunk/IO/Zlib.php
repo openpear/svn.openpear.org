@@ -23,11 +23,11 @@ class IO_Zlib_HuffmanReader_Custom extends IO_Zlib_HuffmanReader {
         $hclen_list_len = count($hclen_list);
         $hclen_min = min(array_diff($hclen_list, array(0)));
         $hclen_max = max($hclen_list);
-        //         echo "hclen_min:$hclen_min hclen_max:$hclen_max\n";
+// echo "hclen_min:$hclen_min hclen_max:$hclen_max\n";
         if ($hclen_min > $hclen_max) {
             throw new Exception("huffman_table_from_hclen: hclen_min($hclen_min) > hclen_max($hclen_max)");
         }
-        $hclen_lists = array_fill($hclen_min, $hclen_max - $hclen_min, array());
+        $hclen_lists = array_fill($hclen_min, $hclen_max - $hclen_min + 1, array());
 
         $huffman_table_rev = array();
         $value = 0;
@@ -140,7 +140,7 @@ class IO_Zlib {
                         $data []= array('Value' => $lit_or_len);
                     } else if ($lit_or_len > 256) {
                         $length = self::$length_table[$lit_or_len - 257];
-                        if ($lit_or_len < 265) { // 256-265 => 0
+                        if ($lit_or_len < 265) { // 257-264 => 0
                             $length_extend_bits = 0;
                         } else if ($lit_or_len < 285) {
                             $length_extend_bits = floor(($lit_or_len  - 261) / 4);
@@ -243,6 +243,7 @@ class IO_Zlib {
 
                 $huffman_reader_custom_lit = new IO_Zlib_HuffmanReader_Custom($lit_len_list);
                 $huffman_reader_custom_dist = new IO_Zlib_HuffmanReader_Custom($dist_len_list);
+                
                 /*
                  * ここまでで、ハフマン符号テーブルの復元終わり。
                  * ここからが、実際のデータのデコード処理
@@ -254,7 +255,7 @@ class IO_Zlib {
                         $data []= array('Value' => $lit_or_len);
                     } else if ($lit_or_len > 256) { // length
                         $length = self::$length_table[$lit_or_len - 257];                        
-                        if ($lit_or_len < 265) { // 256-265 => 0
+                        if ($lit_or_len < 265) { // 257-264 => 0
                             $length_extend_bits = 0;
                         } else if ($lit_or_len < 285) {
                             $length_extend_bits = floor(($lit_or_len - 261) / 4);
@@ -266,6 +267,7 @@ class IO_Zlib {
                         } else {
                             $length_extend = $reader->getUIBitsLSB($length_extend_bits);
                         }
+// echo "ZZZ: length=$length lit_or_len=$lit_or_len\n";
                         $distance_value = $huffman_reader_custom_dist->getValue($reader);
                         $distance = self::$distance_table[$distance_value];
 // print_r(self::$distance_table);
