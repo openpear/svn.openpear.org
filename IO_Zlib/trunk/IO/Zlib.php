@@ -26,8 +26,6 @@ class IO_Zlib_HuffmanReader_Custom extends IO_Zlib_HuffmanReader {
         if ($hclen_min > $hclen_max) {
             throw new Exception("huffman_table_from_hclen: hclen_min($hclen_min) > hclen_max($hclen_max)");
         }
-        $hclen_lists = array_fill($hclen_min, $hclen_max - $hclen_min + 1, array());
-
         $huffman_table_rev = array();
         $value = 0;
         for ($i = $hclen_min ; $i <= $hclen_max ; $i++) {
