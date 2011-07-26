@@ -140,9 +140,9 @@ class IO_Zlib {
                         $data []= array('Value' => $lit_or_len);
                     } else if ($lit_or_len > 256) {
                         $length = self::$length_table[$lit_or_len - 257];
-                        if ($value < 265) { // 256-265 => 0
+                        if ($lit_or_len < 265) { // 256-265 => 0
                             $length_extend_bits = 0;
-                        } else if ($value < 285) {
+                        } else if ($lit_or_len < 285) {
                             $length_extend_bits = floor(($lit_or_len  - 261) / 4);
                         } else { // 285 => 0
                             $length_extend_bits = 0;
@@ -155,7 +155,7 @@ class IO_Zlib {
                         $distance_value = $reader->getUIBitsLSB(5);
                         $distance = self::$distance_table[$distance_value];
 
-// echo "YYY: distance=$distance distance_value:$distance_value\n";
+// echo "YYY: distance=$distance distance_value=$distance_value\n";
                         
                         if ($distance_value < 4) {
                             $distance_extend_bits = 0;
@@ -268,7 +268,8 @@ class IO_Zlib {
                         }
                         $distance_value = $huffman_reader_custom_dist->getValue($reader);
                         $distance = self::$distance_table[$distance_value];
-// echo "ZZZ: distance=$distance distance_value:$distance_value\n";
+// print_r(self::$distance_table);
+// echo "ZZZ: distance=$distance distance_value=$distance_value\n";
                         if ($distance_value < 4) {
                             $distance_extend_bits = 0;
                         } else {
