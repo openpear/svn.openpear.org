@@ -22,16 +22,16 @@ class IO_Zlib_HuffmanReader_Custom {
             throw new Exception("huffman_table_from_hclen: hclen_min($hclen_min) > hclen_max($hclen_max)");
         }
         $huffman_table_rev = array();
-        $value = 0;
+        $hcode = 0;
         for ($i = $hclen_min ; $i <= $hclen_max ; $i++) {
             $huffman_table_rev[$i] = array();
             for ($j = 0 ; $j < $hclen_list_len; $j++) {
                 if ($hclen_list[$j] == $i) {
-                    $huffman_table_rev[$i][$value] = $j;
-                    $value ++;
+                    $huffman_table_rev[$i][$hcode] = $j;
+                    $hcode ++;
                 }
             }
-            $value *= 2;
+            $hcode *= 2;
         }
         $this->_huffman_table_rev = $huffman_table_rev;
         $huffman_table_rev_keys = array_keys($huffman_table_rev);
@@ -42,16 +42,16 @@ class IO_Zlib_HuffmanReader_Custom {
      * 逆引きテーブルを参照して符号に対応する元データ(literal/length)を返す
      */
     function getValue(&$reader) {
-        $value = 0;
+        $hcode = 0;
         for ($i = 0 ; $i < $this->_hclen_min ; $i++) {
-            $value = ($value << 1) | $reader->getUIBitLSB();
+            $hcode = ($hcode << 1) | $reader->getUIBitLSB();
         }
         foreach (range($this->_hclen_min, $this->_hclen_max) as $hclen) {
             $hccode_table = $this->_huffman_table_rev[$hclen];
-            if (isset($hccode_table[$value])) {
-                return $hccode_table[$value];
+            if (isset($hccode_table[$hcode])) {
+                return $hccode_table[$hcode];
             }
-            $value = ($value << 1) | $reader->getUIBitLSB();
+            $hcode = ($hcode << 1) | $reader->getUIBitLSB();
         }
         throw new Exception("Illegal Huffman Code");
     }
@@ -109,22 +109,22 @@ class IO_Zlib {
             case 1: // compressed with fixed Huffman codes;
                 $data = array();
                 while (true) {
-                    $value = 0;
+                    $hcode = 0;
                     // ハフマン符号をリテラル/距離符号に変換
                     for ($i = 0 ; $i < 7 ; $i++) {
-                        $value = ($value << 1) | $reader->getUIBitLSB();
+                        $hcode = ($hcode << 1) | $reader->getUIBitLSB();
                     }
-                    if ($value <= 0x17) { // End of Code or Length Code
-                        $lit_or_len = $value + 256;
+                    if ($hcode <= 0x17) { // End of Code or Length Code
+                        $lit_or_len = $hcode + 256;
                     } else {
-                        $value = ($value << 1) | $reader->getUIBitLSB();
-                        if ($value <= 0xBF) { // Literal Code
-                            $lit_or_len = $value - 0x30;
-                        } else if ($value <= 0xC7) { // Length Code
-                            $lit_or_len = $value - 0xC0 + 280;
+                        $hcode = ($hcode << 1) | $reader->getUIBitLSB();
+                        if ($hcode <= 0xBF) { // Literal Code
+                            $lit_or_len = $hcode - 0x30;
+                        } else if ($hcode <= 0xC7) { // Length Code
+                            $lit_or_len = $hcode - 0xC0 + 280;
                         } else {
-                            $value = ($value << 1) | $reader->getUIBitLSB();
-                            $lit_or_len = $value - 0x190 + 144;
+                            $hcode = ($hcode << 1) | $reader->getUIBitLSB();
+                            $lit_or_len = $hcode - 0x190 + 144;
                         }
                     }
                     // リテラル/距離符号を解釈して保存
@@ -279,7 +279,7 @@ class IO_Zlib {
                                         'Distance' => $lzss_distance,
                                         'DistanceExtend' => $lzss_distance_extend);
                     } else { // 256:End
-//                        $data []= array('Value' => $value);
+//                        $data []= array('Value' => $hcode);
                         break;
                     }
                 } // while end
