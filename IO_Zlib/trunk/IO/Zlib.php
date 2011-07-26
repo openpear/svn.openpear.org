@@ -187,8 +187,8 @@ class IO_Zlib {
                                      4, 12, 3, 13, 2, 14, 1, 15);
                 $hclen_list = array_fill(0, 19, 0);
                 for ($i = 0 ; $i < $hclen ; $i++) {
-                    $value = $reader->getUIBitsLSB(3);
-                    $hclen_list[$hclen_order[$i]] = $value;
+                    $len = $reader->getUIBitsLSB(3);
+                    $hclen_list[$hclen_order[$i]] = $len;
                 }
 //                $block['HCLEN_LIST'] = $hclen_list;
                 // ハフマン符号長からハフマン符号テーブルを生成する。(phase1)
