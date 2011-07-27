@@ -308,6 +308,9 @@ class IO_Zlib {
                 break;
             case 1: // fixed huffman
             case 2: // dynamic huffman
+                if ($btype == 2) {
+                    echo "HLIT:{$block['HLIT']} HDIST:{$block['HDIST']} HCLEN:{$block['HCLEN']} ";
+                }
                 foreach ($block['Data'] as $value) {
                     if (isset($value['Value'])) {
                         printf("%02X(%c) ", $value['Value'], $value['Value']);
