@@ -377,7 +377,7 @@ class IO_Zlib {
             $len = ($data_len < 65535)?$data_len:65535;
             $nlen = ~$len;
             $zlibdata .= "\x01".pack('v', $len).pack('v', $nlen);
-            $zlibdata .= substr($data, $cursol, $data_len);
+            $zlibdata .= substr($data, $cursol, $len);
         }
         return $zlibdata.pack('N', self::adler32($data));
     }
