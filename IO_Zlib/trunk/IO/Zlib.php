@@ -2,6 +2,8 @@
 
 require_once('IO/Bit.php');
 
+define ('MOD_ADLER', 65521);
+
 /*
  * BTYPE:2 Custom Huffma 用 クラス (BTYPE:1 は今の所ベタに処理)
  */
@@ -368,7 +370,25 @@ class IO_Zlib {
      * compress method
      * type:0(no compression) only
      */
-    function deflate() {
-        ;
+    function deflate($data) {
+        $zlibdata = "\x78\x01";
+        $cursol = 0;
+        for ($data_len = strlen($data); $data_len > 0; $data_len -= $len, $cursol += $len) {
+            $len = ($data_len < 65535)?$data_len:65535;
+            $nlen = ~$len;
+            $zlibdata .= "\x01".pack('v', $len).pack('v', $nlen);
+            $zlibdata .= substr($data, $cursol, $data_len);
+        }
+        return $zlibdata.pack('N', self::adler32($data));
+    }
+    function adler32($data) {
+        $a = 1;
+        $b = 0;
+        $data_length = strlen($data);
+        for ($i = 0 ; $i < $data_length ; $i++) {
+            $a = ($a + ord($data[$i])) % MOD_ADLER;
+            $b  = ($b + $a) % MOD_ADLER;
+        }
+        return ($b << 16) | $a;
     }
 }
