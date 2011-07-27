@@ -187,6 +187,7 @@ class IO_Zlib {
                 /*
                  * ハフマンテーブルのハフマン符号長を読み取る (phase 2)
                  */
+                $lit_and_dist_len_list = array();
                 $lit_and_dist_count = $hlit + $hdist;
                 for ($i = 0 ; $i < $lit_and_dist_count ; $i++) {
                     $lit_or_len = $huffman_reader_custom19->getValue($reader);
