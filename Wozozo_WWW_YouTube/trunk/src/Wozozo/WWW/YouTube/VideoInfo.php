@@ -22,6 +22,16 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
 
     public function makeDownloadUrl($preferFmt = null)
     {
+        $fmtUrlMap = $this->makeDownloadUrls();
+
+        // get detected high quality fmt
+        $fmt = $this->detectFmt($preferFmt);
+
+        return $fmtUrlMap[$fmt];
+    }
+
+    public function makeDownloadUrls()
+    {
         if ($this->_parsedVideoInfo['status'] !== 'ok') {
             if ($this->_parsedVideoInfo['status'] === 'fail') {
                 throw new Exception($this->_parsedVideoInfo['reason'], $this->_parsedVideoInfo['errorcode']);
@@ -31,11 +41,12 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
         }
 
         // get detected high quality fmt
-        $fmt = $this->detectFmt($preferFmt);
+        //$fmt = $this->detectFmt($preferFmt);
 
-        $fmtUrlMap = $this->parseFmtUrlMap();
+        //$fmtUrlMap = $this->parseFmtUrlMap();
+        $fmtUrlMap = $this->parseUrlEncodedFmtStreamMap();
 
-        return $fmtUrlMap[$fmt];
+        return $fmtUrlMap;
     }
 
     /**
@@ -52,7 +63,8 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
             return $preferFmt;
         }
 
-        $fmts = $this->parseFmtUrlMap();
+        //$fmts = $this->parseFmtUrlMap();
+        $fmts = $this->parseUrlEncodedFmtStreamMap();
 
         if (null === $preferFmt) {
             return key($fmts); //@todo calcurate high fmt
@@ -133,6 +145,33 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
         return http_build_query($this->_parsedVideoInfo, null, '&');
     }
 
+    public function parseUrlEncodedFmtStreamMap()
+    {
+    
+        if (!($this->offsetExists('url_encoded_fmt_stream_map'))) {
+            throw new RuntimeException('fmt_url_map not exists');
+        }
+
+        //$fmtUrlMap = $this->offsetGet('fmt_url_map');
+        $fmtMap = $this->offsetGet('url_encoded_fmt_stream_map');
+        $maps = preg_split('#(,*)url\=#', $fmtMap);
+
+        array_shift($maps);
+        
+        $ret = array();
+        foreach ($maps as $map){
+            //preg_match('#(.+)\&itag=([0-9]+)$#', $map, $m);
+            preg_match('#(.+)(&type=.*)\&itag=([0-9]+)$#', $map, $m);
+            $ret[$m[3]] = urldecode($m[1]);
+        }
+        
+        return $ret;
+    
+    }
+
+    /**
+     * @deprecated
+     */
     public function parseFmtUrlMap()
     {
         if (!($this->offsetExists('fmt_url_map'))) {
@@ -140,7 +179,7 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
         }
 
         $fmtUrlMap = $this->offsetGet('fmt_url_map');
-        $maps = preg_split('#,#', $fmtUrlMap);
+        $maps = preg_split('#,#', $fmtMap);
 
         $ret = array();
         foreach ($maps as $map){
