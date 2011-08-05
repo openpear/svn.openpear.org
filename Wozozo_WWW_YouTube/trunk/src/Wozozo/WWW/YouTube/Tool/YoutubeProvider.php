@@ -20,6 +20,15 @@ class Wozozo_WWW_YouTube_Tool_YoutubeProvider extends Zend_Tool_Framework_Provid
         $this->_out($url);
     }
 
+    public function getDownloadUrls($id)
+    {
+        $videoId = Wozozo_WWW_YouTube::detectVideoId($id);
+        $youtube = $this->_loadYoutube();
+        $urls = $youtube->getVideoInfo($videoId)->makeDownloadUrls();
+        
+        $this->_out(var_export($urls, true));
+    }
+
     public function download($id, $path = 'GETCWD', $format = 'DETECT')
     {
         $format = ('DETECT' === $format) ? null : $format;
