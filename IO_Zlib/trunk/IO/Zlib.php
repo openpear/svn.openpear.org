@@ -373,10 +373,18 @@ class IO_Zlib {
     function deflate($data) {
         $zlibdata = "\x78\x01";
         $cursol = 0;
+        $limit_size = 65535;
         for ($data_len = strlen($data); $data_len > 0; $data_len -= $len, $cursol += $len) {
-            $len = ($data_len < 65535)?$data_len:65535;
+            if ($data_len <= $limit_size) {
+                $zlibdata .= "\x01"; // BFINAL:1 BTYPE:0
+                $len = $data_len;
+            } else {
+                $zlibdata .= "\x00"; // BFINAL:0 BTYPE:0
+                $len = $limit_size;
+            }
             $nlen = ~$len;
-            $zlibdata .= "\x01".pack('v', $len).pack('v', $nlen);
+            
+            $zlibdata .= pack('v', $len).pack('v', $nlen);
             $zlibdata .= substr($data, $cursol, $len);
         }
         return $zlibdata.pack('N', self::adler32($data));
