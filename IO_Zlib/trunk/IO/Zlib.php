@@ -65,13 +65,13 @@ class IO_Zlib {
     var $dictid = null;
     var $compressed_data = null;
     // fixed huffman table (length, distance)
-    static $lzss_length_table = array(
+    static $lz77_length_table = array(
         3, 4, 5, 6, 7, 8, 9, 10, 11, 13,
         15, 17, 19, 23, 27, 31, 35, 43, 51, 59,
         67, 83, 99,
         115, 131, 163, 195, 227, 258
         );
-    static $lzss_distance_table = array(
+    static $lz77_distance_table = array(
         1, 2, 3, 4, 5, 7, 9, 13 ,17 ,25,
         33, 49, 65, 97, 129, 193, 257, 385, 513, 769,
         1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577
@@ -133,31 +133,31 @@ class IO_Zlib {
                     if ($lit_or_len < 256) {
                         $data []= array('Value' => $lit_or_len);
                     } else if ($lit_or_len > 256) {
-                        $lzss_length = self::$lzss_length_table[$lit_or_len - 257];
+                        $lz77_length = self::$lz77_length_table[$lit_or_len - 257];
                         if ((264 < $lit_or_len) && ($lit_or_len < 285)) {
-                            $lzss_length_extend_bits = floor(($lit_or_len - 261) / 4);
-                            $lzss_length_extend = $reader->getUIBitsLSB($lzss_length_extend_bits);
+                            $lz77_length_extend_bits = floor(($lit_or_len - 261) / 4);
+                            $lz77_length_extend = $reader->getUIBitsLSB($lz77_length_extend_bits);
                         } else { // 257-264, 285 => 0
-                            $lzss_length_extend = 0;
+                            $lz77_length_extend = 0;
                         }
-                        $lzss_distance_value = 0;
+                        $lz77_distance_value = 0;
                         for ($i = 0 ; $i < 5 ; $i++) {
-                            $lzss_distance_value =  ($lzss_distance_value << 1) | $reader->getUIBitLSB();
+                            $lz77_distance_value =  ($lz77_distance_value << 1) | $reader->getUIBitLSB();
                         }
-                        if ($lzss_distance_value >= 30) {
-                            throw new Exception("distance_value=$lzss_distance_value");
+                        if ($lz77_distance_value >= 30) {
+                            throw new Exception("distance_value=$lz77_distance_value");
                         }
-                        $lzss_distance = self::$lzss_distance_table[$lzss_distance_value];
-                        if ($lzss_distance_value < 4) {
-                            $lzss_distance_extend = 0;
+                        $lz77_distance = self::$lz77_distance_table[$lz77_distance_value];
+                        if ($lz77_distance_value < 4) {
+                            $lz77_distance_extend = 0;
                         } else {
-                            $lzss_distance_extend_bits = floor(($lzss_distance_value - 2) / 2);
-                            $lzss_distance_extend = $reader->getUIBitsLSB($lzss_distance_extend_bits);
+                            $lz77_distance_extend_bits = floor(($lz77_distance_value - 2) / 2);
+                            $lz77_distance_extend = $reader->getUIBitsLSB($lz77_distance_extend_bits);
                         }
-                        $data []= array('Length' => $lzss_length,
-                                        'LengthExtend' => $lzss_length_extend,
-                                        'Distance' => $lzss_distance,
-                                        'DistanceExtend' => $lzss_distance_extend);
+                        $data []= array('Length' => $lz77_length,
+                                        'LengthExtend' => $lz77_length_extend,
+                                        'Distance' => $lz77_distance,
+                                        'DistanceExtend' => $lz77_distance_extend);
                     } else { // 256: End of Code
                         break;
                     }
@@ -243,25 +243,25 @@ class IO_Zlib {
                     if ($lit_or_len < 256) { // literal
                         $data []= array('Value' => $lit_or_len);
                     } else if ($lit_or_len > 256) { // length
-                        $lzss_length = self::$lzss_length_table[$lit_or_len - 257];                        
+                        $lz77_length = self::$lz77_length_table[$lit_or_len - 257];                        
                         if ((264 < $lit_or_len) && ($lit_or_len < 285)) {
-                            $lzss_length_extend_bits = floor(($lit_or_len - 261) / 4);
-                            $lzss_length_extend = $reader->getUIBitsLSB($lzss_length_extend_bits);
+                            $lz77_length_extend_bits = floor(($lit_or_len - 261) / 4);
+                            $lz77_length_extend = $reader->getUIBitsLSB($lz77_length_extend_bits);
                         } else { // 257-264, 285 => 0
-                            $lzss_length_extend = 0;
+                            $lz77_length_extend = 0;
                         }
-                        $lzss_distance_value = $huffman_reader_custom_dist->getValue($reader);
-                        $lzss_distance = self::$lzss_distance_table[$lzss_distance_value];
-                        if ($lzss_distance_value < 4) {
-                            $lzss_distance_extend = 0;
+                        $lz77_distance_value = $huffman_reader_custom_dist->getValue($reader);
+                        $lz77_distance = self::$lz77_distance_table[$lz77_distance_value];
+                        if ($lz77_distance_value < 4) {
+                            $lz77_distance_extend = 0;
                         } else {
-                            $lzss_distance_extend_bits = floor(($lzss_distance_value - 2) / 2);
-                            $lzss_distance_extend = $reader->getUIBitsLSB($lzss_distance_extend_bits);
+                            $lz77_distance_extend_bits = floor(($lz77_distance_value - 2) / 2);
+                            $lz77_distance_extend = $reader->getUIBitsLSB($lz77_distance_extend_bits);
                         }
-                        $data []= array('Length' => $lzss_length,
-                                        'LengthExtend' => $lzss_length_extend,
-                                        'Distance' => $lzss_distance,
-                                        'DistanceExtend' => $lzss_distance_extend);
+                        $data []= array('Length' => $lz77_length,
+                                        'LengthExtend' => $lz77_length_extend,
+                                        'Distance' => $lz77_distance,
+                                        'DistanceExtend' => $lz77_distance_extend);
                     } else { // 256:End
 //                        $data []= array('Value' => $hcode);
                         break;
@@ -347,14 +347,14 @@ class IO_Zlib {
                     if (isset($value['Value'])) {
                         $data .= chr($value['Value']);
                     } else {
-                        $lzss_length = $value['Length'] + $value['LengthExtend'];
-                        $lzss_distance = $value['Distance'] + $value['DistanceExtend'];
+                        $lz77_length = $value['Length'] + $value['LengthExtend'];
+                        $lz77_distance = $value['Distance'] + $value['DistanceExtend'];
                         $data_len = strlen($data);
-                        if ($data_len < $lzss_distance) {
-                            throw new Exception("data_len:$data_len < distance:$lzss_distance({$value['Distance']}+{$value['DistanceExtend']})");
+                        if ($data_len < $lz77_distance) {
+                            throw new Exception("data_len:$data_len < distance:$lz77_distance({$value['Distance']}+{$value['DistanceExtend']})");
                         }
-                        $start_pos = $data_len - $lzss_distance;
-                        $end_pos = $start_pos  + $lzss_length - 1;
+                        $start_pos = $data_len - $lz77_distance;
+                        $end_pos = $start_pos  + $lz77_length - 1;
                         for ($i = $start_pos ; $i <= $end_pos ; $i++) { 
                             $data .= $data[$i];
                         }
