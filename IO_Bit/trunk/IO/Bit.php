@@ -48,15 +48,19 @@ class IO_Bit {
         return true;
     }
     function incrementOffset($byte_offset, $bit_offset) {
-        $this->_byte_offset += $byte_offset;
-        $this->_bit_offset  += $bit_offset;
-        while ($this->_bit_offset >= 8) {
-            $this->_byte_offset += 1;
-             $this->_bit_offset  -= 8;
+        if ($bit_offset < 0) {
+            $byte_offset -= (-$bit_offset + 7) >> 3;
+            $bit_offset = ($bit_offset % 8) + 8;
         }
-        while ($this->_bit_offset < 0) {
-            $this->_byte_offset -= 1;
-            $this->_bit_offset  += 8;
+        $byte_offset += $this->_byte_offset;
+        $bit_offset += $this->_bit_offset;
+        if  ($bit_offset < 8) {
+            $this->_byte_offset = $byte_offset;
+            $this->_bit_offset  = $bit_offset;
+            
+        } else {
+            $this->_byte_offse = $byte_offset + ($bit_offset >> 3);
+            $this->_bit_offset = $bit_offset & 7;
         }
         return true;
     }
@@ -164,8 +168,8 @@ class IO_Bit {
         return $value - 0x10000; // 2-negative
     }
     function getUI32LE() {
-        $value = $this->getSI32LE();
-        if ($value < 0) { // PHP bugs
+        $value = $this->getSI32LE(); // PHP bugs
+        if ($value < 0) {
             $value += 4294967296;
         }
         return $value;
