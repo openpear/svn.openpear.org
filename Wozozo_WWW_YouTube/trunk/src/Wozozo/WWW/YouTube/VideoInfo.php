@@ -77,16 +77,16 @@ class Wozozo_WWW_YouTube_VideoInfo implements ArrayAccess
                 $fmt = current(array_intersect($keys, array(38, 37, 22, 18)));
                 break;
             case self::FORMAT_VP8:
-                $fmt = current(array_intersect($keys, array(45, 43)));
+                $fmt = current(array_intersect($keys, array(45, 44, 43)));
                 break;
             case self::FORMAT_FLV:
                 $fmt = current(array_intersect($keys, array(35, 34, 5)));
                 break;
-            case self::FORMAT_VP8:
+            case self::FORMAT_3GP:
                 $fmt = current(array_intersect($keys, array(17)));
                 break;
             default:
-                throw new Exception('unknown format');
+                throw new Exception('Unknown format. available : mp4,vp8,flv,3gp');
         }
 
         if (false === $fmt) {
