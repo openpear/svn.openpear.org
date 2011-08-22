@@ -191,8 +191,9 @@ class Wozozo_WWW_YouTube
             case '17' :
                 return '.3gp';
             case '43':
+            case '44':
             case '45':
-                return '.vp8';
+                return '.webm';
             default :
                 return '.flv';
         }
