@@ -1,1 +1,0 @@
-phpdoc --title "Net_RouterOS documentation" --defaultpackagename "~~name~~" --target "%cd%\..\Generated Documentation" --directory "%cd%\..\src" --ignore "_generate.bat" --undocumentedelements
