@@ -91,7 +91,11 @@ class IO_Bit {
     }
     function getDataUntil($delimiter) {
         $this->byteAlign();
-        $pos = strpos($this->_data, $delimiter, $this->_byte_offset);
+        if (($delimiter === false) || is_null($delimiter)) {
+            $pos = false;
+        } else {
+            $pos = strpos($this->_data, $delimiter, $this->_byte_offset);
+        }
         if ($pos === false) {
             $length = strlen($this->_data) - $this->_byte_offset;
             $delim_len = 0;
