@@ -189,16 +189,20 @@ class IO_Bit {
     
     // start with the MSB(most-significant bit)
     function getUIBit() {
-        if (strlen($this->_data) <= $this->_byte_offset) {
-            $data_len = strlen($this->_data);
-            $offset = $this->_byte_offset;
-            throw new IO_Bit_Exception("getUIBit: $data_len <= $offset");
+        $byte_offset = $this->_byte_offset;
+        $bit_offset = $this->_bit_offset;
+        $data_len = strlen($this->_data);
+        if ($data_len <= $byte_offset) {
+            throw new IO_Bit_Exception("getUIBit: $data_len <= $byte_offset");
         }
-        $value = ord($this->_data{$this->_byte_offset});
-        $value = 1 & ($value >> (7 - $this->_bit_offset)); // MSB(Bit) first
-        $this->_bit_offset ++;
-        if (8 <= $this->_bit_offset) {
-            $this->_byte_offset++;
+        $value = ord($this->_data{$byte_offset});
+        $value = 1 & ($value >> (7 - $bit_offset)); // MSB(Bit) first
+        $bit_offset ++;
+        if ($bit_offset < 8) {
+            $this->_byte_offset = $byte_offset;
+            $this->_bit_offset = $bit_offset;
+        } else {
+            $this->_byte_offset = $byte_offset + 1;
             $this->_bit_offset = 0;
         }
         return $value;
@@ -223,17 +227,22 @@ class IO_Bit {
 
     // start with the LSB(least significant bit)
     function getUIBitLSB() {
-        if (strlen($this->_data) <= $this->_byte_offset) {
-            $data_len = strlen($this->_data);
-            $offset = $this->_byte_offset;
-            throw new IO_Bit_Exception("getUIBitLSB: $data_len <= $offset");
+        $byte_offset = $this->_byte_offset;
+        $bit_offset = $this->_bit_offset;
+        $data_len = strlen($this->_data);
+        if ($data_len <= $byte_offset) {
+            throw new IO_Bit_Exception("getUIBitLSB: $data_len <= $byte_offset");
         }
-        $value = ord($this->_data{$this->_byte_offset});
-        $value = 1 & ($value >> $this->_bit_offset); // LSB(Bit) first
-        $this->_bit_offset ++;
-        if (8 <= $this->_bit_offset) {
-            $this->_byte_offset++;
+        $value = ord($this->_data{$byte_offset});
+        $value = 1 & ($value >> $bit_offset); // LSB(Bit) first
+        $bit_offset ++;
+        if ($bit_offset < 8) {
+            $this->_byte_offset = $byte_offset;
+            $this->_bit_offset = $bit_offset;
+        } else {
+            $this->_byte_offset = $byte_offset + 1;
             $this->_bit_offset = 0;
+
         }
         return $value;
     }
