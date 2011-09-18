@@ -53,7 +53,7 @@ class HTML_CSS_Selector2XPath
   private static $regex = array(
       'element'    => '/^(\*|[a-z_][a-z0-9_-]*|(?=[#:.\[]))/i',
       'id_class'   => '/^([#.])([a-z0-9*_-]*)/i',
-      'attribute'  => '/^\[\s*([^~|=\s]+)\s*([~|]?=)\s*"([^"]+)"\s*\]/',
+      'attribute'  => '/^\[\s*([^~|=¥^¥$¥*\s]+)\s*([~|¥^¥$¥*]?=)\s*"([^"]+)"\s*\]/',
       'attr_box'   => '/^\[([^\]]*)\]/',
       'attr_not'   => '/^:not\(([^)]*)\)/i',
       'pseudo'     => '/^:([a-z0-9_-]+)(\(\s*([a-z0-9_\s+-]+)\s*\))?/i',
@@ -126,6 +126,15 @@ class HTML_CSS_Selector2XPath
             break;
           case '|=':
             $parts[] = '[@' . $e[1] . '="' . $e[3] . '" or starts-with(@' . $e[1] . ', concat( "' . $e[3] . '", "-"))]';
+            break;
+          case '^=':
+            $parts[] = '[starts-with(@' . $e[1] . ', "' . $e[3] . '")]';
+            break;
+          case '$=':
+            $parts[] = sprintf('[substring(@%1$s, string-length(@%1$s) - %3$d)="%2$s"]', $e[1], $e[3], strlen($e[3])-1);
+            break;
+          case '*=':
+            $parts[] = sprintf('[contains(@%s, "%s")]', $e[1], $e[3]);
             break;
           default:
             $parts[] = '[@' . $e[1] . '="' . $e[3] . '"]';
