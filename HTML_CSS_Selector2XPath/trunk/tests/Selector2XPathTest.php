@@ -61,6 +61,9 @@ class selectorToXPathTest extends PHPUnit_Framework_TestCase
             array('E[foo="warning"]', '//E[@foo="warning"]'),
             array('E[foo~="warning"]', '//E[contains(concat( " ", @foo, " "), " warning ")]'),// 注意：foo="warnings"な要素は含まれてはいけない
             array('E[lang|="en"]', '//E[@lang="en" or starts-with(@lang, concat( "en", "-"))]'),
+            array('E[foo^="warning"]', '//E[starts-with(@foo, "warning")]'),
+            array('E[foo$="warning"]', '//E[substring(@foo, string-length(@foo) - 6)="warning"]'),
+            array('E[foo*="warning"]', '//E[contains(@foo, "warning")]'),
             array('E.warning', '//E[contains(concat( " ", @class, " "), " warning ")]'),
             array('E#myid', '//E[@id="myid"]'),
 
