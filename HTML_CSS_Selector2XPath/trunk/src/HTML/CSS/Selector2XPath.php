@@ -187,23 +187,10 @@ class HTML_CSS_Selector2XPath
             $parts[] = '[not(following-sibling::*)]';
             break;
           case 'nth-child':
-            // CSS3
-            if (is_numeric($e[3]))
-            {
-              $parts[] = '[count(preceding-sibling::*) = ' . $e[3] . ' - 1]';
-            } else if ($e[3] == 'odd') {
-              $parts[] = '[count(preceding-sibling::*) mod 2 = 0]';
-            } else if ($e[3] == 'even') {
-              $parts[] = '[count(preceding-sibling::*) mod 2 = 1]';
-            } else if (preg_match('/^([+-]?)(\d*)n(\s*([+-])\s*(\d+))?\s*$/i', $e[3], $sub_e)) {
-              $coefficient = $sub_e[2]==='' ? 1 : intval($sub_e[2]);
-              $constant_term = array_key_exists(3, $sub_e) ?  intval($sub_e[4]==='+' ? $sub_e[5] : -1 * $sub_e[5]) : 0;
-              if($sub_e[1]==='-') {
-                $parts[] = '[(count(preceding-sibling::*) + 1) * ' . $coefficient . ' <= ' . $constant_term . ']';
-              } else { // '+' or ''
-                $parts[] = '[(count(preceding-sibling::*) + 1) ' . ($coefficient===0 ? '': 'mod ' . $coefficient . ' ') . '= ' . ($constant_term>=0 ? $constant_term : $coefficient + $constant_term) . ']';
-              }
-            }
+            $parts[] = self::convertNthSelector($e, '(count(preceding-sibling::*) + 1)');
+            break;
+          case 'nth-of-type':
+            $parts[] = self::convertNthSelector($e, 'position()');
             break;
           case 'lang':
             $parts[] = '[@xml:lang="' . $e[3] . '" or starts-with(@xml:lang, "' . $e[3] . '-")]';
@@ -266,4 +253,38 @@ class HTML_CSS_Selector2XPath
     return $result;
   }
 
+  public static function convertNthSelector($e, $counterExpression)
+  {
+    if (is_numeric($e[3])) {
+      return sprintf('[%s = %d]', $counterExpression, $e[3]);
+    } else if ($e[3] == 'odd') {
+      return sprintf('[%s mod 2 = 1]', $counterExpression);
+    } else if ($e[3] == 'even') {
+      return sprintf('[%s mod 2 = 0]', $counterExpression);
+    } else if (preg_match('/^([+-]?)(\d*)n(\s*([+-])\s*(\d+))?\s*$/i', $e[3], $sub_e)) {
+      $coefficient = $sub_e[2] === '' ? 1 : intval($sub_e[2]);
+      $constantTerm = array_key_exists(3, $sub_e) ? intval($sub_e[4] === '+' ? $sub_e[5] : -1 * $sub_e[5]) : 0;
+      
+      if ($coefficient===0) {
+        return sprintf('[%s = %d]', $counterExpression, $constantTerm);
+      } elseif ($sub_e[1] === '-') {
+        return $coefficient===1
+                ? sprintf('[%s <= %d]', $counterExpression, $constantTerm)
+                :sprintf('[%1$s mod %2$d = %3$d and %1$s <= %4$d]', $counterExpression, $coefficient, self::mod($constantTerm, $coefficient), $constantTerm);
+      } elseif ($coefficient===1) {
+        return $constantTerm > 0
+                ? sprintf('[%s >= %d]', $counterExpression, $constantTerm)
+                : '';
+      } else {
+        return $constantTerm > $coefficient 
+             ? sprintf('[%1$s mod %2$d = %3$d and %1$s >= %4$d]', $counterExpression, $coefficient, self::mod($constantTerm,$coefficient), $constantTerm)
+             : sprintf('[%1$s mod %2$d = %3$d]', $counterExpression, $coefficient, self::mod($constantTerm,$coefficient));
+      }
+    }
+  }
+  
+  public static function mod($n, $m)
+  {
+    return $n < 0 ? $m + $n%$m : $n%$m;
+  }
 }
