@@ -48,8 +48,9 @@ class selectorToXPathTest extends PHPUnit_Framework_TestCase
             array('E ~ F', '//E/following-sibling::F'),
             array('E:first-child', '//E[not(preceding-sibling::*)]'),
             array('E:last-child', '//E[not(following-sibling::*)]'),
+            array('E:only-child', '//E[not(preceding-sibling::*) and not(following-sibling::*)]'),
             array('E:lang(c)', '//E[@xml:lang="c" or starts-with(@xml:lang, "c-")]'),
-            array('E:nth-child(even)', '//E[(count(preceding-sibling::*) + 1) mod 2 = 0]'), // position()だと絞り込んだ中での位置になってしまう
+            array('E:nth-child(even)', '//E[(count(preceding-sibling::*) + 1) mod 2 = 0]'), // position()はnth-of-type
             array('E:nth-child(odd)', '//E[(count(preceding-sibling::*) + 1) mod 2 = 1]'),
             array('E:nth-child(3)', '//E[(count(preceding-sibling::*) + 1) = 3]'),
             array('E:nth-child( 3n + 1 )', '//E[(count(preceding-sibling::*) + 1) mod 3 = 1]'),
@@ -59,6 +60,11 @@ class selectorToXPathTest extends PHPUnit_Framework_TestCase
             array('E:nth-child(-n + 6)', '//E[(count(preceding-sibling::*) + 1) <= 6]'),
             array('E:nth-child(2n+5)', '//E[(count(preceding-sibling::*) + 1) mod 2 = 1 and (count(preceding-sibling::*) + 1) >= 5]'),
             array('E:nth-child(-2n+5)', '//E[(count(preceding-sibling::*) + 1) mod 2 = 1 and (count(preceding-sibling::*) + 1) <= 5]'),
+            array('E:nth-last-child(3n-24)', '//E[(count(following-sibling::*) + 1) mod 3 = 0]'),
+            array('E:nth-last-child(3n+3)', '//E[(count(following-sibling::*) + 1) mod 3 = 0 and (count(following-sibling::*) + 1) >= 3]'),
+            array('E:first-of-type', '//E[position()=1]'),
+            array('E:last-of-type', '//E[position()=last()]'),
+            array('E:only-of-type', '//E[position()=1 and last()=1]'),
             array('E:nth-of-type(even)', '//E[position() mod 2 = 0]'),
             array('E:nth-of-type(odd)', '//E[position() mod 2 = 1]'),
             array('E:nth-of-type( 3)', '//E[position() = 3]'),
@@ -69,6 +75,9 @@ class selectorToXPathTest extends PHPUnit_Framework_TestCase
             array('E:nth-of-type(-n+6)', '//E[position() <= 6]'),
             array('E:nth-of-type(2n+5)', '//E[position() mod 2 = 1 and position() >= 5]'),
             array('E:nth-of-type(-2n+5)', '//E[position() mod 2 = 1 and position() <= 5]'),
+            array('E:nth-last-of-type(2n+8)', '//E[(last() - position() +1) mod 2 = 0 and (last() - position() +1) >= 8]'),
+            array('E:nth-last-of-type(7n+0)', '//E[(last() - position() +1) mod 7 = 0]'),
+            array('E:empty', '//E[not(*) and not(text())]'),
             array('E[foo]', '//E[@foo]'),
             array('E[foo="warning"]', '//E[@foo="warning"]'),
             array('E[foo~="warning"]', '//E[contains(concat( " ", @foo, " "), " warning ")]'),// 注意：foo="warnings"な要素は含まれてはいけない
