@@ -186,14 +186,35 @@ class HTML_CSS_Selector2XPath
           case 'last-child':
             $parts[] = '[not(following-sibling::*)]';
             break;
+          case 'only-child':
+            $parts[] = '[not(preceding-sibling::*) and not(following-sibling::*)]';
+            break;
           case 'nth-child':
             $parts[] = self::convertNthSelector($e, '(count(preceding-sibling::*) + 1)');
+            break;
+          case 'nth-last-child':
+            $parts[] = self::convertNthSelector($e, '(count(following-sibling::*) + 1)');
+            break;
+          case 'first-of-type':
+            $parts[] = '[position()=1]';
+            break;
+          case 'last-of-type':
+            $parts[] = '[position()=last()]';
+            break;
+          case 'only-of-type':
+            $parts[] = '[position()=1 and last()=1]';
             break;
           case 'nth-of-type':
             $parts[] = self::convertNthSelector($e, 'position()');
             break;
+          case 'nth-last-of-type':
+            $parts[] = self::convertNthSelector($e, '(last() - position() +1)');
+            break;
           case 'lang':
             $parts[] = '[@xml:lang="' . $e[3] . '" or starts-with(@xml:lang, "' . $e[3] . '-")]';
+            break;
+          case 'empty':
+            $parts[] = '[not(*) and not(text())]';
             break;
           default:
             break;
@@ -276,7 +297,7 @@ class HTML_CSS_Selector2XPath
                 ? sprintf('[%s >= %d]', $counterExpression, $constantTerm)
                 : '';
       } else {
-        return $constantTerm > $coefficient 
+        return $constantTerm >= $coefficient 
              ? sprintf('[%1$s mod %2$d = %3$d and %1$s >= %4$d]', $counterExpression, $coefficient, self::mod($constantTerm,$coefficient), $constantTerm)
              : sprintf('[%1$s mod %2$d = %3$d]', $counterExpression, $coefficient, self::mod($constantTerm,$coefficient));
       }
@@ -285,6 +306,7 @@ class HTML_CSS_Selector2XPath
   
   public static function mod($n, $m)
   {
-    return $n < 0 ? $m + $n%$m : $n%$m;
+    $mod = $n%$m;
+    return $mod < 0 ? $m + $mod : $mod;
   }
 }
