@@ -403,6 +403,24 @@ class IO_Bit {
     /*
      * set method
      */
+    function setUI8($value, $byte_offset) {
+        $this->_data{$byte_offset + 0} = $data{0};
+        return true;
+    }
+    function setUI16BE($value, $byte_offset) {
+        $data = pack('n', $value);
+        $this->_data{$byte_offset + 0} = $data{0};
+        $this->_data{$byte_offset + 1} = $data{1};
+        return true;
+    }
+    function setUI32BE($value, $byte_offset) {
+        $data = pack('N', $value);
+        $this->_data{$byte_offset + 0} = $data{0};
+        $this->_data{$byte_offset + 1} = $data{1};
+        $this->_data{$byte_offset + 2} = $data{2};
+        $this->_data{$byte_offset + 3} = $data{3};
+        return true;
+    }
     function setUI16LE($value, $byte_offset) {
         $data = pack('v', $value);
         $this->_data{$byte_offset + 0} = $data{0};
