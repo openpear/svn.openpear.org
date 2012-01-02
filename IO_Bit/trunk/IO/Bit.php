@@ -270,10 +270,22 @@ class IO_Bit {
     /*
      * put method
      */
-    function putData($data) {
+    function putData($data, $data_len = null, $pad_string = "\0") {
         $this->byteAlign();
-        $this->_data .= $data;
-        $this->_byte_offset += strlen($data);
+        if (is_null($data_len)) {
+            $this->_data .= $data;
+            $this->_byte_offset += strlen($data);
+        } else {
+            $len = strlen($data);
+            if ($len === $data_len) {
+                $this->_data .= $data;
+            } elseif ($len < $data_len) {
+                $this->_data .= str_pad($data, $data_len, $pad_string);
+            } else {
+                $this->_data .= substr($data, 0, $data_len);
+            }
+            $this->_byte_offset += $data_len;
+        }
         return true;
     }
     function putUI8($value) {
