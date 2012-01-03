@@ -213,7 +213,7 @@ class IO_Bit {
     }
     function getUIBits($width) {
         $value = 0;
-        for ($i = 0 ; $i < $width ; $i++) {
+        while ($width--) {
             $value <<= 1;
             $value |= $this->getUIBit();
         }
@@ -360,8 +360,8 @@ class IO_Bit {
         return true;
     }
     function putUIBits($value, $width) {
-        for ($i = $width - 1 ; $i >= 0 ; $i--) {
-            $bit = ($value >> $i) & 1;
+        while ($width--) {
+            $bit = ($value >> $width) & 1;
             $ret = $this->putUIBit($bit);
             if ($ret !== true) {
                 return $ret;
