@@ -294,7 +294,7 @@ class IO_Zlib {
         $cm = $this->cmf & 0x0f;
         $flevel = $this->flg >> 6;
         $fdict= ($this->flg >> 5) & 1;
-        $fcheck = $this->flg && 0x1f;
+        $fcheck = $this->flg & 0x1f;
         printf("CMF:%02X(CINFO=%d CM=%d) FLG:0x%02X(FLEVEL=%d FDICT=%d FCHECK=%d)\n", $this->cmf, $cinfo, $cm, $this->flg, $flevel, $fdict, $fcheck);
         if (! is_null($this->dictid)) {
             printf("DICTID=0x%08X\n", $this->dictid);
