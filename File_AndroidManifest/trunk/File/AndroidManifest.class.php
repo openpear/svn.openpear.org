@@ -1,4 +1,24 @@
 <?php
+/**
+ * AndroidManifest class
+ *
+ * PHP version 5
+ *
+ * LICENSE: This source file is subject to the New BSD license that is
+ * available through the world-wide-web at the following URI:
+ * http://www.opensource.org/licenses/bsd-license.php. If you did not receive
+ * a copy of the New BSD License and are unable to obtain it through the web,
+ * please send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category  File Formats
+ * @package   File_AndroidManifest
+ * @author    Hideyuki Shimooka <shimooka@doyouphp.jp>
+ * @copyright 2012 Hideyuki Shimooka
+ * @license   http://tinyurl.com/new-bsd New BSD License
+ * @version   0.1.0
+ * @link      http://openpear.org/package/File_AndroidManifest
+ */
+
 require_once 'File/AndroidManifest/ChunkHeader.class.php';
 require_once 'File/AndroidManifest/StringPoolHeader.class.php';
 require_once 'File/AndroidManifest/XMLHeader.class.php';
@@ -9,123 +29,124 @@ require_once 'File/AndroidManifest/XMLTreeAttribute.class.php';
 require_once 'File/AndroidManifest/XMLTreeAttributeValue.class.php';
 require_once 'File/AndroidManifest/XMLTreeEndExt.class.php';
 
+/**
+ * AndroidManifest class
+ *
+ * @category  File Formats
+ * @package   File_AndroidManifest
+ * @author    Hideyuki Shimooka <shimooka@doyouphp.jp>
+ * @copyright 2012 Hideyuki Shimooka
+ * @license   http://tinyurl.com/new-bsd New BSD License
+ * @version   Release: @package_version@
+ * @link      http://openpear.org/package/File_AndroidManifest
+ */
 class AndroidManifest
 {
-    private $chunk_header;
-    private $string_pool_header;
-    private $xml_header;
-    private $xml_tree_node;
-    private $xml_tree_namespace;
-    private $xml_tree_node2;
-    private $xml_tree_ext;
-    private $xml_tree_attribute;
-    private $xml_tree_attr_value;
-
+    /**
+     * parsed xml string
+     * @var string
+     * @access private
+     */
     private $xml_string;
+
+    /**
+     * constructor
+     *
+     * @param binary $binary binary string of AndroidManifest.xml
+     * @return void
+     * @access public
+     */
     public function __construct($binary) {
-        $output_namespace = false;
+        $this->xml_string = $this->parseManifest($binary);
+    }
 
-        $this->chunk_header = new ChunkHeader($binary);
-        $this->string_pool_header = new StringPoolHeader($binary);
-        $string_pool = $this->string_pool_header->getStringPool();
+    /**
+     * parse binary string from AndroidManifest.xml and build into string
+     *
+     * @param binary $binary binary data of AndroidManifest.xml
+     * @return string a XML string of AndroidManifest.xml
+     * @access private
+     */
+    private function parseManifest($binary) {
+        $xml = null;
+        $output_ns = false;
 
-        $offset = $this->chunk_header->getHeaderSize() + $this->string_pool_header->getSize();
+        $chunk_header = new ChunkHeader($binary);
+        $string_pool_header = new StringPoolHeader($binary);
+        $string_pool = $string_pool_header->getStringPool();
 
-        $this->xml_header = new XMLHeader($binary, $offset);
+        $offset = $chunk_header->getHeaderSize() + $string_pool_header->getSize();
 
-        $offset += $this->xml_header->getSize();
-        $this->xml_tree_node = new XMLTreeNode($binary, $offset);
+        $xml_header = new XMLHeader($binary, $offset);
 
-        $offset += $this->xml_tree_node->getHeaderSize();
-        $this->xml_tree_namespace = new XMLTreeNamespace($binary, $offset);
-//var_dump($string_pool->getPoolString($this->xml_tree_namespace->getPrefixIndex()));
-//var_dump($string_pool->getPoolString($this->xml_tree_namespace->getUriIndex()));
-        $namespaces[$string_pool->getPoolString($this->xml_tree_namespace->getUriIndex())] = $string_pool->getPoolString($this->xml_tree_namespace->getPrefixIndex());
+        $offset += $xml_header->getSize();
+        $xml_tree_node = new XMLTreeNode($binary, $offset);
 
-        $offset += $this->xml_tree_namespace->getHeaderSize();
+        $offset += $xml_tree_node->getHeaderSize();
+        $xml_tree_ns = new XMLTreeNamespace($binary, $offset);
+        $namespaces[$string_pool->getPoolString($xml_tree_ns->getUriIndex())] = $string_pool->getPoolString($xml_tree_ns->getPrefixIndex());
+
+        $offset += $xml_tree_ns->getHeaderSize();
         for (;;) {
             $node = new XMLTreeNode($binary, $offset);
-//var_dump($node->getCommentIndex());
-//var_dump($node->getLineOfXML());
             switch ($node->getType()) {
             case XMLTreeNode::RES_XML_START_ELEMENT_TYPE:
                 $offset += $node->getHeaderSize();
                 $ext = new XMLTreeExt($binary, $offset);
-//var_dump($ext);
-//var_dump($ext->getNamespaceIndex());
-//var_dump($string_pool->getPoolString($ext->getNamespaceIndex()));
-//var_dump($string_pool->getPoolString($ext->getElementIndex()));
-//var_dump($string_pool->getPoolString($ext->getIdIndex()));
-//var_dump($string_pool->getPoolString($ext->getClassIndex()));
-//var_dump($string_pool->getPoolString($ext->getStyleIndex()));
                 $offset += $ext->getHeaderSize();
 
                 if ((int)$ext->getNamespaceIndex() === (int)0xFFFFFFFF) {
-                    $this->xml_string .=
-                        sprintf('<%s ', $string_pool->getPoolString($ext->getElementIndex()));
+                    $xml .=
+                        sprintf(
+                            '<%s ',
+                            $string_pool->getPoolString($ext->getElementIndex()));
                 } else {
-                    $this->xml_string .=
+                    $xml .=
                         sprintf(
                             '<%s:%s ',
                             $string_pool->getPoolString($ext->getNamespaceIndex()),
                             $string_pool->getPoolString($ext->getElementIndex()));
                 }
-                if (!$output_namespace && !is_null($string_pool->getPoolString($this->xml_tree_namespace->getPrefixIndex()))) {
-                    $output_namespace = true;
-                    $this->xml_string .=
+                if (!$output_ns && !is_null($string_pool->getPoolString($xml_tree_ns->getPrefixIndex()))) {
+                    $output_ns = true;
+                    $xml .=
                         sprintf(
                             'xmlns:%s="%s" ',
-                            $string_pool->getPoolString($this->xml_tree_namespace->getPrefixIndex()),
-                            $string_pool->getPoolString($this->xml_tree_namespace->getUriIndex()));
+                            $string_pool->getPoolString($xml_tree_ns->getPrefixIndex()),
+                            $string_pool->getPoolString($xml_tree_ns->getUriIndex()));
                 }
-//var_dump($string_pool->getPoolString($this->xml_tree_namespace->getPrefixIndex()));
-//var_dump($string_pool->getPoolString($this->xml_tree_namespace->getUriIndex()));
 
                 for ($i = 0; $i < $ext->getAttributeCount(); $i++) {
                     $attribute = new XMLTreeAttribute($binary, $offset);
-//var_dump($attribute);
-//var_dump($string_pool->getPoolString($attribute->getNamespaceIndex()));
-//var_dump($string_pool->getPoolString($attribute->getNameIndex()));
-//var_dump($attribute->getValueIndex());
-//var_dump($string_pool->getPoolString($attribute->getValueIndex()));
                     $offset += $attribute->getHeaderSize();
                     $attribute_value = new XMLTreeAttributeValue($binary, $offset);
-//var_dump($attribute_value);
                     $offset += $attribute_value->getHeaderSize();
 
                     $name = $string_pool->getPoolString($attribute->getNameIndex());
-//var_dump($attribute->getNamespaceIndex());
-//var_dump($this->xml_tree_namespace->getPrefixIndex());
-//var_dump($this->xml_tree_namespace->getUriIndex());
-                    if ($attribute->getNamespaceIndex() === $this->xml_tree_namespace->getUriIndex()) {
-                        $name = sprintf('%s:%s', $string_pool->getPoolString($this->xml_tree_namespace->getPrefixIndex()), $name);
+                    if ($attribute->getNamespaceIndex() === $xml_tree_ns->getUriIndex()) {
+                        $name = sprintf('%s:%s', $string_pool->getPoolString($xml_tree_ns->getPrefixIndex()), $name);
                     }
                     $value = null;
-//var_dump($attribute->getNamespaceIndex());
                     if ((int)$attribute->getValueIndex() === (int)0xFFFFFFFF) {
                         $value = self::formatAttribute($attribute_value->getType(), $attribute_value->getValue());
                     } else {
                         $value = $string_pool->getPoolString($attribute->getValueIndex());
                     }
-                    $this->xml_string .=
+                    $xml .=
                         sprintf('%s="%s" ', $name, $value);
                 }
-                $this->xml_string .= '>';
+                $xml .= '>';
                 break;
 
             case XMLTreeNode::RES_XML_END_ELEMENT_TYPE:
                 $offset += $node->getHeaderSize();
                 $end_ext = new XMLTreeEndExt($binary, $offset);
-//var_dump($end_ext);
-//var_dump($string_pool->getPoolString($end_ext->getNamespaceIndex()));
-//var_dump($string_pool->getPoolString($end_ext->getNameIndex()));
-//var_dump((int)$end_ext->getNamespaceIndex() === (int)0xFFFFFFFF);
                 $offset += $end_ext->getHeaderSize();
                 if ((int)$end_ext->getNamespaceIndex() === (int)0xFFFFFFFF) {
-                    $this->xml_string .=
+                    $xml .=
                         sprintf('</%s>', $string_pool->getPoolString($end_ext->getNameIndex()));
                 } else {
-                    $this->xml_string .=
+                    $xml .=
                         sprintf(
                             '</%s:%s>',
                             $string_pool->getPoolString($end_ext->getNamespaceIndex()),
@@ -134,44 +155,26 @@ class AndroidManifest
                 break;
             case XMLTreeNode::RES_XML_END_NAMESPACE_TYPE:
                 $offset += $node->getHeaderSize();
-                $xml_tree_namespace = new XMLTreeNamespace($binary, $offset);
-                $offset += $xml_tree_namespace->getHeaderSize();
+                $end_ns = new XMLTreeNamespace($binary, $offset);
+                $offset += $end_ns->getHeaderSize();
                 break;
             }
-            if ($offset >= $this->chunk_header->getFileSize()) {
+            if ($offset >= $chunk_header->getFileSize()) {
                 break;
             }
         }
+        return $xml;
     }
-/*
-    public function getChunkHeader() {
-        return $this->chunk_header;
-    }
-    public function getStringPoolHeader() {
-        return $this->string_pool_header;
-    }
-    public function getXMLHeader() {
-        return $this->xml_header;
-    }
-    public function getXMLTreeNode() {
-        return $this->xml_tree_node;
-    }
-    public function getXMLTreeNamespace() {
-        return $this->xml_tree_namespace;
-    }
-    public function getXMLTreeNode2() {
-        return $this->xml_tree_node2;
-    }
-    public function getXMLTreeExt() {
-        return $this->xml_tree_ext;
-    }
-    public function getXMLTreeAttribute() {
-        return $this->xml_tree_attribute;
-    }
-    public function getXMLTreeAttributeValue() {
-        return $this->xml_tree_attr_value;
-    }
-*/
+
+    /**
+     * format an attribute value by its type
+     *
+     * @param integer $type  an attribute value
+     * @param integer $value an attribute type
+     * @return string formatted value
+     * @access private
+     * @see http://bit.ly/AxtqRz
+     */
     private function formatAttribute($type, $value) {
         switch ($type) {
         case XMLTreeAttributeValue::TYPE_NULL:
@@ -189,30 +192,29 @@ class AndroidManifest
         case XMLTreeAttributeValue::TYPE_INT_BOOLEAN:
             return sprintf('%s', ($value === 0) ? 'false' : 'true');
             break;
-        default: // 他はとりあえず適当
+        default:
             return sprintf('0x%08X', $value);
             break;
         }
     }
+
+    /**
+     * return parsed xml
+     *
+     * @return string parsed xml
+     * @access public
+     */
+    public function getXML() {
+        return $this->xml_string;
+    }
+
+    /**
+     * return parsed xml into SimpleXMLElement
+     *
+     * @return SimpleXMLElement parsed xml into SimpleXMLElement
+     * @access public
+     */
     public function getSimpleXMLElement() {
         return simplexml_load_string($this->xml_string);
     }
-}
-if (isset($argv[0]) && __FILE__ === realpath($argv[0])) {
-    if (!isset($argv[1])) {
-        echo 'usage : php AndroidManifest.class.php [manifest_file]';
-        exit;
-    }
-    $binary = file_get_contents($argv[1]);
-    $xml = new AndroidManifest($binary);
-//    var_dump($xml->getChunkHeader());
-//    var_dump($xml->getStringPoolHeader());
-//    var_dump($xml->getXMLHeader());
-//    var_dump($xml->getXMLTreeNode());
-//    var_dump($xml->getXMLTreeNamespace());
-//    var_dump($xml->getXMLTreeNode2());
-//    var_dump($xml->getXMLTreeExt());
-//    var_dump($xml->getXMLTreeAttribute());
-//    var_dump($xml->getXMLTreeAttributeValue());
-    var_dump($xml->getSimpleXMLElement()->asXML());
 }
