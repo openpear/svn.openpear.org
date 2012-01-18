@@ -39,6 +39,16 @@ class AndroidManifestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * source code from Android SDK sample
+     */
+    public function testHoneycombGallery() {
+        $this->assertXML('HoneycombGallery_AndroidManifest.xml');
+    }
+    public function testWeatherListWidget() {
+        $this->assertXML('WeatherListWidget_AndroidManifest.xml');
+    }
+
+    /**
      * source code from https://github.com/gabu/AndroidSDK-RecipeBook
      */
     public function testRecipe021() {
