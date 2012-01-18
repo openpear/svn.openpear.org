@@ -41,6 +41,9 @@ class AndroidManifestTest extends PHPUnit_Framework_TestCase
     /**
      * source code from Android SDK sample
      */
+    public function testApiDemos() {
+        $this->assertXML('ApiDemos_AndroidManifest.xml');
+    }
     public function testHoneycombGallery() {
         $this->assertXML('HoneycombGallery_AndroidManifest.xml');
     }
