@@ -37,4 +37,47 @@ class AndroidManifestTest extends PHPUnit_Framework_TestCase
         $xml = new AndroidManifest(file_get_contents($manifest_file));
         $this->assertEquals(file_get_contents($parsed_file), $xml->getSimpleXMLElement()->asXML());
     }
+
+    /**
+     * source code from https://github.com/gabu/AndroidSDK-RecipeBook
+     */
+    public function testRecipe021() {
+        $this->assertXML('Recipe021_AndroidManifest.xml');
+    }
+
+    public function testRecipe025() {
+        $this->assertXML('Recipe025_AndroidManifest.xml');
+    }
+
+    public function testRecipe028() {
+        $this->assertXML('Recipe028_AndroidManifest.xml');
+    }
+
+    public function testRecipe035() {
+        $this->assertXML('Recipe035_AndroidManifest.xml');
+    }
+
+    public function testRecipe062() {
+        $this->assertXML('Recipe062_AndroidManifest.xml');
+    }
+
+    public function testRecipe066() {
+        $this->assertXML('Recipe066_AndroidManifest.xml');
+    }
+
+    public function testRecipe095() {
+        $this->assertXML('Recipe095_AndroidManifest.xml');
+    }
+
+    public function testRecipe097() {
+        $this->assertXML('Recipe097_AndroidManifest.xml');
+    }
+
+    public function testRecipe103() {
+        $this->assertXML('Recipe103_AndroidManifest.xml');
+    }
+
+    public function testRecipe104() {
+        $this->assertXML('Recipe104_AndroidManifest.xml');
+    }
 }
