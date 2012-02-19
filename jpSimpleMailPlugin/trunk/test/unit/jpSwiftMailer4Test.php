@@ -1,7 +1,7 @@
 <?php
 include(dirname(__FILE__) . '/../bootstrap/unit.php');
 
-$t = new lime_test(26, new lime_output_color());
+$t = new lime_test(27, new lime_output_color());
 // send mail
 $t->diag('check method');
 $mailer = jpSimpleMail::create('SwiftMailer4');
@@ -78,5 +78,8 @@ try {
 $t->is($mailer->clearTo(), null, 'test to call clearTo method');
 $mailer->addTo('testtesttest.@docomo.ne.jp', null, 'test user for docomo');
 $t->is($mailer->message->getTo(), array('testtesttest.@docomo.ne.jp' => ''), 'RFC incompianct mail address has to pass here.');
-$mailer->setFrom('testtes..ttest@ezweb.ne.jp', 'test user for docomo');
+$mailer->setFrom('testtes..ttest@ezweb.ne.jp', 'test user for ezweb');
 $t->is($mailer->getFrom(), 'testtes..ttest@ezweb.ne.jp', 'RFC incompianct mail address has to pass here.');
+$mailer->setFrom('testtes..ttest@gmail.com', 'test user for gmail');
+$t->is($mailer->getFrom(), 'testtes..ttest@gmail.com', 'RFC incompianct mail address has to pass here.');
+
