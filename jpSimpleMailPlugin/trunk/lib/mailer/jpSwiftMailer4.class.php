@@ -294,7 +294,7 @@ class jp_Swift_Mime_Headers_MailboxHeader extends Swift_Mime_Headers_MailboxHead
         // docomoとezwebでは、ここでExceptionが投げられるので、そのまま受け取る。
         $this->_assertValidAddress($address);
       } catch(Swift_RfcComplianceException $e) {
-        if (!preg_match('/(docomo|ezweb)\.ne\.jp$/', $address)) {
+        if (!preg_match('/((docomo|ezweb)\.ne\.jp|gmail\.com)$/', $address)) {
           throw $e;
         }
       }
