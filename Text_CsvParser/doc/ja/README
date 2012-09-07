@@ -1,2 +1,52 @@
 * Documentation
-このパッケージにはまだドキュメントが存在しません
+
+CSVファイルを読み込み、1行ずつ配列として返すクラスです。
+
+Microsoft Excelが出力するような、値内のダブルクォートと改行に対応しています。
+
+
+** Usage
+
+$csv = new CsvParser('my_file.csv');
+
+while ($array = $csv->getNext()) {
+  print_r($array);
+}
+
+
+** Description
+
+*** Constructor
+
+CsvParser($filename, $has_header = FALSE, $encoding = 'Windows-31J')
+
+$filename	CSVファイルのパスです。
+$has_header	先頭行がヘッダかどうかを返します。
+$encoding	CSVファイルのエンコーディングを指定します。
+
+
+*** Methods
+
+**** hasError
+
+なんらかのエラーがあるかどうか返します。
+
+**** getError
+
+エラーメッセージを返します。
+
+**** getNext
+
+CSVを一行読み込み、配列を返します。
+
+**** getNextAssoc
+
+CSVを一行読み込み、連想配列を返します。
+ヘッダ行がないときは、getNextメソッドと同じ結果です。
+
+
+
+
+
+
+
