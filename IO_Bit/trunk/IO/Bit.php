@@ -192,6 +192,18 @@ class IO_Bit {
         $value = $ret[1];
         return $value; // PHP bug
     }
+    function getUI64LE() {
+        $value = $this->getUI32LE();
+        $value = $value + 0x100000000 * $this->getUI32LE();
+        return $value;
+    }
+    function getSI64LE() {
+        $value = $this->getUI64LE();
+	if ($value >= 0x8000000000000000) {
+	  $value = 0x7fffffffffffffff - $value;
+	}
+        return $value;
+    }
     
     // start with the MSB(most-significant bit)
     function getUIBit() {
