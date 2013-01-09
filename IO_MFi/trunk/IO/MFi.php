@@ -10,6 +10,14 @@ class IO_MFi {
     var $headers = array();
     var $datainfos = array();
     var $tracks = array(); // or into datainfo ? what?
+    var $noteTable = Array(
+        'A', 'A+', 'B', 'C', 'C+', 'D', 'D+', 'E', 'F', 'F+', 'G', 'G+',
+        'A', 'A+', 'B', 'C', 'C+', 'D', 'D+', 'E', 'F', 'F+', 'G', 'G+',
+        'A', 'A+', 'B', 'C', 'C+', 'D', 'D+', 'E', 'F', 'F+', 'G', 'G+',
+        'A', 'A+', 'B', 'C', 'C+', 'D', 'D+', 'E', 'F', 'F+', 'G', 'G+',
+        'A', 'A+', 'B', 'C', 'C+', 'D', 'D+', 'E', 'F', 'F+', 'G', 'G+',
+        'A', 'A+', 'n/a'
+        );
     
     function parse($mfidata) {
         $reader = new IO_Bit();
@@ -81,7 +89,7 @@ class IO_MFi {
                 $event['StatusInfo'] = $statusInfo;
                 switch ($statusInfo) {
                   default:
-                    $event['Data1'] = $reader_ev->getUI8();
+                    $event['Data'] = $reader_ev->getUI8();
                     if ( $note_message_length_info == 1) { // MFi2
                         $event['Data2'] = $reader_ev->getUI8();
                     }
@@ -110,27 +118,74 @@ class IO_MFi {
     function dump() {
         echo "Header Part:\n";
         foreach ($this->headers as $key => $value) {
-            echo "  $key: $value\n";
+            echo "  $key: $value";
+            switch ($key) {
+              case 'DataTypeMajor':
+                switch ($value) {
+                  case 1:
+                    echo " (melo data)";
+                    break;
+                  case 2:
+                    echo " (music data MFi2)";
+                    break;
+                }
+                break;
+              case 'DataTypeMinor':
+                switch ($value) {
+                  case 1:
+                    echo " (music data)";
+                    break;
+                  case 2:
+                    echo " (whole)";
+                    break;
+                  case 3:
+                    echo " (partial)";
+                    break;
+                }
+                break;
+            }
+            echo "\n";
         }
         echo "Data Information Part:\n";
         foreach ($this->datainfos as $idx => $datainfo) {
-            echo "  [$idx]\n";
-            foreach ($datainfo as $key => $value) {
-                echo "    $key: $value\n";
-            }
+            echo "  [$idx] ".$datainfo['Identifer']." (len:".$datainfo['Length'].") Data: ".$datainfo['Data']."\n";
         }
         echo "Track Part\n";
         foreach ($this->tracks as $track_idx => $track) {
             echo "  [$track_idx]\n";
-            foreach ($track as $key => $name) {
-                if ($key != 'Events') {
+            foreach ($track as $key => $value) {
+                if ($key !== 'Events') {
                     echo "    $key: $value\n";
                 } else {
                     echo "    Event:\n";
                     foreach ($track[$key] as $event_idx => $event) {
-                        echo "      [$event_idx]\n";
-                        foreach ($event as $key2 => $value2) {
-                            echo "        $key2: $value2\n";
+                        echo "      [$event_idx]";
+                        echo "  DeltaTime: ".$event['DeltaTime'];
+                        echo "  StatusInfo: ".$event['StatusInfo'];
+                        if (isset($event['StatusInfo2'])) {
+                            echo "  ".$event['StatusInfo2'];
+                        }
+                        echo "  Data: ".$event['Data'];
+                        if (isset($event['Data2'])) {
+                            echo " ".$event['Data2'];
+                        }
+                        echo "\n";
+                        if ($event['StatusInfo'] < 0xF0) {
+                            // Basical Status
+                            $status = $event['StatusInfo'];
+                            $voice = $status >> 6;
+                            $note = $status & 0x3f;
+                            $noteStr = $this->noteTable[$note];
+                            $noteLength = $event['Data'];
+                            echo "             Voice: $voice  Note: $note($noteStr)  Length:$noteLength\n";
+                            if (isset($event['Data2'])) {
+                                $data2 = $event['Data2'];
+                                $velocity = $data2 >> 2;
+                                $octaveShift = $data2 & 0x3;
+                                echo "             Velocity: $velocity  OctaveShift: $octaveShift\n";
+                            }
+                        } else {
+                            // Extended Status
                         }
                     }
                 }
