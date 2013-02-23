@@ -165,26 +165,27 @@ class IO_MIDI {
         foreach ($this->track_list as $idx => $track) {
             echo "TRACK[$idx]:\n";
             foreach ($track['track'] as $idx2 => $chunk) {
-                echo "  CHUNK[$idx2]:\n";
+                echo "  [$idx2]:";
                 foreach ($chunk as $key => $value) {
                     switch ($key) {
                       case 'EventType':
                         $eventname = $this->event_name[$value];
-                        echo "    $key: $value($eventname)\n";
+                        echo " $key:$value($eventname),";
                         break;
                       case 'MetaEventType':
                         if (isset($this->meta_event_name[$value])) {
                             $eventname = $this->meta_event_name[$value];
-                            echo "    $key: $value($eventname)\n";
+                            echo " $key:$value($eventname),";
                         } else {
-                            echo "    $key: $value\n";
+                            echo " $key:$value,";
                         }
                         break;
                       default:
-                        echo "    $key: $value\n";
+                        echo " $key:$value,";
                         break;
                     }
                 }
+                echo "\n";
             }
         }
 
