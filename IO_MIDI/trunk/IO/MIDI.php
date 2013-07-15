@@ -179,6 +179,9 @@ class IO_MIDI {
         }
         foreach ($this->track as $idx => $track) {
             echo "TRACK[$idx]:\n";
+            if (empty($opts['hexdump']) === false) {
+                $bitio->hexdump($track['_offset'], 8);
+            }
             foreach ($track['track'] as $idx2 => $chunk) {
                 echo "  [$idx2]:";
                 foreach ($chunk as $key => $value) {
