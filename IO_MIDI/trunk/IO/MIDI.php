@@ -9,8 +9,10 @@ require_once 'IO/Bit.php';
 class IO_MIDI {
     var $header = null;
     var $track_list = array();
+    var $_mididata = null;
     
     function parse($mididata) {
+        $this->_mididata = $mididata;
         $reader = new IO_Bit();
         $reader->input($mididata);
         while ($reader->hasNextData(4)) {
@@ -34,7 +36,7 @@ class IO_MIDI {
               $chunk['header'] = $this->_parseChunkHeader($data);
               break;
           case 'MTrk':
-              $chunk['track'] = $this->_parseChunkTrack($data);
+              $chunk['track'] = $this->_parseChunkTrack($data, $reader);
               break;
           default:
               throw new Exception("Unknown chunk (type=$type)\n");
@@ -157,10 +159,17 @@ class IO_MIDI {
         0x7F => 'Sequencer Specific',
         );
 
-    function dump() {
+    function dump($opts = array()) {
+        if (empty($opts['hexdump']) === false) {
+            $bitio = new IO_Bit();
+            $bitio->input($this->_mididata);
+        }
         echo "HEADER:\n";
         foreach ($this->header['header'] as $key => $value) {
             echo "  $key: $value\n";
+        }
+        if (empty($opts['hexdump']) === false) {
+            $bitio->hexdump(0, $this->header['length'] + 8);
         }
         foreach ($this->track_list as $idx => $track) {
             echo "TRACK[$idx]:\n";
