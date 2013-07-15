@@ -16,38 +16,40 @@ class IO_MIDI {
         $reader = new IO_Bit();
         $reader->input($mididata);
         while ($reader->hasNextData(4)) {
-            list($byte_offset, $dummy) = $reader->getOffset();
             $chunk = $this->_parseChunk($reader);
-            $chunk['_byte_offset'] = $byte_offset;
             if (isset($chunk['header'])) {
                 $this->header = $chunk;
             } elseif(isset($chunk['track'])) {
-                $this->track_list []= $chunk;
+                $this->track []= $chunk;
             }
         }
     }
     function _parseChunk(&$reader) {
+        list($offset, $dummy) = $reader->getOffset();
         $type = $reader->getData(4);
         $length = $reader->getUI32BE();
-        $data = $reader->getData($length);
-        $chunk = array ('type' => $type, 'length' => $length);
+        $chunk = array ('type' => $type, 'length' => $length, '_offset' => $offset);
         switch ($type) {
           case 'MThd':
-              $chunk['header'] = $this->_parseChunkHeader($data);
+              $chunk['header'] = $this->_parseChunkHeader($reader);
               break;
           case 'MTrk':
-              $chunk['track'] = $this->_parseChunkTrack($data, $reader);
+              $chunk['track'] = $this->_parseChunkTrack($reader);
               break;
           default:
               throw new Exception("Unknown chunk (type=$type)\n");
         }
+        list($doneOffset, $dummy) = $reader->getOffset();
+        $nextOffset = $offset + 8 + $length;
+        if ($doneOffset !== $nextOffset) {
+            echo "done:$doneOffset next:$nextOffset".PHP_EOL;
+        }
+        $reader->setOffset($nextOffset, 0);
         return $chunk;
     }
 
-    function _parseChunkHeader($data) {
+    function _parseChunkHeader($reader) {
         $header = array();
-        $reader = new IO_Bit();
-        $reader->input($data);
         $header['Format'] = $reader->getUI16BE();
         $header['NumberOfTracks'] = $reader->getUI16BE();
         $division = $reader->getUI16BE();
@@ -56,13 +58,15 @@ class IO_MIDI {
         return $header;
     }
 
-    function _parseChunkTrack($data) {
+    function _parseChunkTrack($reader) {
         $track = array();
-        $reader = new IO_Bit();
-        $reader->input($data);
         $prev_status = null;
-        while ($reader->hasNextData(3)) { // XXX 3? or 4
-            $chunk = array();
+        while (true) {
+            list($offset, $dummy) = $reader->getOffset();
+            if ($reader->hasNextData(3) === false) { // XXX 3? or 4
+                break; // done
+            }
+            $chunk = array('_offset' => $offset);
             // delta time
             $chunk['DeltaTime'] = $this->getVaribleLengthValue($reader);
             // event
@@ -108,9 +112,11 @@ class IO_MIDI {
                 break;
               default:
                 printf("unknown EventType=0x%02X\n", $eventType);
-                var_dump($track);
+                var_dump($chunks);
                 exit (0);
             }
+            list($offset2, $dummy) = $reader->getOffset();
+            $chunk['_length'] = $offset2 - $offset;
             $track[] = $chunk;
             $prev_status = $status;
         }
@@ -171,7 +177,7 @@ class IO_MIDI {
         if (empty($opts['hexdump']) === false) {
             $bitio->hexdump(0, $this->header['length'] + 8);
         }
-        foreach ($this->track_list as $idx => $track) {
+        foreach ($this->track as $idx => $track) {
             echo "TRACK[$idx]:\n";
             foreach ($track['track'] as $idx2 => $chunk) {
                 echo "  [$idx2]:";
@@ -195,6 +201,9 @@ class IO_MIDI {
                     }
                 }
                 echo "\n";
+                if (empty($opts['hexdump']) === false) {
+                    $bitio->hexdump($chunk['_offset'], $chunk['_length']);
+                }
             }
         }
 
