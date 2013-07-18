@@ -101,8 +101,8 @@ class IO_MIDI {
                 break;
               case 0xE: // Pitch Bend Event
                 $value =  $reader->getUI8();
-                $value = ($value << 7) & $reader->getUI8();
-                $chunk['Value'] = $value;
+                $value = (($reader->getUI8() & 0x7f) << 7) + ($value & 0x7f);
+                $chunk['Value'] = $value - 0x2000;
                 break;
               case 0xF: // Meta Event
                 $metaEventType = $reader->getUI8();
