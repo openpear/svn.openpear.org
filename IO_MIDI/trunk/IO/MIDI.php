@@ -104,12 +104,21 @@ class IO_MIDI {
                 $value = (($reader->getUI8() & 0x7f) << 7) + ($value & 0x7f);
                 $chunk['Value'] = $value - 0x2000;
                 break;
-              case 0xF: // Meta Event
-                $metaEventType = $reader->getUI8();
-                $chunk['MetaEventType'] = $metaEventType;
-                $length = $this->getVaribleLengthValue($reader);
-                $chunk['MetaEventData'] = $reader->getData($length);
-                break;
+              case 0xF: // Meta Event of System Ex
+                unset($chunk['MIDIChannel']);
+                if ($midiChannel == 0xF) { // not midiChannel
+                    $metaEventType = $reader->getUI8();
+                    $chunk['MetaEventType'] = $metaEventType;
+                    $length = $this->getVaribleLengthValue($reader);
+                    $chunk['MetaEventData'] = $reader->getData($length);
+                    break;
+                } else if ($midiChannel == 0x0) { // System Ex
+                    $length = $this->getVaribleLengthValue($reader);
+                    $chunk['SystemEx'] = $reader->getData($length);
+                    break;
+                } else {
+                    printf("unknown status=0x%02X\n", $status);
+                }
               default:
                 printf("unknown EventType=0x%02X\n", $eventType);
                 var_dump($chunks);
