@@ -8,7 +8,8 @@ require_once 'IO/Bit.php';
 
 class IO_MIDI {
     var $header = null;
-    var $track_list = array();
+//    var $track_list = array();
+    var $tracks = array();
     var $_mididata = null;
     
     function parse($mididata) {
@@ -20,7 +21,7 @@ class IO_MIDI {
             if (isset($chunk['header'])) {
                 $this->header = $chunk;
             } elseif(isset($chunk['track'])) {
-                $this->track []= $chunk;
+                $this->tracks []= $chunk;
             }
         }
     }
@@ -28,19 +29,19 @@ class IO_MIDI {
         list($offset, $dummy) = $reader->getOffset();
         $type = $reader->getData(4);
         $length = $reader->getUI32BE();
+        $nextOffset = $offset + 8 + $length;
         $chunk = array ('type' => $type, 'length' => $length, '_offset' => $offset);
         switch ($type) {
           case 'MThd':
               $chunk['header'] = $this->_parseChunkHeader($reader);
               break;
           case 'MTrk':
-              $chunk['track'] = $this->_parseChunkTrack($reader);
+              $chunk['track'] = $this->_parseChunkTrack($reader, $nextOffset);
               break;
           default:
               throw new Exception("Unknown chunk (type=$type)\n");
         }
         list($doneOffset, $dummy) = $reader->getOffset();
-        $nextOffset = $offset + 8 + $length;
         if ($doneOffset !== $nextOffset) {
             echo "done:$doneOffset next:$nextOffset".PHP_EOL;
         }
@@ -58,12 +59,12 @@ class IO_MIDI {
         return $header;
     }
 
-    function _parseChunkTrack($reader) {
+    function _parseChunkTrack($reader, $nextOffset) {
         $track = array();
         $prev_status = null;
         while (true) {
             list($offset, $dummy) = $reader->getOffset();
-            if ($reader->hasNextData(3) === false) { // XXX 3? or 4
+            if ($offset >= $nextOffset) {
                 break; // done
             }
             $chunk = array('_offset' => $offset);
@@ -186,7 +187,7 @@ class IO_MIDI {
         if (empty($opts['hexdump']) === false) {
             $bitio->hexdump(0, $this->header['length'] + 8);
         }
-        foreach ($this->track as $idx => $track) {
+        foreach ($this->tracks as $idx => $track) {
             echo "TRACK[$idx]:\n";
             if (empty($opts['hexdump']) === false) {
                 $bitio->hexdump($track['_offset'], 8);
@@ -219,5 +220,8 @@ class IO_MIDI {
             }
         }
 
+    }
+    function build() {
+        ;
     }
 }
