@@ -174,7 +174,89 @@ class IO_MIDI {
         0x59 => 'Key Signature',
         0x7F => 'Sequencer Specific',
         );
-
+    var $controller_type_name = array(
+// http://www.bass.radio42.com/help/html/f7f8b18f-a4a4-91bf-83c1-651b8dfc8f96.htm
+        0 => 'BankSelect',
+        1 => 'Modulation',
+        2 => 'BreathControl',
+        3 => 'User3',
+        4 => 'FootControl',
+        5 => 'PortamentoTime',
+        6 => 'DataEntry',
+        7 => 'MainVolume',
+        8 => 'Balance',
+        9 => 'User9',
+        10 => 'Panorama',
+        11 => 'Expression',
+        12 => 'EffectControl1', 13 => 'EffectControl2',
+        14 => 'User14', 15 => 'User15',
+        16 => 'GeneralPurpose1', 17 => 'GeneralPurpose2',
+        18 => 'GeneralPurpose3', 19 => 'GeneralPurpose4',
+        20 => 'User20', 21 => 'User21', 22 => 'User22', 23 => 'User23',
+        24 => 'User24', 25 => 'User25', 26 => 'User26', 27 => 'User27',
+        28 => 'User28', 29 => 'User29', 30 => 'User30', 31 => 'User31',
+        32 => 'BankSelectFine',
+        33 => 'ModulationFine',
+        34 => 'BreathControlFine',
+        35 => 'User3Fine',
+        36 => 'FootControlFine',
+        37 => 'PortamentTimeFine',
+        38 => 'DataEntryFine',
+        39 => 'MainVolumeFine',
+        40 => 'BalanceFine',
+        41 => 'User9Fine',
+        42 => 'PanoramaFine',
+        43 => 'ExpressionFine',
+        44 => 'EffectControl1Fine', 45 => 'EffectControl2Fine',
+        46 => 'User14Fine', 47 => 'User15Fine',
+        48 => 'GeneralPurpose1Fine', 49 => 'GeneralPurpose2Fine',
+        50 => 'GeneralPurpose3Fine', 51 => 'GeneralPurpose4Fine',
+        52 => 'User20Fine', 53 => 'User21Fine', 54 => 'User22Fine',
+        55 => 'User23Fine', 56 => 'User24Fine', 57 => 'User25Fine',
+        58 => 'User26Fine', 59 => 'User27Fine', 60 => 'User28Fine',
+        61 => 'User29Fine', 62 => 'User30Fine', 63 => 'User31Fine',
+        64 => 'HoldPedal1',
+        65 => 'Portamento',
+        66 => 'SutenutoPedal',
+        67 => 'SoftPedal',
+        68 => 'LegatoPedal',
+        69 => 'HoldPedal2',
+        70 => 'SoundVariation',
+        71 => 'SoundTimbre',
+        72 => 'SoundReleaseTime',
+        73 => 'SoundAttackTime',
+        74 => 'SoundBrightness',
+        75 => 'SoundControl6', 76 => 'SoundControl7', 77 => 'SoundControl8',
+        78 => 'SoundControl9',79 => 'SoundControl10',
+        80 => 'GeneralPurposeButton1', 81 => 'GeneralPurposeButton2',
+        82 => 'GeneralPurposeButton3', 83 => 'GeneralPurposeButton4',
+        84 => 'GeneralPurposeButton5', 85 => 'GeneralPurposeButton6',
+        86 => 'GeneralPurposeButton7', 87 => 'GeneralPurposeButton8',
+        88 => 'GeneralPurposeButton9', 89 => 'GeneralPurposeButton10',
+        90 => 'GeneralPurposeButton11',
+        91 => 'EffectsLevel',
+        92 => 'TremeloLevel',
+        93 => 'ChrusLevel',
+        94 => 'CelesteLevel',
+        95 => 'PhaserLevel',
+        96 => 'DataButtonIncrement', 97 => 'DataButtonDecrement',
+        98 => 'NonRegisteredParameterFine',
+        99 => 'NonRegisteredParameterCoarse',
+        100 => 'RegisteredParameterFine',
+        101 => 'RegisteredParameterCoarse',
+        102 => 'User102', 103 => 'User103', 104 => 'User104',
+        105 => 'User105', 106 => 'User106', 107 => 'User107',
+        108 => 'User108', 109 => 'User109', 110 => 'User110',
+        111 => 'User111', 112 => 'User112', 113 => 'User113',
+        114 => 'User114', 115 => 'User115', 116 => 'User116',
+        117 => 'User117', 118 => 'User118', 119 => 'User119',
+        120 => 'AllSoundOff',
+        121 => 'AllControllerReset',
+        122 => 'LocalKeyboard',
+        123 => 'AllNotesOff',
+        124 => 'OmniModeOff', 125 => 'OmniModeOn',
+        126 => 'MonoOperation', 127 => 'PolyOperation',
+        );
     function dump($opts = array()) {
         if (empty($opts['hexdump']) === false) {
             $bitio = new IO_Bit();
@@ -207,6 +289,10 @@ class IO_MIDI {
                         } else {
                             echo " $key:$value,";
                         }
+                        break;
+                      case 'ControllerType':
+                        $typename = $this->controller_type_name[$value];
+                        echo " $key:$value($typename),";
                         break;
                       default:
                         echo " $key:$value,";
