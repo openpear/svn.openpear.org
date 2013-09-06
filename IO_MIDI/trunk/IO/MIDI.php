@@ -91,8 +91,24 @@ class IO_MIDI {
                 $chunk['Amount'] = $reader->getUI8();
                 break;
               case 0xB: // Controller
-                $chunk['ControllerType'] = $reader->getUI8();
-                $chunk['Value'] = $reader->getUI8();
+                $controllerType = $reader->getUI8();
+                $chunk['ControllerType'] = $controllerType;
+                switch ($controllerType) {
+                case 0: // Bank Select #32 more commonly used
+                case 1: // Modulation Wheel
+                default:
+                case 98: // NRPN LSB(Fine);
+                case 100: // RPN LSB(Fine)
+                    $chunk['LSB'] = $reader->getUI8();
+                    break;
+                case 99: // NRPN MSB(Coarse)
+                case 101: // RPN MSB(Coarse)
+                    $chunk['MSB'] = $reader->getUI8();
+                    break;
+                default:
+                    $chunk['Value'] = $reader->getUI8();
+                    break;
+                }
                 break;
               case 0xC: // Program Change
                 $chunk['ProgramNumber'] =  $reader->getUI8();
@@ -240,10 +256,10 @@ class IO_MIDI {
         94 => 'CelesteLevel',
         95 => 'PhaserLevel',
         96 => 'DataButtonIncrement', 97 => 'DataButtonDecrement',
-        98 => 'NonRegisteredParameterFine',
-        99 => 'NonRegisteredParameterCoarse',
-        100 => 'RegisteredParameterFine',
-        101 => 'RegisteredParameterCoarse',
+        98 => 'NRPN LSB(Fine)',
+        99 => 'NRPN MSB(Coarse)',
+        100 => 'RPN LSB(Fine)',
+        101 => 'RPN MSB(Coarse)',
         102 => 'User102', 103 => 'User103', 104 => 'User104',
         105 => 'User105', 106 => 'User106', 107 => 'User107',
         108 => 'User108', 109 => 'User109', 110 => 'User110',
