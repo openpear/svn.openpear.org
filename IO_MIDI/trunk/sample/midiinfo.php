@@ -63,19 +63,20 @@ foreach ($tracks as $idx => $track) {
                 break;
               case 0x9: // Note On
                 $noteOnTable[$channel] ++;
-                if (isset($noteKeyTable[$channel][$chunk['NoteNumber']])) {
-                    $noteKeyTable[$channel][$chunk['NoteNumber']] ++;
+                $keynumber = $chunk['NoteNumber'];
+                if (isset($noteKeyTable[$channel][$keynumber])) {
+                    $noteKeyTable[$channel][$keynumber] ++;
                 } else {
-                    $noteKeyTable[$channel][$chunk['NoteNumber']] = 1;
+                    $noteKeyTable[$channel][$keynumber] = 1;
                 }
                 break;
               case 0xB: // Controller
-                  $controllerType = $chunk['ControllerType'];
-                  if (isset($controllerTypeTable[$channel][$controllerType])) {
-                      $controllerTypeTable[$channel][$controllerType]++;
-                  } else {
-                      $controllerTypeTable[$channel][$controllerType] = 1;
-                  }
+                $controllerType = $chunk['ControllerType'];
+                if (isset($controllerTypeTable[$channel][$controllerType])) {
+                    $controllerTypeTable[$channel][$controllerType] ++;
+                } else {
+                    $controllerTypeTable[$channel][$controllerType] = 1;
+                }
                 break;
               case 0xC: // Program Change
                 if (isset($programTable[$channel])) {
@@ -104,17 +105,17 @@ foreach ($tracks as $idx => $track) {
         echo "      Channel[$channel]:".PHP_EOL;
         echo "        Program: ".implode(' ', $programs).PHP_EOL;
         if ($noteOnTable[$channel] === $noteOffTable[$channel]) {
-            echo "        NoteOn/Off: ".$noteOnTable[$channel];
+            echo "        NoteOn/OffCount: ".$noteOnTable[$channel];
         } else {
-            echo "        NoteOn: ".$noteOnTable[$channel];
-            echo "  NoteOff: ".$noteOffTable[$channel];
+            echo "        NoteOnCount: ".$noteOnTable[$channel];
+            echo "  NoteOffCount: ".$noteOffTable[$channel];
         }
         $noteKeyList = array_keys($noteKeyTable[$channel]);
         echo "  KeyRange: ".MIN($noteKeyList)." <-> ".MAX($noteKeyList);
         echo PHP_EOL;
         if ($pitchbendTable[$channel] > 0) {
             $pitchbendRangeList = array_keys($pitchbendRangeTable[$channel]);
-            echo "        PitchBend: ".$pitchbendTable[$channel];
+            echo "        PitchBendCount: ".$pitchbendTable[$channel];
             echo "  PitchBendRange: ".MIN($pitchbendRangeList)." <-> ".MAX($pitchbendRangeList);
         } else {
             echo "        PitchBend: (none)";
@@ -130,6 +131,3 @@ foreach ($tracks as $idx => $track) {
         echo PHP_EOL;
     }
 }
-
-
-
