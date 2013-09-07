@@ -29,6 +29,8 @@ foreach ($tracks as $idx => $track) {
     $noteOnTable = array();
     $noteKeyTable = array();
     $pitchbendTable =  array();
+    $pitchbendRangeTable =  array();
+    $controllerTypeTable = array();
     //
     echo "  Track[$idx]:".PHP_EOL;
     foreach ($track['track'] as $chunk) {
@@ -46,7 +48,13 @@ foreach ($tracks as $idx => $track) {
                     $noteKeyTable[$channel] = array();
                 }
                 if (isset($pitchbendTable[$channel]) === false) {
-                    $pitchbendTable[$channel] = array();
+                    $pitchbendTable[$channel] = 0;
+                }
+                if (isset($pitchbendRangeTable[$channel]) === false) {
+                    $pitchbendRangeTable[$channel] = array();
+                }
+                if (isset($controllerTypeTable[$channel]) === false) {
+                    $controllerTypeTable[$channel] = array();
                 }
             }
             switch ($chunk['EventType']) {
@@ -61,11 +69,28 @@ foreach ($tracks as $idx => $track) {
                     $noteKeyTable[$channel][$chunk['NoteNumber']] = 1;
                 }
                 break;
+              case 0xB: // Controller
+                  $controllerType = $chunk['ControllerType'];
+                  if (isset($controllerTypeTable[$channel][$controllerType])) {
+                      $controllerTypeTable[$channel][$controllerType]++;
+                  } else {
+                      $controllerTypeTable[$channel][$controllerType] = 1;
+                  }
+                break;
               case 0xC: // Program Change
                 if (isset($programTable[$channel])) {
                     $programTable[$channel] []= $chunk['ProgramNumber'];
                 } else {
                     $programTable[$channel] = array($chunk['ProgramNumber']);
+                }
+                break;
+              case 0xE: // Pitch Bend Event
+                $pitchbendTable[$channel] ++;
+                $value = $chunk['Value'];
+                if (isset($pitchbendRangeTable[$channel][$value])) {
+                    $pitchbendRangeTable[$channel][$value] ++;
+                } else {
+                    $pitchbendRangeTable[$channel][$value] = 1;
                 }
                 break;
             }
@@ -78,10 +103,30 @@ foreach ($tracks as $idx => $track) {
         $programs = $programTable[$channel];
         echo "      Channel[$channel]:".PHP_EOL;
         echo "        Program: ".implode(' ', $programs).PHP_EOL;
-        echo "        NoteOn: ".$noteOnTable[$channel];
-        echo "  NoteOff: ".$noteOnTable[$channel];
+        if ($noteOnTable[$channel] === $noteOffTable[$channel]) {
+            echo "        NoteOn/Off: ".$noteOnTable[$channel];
+        } else {
+            echo "        NoteOn: ".$noteOnTable[$channel];
+            echo "  NoteOff: ".$noteOffTable[$channel];
+        }
         $noteKeyList = array_keys($noteKeyTable[$channel]);
-        echo "  KeyRange: ".MIN($noteKeyList)."-".MAX($noteKeyList);
+        echo "  KeyRange: ".MIN($noteKeyList)." <-> ".MAX($noteKeyList);
+        echo PHP_EOL;
+        if ($pitchbendTable[$channel] > 0) {
+            $pitchbendRangeList = array_keys($pitchbendRangeTable[$channel]);
+            echo "        PitchBend: ".$pitchbendTable[$channel];
+            echo "  PitchBendRange: ".MIN($pitchbendRangeList)." <-> ".MAX($pitchbendRangeList);
+        } else {
+            echo "        PitchBend: (none)";
+        }
+        echo PHP_EOL;
+        if (count($controllerTypeTable) > 0) {
+            $controllerTypeList = array_keys($controllerTypeTable[$channel]);
+            sort($controllerTypeList);
+            echo "        ControllerType: ".implode(' ', $controllerTypeList).PHP_EOL;
+        } else {
+            echo "        ControllerType: (none)";
+        }
         echo PHP_EOL;
     }
 }
