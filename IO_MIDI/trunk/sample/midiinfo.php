@@ -124,7 +124,7 @@ foreach ($tracks as $idx => $track) {
         if (count($controllerTypeTable) > 0) {
             $controllerTypeList = array_keys($controllerTypeTable[$channel]);
             sort($controllerTypeList);
-            echo "        ControllerType: ".implode(' ', $controllerTypeList).PHP_EOL;
+            echo "        ControllerType: ".implode(' ', $controllerTypeList);
         } else {
             echo "        ControllerType: (none)";
         }
