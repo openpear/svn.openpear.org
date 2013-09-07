@@ -46,7 +46,7 @@ foreach ($tracks as $idx => $track) {
                     $noteKeyTable[$channel] = array();
                 }
                 if (isset($pitchbendTable[$channel]) === false) {
-                    $pitchbendTable[$channel]) = array();
+                    $pitchbendTable[$channel] = array();
                 }
             }
             switch ($chunk['EventType']) {
