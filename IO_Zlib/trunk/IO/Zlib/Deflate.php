@@ -95,6 +95,7 @@ class IO_Zlib_Deflate {
             case 1: // compressed with fixed Huffman codes;
                 $data = array();
                 while (true) {
+                    list ($start_byte, $start_bit) = $reader->getOffset();
                     $hcode = 0;
                     // ハフマン符号をリテラル/距離符号に変換
                     for ($i = 0 ; $i < 7 ; $i++) {
@@ -115,7 +116,12 @@ class IO_Zlib_Deflate {
                     }
                     // リテラル/距離符号を解釈して保存
                     if ($lit_or_len < 256) {
-                        $data []= array('Value' => $lit_or_len);
+                        list ($next_byte, $next_bit) = $reader->getOffset();
+                        $bit_length = 8 * ($next_byte - $start_byte) + $next_bit - $start_bit;
+                        $data []= array('Value' => $lit_or_len,
+                                        '_byte_offset' => $start_byte,
+                                        '_bit_offset' => $start_bit,
+                                        '_bit_length' => $bit_length);
                     } else if ($lit_or_len > 256) {
                         $lzss_length = self::$lzss_length_table[$lit_or_len - 257];
                         if ((264 < $lit_or_len) && ($lit_or_len < 285)) {
@@ -138,11 +144,21 @@ class IO_Zlib_Deflate {
                             $lzss_distance_extend_bits = floor(($lzss_distance_value - 2) / 2);
                             $lzss_distance_extend = $reader->getUIBitsLSB($lzss_distance_extend_bits);
                         }
+                        list ($next_byte, $next_bit) = $reader->getOffset();
+                        $bit_length = 8 * ($next_byte - $start_byte) + $next_bit - $start_bit;
                         $data []= array('Length' => $lzss_length,
                                         'LengthExtend' => $lzss_length_extend,
                                         'Distance' => $lzss_distance,
-                                        'DistanceExtend' => $lzss_distance_extend);
+                                        'DistanceExtend' => $lzss_distance_extend,
+                                        '_byte_offset' => $start_byte,
+                                        '_bit_offset' => $start_bit,
+                                        '_bit_length' => $bit_length);
                     } else { // 256: End of Code
+                        list ($next_byte, $next_bit) = $reader->getOffset();
+                        $bit_length = 8 * ($next_byte - $start_byte) + $next_bit - $start_bit;
+                        $data []= array('_byte_offset' => $start_byte,
+                                        '_bit_offset' => $start_bit,
+                                        '_bit_length' => $bit_length);
                         break;
                     }
                 } // while end
@@ -223,9 +239,15 @@ class IO_Zlib_Deflate {
                  */
                 $data = array();
                 while (true) {
+                    list ($start_byte, $start_bit) = $reader->getOffset();
                     $lit_or_len = $huffman_reader_custom_lit->getValue($reader);
+                    list ($next_byte, $next_bit) = $reader->getOffset();
+                    $bit_length = 8 * ($next_byte - $start_byte) + $next_bit - $start_bit;
                     if ($lit_or_len < 256) { // literal
-                        $data []= array('Value' => $lit_or_len);
+                        $data []= array('Value' => $lit_or_len,
+                                        '_byte_offset' => $start_byte,
+                                        '_bit_offset' => $start_bit,
+                                        '_bit_length' => $bit_length);
                     } else if ($lit_or_len > 256) { // length
                         $lzss_length = self::$lzss_length_table[$lit_or_len - 257];                        
                         if ((264 < $lit_or_len) && ($lit_or_len < 285)) {
@@ -242,12 +264,21 @@ class IO_Zlib_Deflate {
                             $lzss_distance_extend_bits = floor(($lzss_distance_value - 2) / 2);
                             $lzss_distance_extend = $reader->getUIBitsLSB($lzss_distance_extend_bits);
                         }
+                        list ($next_byte, $next_bit) = $reader->getOffset();
+                        $bit_length = 8 * ($next_byte - $start_byte) + $next_bit - $start_bit;
                         $data []= array('Length' => $lzss_length,
                                         'LengthExtend' => $lzss_length_extend,
                                         'Distance' => $lzss_distance,
-                                        'DistanceExtend' => $lzss_distance_extend);
+                                        'DistanceExtend' => $lzss_distance_extend,
+                                        '_byte_offset' => $start_byte,
+                                        '_bit_offset' => $start_bit,
+                                        '_bit_length' => $bit_length);
                     } else { // 256:End
-//                        $data []= array('Value' => $hcode);
+                        list ($next_byte, $next_bit) = $reader->getOffset();
+                        $bit_length = 8 * ($next_byte - $start_byte) + $next_bit - $start_bit;
+                        $data []= array('_byte_offset' => $start_byte,
+                                        '_bit_offset' => $start_bit,
+                                        '_bit_length' => $bit_length);
                         break;
                     }
                 } // while end
@@ -282,18 +313,27 @@ class IO_Zlib_Deflate {
             case 1: // fixed huffman
             case 2: // dynamic huffman
                 if ($btype == 2) {
-                    echo "HLIT:{$block['HLIT']} HDIST:{$block['HDIST']} HCLEN:{$block['HCLEN']} ";
+                    echo "HLIT:{$block['HLIT']} HDIST:{$block['HDIST']} HCLEN:{$block['HCLEN']}\n";
                 }
                 foreach ($block['Data'] as $value) {
                     if (isset($value['Value'])) {
-                        printf("%02X(%c) ", $value['Value'], $value['Value']);
+                        printf("%02X(%c) (offset:0x%02x.%02x bitlen:%d)\n",
+                               $value['Value'], $value['Value'],
+                               $value['_byte_offset'], $value['_bit_offset'],
+                               $value['_bit_length']);
                     } else if (isset($value['Length'])) {
-                        echo "Length:{$value['Length']}+{$value['LengthExtend']} Distance:{$value['Distance']}+{$value['DistanceExtend']} ";
+                        printf("Length:%d LengthExtend:%d Distance:%d DistanceExtend:%d (offset:0x%02x.%02x bitlen:%d)\n",
+                               $value['Length'],$value['LengthExtend'],
+                               $value['Distance'], $value['DistanceExtend'],
+                               $value['_byte_offset'], $value['_bit_offset'],
+                               $value['_bit_length']);
+
                     } else { // Maybe Terminate Value
-                        printf("%d(Terminate)", $value['Value']);
+                        printf("(Terminate) (offset:0x%02x.%02x bitlen:%d)\n",
+                               $value['_byte_offset'], $value['_bit_offset'],
+                               $value['_bit_length']);
                     }
                 }
-                echo "\n";
                 break;
             }
         }
@@ -317,7 +357,7 @@ class IO_Zlib_Deflate {
                 foreach ($block['Data'] as $value) {
                     if (isset($value['Value'])) {
                         $data .= chr($value['Value']);
-                    } else {
+                    } else if (isset($value['Length'])) {
                         $lzss_length = $value['Length'] + $value['LengthExtend'];
                         $lzss_distance = $value['Distance'] + $value['DistanceExtend'];
                         $data_len = strlen($data);
@@ -329,6 +369,8 @@ class IO_Zlib_Deflate {
                         for ($i = $start_pos ; $i <= $end_pos ; $i++) { 
                             $data .= $data[$i];
                         }
+                    } else {
+		        break; // Terminate
                     }
                 }
                 break;
