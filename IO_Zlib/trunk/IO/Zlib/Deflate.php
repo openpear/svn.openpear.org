@@ -306,9 +306,12 @@ class IO_Zlib_Deflate {
         foreach ($this->compressed_data as $block) {
             $btype = $block['BTYPE'];
             echo "(BFINAL)={$block['(BFINAL)']} BTYPE:$btype\n";
+	    $orig_offset = 0;
             switch ($btype)  {
             case 0: // uncomress
-                echo "LEN:{$block['LEN']} NLEN:{$block['NLEN']} Data:{$block['Data']}\n";
+                printf("[%06x] LEN:%d NLEN:%d Data:%s\n",
+                $orig_offset, $block['LEN'], $block['NLEN'], $block['Data']);
+		$orig_offset += $block['LEN'];
                 break;
             case 1: // fixed huffman
             case 2: // dynamic huffman
@@ -317,16 +320,20 @@ class IO_Zlib_Deflate {
                 }
                 foreach ($block['Data'] as $value) {
                     if (isset($value['Value'])) {
-                        printf("%02X(%c) (offset:0x%02x.%02x bitlen:%d)\n",
+                        printf("[%06x] %02X(%c) (offset:0x%02x.%02x bitlen:%d)\n",
+			       $orig_offset,
                                $value['Value'], $value['Value'],
                                $value['_byte_offset'], $value['_bit_offset'],
                                $value['_bit_length']);
+		       $orig_offset += 1;
                     } else if (isset($value['Length'])) {
-                        printf("Length:%d LengthExtend:%d Distance:%d DistanceExtend:%d (offset:0x%02x.%02x bitlen:%d)\n",
+                        printf("[%06x] Length:%d LengthExtend:%d Distance:%d DistanceExtend:%d (offset:0x%02x.%02x bitlen:%d)\n",
+			       $orig_offset,
                                $value['Length'],$value['LengthExtend'],
                                $value['Distance'], $value['DistanceExtend'],
                                $value['_byte_offset'], $value['_bit_offset'],
                                $value['_bit_length']);
+			       $orig_offset += $value['Length'] + $value['LengthExtend'];
 
                     } else { // Maybe Terminate Value
                         printf("(Terminate) (offset:0x%02x.%02x bitlen:%d)\n",
