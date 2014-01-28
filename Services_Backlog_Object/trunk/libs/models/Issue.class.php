@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__FILE__) . '/../BaseModel.class.php';
 
+/**
+ * @method string getId()
+ * @method string getDescription()
+ * @method string getCreatedOn()
+ */
+
 class Issue extends BaseModel
 {
     protected $fields = array(
