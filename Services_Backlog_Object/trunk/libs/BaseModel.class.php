@@ -7,14 +7,17 @@ abstract class BaseModel
     protected $fields = array();
     protected $values = array();
 
+    protected $backlog;
+
     /**
      * constructor
      *
      * @param array $values initialize varues
      */
-    public function __construct($values = null)
+    public function __construct($values = null, $backlog = null)
     {
         $this->setDefalut($values);
+        $this->setBacklog($backlog);
     }
 
     /**
@@ -37,6 +40,37 @@ abstract class BaseModel
     }
 
     /**
+     * backlog setter
+     *
+     * @param Services_BacklogObject $backlog
+     * @return null
+     */
+    public function setBacklog($backlog)
+    {
+        $this->backlog = $backlog;
+    }
+
+    /**
+     * backlog getter
+     *
+     * @return Services_BacklogObject
+     */
+    public function getBacklog()
+    {
+        return $this->backlog;
+    }
+
+    /**
+     * backlog has?
+     *
+     * @return boolean
+     */
+    public function hasBacklog()
+    {
+        return $this->backlog instanceof Services_BacklogObject;
+    }
+
+    /**
      *
      * @param unknown_type $name
      * @param unknown_type $arguments
@@ -44,9 +78,9 @@ abstract class BaseModel
     public function __call($name, $arguments)
     {
         if (substr($name, 0, 3) == 'set') {
-            return $this->set(strtolower(substr($name, 3)), $arguments);
+            return $this->set($this->toSnake(substr($name, 3)), $arguments);
         } else if (substr($name, 0, 3) == 'get') {
-            return $this->get(strtolower(substr($name, 3)));
+            return $this->get($this->toSnake(substr($name, 3)));
         }
     }
 
@@ -90,7 +124,34 @@ abstract class BaseModel
         }
 
         $trace = debug_backtrace();
-        trigger_error(sprintf('undefined property: %s in %s on line %s', $name, $trace[0]['file'], $trace[0]['line']), E_NOTICE);
+        trigger_error(sprintf('undefined property: %s in %s on line %d', $name, $trace[0]['file'], $trace[0]['line']));
         return false;
+    }
+
+    /**
+     * toPascal
+     *
+     * @param string $string
+     * @return string
+     */
+    private function toPascal($string)
+    {
+        $string = strtolower($string);
+        $string = str_replace('_', ' ', $string);
+        $string = ucwords($string);
+        $string = str_replace(' ', '', $string);
+        return $string;
+    }
+
+    /**
+     * toSnake
+     * @param string $string
+     * @return string
+     */
+    private function toSnake($string)
+    {
+        $string = preg_replace('/([A-Z])/', '_$1', $string);
+        $string = strtolower($string);
+        return ltrim($string, '_');
     }
 }
