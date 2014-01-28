@@ -22,7 +22,7 @@ class Services_BacklogObject {
         }
     }
 
-    protected function getClient()
+    public function getClient()
     {
         if (!$this->client instanceof XML_RPC_Client) {
             if (is_null($this->space_id)) {
@@ -83,6 +83,23 @@ class Services_BacklogObject {
             $projects[] = new Project($xml_project);
         }
         return $projects;
+    }
+
+    /**
+     * get project by key or id
+     *
+     * @return array
+     */
+    public function getProject($project_key_or_id)
+    {
+        $xml_params = array();
+        if (is_numeric($project_key_or_id)) {
+            $xml_params = new XML_RPC_Value($project_key_or_id, 'int');
+        } else {
+            $xml_params = new XML_RPC_Value($project_key_or_id, 'string');
+        }
+        $xml_project = $this->sendMessage('getProject', array($xml_params));
+        return new Project($xml_project, $this);
     }
 
     /**
