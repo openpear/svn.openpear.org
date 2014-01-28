@@ -16,9 +16,9 @@ class Project extends BaseModel
 
     public function getIssues()
     {
-        $backlog = new Services_BacklogObject('swx');
-        $backlog->setCredentials('shinsaka', 'koyuki1127');
-
-        return $backlog->findIssue(array('projectId' => $this->getId()));
+        if (!$this->hasBacklog()) {
+            return array();
+        }
+        return $this->backlog->findIssue(array('projectId' => $this->getId()));
     }
 }
