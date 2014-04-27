@@ -324,6 +324,131 @@ class IO_MIDI {
 
     }
     function build() {
-        ;
+        $writer = new IO_Bit();
+	$this->_buildChunk($writer, $this->header);
+	foreach ($this->tracks as $track) {
+	    $this->_buildChunk($writer, $track);
+	}
+	return $writer->output();
+    }
+    function _buildChunk(&$writer, $chunk) {
+        $type = $chunk['type'];
+        $writerChunk = new IO_Bit();
+        switch ($type) {
+          case 'MThd':
+              $this->_buildChunkHeader($writerChunk, $chunk['header']);
+              break;
+          case 'MTrk':
+              $this->_buildChunkTrack($writerChunk, $chunk['track']);
+              break;
+          default:
+              throw new Exception("Unknown chunk (type=$type)\n");
+        }
+	$chunkData = $writerChunk->output();
+	$length = strlen($chunkData);
+        $writer->putData($type , 4);
+	$writer->putUI32BE($length);
+        $writer->putData($chunkData, $length);
+    }
+    function _buildChunkHeader(&$writer, $header) {
+        $writer->putUI16BE($header['Format']);
+        $writer->putUI16BE($header['NumberOfTracks']);
+	$division = ($header['DivisionFlag'] << 15) || $header['Division'];
+	$writer->putUI16BE($division);
+    }
+    function _buildChunkTrack(&$writer, $track) {
+        foreach ($track as $chunk) {
+           $this->putVaribleLengthValue($writer, $chunk['DeltaTime']);
+	   $eventType = $chunk['EventType'];
+	   if (isset($chunk['MIDIChannel'])) {
+	       $midiChannel = $chunk['MIDIChannel'];
+           } else {
+               if (isset($chunk['MetaEventType'])) {
+                   $midiChannel = 0xF;
+               } else { // SystemEx
+                   $midiChannel = 0;
+               }
+           }
+	   $status = $eventType << 4 | $midiChannel;
+           $writer->putUI8($status);
+	   switch ($eventType) {
+              case 0x8: // Note Off
+              case 0x9: // Note On
+                $writer->putUI8($chunk['NoteNumber']);
+                $writer->putUI8($chunk['Velocity']);
+                break;
+              case 0xA: // Note Aftertouch Event
+                $writer->putUI8($chunk['NoteNumber']);
+                $writer->putUI8($chunk['Amount']);
+                break;
+              case 0xB: // Controller
+                $controllerType = $chunk['ControllerType'];
+		$writer->putUI8($controllerType);
+                switch ($controllerType) {
+                  case 0: // Bank Select #32 more commonly used
+                  case 1: // Modulation Wheel
+                  default:
+                  case 98: // NRPN LSB(Fine);
+                  case 100: // RPN LSB(Fine)
+                    $writer->putUI8($chunk['LSB']);
+                    break;
+                  case 99: // NRPN MSB(Coarse)
+                  case 101: // RPN MSB(Coarse)
+                    $writer->putUI8($chunk['MSB']);
+                    break;
+                  default:
+                    $writer->putUI8($chunk['Value']);
+                    break;
+                }
+                break;
+              case 0xC: // Program Change
+                $writer->putUI8($chunk['ProgramNumber']);
+                break;
+              case 0xD: // Note Aftertouch Event
+                $writer->putUI8($chunk['Amount']);
+                break;
+              case 0xE: // Pitch Bend Event
+                $value = $chunk['Value'] + 0x2000;
+                $writer->putUI8($value & 0x7f);
+                $writer->putUI8($value >> 7);
+                break;
+              case 0xF: // Meta Event of System Ex
+                if ($midiChannel == 0xF) { // not midiChannel
+                    $writer->putUI8($chunk['MetaEventType']);
+		    $length = strlen($chunk['MetaEventData']);
+                    $this->putVaribleLengthValue($writer, $length);
+                    $writer->putData($chunk['MetaEventData'], $length);
+                    break;
+                } else if ($midiChannel == 0x0) { // System Ex
+		    $length = strlen($chunk['SystemEx']);
+                    $this->putVaribleLengthValue($writer, $length);
+                    $writer->putData($chunk['SystemEx'], $length);
+                    break;
+                } else {
+                    printf("unknown status=0x%02X\n", $status);
+                }
+              default:
+                printf("unknown EventType=0x%02X\n", $eventType);
+                var_dump($chunks);
+                exit (0);
+	   }
+	}
+    }
+    function putVaribleLengthValue($writer, $value) {
+        $binList = Array();
+        if ($value === 0) {
+                $binList [] = 0;
+        } else {
+            while ($value > 0) {
+                $binList [] = $value & 0x7F;
+                $value >>= 7;
+            }
+        }
+        while (count($binList) > 1) {
+            $bin = array_pop($binList);
+            $writer->putUI8(0x80 | $bin);
+        }
+        $writer->putUI8($binList[0]);
+        return true;
     }
 }
