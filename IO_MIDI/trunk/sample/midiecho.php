@@ -2,17 +2,24 @@
 
 require_once 'IO/MIDI.php';
 
-$options = getopt("f:h");
+$options = getopt("f:r");
 
-if (($argc !== 2) || (! is_readable($argv[1]))) {
-    echo "Usage: php midiecho.php <midi_file> \n";
-    echo "ex) php midiecho.php in.mid\n";
+
+if ((isset($options['f']) === false) || (is_readable($options['f']) === false)) {
+    echo "Usage: php midiecho.php -f <midi_file> [-r]\n";
+    echo "ex) php midiecho.php -f in.mid -r\n";
     exit(1);
 }
 
-$midiin = file_get_contents($argv[1]);
+$mididata = file_get_contents($options['f']);
 
 $midi = new IO_MIDI();
-$midi->parse($midiin);
+$midi->parse($mididata);
 
-echo $midi->build();
+$opts = array();
+
+if (isset($options['r'])) {
+    $opts['runningstatus'] = true;
+}
+
+echo $midi->build($opts);

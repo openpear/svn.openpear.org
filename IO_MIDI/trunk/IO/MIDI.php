@@ -323,23 +323,23 @@ class IO_MIDI {
         }
 
     }
-    function build() {
+    function build($opts = array()) {
         $writer = new IO_Bit();
-	$this->_buildChunk($writer, $this->header);
+	$this->_buildChunk($writer, $this->header, $opts);
 	foreach ($this->tracks as $track) {
-	    $this->_buildChunk($writer, $track);
+	    $this->_buildChunk($writer, $track, $opts);
 	}
 	return $writer->output();
     }
-    function _buildChunk(&$writer, $chunk) {
+    function _buildChunk(&$writer, $chunk, $opts) {
         $type = $chunk['type'];
         $writerChunk = new IO_Bit();
         switch ($type) {
           case 'MThd':
-              $this->_buildChunkHeader($writerChunk, $chunk['header']);
+              $this->_buildChunkHeader($writerChunk, $chunk['header'], $opts);
               break;
           case 'MTrk':
-              $this->_buildChunkTrack($writerChunk, $chunk['track']);
+              $this->_buildChunkTrack($writerChunk, $chunk['track'], $opts);
               break;
           default:
               throw new Exception("Unknown chunk (type=$type)\n");
@@ -350,13 +350,14 @@ class IO_MIDI {
 	$writer->putUI32BE($length);
         $writer->putData($chunkData, $length);
     }
-    function _buildChunkHeader(&$writer, $header) {
+    function _buildChunkHeader(&$writer, $header, $opts) {
         $writer->putUI16BE($header['Format']);
         $writer->putUI16BE($header['NumberOfTracks']);
 	$division = ($header['DivisionFlag'] << 15) || $header['Division'];
 	$writer->putUI16BE($division);
     }
-    function _buildChunkTrack(&$writer, $track) {
+    function _buildChunkTrack(&$writer, $track, $opts) {
+        $prev_status = null;
         foreach ($track as $chunk) {
            $this->putVaribleLengthValue($writer, $chunk['DeltaTime']);
 	   $eventType = $chunk['EventType'];
@@ -370,7 +371,14 @@ class IO_MIDI {
                }
            }
 	   $status = $eventType << 4 | $midiChannel;
-           $writer->putUI8($status);
+           if (empty($opts['runningstatus']) === true) {
+               $writer->putUI8($status);
+           } else {
+               if ($prev_status !== $status) {
+                   $writer->putUI8($status);
+		   $prev_status = $status;
+               }
+           }
 	   switch ($eventType) {
               case 0x8: // Note Off
               case 0x9: // Note On
