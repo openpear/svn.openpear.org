@@ -133,6 +133,10 @@ class IO_MIDI {
                     $length = $this->getVaribleLengthValue($reader);
                     $chunk['SystemEx'] = $reader->getData($length);
                     break;
+                } else if ($midiChannel == 0x7) { // System Ex continue
+                    $length = $this->getVaribleLengthValue($reader);
+                    $chunk['SystemExCont'] = $reader->getData($length);
+                    break;
                 } else {
                     printf("unknown status=0x%02X\n", $status);
                 }
@@ -171,7 +175,7 @@ class IO_MIDI {
         0xC => 'Program Change',
         0xD => 'Note Aftertouch Event',
         0xE => 'Pitch Bend Event',
-        0xF => 'Meta Event',
+        0xF => 'Meta Event or SysEx',
         );
     var $meta_event_name = array(
         0x00 => 'Sequence Number',
@@ -310,6 +314,15 @@ class IO_MIDI {
                         $typename = $this->controller_type_name[$value];
                         echo " $key:$value($typename),";
                         break;
+                      case 'SystemEx':
+                      case 'SystemExCont':
+                      case 'MetaEventData':
+                        echo " $key:";
+		        $dataLen = strlen($value);
+                        for ($i = 0 ; $i < $dataLen; $i++) {
+			    printf(" %02x", ord($value{$i}));
+                        }
+                        break;
                       default:
                         echo " $key:$value,";
                         break;
@@ -366,8 +379,12 @@ class IO_MIDI {
            } else {
                if (isset($chunk['MetaEventType'])) {
                    $midiChannel = 0xF;
-               } else { // SystemEx
+	       } else if (isset($chunk['SystemEx'])) {
                    $midiChannel = 0;
+	       } else if (isset($chunk['SystemExCont'])) {
+                   $midiChannel = 0x7;
+               } else {
+	           throw new Exception();
                }
            }
 	   $status = $eventType << 4 | $midiChannel;
