@@ -11,7 +11,7 @@ class IO_MIDI {
 //    var $track_list = array();
     var $tracks = array();
     var $_mididata = null;
-    
+
     function parse($mididata) {
         $this->_mididata = $mididata;
         $reader = new IO_Bit();
@@ -155,7 +155,7 @@ class IO_MIDI {
         }
         return $track;
     }
-    
+
     function getVaribleLengthValue($reader) {
         $ret_value = 0;
         while (true) {
@@ -307,6 +307,7 @@ class IO_MIDI {
                         break;
                       case 'MetaEventType':
                         if (isset($this->meta_event_name[$value])) {
+                            $meta_event_type = $value;
                             $eventname = $this->meta_event_name[$value];
                             echo " $key:$value($eventname),";
                         } else {
@@ -324,6 +325,9 @@ class IO_MIDI {
 		        $dataLen = strlen($value);
                         for ($i = 0 ; $i < $dataLen; $i++) {
 			    printf(" %02x", ord($value{$i}));
+                        }
+                        if($meta_event_type == 0x05){
+                            echo " ($value)";
                         }
                         break;
                       default:
