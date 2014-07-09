@@ -22,7 +22,9 @@ class IO_MIDI {
                 $this->header = $chunk;
             } elseif(isset($chunk['track'])) {
                 $this->tracks []= $chunk;
-            }
+            } else {
+	        break;
+	    }
         }
     }
     function _parseChunk(&$reader) {
@@ -39,7 +41,8 @@ class IO_MIDI {
               $chunk['track'] = $this->_parseChunkTrack($reader, $nextOffset);
               break;
           default:
-              throw new Exception("Unknown chunk (type=$type)\n");
+	      fprintf(STDERR, "warning: Unknown chunk (type=$type)\n");
+	      return array();
         }
         list($doneOffset, $dummy) = $reader->getOffset();
         if ($doneOffset !== $nextOffset) {
